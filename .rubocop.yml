@@ -1,0 +1,224 @@
+# rubocop: 0.80.1
+# rubocop-rails: 2.4.2
+# rubocop-performance 1.5.2
+
+require: [
+  rubocop-rspec,
+  rubocop-rails,
+  rubocop-performance
+]
+
+AllCops:
+  AutoCorrect: false
+  DefaultFormatter: simple
+  DisplayCopNames: true
+  # Exclude:
+  #   - 'rails/ATBAll/vendor/**/*'
+  #   - 'rails/ATBAll/tmp/**/*'
+  TargetRubyVersion: 2.6.3
+  TargetRailsVersion: 6.0
+  RSpec:
+    Patterns:
+    - '.*/test/.*\.rb'
+
+Metrics/AbcSize:
+  Max: 30
+
+Style/Alias:
+  Enabled: false
+  Severity: convention
+
+# If you know what you're doing, feel free to disable this rule in-line
+Style/AndOr:
+  Severity: error
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Max: 10
+
+Layout/LineLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 100
+
+Metrics/PerceivedComplexity:
+  Max: 15
+
+Naming/VariableNumber:
+  Enabled: false
+
+# Disabled because casecmp doesn't work on unicode, but casecmp? does (ruby >= 2.4)
+# Performance cops are removed as of 0.68.0
+# Performance/Casecmp:
+#   Enabled: false
+
+Lint/InheritException:
+  Enabled: true
+  EnforcedStyle: standard_error
+
+Lint/RescueException:
+  Enabled: true
+  Severity: error
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/CommentedKeyword:
+  Enabled: false
+
+Style/ConditionalAssignment:
+  Enabled: false
+
+Lint/Debugger:
+  Enabled: true
+  Severity: error
+
+Style/Documentation:
+  Enabled: false
+
+Style/EmptyMethod:
+  Enabled: false
+
+Style/FormatString:
+  Enabled: false
+
+Style/FormatStringToken:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+# You can safely ignore this. it _can_ help make code more elegant, but not always.
+Style/GuardClause:
+  Enabled: false
+
+Style/HashEachMethods:
+  Enabled: true
+  Severity: convention
+
+Rails/HttpStatus:
+  Enabled: false
+
+Layout/FirstArrayElementIndentation:
+  Enabled: true
+  EnforcedStyle: consistent
+
+Layout/FirstHashElementIndentation:
+  Enabled: true
+  EnforcedStyle: consistent
+
+Style/HashTransformKeys:
+  Enabled: true
+  Severity: convention
+
+Style/HashTransformValues:
+  Enabled: true
+  Severity: convention
+
+# You can safely ignore this. It is to emphasize that this is the "ruby" way to do things.
+Style/NegatedIf:
+  Enabled: true
+
+Style/RegexpLiteral:
+  EnforcedStyle: mixed
+  AllowInnerSlashes: false
+
+Layout/LeadingCommentSpace:
+  Enabled: false
+
+Style/MethodCallWithArgsParentheses:
+  Enabled: false
+
+Style/MethodCallWithoutArgsParentheses:
+  Enabled: false
+
+Layout/MultilineHashKeyLineBreaks:
+  Enabled: true
+  Severity: convention
+
+Layout/MultilineMethodCallIndentation:
+  Enabled: false
+
+Layout/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
+Style/MultilineTernaryOperator:
+  Enabled: false
+
+Style/MultilineWhenThen:
+  Enabled: true
+
+Style/NumericLiterals:
+  Enabled: false
+
+Style/NumericPredicate:
+  Enabled: false
+
+Security/Open:
+  Enabled: true
+  Severity: error
+
+Bundler/OrderedGems:
+  Enabled: false
+
+Style/ParenthesesAroundCondition:
+  Enabled: false
+
+Style/Proc:
+  Enabled: false
+
+Style/RedundantReturn:
+  Enabled: false
+
+Style/RedundantSelf:
+  # This is completely ok to not correct.
+  # The intended purpose is to catch cases
+  # where the developer thinks `self`
+  # is required, when it actually is not
+  Enabled: true
+  Severity: convention
+
+Style/RescueStandardError:
+  Enabled: false
+
+Style/SafeNavigation:
+  Enabled: true
+  Severity: warning
+
+Lint/SendWithMixinArgument:
+  Enabled: true
+
+Layout/SpaceAroundEqualsInParameterDefault:
+  Enabled: false
+
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: compact
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/SymbolArray:
+  Enabled: false
+
+Style/TernaryParentheses:
+  Enabled: true
+  EnforcedStyle: require_parentheses_when_complex
+
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false
+
+Style/TrailingCommaInHashLiteral:
+  Enabled: false
+
+Layout/TrailingWhitespace:
+  Enabled: false
+
+Lint/UnusedMethodArgument:
+  Enabled: true
+  Severity: convention
+
+Style/ZeroLengthPredicate:
+  Enabled: false
