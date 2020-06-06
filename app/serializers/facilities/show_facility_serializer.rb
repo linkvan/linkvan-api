@@ -1,0 +1,2 @@
+class ShowFacilitySerializer < FacilitySerializer
+end

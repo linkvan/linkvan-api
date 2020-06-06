@@ -1,0 +1,2 @@
+class IndexFacilitiesSerializer < FacilitiesSerializer
+end

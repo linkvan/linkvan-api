@@ -1,0 +1,2 @@
+class Anaylitic < ApplicationRecord
+end
