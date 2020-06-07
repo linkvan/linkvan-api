@@ -1,7 +1,8 @@
 class ApplicationCollectionSerializer
-  attr_reader :collection
+  attr_reader :collection, :serializer_class
 
-  def initialize(collection_object)
+  def initialize(collection_object, serializer_class = nil)
+    @serializer_class = serializer_class
     @collection = collection_object
   end
 
