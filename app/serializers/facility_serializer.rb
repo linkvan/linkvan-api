@@ -28,13 +28,13 @@ class FacilitySerializer < ApplicationSerializer
   def welcomes
     return [] if object.welcomes.nil?
 
-    object.welcomes.split(' ')
+    object.welcome.underscores.split(' ')
   end #/welcomes
     
   def services
     return [] if object.services.nil?
 
-    object.services.split(' ')
+    object.services.underscore.split(' ')
   end #/services
 
   def schedule
