@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-  resources :facilities, only: [:index, :show]
+
+  namespace :api do
+    resources :facilities, only: [:index, :show]
+  end
 end
