@@ -42,6 +42,13 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 group :development, :test do
   gem 'rspec-rails', '>= 4.0.1'
+
+  # testing related
+  gem 'database_cleaner-active_record'
+  gem 'factory_bot_rails', '~> 5.2'
+  gem 'faker', '~> 2.12'
+  gem 'shoulda-matchers', '~> 4.3'
+  gem 'capybara'
 end
 
 group :development do
@@ -51,12 +58,6 @@ group :development do
   gem 'pry-stack_explorer', '~> 0.5.0'
   gem 'pry-remote'
   gem 'pry-byebug'
-
-  # testing related
-  gem 'database_cleaner-active_record'
-  gem 'factory_bot_rails', '~> 5.2'
-  gem 'faker', '~> 2.12'
-  gem 'shoulda-matchers', '~> 4.3'
 
   # Ruby code analyzer and formatter
   gem 'rubocop', require: false
