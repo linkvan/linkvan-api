@@ -3,5 +3,6 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :facilities, only: [:index, :show]
+    resources :zones, only: [:index]
   end
 end
