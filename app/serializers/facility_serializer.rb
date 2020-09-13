@@ -2,7 +2,7 @@ class FacilitySerializer < ApplicationSerializer
   def attributes
     fields = super
     fields -= Facility.schedule_fields
-    fields += [:schedule]
+    fields += [:zone, :schedule]
     fields
   end
   
