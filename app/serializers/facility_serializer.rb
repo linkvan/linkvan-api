@@ -6,18 +6,6 @@ class FacilitySerializer < ApplicationSerializer
     fields
   end
   
-  # def as_json(response = nil)
-  #   # facilities = serialize(FacilitySerializer)
-  #   # result.merge({ facilities: facilities })
-  #   result = super(response)
-
-  #   serialized_obj = {}
-  #   attributes.each do |field|
-  #     serialized_obj[field.to_sym] = object.send(field)
-  #   end
-  #   return result.merge({ facility: serialized_obj })
-  # end
-
   def zone
     return [] if object.zone.nil?
 
