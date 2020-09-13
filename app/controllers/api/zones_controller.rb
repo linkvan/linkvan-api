@@ -4,7 +4,7 @@ class Api::ZonesController < Api::BaseController
 
   # GET api/zones
   def index
-    @zones = Zone.all
+    @zones = Zone.all.includes(:facilities, :users)
 
     @response = ZonesSerializer.new(@zones)
     render json: @response, status: :ok

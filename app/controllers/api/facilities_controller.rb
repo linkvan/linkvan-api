@@ -3,7 +3,7 @@ class Api::FacilitiesController < Api::BaseController
   
   # GET /facilities
   def index
-    @facilities = Facility.is_verified.order(:updated_at)
+    @facilities = Facility.includes(:zone).is_verified.order(:updated_at)
 
     @response = FacilitiesSerializer.new(@facilities, Facilities::IndexFacilitySerializer)
     render json: @response, status: :ok
