@@ -1,14 +1,11 @@
 class ZoneSerializer < ApplicationSerializer
-  def as_json
-    {
-      id: @zone.id,
-      name: @zone.name,
-      description: @zone.description,
-      users: admins
-    }
+  def attributes
+    fields = super
+    fields += [:admins]
+    fields
   end
 
   def admins
-    @zone.users.select(:id, :name).as_json
+    object.users.select(:id, :name).as_json
   end
 end #/ZoneSerializer

@@ -1,7 +1,7 @@
 class ZonesSerializer < ApplicationCollectionSerializer
-  def as_json
-    @zones.map do |zone|
-      ZoneSerializer.new(zone).as_json
-    end
+  def as_json(response = nil)
+    result = super(response)
+    zones = serialize(serializer_class || ZoneSerializer)
+    result.merge({ zones: zones })
   end
 end #/ZoneSerializer
