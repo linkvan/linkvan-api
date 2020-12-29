@@ -8,32 +8,32 @@ describe Facilities::IndexFacilitySerializer do
   let(:now_open2_facility) { create(:open2_facility) }
 
   describe 'as_json hash' do
+    subject { all_day_serializer.as_json }
+
     let(:serializer_class) { Facilities::IndexFacilitySerializer }
     let(:all_day_serializer) { serializer_class.new(all_day_facility) }
     let(:serialized_all_day_facility) { all_day_serializer.as_json }
-
-    subject { all_day_serializer.as_json }
 
     facility_attribs = %w[id name phone services lat long schedule]
     facility_attibs_removed = %w[welcomes address website description notes verified shelter_note food_note medical_note hygiene_note technology_note legal_note learning_note zone_id created_at updated_at r_pets r_id r_cart r_phone r_wifi user_id]
 
     # All included Facility atributes
     facility_attribs.each do |field|
-      it { should include(field) }
+      it { is_expected.to include(field) }
     end
 
     # All non-included Facility atributes
     facility_attibs_removed.each do |field|
-      it { should_not include(field) }
+      it { is_expected.not_to include(field) }
     end
 
     # Facility services field content
     describe "services" do
       subject { serialized_all_day_facility['services'] }
 
-      it { should include('test') }
-      it { should include('another_test') }
-      it { should include('yet_another_test') }
+      it { is_expected.to include('test') }
+      it { is_expected.to include('another_test') }
+      it { is_expected.to include('yet_another_test') }
     end #/services
 
     # Facility schedule field content
@@ -43,13 +43,14 @@ describe Facilities::IndexFacilitySerializer do
       # All schedule fields
       expected_schedule_fields = %w[schedule_sunday schedule_monday schedule_tuesday schedule_wednesday schedule_thursday schedule_friday schedule_saturday]
       expected_schedule_fields.each do |field|
-        it { should include(field) }
-        it { should be_a(Hash) }
+        it { is_expected.to include(field) }
+        it { is_expected.to be_a(Hash) }
 
         describe field.to_s do
           subject { serialized_all_day_facility.dig('schedule', 'schedule_sunday') }
-          it { should include(:availability) }
-          it { should include(:times) }
+
+          it { is_expected.to include(:availability) }
+          it { is_expected.to include(:times) }
         end
       end
 
@@ -58,13 +59,15 @@ describe Facilities::IndexFacilitySerializer do
 
         describe "availability" do
           subject { all_open_sunday_schedule['availability'] }
-          it { should eq('open') }
+
+          it { is_expected.to eq('open') }
         end
         
         describe 'times' do
           subject { all_open_sunday_schedule['times'] }
-          it { should be_a(Array) }
-          it { should be_empty }
+
+          it { is_expected.to be_a(Array) }
+          it { is_expected.to be_empty }
         end
       end #/all day open
 
@@ -74,24 +77,31 @@ describe Facilities::IndexFacilitySerializer do
 
         describe "availability field" do
           subject { now_open_schedule['availability'] }
-          it { should eq('set_times') }
+
+          it { is_expected.to eq('set_times') }
         end
 
         # describe 'times' do
         describe 'times field' do
           subject { now_open_schedule['times'] }
-          it { should be_a(Array) }
-          it { should_not be_empty }
+
+          it { is_expected.to be_a(Array) }
+          it { is_expected.not_to be_empty }
+
           describe 'size' do
             it { expect(subject.size).to eq(1) }
           end
           
           describe 'times object' do
             subject { now_open_schedule['times'].first }
-            it { should include(from_hour: 2.hours.ago.hour.to_s) }
-            it { should include(from_min: 2.hours.ago.min.to_s) }
-            it { should include(to_hour: 2.hours.from_now.hour.to_s) }
-            it { should include(to_min: 2.hours.from_now.min.to_s) }
+
+            let(:time_from_now) { 2.hours.from_now.to_s(:time).split(':') }
+            let(:time_ago) { 2.hours.ago.to_s(:time).split(':') }
+
+            it { is_expected.to include(from_hour: time_ago[0]) }
+            it { is_expected.to include(from_min: time_ago[1]) }
+            it { is_expected.to include(to_hour: time_from_now[0]) }
+            it { is_expected.to include(to_min: time_from_now[1]) }
           end
         end #/times
         
