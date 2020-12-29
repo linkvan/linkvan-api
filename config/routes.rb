@@ -4,4 +4,8 @@ Rails.application.routes.draw do
     resources :facilities, only: [:index, :show]
     resources :zones, only: [:index]
   end
+
+  namespace :admin do
+    resources :dashboard, only: [:index, :show]
+  end
 end
