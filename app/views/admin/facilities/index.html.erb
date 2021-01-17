@@ -1,0 +1,6 @@
+<% @facilities.each do |facility| %>
+  <%= render Facilities::CardComponent.new(facility: facility) %>
+<% end %>
+
+<%== pagy_bulma_combo_nav_js(@pagy) %>
+<%#== pagy_nav(@pagy) %>
