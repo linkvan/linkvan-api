@@ -12,7 +12,10 @@ Rails.start()
 Turbolinks.start()
 ActiveStorage.start()
 
+import "@fortawesome/fontawesome-free/js/all";
+import "@fortawesome/fontawesome-free/css/all.css"
 
-import "bootstrap"
+import "bulma"
+
 import "../stylesheets/application"
 
