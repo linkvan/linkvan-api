@@ -1,0 +1,15 @@
+<div class='container'>
+  <% flash.each do |type, msg| %>
+    <div class="notification <%= html_class_for(type) %> is-light">
+      <button class="delete"></button>
+
+      <%= msg %>
+    </div>
+  <% end %>
+
+  <div class='notification is-light'>
+    <button class='delete'></button>
+
+    Test of a notication without class
+  </div>
+</div>

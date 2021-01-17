@@ -13,6 +13,25 @@
   </head>
 
   <body>
-    <%= yield %>
+    <!-- Header -->
+    <header>
+      <%= render Layout::HeaderComponent.new %>
+    </header>
+
+    <!-- Flash messages -->
+    <section class="section" id="flash_messages">
+      <%= render Layout::FlashComponent.new %>
+    </section>
+
+    <!-- Content -->
+    <section class="section">
+      <%= yield %>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <%= render Layout::FooterComponent.new%>
+    </footer>
+
   </body>
 </html>
