@@ -116,6 +116,7 @@ GEM
     nio4r (2.5.4)
     nokogiri (1.10.10)
       mini_portile2 (~> 2.4.0)
+    pagy (3.10.0)
     parallel (1.20.1)
     parser (3.0.0.0)
       ast (~> 2.4.1)
@@ -277,6 +278,7 @@ DEPENDENCIES
   faker (~> 2.15)
   jbuilder (~> 2.7)
   listen (~> 3.3)
+  pagy (~> 3.10)
   pg (~> 1.1)
   pry (~> 0.13.1)
   pry-byebug

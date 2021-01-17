@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base # ActionController::API
+  include Pagy::Backend
+
   # Prevent CSRF attacks by raising an exception.
   #   protect_from_forgery with: :null_session
   # For APIs, you may want to use :null_session instead.
