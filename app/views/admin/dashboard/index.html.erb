@@ -1,25 +1,86 @@
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-  Launch demo modal
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
+<!-- Main container -->
+<nav class="level">
+  <!-- Left side -->
+  <div class="level-left">
+    <div class="level-item">
+    </div>
+    <div class="level-item">
     </div>
   </div>
+
+  <!-- Right side -->
+  <div class="level-right">
+    <p class="level-item"><a class="button">Location Data</a></p>
+    <p class="level-item"><a class="button">Add Facilities</a></p>
+    <p class="level-item"><a class="button">Users CSV</a></p>
+  </div>
+</nav>
+
+
+
+
+<div class="container">
+  <div class="tabs is-centered">
+    <ul>
+      <li class="is-active">
+        <a>
+          <span class="icon is-small"><i class="fas fa-image" aria-hidden="true"></i></span>
+          <span>My Facilities</span>
+        </a>
+      </li>
+      <li>
+        <a>
+          <span class="icon is-small"><i class="fas fa-music" aria-hidden="true"></i></span>
+          <span>All Facilities</span>
+        </a>
+      </li>
+      <li>
+        <a>
+          <span class="icon is-small"><i class="fas fa-film" aria-hidden="true"></i></span>
+          <span>All Users</span>
+        </a>
+      </li>
+      <li>
+        <a>
+          <span class="icon is-small"><i class="far fa-file-alt" aria-hidden="true"></i></span>
+          <span>Notices</span>
+        </a>
+      </li>
+
+    </ul>
+  </div>
 </div>
+
+
+
+
+<div class="container">
+  <% Facility.all.limit(10).find_each do |facility| %>
+    <div class="card">
+      <header class="card-header">
+      </header>
+
+      <div class="card-content">
+        <div class="is-pulled-right">
+          <div class="field">
+            <input id="switchColorDefault" type="checkbox" name="switchColorDefault" class="switch is-rtl" checked="checked">
+            <label for="switchColorDefault">Pending Reviews / Live</label>
+          </div>
+        </div>
+
+        <div class="content">
+          <p><%= facility.name %></p>
+          <p><%= facility.description %></p>
+
+          <time datetime="<%= facility.updated_at %>">
+            <%= facility.updated_at %>
+          </time>
+        </div>
+      </div>
+
+      <footer class="card-footer">
+      </footer>
+    </div>
+  <% end %>
+</div>
+
