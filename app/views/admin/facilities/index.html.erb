@@ -1,6 +1,10 @@
-<% @facilities.each do |facility| %>
-  <%= render Facilities::CardComponent.new(facility: facility) %>
-<% end %>
+<div class="container">
+  <% @facilities.each do |facility| %>
+    <%= render Facilities::CardComponent.new(facility: facility) %>
+  <% end %>
+</div>
 
-<%== pagy_bulma_combo_nav_js(@pagy) %>
-<%#== pagy_nav(@pagy) %>
+<hr/>
+<div class="container">
+  <%== pagy_bulma_combo_nav_js(@pagy) %>
+</div>
