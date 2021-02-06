@@ -51,6 +51,12 @@ class Facility < ApplicationRecord
     8.hours.ago
   end #/adjusted_current_time
 
+  def services_list
+    return [] if services.nil?
+
+    services.underscore.split(' ')
+  end #/services
+
   def schedule
     result = HashWithIndifferentAccess.new
     wday_names = Date::DAYNAMES
