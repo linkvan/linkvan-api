@@ -3,7 +3,7 @@ The purpose of Linkvan is to connect people in need to the services they require
 
 linkvan-web is originally a Rails translation of Zendesk's awesome open source [linksf project](https://github.com/zendesk/linksf).
 
-linkvan-web has now being splitted into a NExtJS frontend (<link>) and a Rails backend (https://github.com/linkvan/linkvan-api).
+linkvan-web has now being splitted into a NExtJS frontend (https://github.com/linkvanproject/linkvan-web) and a Rails backend (https://github.com/linkvan/linkvan-api).
 
 linkvan-api is developed in [Ruby on Rails 6.1](https://rubyonrails.org/) and is responsible for the admin interface and to expose an Rest API to the frontend.
 
