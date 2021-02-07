@@ -6,7 +6,7 @@ class Api::FacilitiesController < Api::BaseController
     @facilities = Facility.includes(:zone).is_verified.order(:updated_at)
 
     @response = FacilitiesSerializer.new(@facilities, Facilities::IndexFacilitySerializer)
-    render json: @response, status: :ok
+    render json: @response.to_json, status: :ok
   end #/index
 
   # GET /facilities/:id

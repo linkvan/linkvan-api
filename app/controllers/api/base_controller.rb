@@ -1,9 +1,9 @@
-class Api::BaseController < ApplicationController
-  # before_action :set_default_request_format
+class Api::BaseController < ActionController::API #ApplicationController #ActionController::API
+  before_action :require_signin
 
   private
 
-  # def set_default_request_format
-    # request.format = :json unless params[:fomat]
-  # end
+  def require_signin
+    head :unauthorized unless current_user
+  end
 end

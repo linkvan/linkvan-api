@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::FacilitiesController do
+RSpec.describe Api::FacilitiesController do #, type: :request do
   let(:test_services) { 'Test AnotherTest Yet_Another_Test' }
 
   describe "GET #index" do
@@ -29,16 +29,11 @@ RSpec.describe Api::FacilitiesController do
     end
 
     describe "JSON body response" do
-      subject { parsed_response }
+      let(:returned_facilities) { parsed_response['facilities'] }
 
-      it { should include(:status) }
-      it { should include(:facilities) }
-
-      describe "facilities" do
-        subject { parsed_response['facilities'] }
-
-        it { should be_a(Array) }
-      end
+      it { expect(response.status).to eq(200) }
+      it { expect(parsed_response).to include(:facilities) }
+      it { expect(returned_facilities).to be_a(Array) }
     end #/json body
   end #/index
 end
