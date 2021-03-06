@@ -4,11 +4,11 @@ class Layout::FlashComponent < ViewComponent::Base
   def html_class_for(type)
     case type.to_s.to_sym
     when :notice
-      'is-info'
+      "is-info"
     when :alert
-      'is-danger'
+      "is-danger"
     else
-      ''
+      ""
     end
   end
 end

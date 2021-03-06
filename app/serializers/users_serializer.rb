@@ -4,4 +4,4 @@ class UsersSerializer < ApplicationCollectionSerializer
       UserSerializer.new(user).as_json
     end
   end
-end #/UsersSerializer
+end # /UsersSerializer

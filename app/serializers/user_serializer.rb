@@ -18,8 +18,8 @@ class UserSerializer < ApplicationSerializer
   def facilities
     @user.facilities.select(:id, :name).as_json
   end
-    
+
   def zones
     @user.zones.select(:id, :name).as_json
   end
-end #/ZoneSerializer
+end # /ZoneSerializer

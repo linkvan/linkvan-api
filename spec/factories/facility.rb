@@ -79,7 +79,7 @@ FactoryBot.define do
         second_time_fri { true }
         second_time_sat { true }
         second_time_sun { true }
-    
+
         startsmon_at2 { 3.hours.from_now }
         endsmon_at2 { startsmon_at2 + 1.hour }
         startstues_at2 { 3.hours.from_now }

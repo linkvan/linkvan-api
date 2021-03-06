@@ -2,15 +2,15 @@ class User < ApplicationRecord
   has_secure_password
   has_many :facilities
   has_and_belongs_to_many :zones
-  
+
   validates :name, presence: true
   validates :email, presence: true,
-  					format: /\A\S+@\S+\z/,
-            uniqueness: { case_sensitive: false}
-  
+            format: /\A\S+@\S+\z/,
+            uniqueness: { case_sensitive: false }
+
   def self.authenticate(email, password)
-  	user = User.find_by(email: email)
-	  user && user.authenticate(password)
+    user = User.find_by(email: email)
+    user && user.authenticate(password)
   end
 
   def self.to_csv
@@ -20,7 +20,7 @@ class User < ApplicationRecord
       csv << attributes
 
       all.each do |user|
-        csv << attributes.map{ |attr| user.send(attr) }
+        csv << attributes.map { |attr| user.send(attr) }
       end
     end
   end
@@ -28,13 +28,13 @@ class User < ApplicationRecord
   def manages
     return Facility.all if self.super_admin?
     return Facility.where(zone: zone_ids) if self.zone_admin?
-    return self.facilities
+    self.facilities
   end
 
   def manageable_users
     return User.all if self.super_admin?
     return self.collect_users if self.zone_admin?
-    return self
+    self
   end
 
   def can_manage?(user)
@@ -43,23 +43,23 @@ class User < ApplicationRecord
     # Non-SuperAdmins can't manage themselves
     return false if self.id == user.id
     # Zone Admins can manage all users from zone (but themselves)
-    return (zone_users.include?(user))
+    (zone_users.include?(user))
   end
 
   def super_admin?
-    return (self.admin && self.verified)
+    (self.admin && self.verified)
   end
 
   def zone_admin?
-    return (self.zones.any? && self.verified)
+    (self.zones.any? && self.verified)
   end
 
   def facility_admin?
-    return (self.facilities.any? && self.verified)
+    (self.facilities.any? && self.verified)
   end
 
   def zone_users
-    return (self.collect_users)
+    (self.collect_users)
   end
 
   def toggle_verified!
@@ -67,21 +67,16 @@ class User < ApplicationRecord
   end
 
   private
+    def collect_users_from(facilities)
+      facilities.map(&:user)
+    end
 
-  def collect_users_from(facilities)
-    facilities.map(&:user)
-  end
+    def collect_facilities_from(zones)
+      zones.map(&:facilities)
+    end
 
-  def collect_facilities_from(zones)
-    zones.map(&:facilities)
-  end
-
-  def collect_users
-    facilities  = collect_facilities_from(self.zones)
-    collect_users_from(facilities).uniq
-  end
-
-  
-  
-
+    def collect_users
+      facilities  = collect_facilities_from(self.zones)
+      collect_users_from(facilities).uniq
+    end
 end

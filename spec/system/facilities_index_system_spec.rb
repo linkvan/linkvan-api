@@ -4,7 +4,7 @@ require "rails_helper"
 #   RSpec.describe "Hello", type: :feature do
 #
 RSpec.describe "Facilities index" do
-  it 'returns a json object' do
+  it "returns a json object" do
     visit api_facilities_path
 
     expect(page.status_code).to be(200)

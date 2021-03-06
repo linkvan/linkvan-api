@@ -15,9 +15,9 @@ class ApplicationCollectionSerializer
   def as_json(response = nil)
     case response
     when Hash
-      return response.with_indifferent_access
+      response.with_indifferent_access
     else
-      return HashWithIndifferentAccess.new
+      HashWithIndifferentAccess.new
     end
   end
 end

@@ -1,5 +1,5 @@
-require 'bigdecimal'
-require 'bigdecimal/util'
+require "bigdecimal"
+require "bigdecimal/util"
 
 class Facility < ApplicationRecord
   belongs_to :user, optional: true
@@ -14,7 +14,7 @@ class Facility < ApplicationRecord
   }
 
   scope :keywordSearch, lambda  { |word|
-    where(["services ILIKE ? OR welcomes ILIKE ?", "%#{word}%", "%#{word}%"]) unless word == 'all'
+    where(["services ILIKE ? OR welcomes ILIKE ?", "%#{word}%", "%#{word}%"]) unless word == "all"
   }
 
   def managed_by?(user)
@@ -24,38 +24,38 @@ class Facility < ApplicationRecord
       f_user_id = user
     end
     # Case Facility's User is the same
-    return true if (this.user_id == f_user_id)
+    return true if this.user_id == f_user_id
     # Case Zone of the Facility has the user as admin
     return true if User.find(f_user_id).manages.any?
 
     # Otherwise return FALSE
-    return false
-  end #/managed_by?
+    false
+  end # /managed_by?
 
   def self.managed_by(user)
     user.manages
-  end #/owned_by
+  end # /owned_by
 
   def self.search(search)
     return all if search.empty?
 
     where("name ILIKE ?", "%#{search}%")
-  end #/search
+  end # /search
 
   def self.search_by_services(search)
     where("services ILIKE ?", "%#{search}%")
-  end #/search_by_services
+  end # /search_by_services
 
   def self.adjusted_current_time
     # Returns current server time subtracted by 8 hours.
     8.hours.ago
-  end #/adjusted_current_time
+  end # /adjusted_current_time
 
   def services_list
     return [] if services.nil?
 
-    services.underscore.split(' ')
-  end #/services
+    services.underscore.split(" ")
+  end # /services
 
   def schedule
     result = HashWithIndifferentAccess.new
@@ -88,11 +88,11 @@ class Facility < ApplicationRecord
   end
 
   def schedule_for(week_day)
-    cday = week_day % 7 #-> sun= 0, mon=1, ..., sat=6 
+    cday = week_day % 7 #-> sun= 0, mon=1, ..., sat=6
     # cday = DateTime.wday
     wday = self.class.weekdays[cday]
 
-    availability = 'set_times'
+    availability = "set_times"
     if self["open_all_day_#{wday}"]
       availability = "open"
     elsif self["closed_all_day_#{wday}"]
@@ -100,16 +100,16 @@ class Facility < ApplicationRecord
     end
 
     times = []
-    if availability == 'set_times'
-      start_time = self["starts#{wday}_at"].to_s(:time).split(':')
-      end_time = self["ends#{wday}_at"].to_s(:time).split(':')
+    if availability == "set_times"
+      start_time = self["starts#{wday}_at"].to_s(:time).split(":")
+      end_time = self["ends#{wday}_at"].to_s(:time).split(":")
       times << { from_hour: start_time.first,
                  from_min: start_time.last,
                  to_hour: end_time.first,
                  to_min: end_time.last }
       if self["second_time_#{wday}"]
-        start_time = self["starts#{wday}_at2"].to_s(:time).split(':')
-        end_time = self["ends#{wday}_at2"].to_s(:time).split(':')
+        start_time = self["starts#{wday}_at2"].to_s(:time).split(":")
+        end_time = self["ends#{wday}_at2"].to_s(:time).split(":")
         times << { from_hour: start_time.first,
                    from_min: start_time.last,
                    to_hour: end_time.first,
@@ -132,12 +132,12 @@ class Facility < ApplicationRecord
     elsif time_in_range?(ctime, wday)
       ret = true
     end
-    return ret
-  end #/is_open?
+    ret
+  end # /is_open?
 
   def is_closed?(ctime = Facility.adjusted_current_time)
     !is_open?(ctime)
-  end #/is_closed?
+  end # /is_closed?
 
   def time_in_range?(ctime, wday)
     # We consider Facilities opening in 5 mins as an Opened Facilty.
@@ -151,19 +151,19 @@ class Facility < ApplicationRecord
     close2 = 5.minutes.until(close2)
 
     if (ctime >= open1 && ctime < close1) || (ctime >= open2 && ctime < close2)
-      return true
+      true
     else
-      return false
+      false
     end
-  end #/time_in_range?
+  end # /time_in_range?
 
   def self.translate_time(cdate, ftime)
-    newdate = cdate.strftime('%Y-%m-%d')
+    newdate = cdate.strftime("%Y-%m-%d")
     newtime = ftime&.to_s(:time)
     newzone = ftime&.zone
     # cdate = ctime.strftime('%I:%M:%P')
     Time.zone.parse("#{newdate} #{newtime} #{newzone}")
-  end #/translate_time
+  end # /translate_time
 
   def distance(ulat, ulong)
     Facility.haversine(self[:lat], self[:long], ulat, ulong)
@@ -188,32 +188,31 @@ class Facility < ApplicationRecord
     # Select Opened/Closed facilities
     selected_facilities = []
     searched_facilities.each do |facility|
-      if (open == "Yes")
+      if open == "Yes"
         selected_facilities.push facility if facility.is_open?(ctime)
-      elsif (open == "No")
+      elsif open == "No"
         selected_facilities.push facility if facility.is_closed?(ctime)
       else
         # Only for Testing purposes (should delete these lines later)
         return []
         # raise 'Error! Should not go into this one'
       end
-    end #/searched_facilities.each
+    end # /searched_facilities.each
 
     # Sorts out selected facilities.
     ret_arr = []
-    if (prox == "Near")
+    if prox == "Near"
       ret_arr = selected_facilities.sort_by { |f| f.distance(ulat, ulong) }
-    elsif (prox == "Name")
+    elsif prox == "Name"
       ret_arr = selected_facilities.sort_by(&:name)
-    end #/prox == Near, Name
+    end # /prox == Near, Name
 
-    return ret_arr
-  end #ends self.contains_service?
+    ret_arr
+  end # ends self.contains_service?
 
   def self.redist_sort(inArray, ulat, ulong)
     ulat = ulat.to_d
     ulong = ulong.to_d
-    arr = []
     distarr = []
 
     inArray.each do |a|
@@ -222,13 +221,13 @@ class Facility < ApplicationRecord
 
     arr = Facility.bubble_sort(distarr, inArray)
 
-    return arr
+    arr
   end
 
-  #use haversine and power to calculate distance between user's latlongs and facilities'
+  # use haversine and power to calculate distance between user's latlongs and facilities'
   def self.haversine(lat1, long1, lat2, long2)
     dtor = Math::PI / 180
-    r = 6378.14 * 1000 #delete 1000 to get kms
+    r = 6378.14 * 1000 # delete 1000 to get kms
 
     rlat1 = lat1 * dtor
     rlong1 = long1 * dtor
@@ -242,7 +241,7 @@ class Facility < ApplicationRecord
     c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
     d = r * c
 
-    return d
+    d
   end
 
   def self.haversine_km(lat1, long1, lat2, long2)
@@ -261,13 +260,13 @@ class Facility < ApplicationRecord
     c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
     d = r * c
 
-    return d
+    d
   end
 
   def self.haversine_min(lat1, long1, lat2, long2)
     km = haversine_km(lat1, long1, lat2, long2)
     time = km * 12.2 * 60 # avegrage 12.2 min/km walking
-    return time.round(0) # time in seconds
+    time.round(0) # time in seconds
   end
 
   def self.power(num, pow)
@@ -295,9 +294,7 @@ class Facility < ApplicationRecord
   end
 
   def self.rename_sort(inArray)
-    arr = []
-    arr = inArray.sort_by { |f| f[:name] }
-    return arr
+    inArray.sort_by { |f| f[:name] }
   end
 
   def self.to_csv
@@ -311,4 +308,4 @@ class Facility < ApplicationRecord
       end
     end
   end
-end #ends class
+end # ends class

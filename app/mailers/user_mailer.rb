@@ -2,10 +2,10 @@ class UserMailer < ApplicationMailer
   default from: "linkvanca@gmail.com"
 
   def welcome_email(user)
-  	@url  = 'http://linkvan.ca'
+    @url  = "http://linkvan.ca"
     @user = user
     mail(to: @user.email,
-    	subject: 'Welcome to LinkVan!')
+       subject: "Welcome to LinkVan!")
   end
 
   def new_message(message, user)
@@ -15,7 +15,6 @@ class UserMailer < ApplicationMailer
 
     mail(to: "info@linkvan.ca",
       subject: "Activation Request from #{@user.name}")
-
   end
 
   def simple_message

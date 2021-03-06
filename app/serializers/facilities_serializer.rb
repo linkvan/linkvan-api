@@ -4,4 +4,4 @@ class FacilitiesSerializer < ApplicationCollectionSerializer
     facilities = serialize(serializer_class || FacilitySerializer)
     result.merge({ facilities: facilities })
   end
-end #/FacilitiesSerializer
+end # /FacilitiesSerializer

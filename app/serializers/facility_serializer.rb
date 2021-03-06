@@ -5,7 +5,7 @@ class FacilitySerializer < ApplicationSerializer
     fields += [:zone, :schedule]
     fields
   end
-  
+
   def zone
     return [] if object.zone.nil?
 
@@ -16,21 +16,21 @@ class FacilitySerializer < ApplicationSerializer
   def welcomes
     return [] if object.welcomes.nil?
 
-    object.welcome.underscores.split(' ')
-  end #/welcomes
-    
+    object.welcome.underscores.split(" ")
+  end # /welcomes
+
   def services
     return [] if object.services.nil?
 
-    object.services.underscore.split(' ')
-  end #/services
+    object.services.underscore.split(" ")
+  end # /services
 
   def schedule
-    prefix = 'schedule_'
+    prefix = "schedule_"
     result = HashWithIndifferentAccess.new
     object.schedule.each_pair do |wday, schedule_data|
       result["#{prefix}#{wday}"] = schedule_data
     end
     result
   end
-end #/FacilitySerializer
+end # /FacilitySerializer

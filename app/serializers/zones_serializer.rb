@@ -4,4 +4,4 @@ class ZonesSerializer < ApplicationCollectionSerializer
     zones = serialize(serializer_class || ZoneSerializer)
     result.merge({ zones: zones })
   end
-end #/ZoneSerializer
+end # /ZoneSerializer

@@ -1,5 +1,4 @@
 class Message
-
   include ActiveModel::Model
   include ActiveModel::Conversion
   include ActiveModel::Validations
@@ -14,7 +13,4 @@ class Message
 
   validates :content,
     presence: true
-
-
-
 end

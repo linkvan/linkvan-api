@@ -1,4 +1,4 @@
-require 'rake'
+require "rake"
 
 namespace :json do
   # Usage Example:
@@ -11,7 +11,7 @@ namespace :json do
     File.open(args[:jsonfile], "w") do |f|
       f.write JSON.pretty_generate(facilities_hash)
     end
-  end #/export
+  end # /export
 
   # Usage Example:
   #    rake json:import[./db/facilities.json]
@@ -28,9 +28,9 @@ namespace :json do
     #       {<facility_attributes},
     #       {<facility_attributes} ]
     #   }}
-    facilities = data.dig('v1', 'facilities')
+    facilities = data.dig("v1", "facilities")
     facilities.each do |facility_data|
       Facility.create(facility_data)
     end
   end
-end #/json
+end # /json
