@@ -25,6 +25,8 @@ To execute the app on your computer proceed as follows:
 6. rails server
 7. load http://localhost:3000/admin/dashboard on your web browser.
 
+
+
 ## Contributing to linkvan-web  
 We want to make contributing to this project as easy and transparent as possible. By contributing to linkvan-API, you agree that your contributions can be used by the project and any others that fork the project at no cost.
 
