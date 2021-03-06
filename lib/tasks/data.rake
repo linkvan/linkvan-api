@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :data do
   # Usage Example:
   #    rake json:export[./db/facilities.json]

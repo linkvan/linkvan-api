@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::SessionsController < Api::ApplicationController
   skip_before_action :require_signin
 

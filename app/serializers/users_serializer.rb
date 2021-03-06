@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UsersSerializer < ApplicationCollectionSerializer
   def as_json
     @users.map do |user|

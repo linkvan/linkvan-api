@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FacilitySerializer < ApplicationSerializer
   def attributes
     fields = super

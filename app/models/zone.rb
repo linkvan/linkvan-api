@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Zone < ApplicationRecord
   has_many :facilities
   has_and_belongs_to_many :users

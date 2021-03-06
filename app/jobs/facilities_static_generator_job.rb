@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FacilitiesStaticGeneratorJob
   def perform
     jsonfile = "public/facilities.json"

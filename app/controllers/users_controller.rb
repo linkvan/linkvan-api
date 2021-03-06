@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::UsersController < Api::ApplicationController
   # GET api/users
   def index

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ZoneSerializer < ApplicationSerializer
   def attributes
     fields = super

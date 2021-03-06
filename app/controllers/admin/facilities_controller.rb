@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::FacilitiesController < Admin::BaseController
   # before_action :set_default_request_format
   before_action :load_facilities

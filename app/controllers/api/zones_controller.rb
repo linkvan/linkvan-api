@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::ZonesController < Api::BaseController
   skip_before_action :require_signin, only: [:index]
   before_action :require_admin, except: [:index]

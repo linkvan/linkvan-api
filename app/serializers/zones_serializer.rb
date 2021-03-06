@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ZonesSerializer < ApplicationCollectionSerializer
   def as_json(response = nil)
     result = super(response)
