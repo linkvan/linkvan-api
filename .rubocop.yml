@@ -10,27 +10,29 @@ AllCops:
   DisabledByDefault: true
   SuggestExtensions: false
   Exclude:
-    - '**/tmp/**/*'
-    - '**/templates/**/*'
-    - '**/vendor/**/*'
-    - 'actionpack/lib/action_dispatch/journey/parser.rb'
-    - 'actionmailbox/test/dummy/**/*'
-    - 'actiontext/test/dummy/**/*'
+    - 'Gemfile*'
+    - 'Rakefile'
+    - 'bin/*'
+    - 'config.ru'
+    - 'db/schema.rb'
+    - 'tmp/**/*'
+    - 'log/**/*'
+    - 'vendor/**/*'
     - '**/node_modules/**/*'
 
 Performance:
   Exclude:
-    - '**/test/**/*'
+    - '**/spec/**/*'
 
 # Prefer assert_not over assert !
 Rails/AssertNot:
   Include:
-    - '**/test/**/*'
+    - '**/spec/**/*'
 
 # Prefer assert_not_x over refute_x
 Rails/RefuteMethods:
   Include:
-    - '**/test/**/*'
+    - '**/spec/**/*'
 
 Rails/IndexBy:
   Enabled: true
@@ -140,14 +142,12 @@ Style/FrozenStringLiteralComment:
   Enabled: true
   EnforcedStyle: always
   Exclude:
-    - 'actionview/test/**/*.builder'
-    - 'actionview/test/**/*.ruby'
-    - 'actionpack/test/**/*.builder'
-    - 'actionpack/test/**/*.ruby'
-    - 'activestorage/db/migrate/**/*.rb'
-    - 'activestorage/db/update_migrate/**/*.rb'
-    - 'actionmailbox/db/migrate/**/*.rb'
-    - 'actiontext/db/migrate/**/*.rb'
+    - 'config/*.rb'
+    - 'config/**/*.rb'
+    - 'spec/*.rb'
+    - 'spec/**/*.rb'
+    - 'db/*.rb'
+    - 'db/**/*.rb'
 
 Style/RedundantFreeze:
   Enabled: true

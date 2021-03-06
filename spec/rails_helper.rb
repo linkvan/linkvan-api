@@ -1,14 +1,14 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-require 'spec_helper'
-ENV['RAILS_ENV'] ||= 'test'
-require File.expand_path('../config/environment', __dir__)
+require "spec_helper"
+ENV["RAILS_ENV"] ||= "test"
+require File.expand_path("../config/environment", __dir__)
 
 # Prevent database truncation if the environment is production
-abort('The Rails environment is running in production mode!') if Rails.env.production?
-require 'rspec/rails'
+abort("The Rails environment is running in production mode!") if Rails.env.production?
+require "rspec/rails"
 
 # Add additional requires below this line. Rails is not loaded until this point!
-require 'capybara/rspec'     # for system specs
+require "capybara/rspec"     # for system specs
 # require 'database_cleaner'   # for test database cleaning
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -24,9 +24,9 @@ require 'capybara/rspec'     # for system specs
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
+Dir[Rails.root.join("spec", "support", "**", "*.rb")].sort.each { |f| require f }
 
-Capybara.server = :puma #, { Silent: true } # To clean up your test output
+Capybara.server = :puma # , { Silent: true } # To clean up your test output
 
 # configure shoulda matchers to use rspec as the test framework and full matcher libraries for rails
 Shoulda::Matchers.configure do |config|
@@ -81,14 +81,14 @@ RSpec.configure do |config|
 
   # start by truncating all the tables but then use the faster transaction strategy the rest of the time.
   # config.before(:suite) do
-    # DatabaseCleaner.clean_with(:truncation)
-    # DatabaseCleaner.strategy = :transaction
+  # DatabaseCleaner.clean_with(:truncation)
+  # DatabaseCleaner.strategy = :transaction
   # end
 
   # start the transaction strategy as examples are run
   # config.around(:each) do |example|
-    # DatabaseCleaner.cleaning do
-      # example.run
-    # end
+  # DatabaseCleaner.cleaning do
+  # example.run
+  # end
   # end
 end

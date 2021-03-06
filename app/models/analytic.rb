@@ -1,3 +1,4 @@
-class Analytic < ApplicationRecord
+# frozen_string_literal: true
 
+class Analytic < ApplicationRecord
 end

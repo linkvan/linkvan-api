@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 class Api::FacilitiesController < Api::BaseController
   skip_before_action :require_signin
-  
+
   # GET /facilities
   def index
     @facilities = Facility.includes(:zone).is_verified.order(:updated_at)
 
     @response = FacilitiesSerializer.new(@facilities, Facilities::IndexFacilitySerializer)
     render json: @response.to_json, status: :ok
-  end #/index
+  end # /index
 
   # GET /facilities/:id
   def show
@@ -15,4 +17,4 @@ class Api::FacilitiesController < Api::BaseController
     @response = FacilitySerializer.new(@facility)
     render json: @response, status: :ok
   end
-end #/FacilitiesController
+end # /FacilitiesController
