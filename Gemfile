@@ -58,10 +58,13 @@ group :development do
   gem 'pry-stack_explorer', '~> 0.5.0'
   gem 'pry-remote'
   gem 'pry-byebug'
+end
 
-  # Ruby code analyzer and formatter
-  gem 'rubocop', require: false
+# Ruby code analyzer and formatter
+group :rubocop, :development do
+  gem 'rubocop', ">= 0.90", require: false
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
   gem 'rubocop-performance', require: false
+  gem "rubocop-packaging", require: false
 end

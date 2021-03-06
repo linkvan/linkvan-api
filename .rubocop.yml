@@ -1,224 +1,279 @@
-# rubocop: 0.80.1
-# rubocop-rails: 2.4.2
-# rubocop-performance 1.5.2
-
-require: [
-  rubocop-rspec,
-  rubocop-rails,
-  rubocop-performance
-]
+require:
+  - rubocop-packaging
+  - rubocop-performance
+  - rubocop-rails
 
 AllCops:
-  AutoCorrect: false
-  DefaultFormatter: simple
-  DisplayCopNames: true
-  # Exclude:
-  #   - 'rails/ATBAll/vendor/**/*'
-  #   - 'rails/ATBAll/tmp/**/*'
-  TargetRubyVersion: 2.6.3
-  TargetRailsVersion: 6.0
-  RSpec:
-    Patterns:
-    - '.*/test/.*\.rb'
+  TargetRubyVersion: 2.7
+  # RuboCop has a bunch of cops enabled by default. This setting tells RuboCop
+  # to ignore them, so only the ones explicitly set in this file are enabled.
+  DisabledByDefault: true
+  SuggestExtensions: false
+  Exclude:
+    - '**/tmp/**/*'
+    - '**/templates/**/*'
+    - '**/vendor/**/*'
+    - 'actionpack/lib/action_dispatch/journey/parser.rb'
+    - 'actionmailbox/test/dummy/**/*'
+    - 'actiontext/test/dummy/**/*'
+    - '**/node_modules/**/*'
 
-Metrics/AbcSize:
-  Max: 30
+Performance:
+  Exclude:
+    - '**/test/**/*'
 
-Style/Alias:
-  Enabled: false
-  Severity: convention
+# Prefer assert_not over assert !
+Rails/AssertNot:
+  Include:
+    - '**/test/**/*'
 
-# If you know what you're doing, feel free to disable this rule in-line
+# Prefer assert_not_x over refute_x
+Rails/RefuteMethods:
+  Include:
+    - '**/test/**/*'
+
+Rails/IndexBy:
+  Enabled: true
+
+Rails/IndexWith:
+  Enabled: true
+
+# Prefer &&/|| over and/or.
 Style/AndOr:
-  Severity: error
-
-Metrics/ClassLength:
-  Enabled: false
-
-Metrics/CyclomaticComplexity:
-  Max: 10
-
-Layout/LineLength:
-  Enabled: false
-
-Metrics/MethodLength:
-  Max: 100
-
-Metrics/PerceivedComplexity:
-  Max: 15
-
-Naming/VariableNumber:
-  Enabled: false
-
-# Disabled because casecmp doesn't work on unicode, but casecmp? does (ruby >= 2.4)
-# Performance cops are removed as of 0.68.0
-# Performance/Casecmp:
-#   Enabled: false
-
-Lint/InheritException:
-  Enabled: true
-  EnforcedStyle: standard_error
-
-Lint/RescueException:
-  Enabled: true
-  Severity: error
-
-Style/ClassAndModuleChildren:
-  Enabled: false
-
-Style/CommentedKeyword:
-  Enabled: false
-
-Style/ConditionalAssignment:
-  Enabled: false
-
-Lint/Debugger:
-  Enabled: true
-  Severity: error
-
-Style/Documentation:
-  Enabled: false
-
-Style/EmptyMethod:
-  Enabled: false
-
-Style/FormatString:
-  Enabled: false
-
-Style/FormatStringToken:
-  Enabled: false
-
-Style/FrozenStringLiteralComment:
-  Enabled: false
-
-# You can safely ignore this. it _can_ help make code more elegant, but not always.
-Style/GuardClause:
-  Enabled: false
-
-Style/HashEachMethods:
-  Enabled: true
-  Severity: convention
-
-Rails/HttpStatus:
-  Enabled: false
-
-Layout/FirstArrayElementIndentation:
-  Enabled: true
-  EnforcedStyle: consistent
-
-Layout/FirstHashElementIndentation:
-  Enabled: true
-  EnforcedStyle: consistent
-
-Style/HashTransformKeys:
-  Enabled: true
-  Severity: convention
-
-Style/HashTransformValues:
-  Enabled: true
-  Severity: convention
-
-# You can safely ignore this. It is to emphasize that this is the "ruby" way to do things.
-Style/NegatedIf:
   Enabled: true
 
-Style/RegexpLiteral:
-  EnforcedStyle: mixed
-  AllowInnerSlashes: false
+# Align `when` with `case`.
+Layout/CaseIndentation:
+  Enabled: true
+
+Layout/ClosingHeredocIndentation:
+  Enabled: true
+
+# Align comments with method definitions.
+Layout/CommentIndentation:
+  Enabled: true
+
+Layout/ElseAlignment:
+  Enabled: true
+
+# Align `end` with the matching keyword or starting expression except for
+# assignments, where it should be aligned with the LHS.
+Layout/EndAlignment:
+  Enabled: true
+  EnforcedStyleAlignWith: variable
+  AutoCorrect: true
+
+Layout/EmptyLineAfterMagicComment:
+  Enabled: true
+
+Layout/EmptyLinesAroundAccessModifier:
+  Enabled: true
+  EnforcedStyle: only_before
+
+Layout/EmptyLinesAroundBlockBody:
+  Enabled: true
+
+# In a regular class definition, no empty lines around the body.
+Layout/EmptyLinesAroundClassBody:
+  Enabled: true
+
+# In a regular method definition, no empty lines around the body.
+Layout/EmptyLinesAroundMethodBody:
+  Enabled: true
+
+# In a regular module definition, no empty lines around the body.
+Layout/EmptyLinesAroundModuleBody:
+  Enabled: true
+
+# Use Ruby >= 1.9 syntax for hashes. Prefer { a: :b } over { :a => :b }.
+Style/HashSyntax:
+  Enabled: true
+
+# Method definitions after `private` or `protected` isolated calls need one
+# extra level of indentation.
+Layout/IndentationConsistency:
+  Enabled: true
+  EnforcedStyle: indented_internal_methods
+
+# Two spaces, no tabs (for indentation).
+Layout/IndentationWidth:
+  Enabled: true
 
 Layout/LeadingCommentSpace:
-  Enabled: false
-
-Style/MethodCallWithArgsParentheses:
-  Enabled: false
-
-Style/MethodCallWithoutArgsParentheses:
-  Enabled: false
-
-Layout/MultilineHashKeyLineBreaks:
-  Enabled: true
-  Severity: convention
-
-Layout/MultilineMethodCallIndentation:
-  Enabled: false
-
-Layout/MultilineOperationIndentation:
-  EnforcedStyle: indented
-
-Style/MultilineTernaryOperator:
-  Enabled: false
-
-Style/MultilineWhenThen:
   Enabled: true
 
-Style/NumericLiterals:
-  Enabled: false
-
-Style/NumericPredicate:
-  Enabled: false
-
-Security/Open:
+Layout/SpaceAfterColon:
   Enabled: true
-  Severity: error
 
-Bundler/OrderedGems:
-  Enabled: false
-
-Style/ParenthesesAroundCondition:
-  Enabled: false
-
-Style/Proc:
-  Enabled: false
-
-Style/RedundantReturn:
-  Enabled: false
-
-Style/RedundantSelf:
-  # This is completely ok to not correct.
-  # The intended purpose is to catch cases
-  # where the developer thinks `self`
-  # is required, when it actually is not
+Layout/SpaceAfterComma:
   Enabled: true
-  Severity: convention
 
-Style/RescueStandardError:
-  Enabled: false
-
-Style/SafeNavigation:
-  Enabled: true
-  Severity: warning
-
-Lint/SendWithMixinArgument:
+Layout/SpaceAfterSemicolon:
   Enabled: true
 
 Layout/SpaceAroundEqualsInParameterDefault:
-  Enabled: false
+  Enabled: true
 
+Layout/SpaceAroundKeyword:
+  Enabled: true
+
+Layout/SpaceAroundOperators:
+  Enabled: true
+
+Layout/SpaceBeforeComma:
+  Enabled: true
+
+Layout/SpaceBeforeComment:
+  Enabled: true
+
+Layout/SpaceBeforeFirstArg:
+  Enabled: true
+
+Style/DefWithParentheses:
+  Enabled: true
+
+# Defining a method with parameters needs parentheses.
+Style/MethodDefParentheses:
+  Enabled: true
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  EnforcedStyle: always
+  Exclude:
+    - 'actionview/test/**/*.builder'
+    - 'actionview/test/**/*.ruby'
+    - 'actionpack/test/**/*.builder'
+    - 'actionpack/test/**/*.ruby'
+    - 'activestorage/db/migrate/**/*.rb'
+    - 'activestorage/db/update_migrate/**/*.rb'
+    - 'actionmailbox/db/migrate/**/*.rb'
+    - 'actiontext/db/migrate/**/*.rb'
+
+Style/RedundantFreeze:
+  Enabled: true
+
+# Use `foo {}` not `foo{}`.
+Layout/SpaceBeforeBlockBraces:
+  Enabled: true
+
+# Use `foo { bar }` not `foo {bar}`.
+Layout/SpaceInsideBlockBraces:
+  Enabled: true
+  EnforcedStyleForEmptyBraces: space
+
+# Use `{ a: 1 }` not `{a:1}`.
 Layout/SpaceInsideHashLiteralBraces:
-  EnforcedStyle: compact
+  Enabled: true
 
+Layout/SpaceInsideParens:
+  Enabled: true
+
+# Check quotes usage according to lint rule below.
 Style/StringLiterals:
-  Enabled: false
-
-Style/SymbolArray:
-  Enabled: false
-
-Style/TernaryParentheses:
   Enabled: true
-  EnforcedStyle: require_parentheses_when_complex
+  EnforcedStyle: double_quotes
 
-Style/TrailingCommaInArrayLiteral:
-  Enabled: false
+# Detect hard tabs, no hard tabs.
+Layout/IndentationStyle:
+  Enabled: true
 
-Style/TrailingCommaInHashLiteral:
-  Enabled: false
+# Empty lines should not have any spaces.
+Layout/TrailingEmptyLines:
+  Enabled: true
 
+# No trailing whitespace.
 Layout/TrailingWhitespace:
-  Enabled: false
-
-Lint/UnusedMethodArgument:
   Enabled: true
-  Severity: convention
 
-Style/ZeroLengthPredicate:
-  Enabled: false
+# Use quotes for string literals when they are enough.
+Style/RedundantPercentQ:
+  Enabled: true
+
+Lint/AmbiguousOperator:
+  Enabled: true
+
+Lint/AmbiguousRegexpLiteral:
+  Enabled: true
+
+Lint/DuplicateRequire:
+  Enabled: true
+
+Lint/ErbNewArguments:
+  Enabled: true
+
+# Use my_method(my_arg) not my_method( my_arg ) or my_method my_arg.
+Lint/RequireParentheses:
+  Enabled: true
+
+Lint/RedundantStringCoercion:
+  Enabled: true
+
+Lint/UriEscapeUnescape:
+  Enabled: true
+
+Lint/UselessAssignment:
+  Enabled: true
+
+Lint/DeprecatedClassMethods:
+  Enabled: true
+
+Style/ParenthesesAroundCondition:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
+Style/RedundantBegin:
+  Enabled: true
+
+Style/RedundantReturn:
+  Enabled: true
+  AllowMultipleReturnValues: true
+
+Style/RedundantRegexpEscape:
+  Enabled: true
+
+Style/Semicolon:
+  Enabled: true
+  AllowAsExpressionSeparator: true
+
+# Prefer Foo.method over Foo::method
+Style/ColonMethodCall:
+  Enabled: true
+
+Style/TrivialAccessors:
+  Enabled: true
+
+Performance/BindCall:
+  Enabled: true
+
+Performance/FlatMap:
+  Enabled: true
+
+Performance/RedundantMerge:
+  Enabled: true
+
+Performance/StartWith:
+  Enabled: true
+
+Performance/EndWith:
+  Enabled: true
+
+Performance/RegexpMatch:
+  Enabled: true
+
+Performance/ReverseEach:
+  Enabled: true
+
+Performance/UnfreezeString:
+  Enabled: true
+
+Performance/DeletePrefix:
+  Enabled: true
+
+Performance/DeleteSuffix:
+  Enabled: true
+
