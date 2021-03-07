@@ -22,7 +22,7 @@ namespace :data do
 
     result = []
     new_facilities.map do |facility_hash|
-      next if Facility.find_by(id: facility_hash['id']).present?
+      next if Facility.find_by(id: facility_hash["id"]).present?
 
       result << Facility.create(facility_hash)
     end
