@@ -5,6 +5,8 @@ namespace :data do
   #    rake json:export[./db/facilities.json]
   desc "export active facilities to a JSON file"
   task load_fake: :environment do
+    abort "This script can only be run on development environment" unless Rails.env.development?
+
     logger = Rails.logger
     logger.extend(ActiveSupport::Logger.broadcast(ActiveSupport::Logger.new(STDOUT)))
     logger.formatter = nil
