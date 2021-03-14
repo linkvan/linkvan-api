@@ -83,3 +83,6 @@ gem "pagy", "~> 3.12.0"
 # Alternative approach to web apps development.
 # https://github.com/hotwired/hotwire-rails
 gem "hotwire-rails"
+
+# Colorize terminal output
+gem 'colorize'
