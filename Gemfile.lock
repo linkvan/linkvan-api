@@ -111,6 +111,7 @@ GEM
       mini_mime (>= 0.1.1)
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
+    memory_profiler (1.0.0)
     method_source (1.0.0)
     mimemagic (0.3.5)
     mini_mime (1.0.2)
@@ -246,6 +247,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    stackprof (0.2.16)
     stimulus-rails (0.2.3)
       rails (>= 6.0.0)
     thor (1.1.0)
@@ -289,6 +291,7 @@ DEPENDENCIES
   faker (~> 2.17.0)
   hotwire-rails
   listen (~> 3.4.1)
+  memory_profiler
   pagy (~> 3.12.0)
   pg (~> 1.2.3)
   pry (~> 0.14.0)
@@ -309,6 +312,7 @@ DEPENDENCIES
   sass-rails (~> 6.0.0)
   shoulda-matchers (>= 4.5.1)
   spring
+  stackprof
   turbolinks (~> 5.2.1)
   tzinfo-data
   view_component
