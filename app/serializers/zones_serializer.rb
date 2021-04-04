@@ -1,7 +1,11 @@
 class ZonesSerializer < ApplicationCollectionSerializer
   def as_json(response = nil)
     result = super(response)
-    zones = serialize(serializer_class || ZoneSerializer)
+    zones = build
     result.merge({ zones: zones })
   end
-end #/ZoneSerializer
+
+  def build
+    serialize(serializer_class || ZoneSerializer)
+  end
+end # /ZoneSerializer
