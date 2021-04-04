@@ -5,7 +5,7 @@ class FacilitySerializer < ApplicationSerializer
     fields += [:zone, :schedule]
     fields
   end
-  
+
   def zone
     return [] if object.zone.nil?
 
@@ -18,7 +18,7 @@ class FacilitySerializer < ApplicationSerializer
 
     object.welcome.underscores.split(' ')
   end #/welcomes
-    
+
   def services
     return [] if object.services.nil?
 
