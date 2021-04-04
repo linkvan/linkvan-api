@@ -3,7 +3,11 @@
 class FacilitiesSerializer < ApplicationCollectionSerializer
   def as_json(response = nil)
     result = super(response)
-    facilities = serialize(serializer_class || FacilitySerializer)
+    facilities = build
     result.merge({ facilities: facilities })
   end
-end # /FacilitiesSerializer
+
+  def build
+    serialize(serializer_class || FacilitySerializer)
+  end
+end
