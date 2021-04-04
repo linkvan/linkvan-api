@@ -19,7 +19,6 @@ class ApplicationCollectionSerializer
   end
 
   private
-
     def hashfy(response)
       case response
       when Hash

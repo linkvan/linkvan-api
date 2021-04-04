@@ -16,7 +16,6 @@ class Api::HomeController < Api::BaseController
     facilities = Facility.includes(:zone).is_verified.order(:updated_at)
     result[:facilities] = FacilitiesSerializer.new(facilities, Facilities::IndexFacilitySerializer).build
 
-    # result[:notices] = 
     render json: result.as_json, status: :ok
   end
 
@@ -24,14 +23,13 @@ class Api::HomeController < Api::BaseController
   end
 
   private
+    def compute_notices
+      result = {}
 
-  def compute_notices
-    result = {}
+      Notice.notice_types.each_key do |type|
+        result[type] = Notice.published.where(notice_type: type).exists?
+      end
 
-    Notice.notice_types.each_key do |type|
-      result[type] = Notice.published.where(notice_type: type).exists?
+      result
     end
-
-    result
-  end
 end

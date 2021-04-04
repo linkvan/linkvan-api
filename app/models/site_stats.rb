@@ -8,7 +8,6 @@ class SiteStats
   attribute :last_updated, :datetime, default: -> { self.compute_last_updated }
 
   private
-
     class << self
       def facilities
         Facility.order(updated_at: :desc)
@@ -19,7 +18,6 @@ class SiteStats
       end
 
       private
-
         def compute_last_updated
           [ last_facility&.updated_at, last_notice&.updated_at ].reject(&:nil?).max
         end

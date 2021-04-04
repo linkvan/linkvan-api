@@ -12,8 +12,7 @@ class SiteStatsSerializer < ApplicationSerializer
   end
 
   private
-
-  def site_stats
-    @site_stats ||= SiteStats.new
-  end
+    def site_stats
+      @site_stats ||= SiteStats.new
+    end
 end
