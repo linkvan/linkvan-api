@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_01_190143) do
+ActiveRecord::Schema.define(version: 2020_04_18_180146) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -119,6 +119,7 @@ ActiveRecord::Schema.define(version: 2020_03_01_190143) do
     t.text "legal_note"
     t.text "learning_note"
     t.integer "zone_id"
+    t.text "overdose_note"
     t.index ["user_id"], name: "index_facilities_on_user_id"
     t.index ["zone_id"], name: "index_facilities_on_zone_id"
   end
@@ -164,6 +165,7 @@ ActiveRecord::Schema.define(version: 2020_03_01_190143) do
     t.boolean "published"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "notice_type"
   end
 
   create_table "statuses", id: :serial, force: :cascade do |t|
