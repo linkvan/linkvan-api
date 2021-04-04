@@ -15,11 +15,20 @@ class ApplicationCollectionSerializer
   end
 
   def as_json(response = nil)
-    case response
-    when Hash
-      response.with_indifferent_access
-    else
-      HashWithIndifferentAccess.new
-    end
+    hashfy(response).merge(SiteStatsSerializer.new(site_stats).as_json)
   end
+
+  private
+    def hashfy(response)
+      case response
+      when Hash
+        response.with_indifferent_access
+      else
+        HashWithIndifferentAccess.new
+      end
+    end
+
+    def site_stats
+      @site_stats ||= SiteStats.new
+    end
 end

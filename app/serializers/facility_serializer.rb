@@ -35,4 +35,4 @@ class FacilitySerializer < ApplicationSerializer
     end
     result
   end
-end # /FacilitySerializer
+end
