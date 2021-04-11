@@ -7,7 +7,7 @@ class Api::HomeController < Api::BaseController
     result = {}
 
     alert = Alert.active.timeline.first
-    result[:alert] = alert.nil? ? {} : AlertSerializer.new(alert).as_json
+    result[:alert] = alert.nil? ? nil : AlertSerializer.new(alert).as_json
 
     result[:notices] = compute_notices
 
