@@ -6,4 +6,8 @@ class Facilities::CardComponent < ViewComponent::Base
   def initialize(facility:)
     @facility = facility
   end
+
+  def card_id
+    dom_id(facility)
+  end
 end

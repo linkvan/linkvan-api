@@ -16,15 +16,11 @@ class FacilitySerializer < ApplicationSerializer
   end
 
   def welcomes
-    return [] if object.welcomes.nil?
-
-    object.welcome.underscores.split(" ")
+    object.welcomes_list
   end # /welcomes
 
   def services
-    return [] if object.services.nil?
-
-    object.services.underscore.split(" ")
+    object.services_list
   end # /services
 
   def schedule

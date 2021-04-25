@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "ostruct"
 require "bigdecimal"
 require "bigdecimal/util"
 
@@ -7,7 +8,16 @@ class Facility < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :zone, optional: true
 
+  # WELCOMES = %w[male female transgender children youth adult senior].freeze
+  WELCOMES = [:male, :female, :transgender, :children, :youth, :adult, :senior].freeze
+  SERVICES = [:shelter, :food, :medical, :hygiene, :technology, :legal, :learning, :overdose_provention, :phone].freeze
+
+  Welcomes = Struct.new(*WELCOMES, keyword_init: true)
+  Services = Struct.new(*SERVICES, keyword_init: true)
+
   validates :name, :lat, :long, :services, presence: true
+  validates :welcome, inclusion: WELCOMES
+  validates :services, inclusion: SERVICES
 
   # is_impressionable
 
@@ -18,6 +28,18 @@ class Facility < ApplicationRecord
   scope :keywordSearch, lambda  { |word|
     where(["services ILIKE ? OR welcomes ILIKE ?", "%#{word}%", "%#{word}%"]) unless word == "all"
   }
+
+  def self.welcomes
+    @welcomes ||= ActiveSupport::ArrayInquirer.new(WELCOMES)
+
+    # return @welcomes if @welcomes.present?
+
+    # @welcomes = Welcomes.new(WELCOMES)
+    # @welcomes = HashWithIndifferentAccess.new
+    # WELCOMES.each { |w| @welcomes[w] = w.to_s.titleize }
+
+    # @welcomes = OpenStruct.new(@welcomes)
+  end
 
   def managed_by?(user)
     if user.respond_to? :id
@@ -54,10 +76,27 @@ class Facility < ApplicationRecord
   end # /adjusted_current_time
 
   def services_list
-    return [] if services.nil?
+    return [] if services.blank?
 
-    services.underscore.split(" ")
+    list = services.underscore.split(" ")#.map(&:to_sym)
+    Services.new(list.map { |v| [v,v] }.to_h)
   end # /services
+
+  def welcomes_obj
+    ActiveSupport::ArrayInquirer.new(welcomes_list)
+    # Welcomes.new(*welcomes_list)
+  end
+
+  def welcomes_list
+    return [] if welcomes.blank?
+
+    # welcomes.underscore.split(" ")#.map(&:to_sym)
+    list = welcomes.underscore.split(" ")#._map(&:to_sym)
+    # result = HashWithIndifferentAccess.new
+    Welcomes.new(list.map { |v| [v, v] }.to_h)
+    # WELCOMES.each { |v| result[v] = list.include? (}
+    # Welcomes.new(welcomes.underscore.split(" ") ) #.map(&:to_sym)
+  end
 
   def schedule
     result = HashWithIndifferentAccess.new
