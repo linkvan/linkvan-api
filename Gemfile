@@ -14,7 +14,8 @@ gem "sass-rails", "~> 6.0.0"
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem "webpacker", "~> 5.2.1"
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
-gem "turbolinks", "~> 5.2.1"
+# gem "turbolinks", "~> 5.2.1"
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 #gem "jbuilder", "~> 2.7"
 # Use Redis adapter to run Action Cable in production
@@ -83,6 +84,7 @@ gem "pagy", "~> 3.12.0"
 # Alternative approach to web apps development.
 # https://github.com/hotwired/hotwire-rails
 gem "hotwire-rails"
+gem "turbo-rails"
 
 # Colorize terminal output
 gem "colorize"

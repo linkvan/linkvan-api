@@ -18,9 +18,9 @@ import "bulma"
 
 import "../stylesheets/application"
 
-import Linkvan from '../linkvan/linkvan'
+import Linkvan from '../src/linkvan/linkvan'
 
-document.addEventListener("turbolinks:load", () => {
+document.addEventListener("turbo:load", () => {
 
   Linkvan.start();
 })
