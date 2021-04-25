@@ -1,0 +1,16 @@
+<%= render Shared::CardComponent.new(title: 'Contacts') do |card| %>
+    <div class="field">
+        <%= form.label :phone, "Phone:", class: "label" %>
+        <div class="control">
+            <%= form.text_field :phone, class: "input" %>
+        </div>
+    </div>
+
+    <div class="field">
+        <%= form.label :website, "Website:", class: "label" %>
+        <div class="control">
+            <%= form.text_field :website, class: "input" %>
+        </div>
+    </div>
+<% end %>
+

@@ -1,0 +1,17 @@
+<header class='<%= classes %>'>
+    <div class="level-left">
+        <div class="level-item">
+            <div class="card-header-title">
+                <%= title %>
+            </div>
+        </div>
+    </div>
+
+    <div class="level-right">
+        <% action_contents.each do |action_content| %>
+            <div class="level-item">
+                <%= action_content %>
+            </div>
+        <% end %>
+    </div>
+</header>

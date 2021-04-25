@@ -1,0 +1,28 @@
+<%= render Shared::CardComponent.new(title: "Details") do |card| %>
+    <!-- Name -->
+    <div class="field">
+        <%= form.label :name, "Name:", class: "label" %>
+        <div class="control">
+            <%= form.text_field :name, class: "input" %>
+        </div>
+        <p class="help is-danger">This is a help text</p>
+    </div>
+
+    <!-- Welcomes -->
+    <div class="field" id='welcomes_field'>
+        <%= form.label :welcomes, "Welcomes:", class: "label" %>
+
+        <div class="columns is-multiline">
+            <% @facility.welcomes_list.each_pair do |welcome_key, welcome| %>
+                <div class="column is-half">
+                    <%= label_tag "facility_welcomes_list_#{welcome_key}", class: 'svg-icons' do %>
+                        <%= check_box_tag "facility[welcomes_list][#{welcome_key}]", welcome_key, welcome.present? %>
+                        <%= render Facilities::WelcomesIconComponent.new(welcome_key) %>
+                        <%= welcome_key.to_s.titleize %>
+                    <% end %>
+                </div>
+            <% end %>
+        </div>
+
+    </div>
+<% end %>

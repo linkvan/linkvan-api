@@ -11,179 +11,35 @@
             </p>
         </div>
 
-        <!-- Name -->
         <div class="field">
-            <%= form.label :name, "Name:", class: "label" %>
-            <div class="control">
-                <%= form.text_field :name, class: "input" %>
-            </div>
-            <p class="help is-danger">This is a help text</p>
-        </div>
-
-        <!-- Location -->
-        <div class="field is-grouped">
-            <div class="control is-expanded">
-                <%= form.label :lat, "Lat:", class: "label" %>
-                <p class="control">
-                <%= form.text_field :lat, placeholder: "Lat", class: "input" %>
-                </P>
-            </div>
-
-            <div class="control is-expanded">
-                <%= form.label :long, "Long:", class: "label" %>
+            <%= form.label :verified, class: "label" do %>
                 <div class="control">
-                    <%= form.text_field :long, placeholder: "Long", class: "input" %>
+                    <%= form.check_box :verified %>
+                    Verified
                 </div>
-            </div>
-        </div>
-
-        <!-- Welcomes -->
-        <div class="field">
-            <%= form.label :welcomes, "Welcomes:", class: "label" %>
-            <% @facility.welcomes_list.each_pair do |welcome_key, welcome| %>
-                <%= label_tag "facility_welcomes_list_#{welcome_key}", class: 'svg-icons' do %>
-                    <%= check_box_tag "facility[welcomes_list][#{welcome_key}]", welcome_key, welcome.present? %>
-                    <%= render Facilities::WelcomesIconComponent.new(welcome_key) %>
-                    <%= welcome_key.to_s.titleize %>
-                <% end %>
             <% end %>
         </div>
 
-        <!-- Services -->
-        <fieldset class="field">
-            <legend class="label">Services:</legend>
-
-            <div class="block">
-                <div class="field">
-                    <% @facility.services_list.each_pair do |service_key, service| %>
-                        <%= label_tag "facility_services_list_#{service_key}" do %>
-                            <%= check_box_tag "facility[services_list][#{service_key}]", service_key,  service.present?, data: { target_note: "#{service_key}_note" } %>
-                            <%= service_key.to_s.titleize %>
-                        <% end %>
-                    <% end %>
-                </div>
+        <div class="columns">
+            <div class="column is-one-third">
+                <%= render 'form_card_details', form: form %>
             </div>
 
-            <div class="block">
-                <div class="container">
-                    <p><span class="has-text-weight-bold">Service Notes</span> - Add any notes relevant to specific services such as special hours, or eligibility concerns.</p>
-                    <p>Eg: "Lunch served between 11:30am and 1:30pm"</p>
-                </div>
-
-                <div class="columns is-multiline">
-                    <div class="column is-one-third" id='shelter_note'>
-                        <div class="field">
-                            <%= form.label :shelter_note, "Shelter Note:", class: "label" %>
-                            <div class="control">
-                                <%= form.text_area :shelter_note, rows: 5, class: "textarea" %>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="column is-one-third" id='food_note'>
-                        <div class="field">
-                            <%= form.label :food_note, "Food Note:", class: "label" %>
-                            <div class="control">
-                                <%= form.text_area :food_note, rows: 5, class: "textarea" %>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="column is-one-third" id='medical_note'>
-                        <div class="field">
-                            <%= form.label :medical_note, "Medical Note:", class: "label" %>
-                            <div class="control">
-                                <%= form.text_area :medical_note, rows: 5, class: "textarea" %>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="column is-one-third" id='hygiene_note'>
-                        <div class="field">
-                            <%= form.label :hygiene_note, "Hygiene Note:", class: "label" %>
-                            <div class="control">
-                                <%= form.text_area :hygiene_note, rows: 5, class: "textarea" %>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="column is-one-third" id='technology_note'>
-                        <div class="field">
-                            <%= form.label :technology_note , "Technology Note:", class: "label" %>
-                            <div class="control">
-                                <%= form.text_area :technology_note, rows: 5, class: "textarea" %>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="column is-one-third" id='legal_note'>
-                        <div class="field">
-                            <%= form.label :legal_note , "Legal Note:", class: "label" %>
-                            <div class="control">
-                                <%= form.text_area :legal_note, rows: 5, class: "textarea" %>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="column is-one-third" id='learning_note'>
-                        <div class="field">
-                            <%= form.label :learning_note , "Learning Note:", class: "label" %>
-                            <div class="control">
-                                <%= form.text_area :learning_note, rows: 5, class: "textarea" %>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </fieldset>
-
-
-
-
-
-
-
-        <div class="field">
-            <%= form.label :address, "Address:", class: "label" %>
-            <div class="control">
-                <%= form.text_field :address, class: "input" %>
+            <div class="column">
+                <%= render 'form_card_descriptions', form: form %>
             </div>
         </div>
 
-        <div class="field">
-            <%= form.label :phone, "Phone:", class: "label" %>
-            <div class="control">
-                <%= form.text_field :phone, class: "input" %>
+        <div class="columns">
+            <div class="column">
+                <%= render 'form_card_location', form: form %>
+            </div>
+            <div class="column is-one-third">
+                <%= render 'form_card_contacts', form: form %>
             </div>
         </div>
 
-        <div class="field">
-            <%= form.label :website, "Website:", class: "label" %>
-            <div class="control">
-                <%= form.text_field :website, class: "input" %>
-            </div>
-        </div>
+        <%= render 'form_card_services', form: form %>
 
-        <div class="field">
-            <%= form.label :description, "Description:", class: "label" %>
-            <div class="control">
-                <%= form.text_field :description, class: "input" %>
-            </div>
-        </div>
-
-        <div class="field">
-            <%= form.label :verified, "Verified:", class: "label" %>
-            <div class="control">
-                <%= form.text_field :verified, class: "input" %>
-            </div>
-        </div>
-
-        <div class="field">
-            <%= form.label :notes, "Notes:", class: "label" %>
-            <div class="control">
-                <%= form.text_area :notes, rows: 5, class: "textarea" %>
-            </div>
-        </div>
     <% end %>
 </div>
