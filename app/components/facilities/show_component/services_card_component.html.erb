@@ -1,0 +1,43 @@
+<%= render Shared::CardComponent.new(title: 'Services') do |card| %>
+    <%# card.button(title: 'Edit', path: edit_admin_facility_service_path(facility_id: @facility.id)) %>
+
+    <table class='table is-fullwidth is-hoverable'>
+        <tbody>
+            <% all_services.each do |service| %>
+                <tr>
+                    <th><%= service.name %></th>
+                    <% if provides_service?(service) %>
+                        <td>
+                            <%= link_to(admin_facility_service_path(facility_id: facility.id, service_id: service.id), method: :delete, class: 'button is-white')  do %>
+                                <%= render Shared::StatusComponent.new(provides_service?(service)) %>
+                            <% end %>
+                        </td>
+                    <% else %>
+                        <td>
+                            <%= link_to(admin_facility_services_path(facility_id: facility.id, service_id: service.id), method: :post, class: 'button is-white') do %>
+                                <%= render Shared::StatusComponent.new(provides_service?(service)) %>
+                            <% end %>
+                        </td>
+                    <% end %>
+
+                    <% if provides_service?(service) %>
+                        <tr>
+                            <td colspan = '2'>
+                                <%= notes_for(service) %>
+
+                                <%= render Shared::ModalCardComponent.new do %>
+                                    <%= form_with model: facility_service_for(service), url: admin_facility_service_path(facility_id: facility.id, service_id: service.id), method: :put do |form| %>
+                                        <div class='field'>
+                                            <%= form.label :note %>
+                                            <%= form.text_area :note, rows: 5, class: 'textarea' %>
+                                        </div>
+                                    <% end %>
+                                <% end %>
+                            </td>
+                        </tr>
+                    <% end %>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+<% end %>

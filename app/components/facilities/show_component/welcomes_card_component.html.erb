@@ -1,0 +1,18 @@
+<%= render Shared::CardComponent.new(title: 'Welcomes') do |card| %>
+    <table class='table is-fullwidth is-hoverable'>
+        <tbody>
+            <% all_welcomes.each do |welcome| %>
+                <tr>
+                    <th>
+                        <span class='icon-text'>
+                            <%= render Facilities::WelcomesIconComponent.new(welcome).with_variant(:icon) %>
+                            <span><%= welcome.to_s.titleize %></span>
+                        </span>
+                    </th>
+
+                    <td><%= welcomes?(welcome) %></td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+<% end %>

@@ -3,8 +3,13 @@
 class Shared::CardComponent < ViewComponent::Base
   # include ActionView::RecordIdentifier
 
-  renders_many :action_contents
   renders_one :footer
+  # renders_many :buttons
+  renders_many :buttons, 'ButtonComponent'
+  # renders_many :buttons, ->(**args) {
+    # Rails.logger.info "BUTTON: #{args.inspect}"
+    # header_component.button(args)
+  # }
 
   attr_reader :card_id
 
@@ -14,30 +19,53 @@ class Shared::CardComponent < ViewComponent::Base
     @header_classes = options.dig(:header, :classes)
   end
 
-  delegate :action_content, to: :header_component
-
-  def header
-    render header_component
-  end
+  # delegate :action_content, to: :header_component
 
   def header_component
-    @header_component ||= HeaderComponent.new title: @title, classes: @header_classes
+    # @header_component ||= HeaderComponent.new title: @title, classes: @header_classes
+    HeaderComponent.new title: @title, classes: @header_classes, buttons: buttons
   end
 
   class HeaderComponent < ViewComponent::Base
     attr_reader :title, :classes
 
-    renders_many :action_contents
-
-    def initialize(title:, classes:)
+    def initialize(title:, classes:, buttons: nil)
       @title = title
       @classes = classes
+      @buttons = buttons.presence || []
     end
 
     private
 
     def classes
       "card-header level #{@classes}"
+    end
+  end
+
+  class ButtonComponent < ViewComponent::Base
+    def initialize(title:, path:)
+      @title = title
+      @path = path
+    end
+
+    def render?
+      @title.present? && @path.present?
+    end
+
+    def call
+      link_to @path, class: "button" do
+        button_content
+      end
+    end
+
+    def button_content
+      edit_icon + tag.span(@title)
+    end
+
+    def edit_icon
+      tag.span(class: "icon") do
+        tag.i class: "fas fa-pen"
+      end
     end
   end
 end

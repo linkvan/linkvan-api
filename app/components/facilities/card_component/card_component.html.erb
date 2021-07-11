@@ -65,11 +65,11 @@
 
                 <br/>
                 Services:
-                <% if facility.services_list.blank? %>
+                <% if facility.services.blank? %>
                     <span class="tag is-danger">None</span>
                 <% else %>
-                    <% facility.services_list.each do |service| %>
-                        <span class="tag is-light"><%= service.titleize %></span>
+                    <% facility.services.compact_blank.each do |service| %>
+                        <span class="tag is-light"><%= service.name %></span>
                     <% end %>
                 <% end %>
 

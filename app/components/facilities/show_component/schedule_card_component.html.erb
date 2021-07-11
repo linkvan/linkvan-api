@@ -1,0 +1,49 @@
+<%= render Shared::CardComponent.new(title: 'Schedule') do |card| %>
+    <table class='table is-fullwidth is-hoverable'>
+        <tbody>
+            <% schedules.each do |schedule| %>
+                <tr>
+                    <th>
+                      <%= schedule.week_day.titleize %>:
+                    </th>
+
+                    <td>
+                        <% if schedule.availability == :set_times %>
+                            <% schedule.time_slots.each do |time_slot| %>
+                                <div class='level'>
+                                    <div class='level-right'>
+                                        <div>
+                                            <div>
+                                                Starts at:
+                                                <%= time_slot.from_time %>
+                                            </div>
+
+                                            <div>
+                                                Ends at:
+                                                <%= time_slot.to_time %>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class='level-left'>
+                                        <%= link_to_edit(schedule) %>
+                                    </div>
+                                </div>
+                            <% end %>
+                        <% else %>
+                                <div class='level'>
+                                    <div class='level-right'>
+                                        <%= schedule.availability.to_s.titleize %>
+                                    </div>
+
+                                    <div class='level-left'>
+                                        <%= link_to_edit(schedule) %>
+                                    </div>
+                                </div>
+                        <% end %>
+                    </td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+<% end %>
