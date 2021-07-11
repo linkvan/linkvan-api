@@ -64,6 +64,9 @@ group :development do
   gem "rack-mini-profiler", "~> 2.3.1"
   gem "memory_profiler"
   gem "stackprof"
+
+  # Replaces standard Rails' error page with a more useful error page
+  gem 'better_errors'
 end
 
 # Ruby code analyzer and formatter
@@ -91,3 +94,7 @@ gem "colorize"
 
 # Adds support to inline SVG images
 gem "inline_svg"
+
+gem "haversine", git: "https://github.com/fabionl/haversine.git"
+gem "geo_coord", require: "geo/coord"
+gem 'geocoder', '~> 1.6'
