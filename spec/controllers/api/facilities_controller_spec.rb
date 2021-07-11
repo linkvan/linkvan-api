@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Api::FacilitiesController do # , type: :request do
-  let(:test_services) { "Test AnotherTest Yet_Another_Test" }
+  let(:test_services) { "shelter legal" }
 
   describe "GET #index" do
     before do

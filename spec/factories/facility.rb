@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :facility do
     id { 1 }
     name { "Test Facility" }
-    welcomes { "All" }
+    welcomes { "male female transgender children youth adult senior" }
     services { " Legal" }
     lat { 49.2450424 }
     long { -123.02894679999997 }

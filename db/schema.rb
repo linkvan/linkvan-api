@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_18_180146) do
+ActiveRecord::Schema.define(version: 2021_06_27_182222) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -124,6 +124,39 @@ ActiveRecord::Schema.define(version: 2020_04_18_180146) do
     t.index ["zone_id"], name: "index_facilities_on_zone_id"
   end
 
+  create_table "facility_schedules", force: :cascade do |t|
+    t.bigint "facility_id"
+    t.string "week_day", null: false
+    t.boolean "open_all_day", default: false, null: false
+    t.boolean "closed_all_day", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["facility_id"], name: "index_facility_schedules_on_facility_id"
+    t.index ["week_day"], name: "index_facility_schedules_on_week_day"
+  end
+
+  create_table "facility_services", force: :cascade do |t|
+    t.bigint "facility_id", null: false
+    t.bigint "service_id", null: false
+    t.text "note"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["facility_id", "service_id"], name: "index_facility_services_on_facility_id_and_service_id", unique: true
+    t.index ["facility_id"], name: "index_facility_services_on_facility_id"
+    t.index ["service_id"], name: "index_facility_services_on_service_id"
+  end
+
+  create_table "facility_time_slots", force: :cascade do |t|
+    t.bigint "facility_schedule_id"
+    t.integer "from_hour", null: false
+    t.integer "from_min", null: false
+    t.integer "to_hour", null: false
+    t.integer "to_min", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["facility_schedule_id"], name: "index_facility_time_slots_on_facility_schedule_id"
+  end
+
   create_table "impressions", id: :serial, force: :cascade do |t|
     t.string "impressionable_type"
     t.integer "impressionable_id"
@@ -168,6 +201,13 @@ ActiveRecord::Schema.define(version: 2020_04_18_180146) do
     t.string "notice_type"
   end
 
+  create_table "services", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_services_on_name", unique: true
+  end
+
   create_table "statuses", id: :serial, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -202,4 +242,6 @@ ActiveRecord::Schema.define(version: 2020_04_18_180146) do
   end
 
   add_foreign_key "facilities", "zones"
+  add_foreign_key "facility_services", "facilities"
+  add_foreign_key "facility_services", "services"
 end
