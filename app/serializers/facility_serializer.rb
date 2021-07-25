@@ -16,7 +16,7 @@ class FacilitySerializer < ApplicationSerializer
   def welcomes
     return [] if object.welcomes.nil?
 
-    object.welcome.underscores.split(' ')
+    object.welcomes.underscore.split(' ')
   end #/welcomes
 
   def services
