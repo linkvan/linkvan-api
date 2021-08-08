@@ -23,7 +23,7 @@ class Admin::FacilityServicesController < Admin::BaseController
   def update
     if @facility_service.blank?
       flash[:error] = "Facility #{@facility.name} (id: #{@facility.id}) doesn't have #{@service.name} turned on"
-    elsif @facility_service.update(facility_service_params)
+    elsif @facility_service.update(update_facility_service_params)
       flash[:notice] = "Successfully updated #{@service.name} service for Facility #{@facility.name} (id: #{@facility.id}"
     else
       flash[:error] = "Failed to update #{@service.name} service for Facility #{@facility.name} (id: #{@facility.id}"
@@ -59,5 +59,9 @@ class Admin::FacilityServicesController < Admin::BaseController
 
   def load_service
     @service = Service.find(params[:service_id])
+  end
+
+  def update_facility_service_params
+    params.require(:facility_service).permit(:note)
   end
 end

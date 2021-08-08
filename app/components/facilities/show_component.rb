@@ -66,11 +66,36 @@ class Facilities::ShowComponent < ViewComponent::Base
 
     private
 
-    def notes_for(service)
-      if @teste.blank?
-        @teste = true
-        console
+    def switch_button(service)
+      if provides_service?(service)
+        target_url = admin_facility_service_path(facility_id: facility.id, service_id: service.id)
+        method = :delete
+      else
+        target_url = admin_facility_services_path(facility_id: facility.id, service_id: service.id)
+        method = :post
       end
+
+      link_to(target_url, method: method, class: "button is-white is-pulled-right")  do
+        render Shared::StatusComponent.new(provides_service?(service))
+      end
+    end
+
+    def show_notes_button(service)
+      if facility_service_for(service).present?
+        button_data = { modal_id: note_modal_id(service) }
+        tag.button class: "button is-white show_notes_button is-pulled-right", data: button_data do
+          tag.span class: "icon" do
+            tag.i class: "fas fa-edit"
+          end
+        end
+      end
+    end
+
+    def note_modal_id(service)
+      "note_modal_#{service.id}"
+    end
+
+    def notes_for(service)
       facility_service_for(service)&.note
     end
 

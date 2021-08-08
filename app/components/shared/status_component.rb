@@ -6,10 +6,14 @@ class Shared::StatusComponent < ViewComponent::Base
     off: "fa-times-circle has-text-danger"
   }.freeze
 
+  SIZE_CLASSES = {
+    large: "fa-lg"
+  }.freeze
 
-  def initialize(status, show_title: false)
+  def initialize(status, show_title: false, size: :large)
     @status = ActiveModel::Type::Boolean.new.cast(status)
     @show_title = show_title
+    @size = size
   end
 
   def call
@@ -18,7 +22,7 @@ class Shared::StatusComponent < ViewComponent::Base
 
   def call_icon
     tag.span class: "icon" do
-      tag.i class: "fas fa-lg #{status_classes}"
+      tag.i class: "fas #{size_classes} #{status_classes}"
     end
   end
 
@@ -29,6 +33,10 @@ class Shared::StatusComponent < ViewComponent::Base
   end
 
   private
+
+  def size_classes
+    SIZE_CLASSES[@size]
+  end
 
   def title
     @status ? "Yes" : "No"
