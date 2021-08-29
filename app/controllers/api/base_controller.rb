@@ -1,10 +1,10 @@
-# frozen_string_literal: true
-
-class Api::BaseController < ActionController::API # ApplicationController #ActionController::API
-  before_action :require_signin
-
+class Api::BaseController < ApplicationController
   private
-    def require_signin
-      head :unauthorized unless current_user
+    def base_result
+      site_stats
+    end
+
+    def site_stats
+      { site_stats: SiteStatsSerializer.new(SiteStats.new).build }
     end
 end

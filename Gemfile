@@ -31,6 +31,8 @@ gem "bootsnap", "~> 1.7.2", require: false
 # Framework building reusable, tetable and encapsulated ViewComponents in Rails
 # docs: viewcomponent.org
 gem "view_component", require: "view_component/engine"
+# Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
+gem 'rack-cors'
 
 group :development, :test do
   gem "rspec-rails", "~> 5.0.0"

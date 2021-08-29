@@ -11,9 +11,8 @@ class Facility < ApplicationRecord
 
   # is_impressionable
 
-  scope :is_verified, lambda {
-    where(verified: true)
-  }
+  scope :is_verified, -> { where(verified: true) }
+  scope :with_service, ->(service) { where("services ILIKE ?", "%#{service}%") }
 
   scope :keywordSearch, lambda  { |word|
     where(["services ILIKE ? OR welcomes ILIKE ?", "%#{word}%", "%#{word}%"]) unless word == "all"

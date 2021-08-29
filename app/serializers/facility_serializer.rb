@@ -19,13 +19,13 @@ class FacilitySerializer < ApplicationSerializer
     return [] if object.welcomes.nil?
 
     object.welcome.underscores.split(" ")
-  end # /welcomes
+  end
 
   def services
     return [] if object.services.nil?
 
     object.services.underscore.split(" ")
-  end # /services
+  end
 
   def schedule
     prefix = "schedule_"
