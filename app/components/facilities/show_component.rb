@@ -126,12 +126,44 @@ class Facilities::ShowComponent < ViewComponent::Base
 
     private
 
-    def welcomes?(welcome)
-      facility.welcomes_list[welcome].present?
+    def switch_button(customer)
+      options = {
+        class: "button is-white is-pulled-right"
+      }
+
+      customer_value = customer_value_for(customer)
+
+      if welcomes?(customer_value)
+        target_url = admin_facility_welcome_path(id: facility_welcome_for(customer),
+                                                 customer: customer_value,
+                                                 facility_id: facility.id)
+        options[:method] = :delete
+        options[:data] = { confirm: "Are you sure you want to turn off welcome '#{customer_value}' for this facility?" }
+      else
+        target_url = admin_facility_welcomes_path(facility_id: facility.id,
+                                                  customer: customer_value)
+        options[:method] = :post
+      end
+
+      link_to(target_url, options)  do
+        render Shared::StatusComponent.new(welcomes?(customer_value))
+      end
     end
 
-    def all_welcomes
-      Facility::WELCOMES
+    def welcomes?(customer)
+      facility.facility_welcomes.exists?(customer: customer_value_for(customer))
+    end
+
+    def customer_value_for(customer)
+      customer.respond_to?(:value) ? customer.value : customer
+    end
+
+    def facility_welcome_for(customer)
+      facility.facility_welcomes.find_by(customer: customer_value_for(customer))
+    end
+
+    def all_customers
+      FacilityWelcome.all_customers
     end
   end
 

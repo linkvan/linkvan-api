@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     resources :dashboard, only: [:index, :show]
     resources :facilities do
       resources :services, only: [:create, :update, :destroy], controller: :facility_services
+      resources :welcomes, only: [:create, :destroy], controller: :facility_welcomes
     end
   end
 end
