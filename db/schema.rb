@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_27_182222) do
+ActiveRecord::Schema.define(version: 2021_08_08_326371) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -157,6 +157,15 @@ ActiveRecord::Schema.define(version: 2021_06_27_182222) do
     t.index ["facility_schedule_id"], name: "index_facility_time_slots_on_facility_schedule_id"
   end
 
+  create_table "facility_welcomes", force: :cascade do |t|
+    t.bigint "facility_id", null: false
+    t.string "customer", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["facility_id", "customer"], name: "index_facility_welcomes_on_facility_id_and_customer", unique: true
+    t.index ["facility_id"], name: "index_facility_welcomes_on_facility_id"
+  end
+
   create_table "impressions", id: :serial, force: :cascade do |t|
     t.string "impressionable_type"
     t.integer "impressionable_id"
@@ -244,4 +253,5 @@ ActiveRecord::Schema.define(version: 2021_06_27_182222) do
   add_foreign_key "facilities", "zones"
   add_foreign_key "facility_services", "facilities"
   add_foreign_key "facility_services", "services"
+  add_foreign_key "facility_welcomes", "facilities"
 end
