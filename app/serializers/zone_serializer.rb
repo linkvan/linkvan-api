@@ -10,4 +10,4 @@ class ZoneSerializer < ApplicationSerializer
   def admins
     object.users.select(:id, :name).as_json
   end
-end # /ZoneSerializer
+end

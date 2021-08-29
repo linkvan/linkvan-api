@@ -17,17 +17,17 @@ class Api::HomeController < Api::BaseController
     render json: result.as_json, status: :ok
   end
 
-  def last_updated
-  end
+  def last_updated; end
 
   private
-    def compute_notices
-      result = {}
 
-      Notice.notice_types.each_key do |type|
-        result[type] = Notice.published.where(notice_type: type).exists?
-      end
+  def compute_notices
+    result = {}
 
-      result
+    Notice.notice_types.each_key do |type|
+      result[type] = Notice.published.where(notice_type: type).exists?
     end
+
+    result
+  end
 end

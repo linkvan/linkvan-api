@@ -8,7 +8,7 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require "rspec/rails"
 
 # Add additional requires below this line. Rails is not loaded until this point!
-require "capybara/rspec"     # for system specs
+require "capybara/rspec" # for system specs
 # require 'database_cleaner'   # for test database cleaning
 
 # Requires supporting ruby files with custom matchers and macros, etc, in

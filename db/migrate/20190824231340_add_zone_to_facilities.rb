@@ -10,13 +10,13 @@ class AddZoneToFacilities < ActiveRecord::Migration[4.2]
       dir.up do
         zone = Zone.create(name: zone_name, description: zone_description)
         Facility.update_all({ zone_id: zone.id })
-      end # /up
+      end
 
       dir.down do
         Facility.update_all({ zone_id: nil })
         zone = Zone.find_by(name: zone_name)
         zone.destroy
-      end # /down
+      end
     end
   end
 end

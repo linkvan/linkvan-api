@@ -33,26 +33,28 @@ class ApplicationSerializer
   end
 
   protected
-    def field_name
-      NotImplementedError
-    end
 
-    def serializer_class
-      raise NotImplementedError
-    end
+  def field_name
+    NotImplementedError
+  end
+
+  def serializer_class
+    raise NotImplementedError
+  end
 
   private
-    def method_missing(meth, *args, &block)
-      return object.send(meth, *args, &block) if object.respond_to?(meth)
 
-      super
-    end
+  def method_missing(meth, *args, &block)
+    return object.send(meth, *args, &block) if object.respond_to?(meth)
 
-    def respond_to_missing?(meth, include_private = false)
-      result = super
-      result = true if !result && object.respond_to?(meth)
-      result
-    end
+    super
+  end
+
+  def respond_to_missing?(meth, include_private = false)
+    result = super
+    result = true if !result && object.respond_to?(meth)
+    result
+  end
 
   # def respond_to?(meth)
   #   result = super

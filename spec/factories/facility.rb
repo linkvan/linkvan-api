@@ -1,5 +1,3 @@
-# rubocop:disable Metrics/BlockLength
-
 FactoryBot.define do
   factory :facility do
     id { 1 }

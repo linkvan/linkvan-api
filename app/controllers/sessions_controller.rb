@@ -5,11 +5,9 @@ class Api::SessionsController < Api::ApplicationController
 
   # POST login
   def create
-    if user = User.authenticate(params[:email], params[:password])
+    if (user = User.authenticate(params[:email], params[:password]))
       session[:user_id] = user.id
-      if !cookies["non_data_user"].present?
-        cookies["non_data_user"] = "true"
-      end
+      cookies["non_data_user"] = "true" if cookies["non_data_user"].blank?
       @response = { cookies: cookies }
       render json: @response, status: :ok
     else

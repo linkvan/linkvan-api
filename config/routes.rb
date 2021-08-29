@@ -4,12 +4,12 @@ Rails.application.routes.draw do
     # get :last_updated, controller: :home
     # get :home, controller: :home
     resources :home, only: [:index]
-    resources :facilities, only: [:index, :show]
+    resources :facilities, only: %i[index show]
     resources :zones, only: [:index]
   end
 
   namespace :admin do
-    resources :dashboard, only: [:index, :show]
-    resources :facilities, only: [:index, :show]
+    resources :dashboard, only: %i[index show]
+    resources :facilities, only: %i[index show]
   end
 end

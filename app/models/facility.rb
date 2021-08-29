@@ -19,10 +19,10 @@ class Facility < ApplicationRecord
   }
 
   def managed_by?(user)
-    if user.respond_to? :id
-      f_user_id = user.id
+    f_user_id = if user.respond_to? :id
+      user.id
     else
-      f_user_id = user
+      user
     end
     # Case Facility's User is the same
     return true if this.user_id == f_user_id
@@ -31,32 +31,32 @@ class Facility < ApplicationRecord
 
     # Otherwise return FALSE
     false
-  end # /managed_by?
+  end
 
   def self.managed_by(user)
     user.manages
-  end # /owned_by
+  end
 
   def self.search(search)
     return all if search.empty?
 
     where("name ILIKE ?", "%#{search}%")
-  end # /search
+  end
 
   def self.search_by_services(search)
     where("services ILIKE ?", "%#{search}%")
-  end # /search_by_services
+  end
 
   def self.adjusted_current_time
     # Returns current server time subtracted by 8 hours.
     8.hours.ago
-  end # /adjusted_current_time
+  end
 
   def services_list
     return [] if services.nil?
 
-    services.underscore.split(" ")
-  end # /services
+    services.underscore.split
+  end
 
   def schedule
     result = HashWithIndifferentAccess.new
@@ -85,7 +85,7 @@ class Facility < ApplicationRecord
   end
 
   def self.weekdays
-    [:sun, :mon, :tues, :wed, :thurs, :fri, :sat]
+    %i[sun mon tues wed thurs fri sat]
   end
 
   def schedule_for(week_day)
@@ -134,11 +134,11 @@ class Facility < ApplicationRecord
       ret = true
     end
     ret
-  end # /is_open?
+  end
 
   def is_closed?(ctime = Facility.adjusted_current_time)
     !is_open?(ctime)
-  end # /is_closed?
+  end
 
   def time_in_range?(ctime, wday)
     # We consider Facilities opening in 5 mins as an Opened Facilty.
@@ -151,12 +151,8 @@ class Facility < ApplicationRecord
     close1 = 5.minutes.until(close1)
     close2 = 5.minutes.until(close2)
 
-    if (ctime >= open1 && ctime < close1) || (ctime >= open2 && ctime < close2)
-      true
-    else
-      false
-    end
-  end # /time_in_range?
+    (ctime >= open1 && ctime < close1) || (ctime >= open2 && ctime < close2)
+  end
 
   def self.translate_time(cdate, ftime)
     newdate = cdate.strftime("%Y-%m-%d")
@@ -164,7 +160,7 @@ class Facility < ApplicationRecord
     newzone = ftime&.zone
     # cdate = ctime.strftime('%I:%M:%P')
     Time.zone.parse("#{newdate} #{newtime} #{newzone}")
-  end # /translate_time
+  end
 
   def distance(ulat, ulong)
     Facility.haversine(self[:lat], self[:long], ulat, ulong)
@@ -189,27 +185,29 @@ class Facility < ApplicationRecord
     # Select Opened/Closed facilities
     selected_facilities = []
     searched_facilities.each do |facility|
-      if open == "Yes"
+      case open
+      when "Yes"
         selected_facilities.push facility if facility.is_open?(ctime)
-      elsif open == "No"
+      when "No"
         selected_facilities.push facility if facility.is_closed?(ctime)
       else
         # Only for Testing purposes (should delete these lines later)
         return []
         # raise 'Error! Should not go into this one'
       end
-    end # /searched_facilities.each
+    end
 
     # Sorts out selected facilities.
     ret_arr = []
-    if prox == "Near"
+    case prox
+    when "Near"
       ret_arr = selected_facilities.sort_by { |f| f.distance(ulat, ulong) }
-    elsif prox == "Name"
+    when "Name"
       ret_arr = selected_facilities.sort_by(&:name)
-    end # /prox == Near, Name
+    end
 
     ret_arr
-  end # ends self.contains_service?
+  end
 
   def self.redist_sort(inArray, ulat, ulong)
     ulat = ulat.to_d
@@ -220,9 +218,7 @@ class Facility < ApplicationRecord
       distarr.push(Facility.haversine(a.lat, a.long, ulat, ulong))
     end
 
-    arr = Facility.bubble_sort(distarr, inArray)
-
-    arr
+    Facility.bubble_sort(distarr, inArray)
   end
 
   # use haversine and power to calculate distance between user's latlongs and facilities'
@@ -240,9 +236,7 @@ class Facility < ApplicationRecord
 
     a = power(Math.sin(dlat / 2), 2) + Math.cos(rlat1) * Math.cos(rlat2) * power(Math.sin(dlon / 2), 2)
     c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-    d = r * c
-
-    d
+    r * c
   end
 
   def self.haversine_km(lat1, long1, lat2, long2)
@@ -259,9 +253,7 @@ class Facility < ApplicationRecord
 
     a = power(Math.sin(dlat / 2), 2) + Math.cos(rlat1) * Math.cos(rlat2) * power(Math.sin(dlon / 2), 2)
     c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-    d = r * c
-
-    d
+    r * c
   end
 
   def self.haversine_min(lat1, long1, lat2, long2)
@@ -299,7 +291,8 @@ class Facility < ApplicationRecord
   end
 
   def self.to_csv
-    attributes = %w[id name welcomes services lat long address phone website description notes created_at updated_at startsmon_at endsmon_at startstues_at endstues_at startswed_at endswed_at startsthurs_at endsthurs_at startsfri_at endsfri_at startssat_at endssat_at startssun_at endssun_at r_pets r_id r_cart r_phone r_wifi startsmon_at2 endsmon_at2 startstues_at2 endstues_at2 startswed_at2 endswed_at2 startsthurs_at2 endsthurs_at2 startsfri_at2 endsfri_at2 startssat_at2 endssat_at2 startssun_at2 endssun_at2 open_all_day_mon open_all_day_tues open_all_day_wed open_all_day_thurs open_all_day_fri open_all_day_sat open_all_day_sun closed_all_day_mon closed_all_day_tues closed_all_day_wed closed_all_day_thurs closed_all_day_fri closed_all_day_sat closed_all_day_sun second_time_mon second_time_tues second_time_wed second_time_thurs second_time_fri second_time_sat second_time_sun user_id verified shelter_note food_note medical_note hygiene_note technology_note legal_note learning_note]
+    attributes = %w[id name welcomes services lat long address phone website description notes created_at updated_at
+                    startsmon_at endsmon_at startstues_at endstues_at startswed_at endswed_at startsthurs_at endsthurs_at startsfri_at endsfri_at startssat_at endssat_at startssun_at endssun_at r_pets r_id r_cart r_phone r_wifi startsmon_at2 endsmon_at2 startstues_at2 endstues_at2 startswed_at2 endswed_at2 startsthurs_at2 endsthurs_at2 startsfri_at2 endsfri_at2 startssat_at2 endssat_at2 startssun_at2 endssun_at2 open_all_day_mon open_all_day_tues open_all_day_wed open_all_day_thurs open_all_day_fri open_all_day_sat open_all_day_sun closed_all_day_mon closed_all_day_tues closed_all_day_wed closed_all_day_thurs closed_all_day_fri closed_all_day_sat closed_all_day_sun second_time_mon second_time_tues second_time_wed second_time_thurs second_time_fri second_time_sat second_time_sun user_id verified shelter_note food_note medical_note hygiene_note technology_note legal_note learning_note]
 
     CSV.generate(headers: true) do |csv|
       csv << attributes
@@ -309,4 +302,4 @@ class Facility < ApplicationRecord
       end
     end
   end
-end # ends class
+end

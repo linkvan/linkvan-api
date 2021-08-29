@@ -10,9 +10,10 @@ class Admin::FacilitiesController < Admin::BaseController
   end
 
   private
-    def load_facilities
-      @pagy, @facilities = pagy(Facility.all)
-    end
+
+  def load_facilities
+    @pagy, @facilities = pagy(Facility.all)
+  end
 
   # def set_default_request_format
   # request.format = :json unless params[:fomat]

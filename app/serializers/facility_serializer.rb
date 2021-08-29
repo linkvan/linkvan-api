@@ -4,7 +4,7 @@ class FacilitySerializer < ApplicationSerializer
   def attributes
     fields = super
     fields -= Facility.schedule_fields
-    fields += [:zone, :schedule]
+    fields += %i[zone schedule]
     fields
   end
 
@@ -18,13 +18,13 @@ class FacilitySerializer < ApplicationSerializer
   def welcomes
     return [] if object.welcomes.nil?
 
-    object.welcome.underscores.split(" ")
+    object.welcome.underscores.split
   end
 
   def services
     return [] if object.services.nil?
 
-    object.services.underscore.split(" ")
+    object.services.underscore.split
   end
 
   def schedule
