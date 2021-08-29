@@ -8,25 +8,17 @@ class Facility < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :zone, optional: true
 
+  has_many :facility_welcomes
   has_many :facility_services
   has_many :services, through: :facility_services
   has_many :schedules, class_name: "FacilitySchedule", dependent: :destroy
   has_many :time_slots, through: :schedules
 
   # WELCOMES = %w[male female transgender children youth adult senior].freeze
-  WELCOMES = LinkvanConfig.welcomes.map(&:to_sym).freeze
 
-  Welcomes = Struct.new(*WELCOMES, keyword_init: true)
 
   validates :name, :lat, :long, presence: true
-  validate :validate_welcomes
 
-  def validate_welcomes
-    welcomes.split(" ").each do |welcome_value|
-      valid_welcome_value = WELCOMES.include?(welcome_value.to_s.downcase.to_sym)
-      errors.add(:welcomes, "#{welcome_value} is not a valid value") unless valid_welcome_value
-    end
-  end
 
   # is_impressionable
 
@@ -38,17 +30,6 @@ class Facility < ApplicationRecord
     where(["services ILIKE ? OR welcomes ILIKE ?", "%#{word}%", "%#{word}%"]) unless word == "all"
   }
 
-  def self.welcomes
-    @welcomes ||= ActiveSupport::ArrayInquirer.new(WELCOMES)
-
-    # return @welcomes if @welcomes.present?
-
-    # @welcomes = Welcomes.new(WELCOMES)
-    # @welcomes = HashWithIndifferentAccess.new
-    # WELCOMES.each { |w| @welcomes[w] = w.to_s.titleize }
-
-    # @welcomes = OpenStruct.new(@welcomes)
-  end
 
   def managed_by?(user)
     if user.respond_to? :id
@@ -110,26 +91,6 @@ class Facility < ApplicationRecord
   def distance_in_kms(*params)
     distance(*params).to_kilometers
   end
-
-
-  def welcomes_obj
-    ActiveSupport::ArrayInquirer.new(welcomes_list)
-    # Welcomes.new(*welcomes_list)
-  end
-
-  def welcomes_list
-    return [] if welcomes.blank?
-
-    # welcomes.underscore.split(" ")#.map(&:to_sym)
-    list = welcomes.underscore.split(" ")#._map(&:to_sym)
-    # result = HashWithIndifferentAccess.new
-    Welcomes.new(list.map { |v| [v, v] }.to_h)
-    # WELCOMES.each { |v| result[v] = list.include? (}
-    # Welcomes.new(welcomes.underscore.split(" ") ) #.map(&:to_sym)
-  end
-
-
-  # Return list of fields related with schedule
 
   def is_open?(ctime = Facility.adjusted_current_time)
     cday = ctime.wday
