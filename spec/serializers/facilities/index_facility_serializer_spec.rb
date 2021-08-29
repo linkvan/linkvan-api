@@ -34,7 +34,7 @@ describe Facilities::IndexFacilitySerializer do
       it { is_expected.to include("test") }
       it { is_expected.to include("another_test") }
       it { is_expected.to include("yet_another_test") }
-    end # /services
+    end
 
     # Facility schedule field content
     describe "schedule" do
@@ -69,7 +69,7 @@ describe Facilities::IndexFacilitySerializer do
           it { is_expected.to be_a(Array) }
           it { is_expected.to be_empty }
         end
-      end # /all day open
+      end
 
       describe "for now open facilities" do
         let(:serialized_facility) { serializer_class.new(now_open_facility).as_json }
@@ -103,8 +103,8 @@ describe Facilities::IndexFacilitySerializer do
             it { is_expected.to include(to_hour: time_from_now[0]) }
             it { is_expected.to include(to_min: time_from_now[1]) }
           end
-        end # /times
-      end # /now open
-    end # /schedule
+        end
+      end
+    end
   end
 end

@@ -5,16 +5,24 @@ class Api::FacilitiesController < Api::BaseController
 
   # GET /facilities
   def index
-    @facilities = Facility.includes(:zone).is_verified.order(:updated_at)
+    result = base_result
 
-    @response = FacilitiesSerializer.new(@facilities, Facilities::IndexFacilitySerializer)
-    render json: @response.to_json, status: :ok
-  end # /index
+    @facilities = Facility.includes(:zone).is_verified.order(:updated_at)
+    @facilities = @facilities.with_service(params[:service]) if params[:service].present?
+
+    result[:facilities] = FacilitiesSerializer.new(@facilities, Facilities::IndexFacilitySerializer).build
+
+    render json: result.as_json, status: :ok
+  end
 
   # GET /facilities/:id
   def show
+    result = base_result
+    # result[:site_stats] = SiteStatsSerializer.new(SiteStats.new).build
+
     @facility = Facility.find(params[:id])
-    @response = FacilitySerializer.new(@facility)
-    render json: @response, status: :ok
+    result[:facility] = FacilitySerializer.new(@facility)
+
+    render json: result.as_json, status: :ok
   end
-end # /FacilitiesController
+end

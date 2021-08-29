@@ -7,21 +7,21 @@ namespace :data do
   task seed_fake: :environment do
     abort "This script can only be run on development environment" unless Rails.env.development?
 
-    stdout_logger = ActiveSupport::Logger.new(STDOUT)
+    stdout_logger = ActiveSupport::Logger.new($stdout)
     stdout_logger.level = :info
-    stdout_logger.formatter = proc do | severity, time, progname, msg |
+    stdout_logger.formatter = proc do |severity, _time, progname, msg|
       header = "["
       header += "#{progname} - " if progname.present?
 
-      case severity
-      when "INFO"
-        header += severity.green
-      when "WARN"
-        header += severity.yellow
-      when "ERROR"
-        header += severity.light_red
-      else
-        header += severity
+      header += case severity
+                when "INFO"
+                  severity.green
+                when "WARN"
+                  severity.yellow
+                when "ERROR"
+                  severity.light_red
+                else
+                  severity
       end
       header += "]"
 

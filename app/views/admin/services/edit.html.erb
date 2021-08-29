@@ -1,0 +1,39 @@
+<div class="container">
+    <%#= form_for [:admin, @facility] do |form| %>
+    <%= form_with model: @facility_services, path: admin_services_path(facility: @facility) do |form| %>
+
+        <!-- Action Buttons -->
+        <div class="field is-grouped is-grouped-right">
+            <p class="control">
+            <%= form.submit class: "button is-primary" %>
+            </p>
+            <p class="control">
+            <%= link_to "Back", admin_facilities_path, class: "button is-light" %>
+            </p>
+        </div>
+
+        <div class="columns">
+            <div class="column is-one-third">
+                <%#= render 'form_card_details', form: form %>
+            </div>
+
+            <div class="column">
+                <%#= render 'form_card_hours', form: form %>
+            </div>
+        </div>
+
+
+        <%#= render 'form_card_services', form: form %>
+
+        <%#= render 'form_card_descriptions', form: form %>
+
+        <div class="columns">
+            <div class="column">
+                <%#= render 'form_card_location', form: form %>
+            </div>
+            <div class="column is-one-third">
+                <%#= render 'form_card_contacts', form: form %>
+            </div>
+        </div>
+    <% end %>
+</div>

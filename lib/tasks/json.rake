@@ -13,7 +13,7 @@ namespace :json do
     File.open(args[:jsonfile], "w") do |f|
       f.write JSON.pretty_generate(facilities_hash)
     end
-  end # /export
+  end
 
   # Usage Example:
   #    rake json:import[./db/facilities.json]
@@ -35,4 +35,4 @@ namespace :json do
       Facility.create(facility_data)
     end
   end
-end # /json
+end

@@ -34,6 +34,6 @@ RSpec.describe Api::FacilitiesController do # , type: :request do
       it { expect(response.status).to eq(200) }
       it { expect(parsed_response).to include(:facilities) }
       it { expect(returned_facilities).to be_a(Array) }
-    end # /json body
-  end # /index
+    end
+  end
 end

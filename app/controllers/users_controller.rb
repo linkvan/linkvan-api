@@ -7,7 +7,7 @@ class Api::UsersController < Api::ApplicationController
 
     @response = { users: UsersSerializer.new(@users) }
     render json: @response, status: :ok
-  end # /index
+  end
 
   # POST api/users/:id/toggle_verified
   def toggle_verified
@@ -17,36 +17,33 @@ class Api::UsersController < Api::ApplicationController
       render json: error_json, status: :forbidden
     elsif !current_user.can_manage?(user)
       head :forbidden
+    elsif user.toggle_verified!
+      render json: UserSerializer.new(user), status: :ok
     else
-      if user.toggle_verified!
-        render json: UserSerializer.new(user), status: :ok
-      else
-        error_json = { errors: @user.errors }
-        render json: error_json, status: :unprocessable_entity
-      end
+      error_json = { errors: @user.errors }
+      render json: error_json, status: :unprocessable_entity
     end
-  end # /toggle_verified
+  end
 
   # POST api/users
-  def create
-  end # /create
+  def create; end
 
   # PUT api/users/:id
-  def update
-  end # /update
+  def update; end
 
   private
-    def user_params
-      # :verified
-      # :admin,
-      params.permit(
-        :name,
-        :email,
-        :password_digest,
-        :created_at,
-        :updated_at,
-        :activation_email_sent,
-        :phone_number
-      )
-    end # /user_params
-end # /UsersController
+
+  def user_params
+    # :verified
+    # :admin,
+    params.permit(
+      :name,
+      :email,
+      :password_digest,
+      :created_at,
+      :updated_at,
+      :activation_email_sent,
+      :phone_number
+    )
+  end
+end

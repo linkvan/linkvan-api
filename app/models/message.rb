@@ -8,11 +8,11 @@ class Message
   attr_accessor :name, :phone, :content
 
   validates :name,
-    presence: true
+            presence: true
 
   validates :phone,
-    presence: true
+            presence: true
 
   validates :content,
-    presence: true
+            presence: true
 end

@@ -24,4 +24,4 @@ class UserSerializer < ApplicationSerializer
   def zones
     @user.zones.select(:id, :name).as_json
   end
-end # /ZoneSerializer
+end

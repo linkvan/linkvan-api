@@ -1,13 +1,15 @@
 require:
   - rubocop-packaging
   - rubocop-performance
+  - rubocop-ast
   - rubocop-rails
 
 AllCops:
   TargetRubyVersion: 2.7
+  NewCops: enable
   # RuboCop has a bunch of cops enabled by default. This setting tells RuboCop
   # to ignore them, so only the ones explicitly set in this file are enabled.
-  DisabledByDefault: true
+  DisabledByDefault: false #true
   SuggestExtensions: false
   Exclude:
     - 'Gemfile*'
@@ -24,6 +26,13 @@ Performance:
   Exclude:
     - '**/spec/**/*'
 
+Rails:
+  StyleGuideBaseURL: https://rails.rubystyle.guide
+
+Rails/BulkChangeTable:
+  Exclude:
+    - 'db/migrate/*.rb'
+
 # Prefer assert_not over assert !
 Rails/AssertNot:
   Include:
@@ -39,6 +48,14 @@ Rails/IndexBy:
 
 Rails/IndexWith:
   Enabled: true
+
+Rails/SkipsModelValidations:
+  Exclude:
+    - 'db/migrate/*.rb'
+
+Rails/FilePath:
+  Enabled: true
+  EnforcedStyle: arguments
 
 # Prefer &&/|| over and/or.
 Style/AndOr:
@@ -57,6 +74,10 @@ Layout/CommentIndentation:
 
 Layout/ElseAlignment:
   Enabled: true
+
+Layout/BeginEndAlignment:
+  Enabled: true
+  EnforcedStyleAlignWith: begin
 
 # Align `end` with the matching keyword or starting expression except for
 # assignments, where it should be aligned with the LHS.
@@ -91,11 +112,19 @@ Layout/EmptyLinesAroundModuleBody:
 Style/HashSyntax:
   Enabled: true
 
+Layout/EmptyLinesAroundAccessModifier:
+  Enabled: true
+  EnforcedStyle: around
+
+Layout/AccessModifierIndentation:
+  Enabled: true
+  EnforcedStyle: indent
+
 # Method definitions after `private` or `protected` isolated calls need one
 # extra level of indentation.
 Layout/IndentationConsistency:
   Enabled: true
-    #EnforcedStyle: indented_internal_methods
+  EnforcedStyle: normal #indented_internal_methods
 
 # Two spaces, no tabs (for indentation).
 Layout/IndentationWidth:
@@ -152,6 +181,16 @@ Style/FrozenStringLiteralComment:
 Style/RedundantFreeze:
   Enabled: true
 
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
+
+Style/Documentation:
+  Enabled: false
+
+Style/GuardClause:
+  Exclude:
+    - 'db/migrate/*.rb'
+
 # Use `foo {}` not `foo{}`.
 Layout/SpaceBeforeBlockBraces:
   Enabled: true
@@ -188,6 +227,10 @@ Layout/TrailingWhitespace:
 # Use quotes for string literals when they are enough.
 Style/RedundantPercentQ:
   Enabled: true
+
+Lint/AssignmentInCondition:
+  Enabled: true
+  AllowSafeAssignment: true
 
 Lint/AmbiguousOperator:
   Enabled: true
@@ -276,4 +319,34 @@ Performance/DeletePrefix:
 
 Performance/DeleteSuffix:
   Enabled: true
+
+##########
+# Metrics
+
+Metrics/BlockLength:
+  Max: 75
+  Exclude:
+    - '**/spec/**/*'
+
+Metrics/CyclomaticComplexity:
+  Max: 15
+
+Metrics/MethodLength:
+  Max: 50
+
+Metrics/PerceivedComplexity:
+  Max: 12
+
+Metrics/ClassLength:
+  Max: 300
+
+Metrics/AbcSize:
+  Max: 41 #30
+  Exclude:
+    - 'db/migrate/*.rb'
+
+# Special cases to be cleaned up in the future
+Rails/CreateTableWithTimestamps:
+  Exclude:
+    - 'db/migrate/20170204222106_add_analytics.rb'
 

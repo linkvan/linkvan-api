@@ -19,16 +19,17 @@ class ApplicationCollectionSerializer
   end
 
   private
-    def hashfy(response)
-      case response
-      when Hash
-        response.with_indifferent_access
-      else
-        HashWithIndifferentAccess.new
-      end
-    end
 
-    def site_stats
-      @site_stats ||= SiteStats.new
+  def hashfy(response)
+    case response
+    when Hash
+      response.with_indifferent_access
+    else
+      HashWithIndifferentAccess.new
     end
+  end
+
+  def site_stats
+    @site_stats ||= SiteStats.new
+  end
 end

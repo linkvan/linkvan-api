@@ -8,7 +8,6 @@ class Admin::DashboardController < Admin::BaseController
     flash.now[:alert] = "error test"
   end
 
-  private
   # def set_default_request_format
   # request.format = :json unless params[:fomat]
   # end

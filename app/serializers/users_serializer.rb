@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
 class UsersSerializer < ApplicationCollectionSerializer
-  def as_json
-    build.as_json
-  end
+  delegate :as_json, to: :build
 
   def build
     @users.map do |user|
       UserSerializer.new(user)
     end
   end
-end # /UsersSerializer
+end
