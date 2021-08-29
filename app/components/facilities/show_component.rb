@@ -67,15 +67,20 @@ class Facilities::ShowComponent < ViewComponent::Base
     private
 
     def switch_button(service)
+      options = {
+        class: "button is-white is-pulled-right"
+      }
+
       if provides_service?(service)
         target_url = admin_facility_service_path(facility_id: facility.id, service_id: service.id)
-        method = :delete
+        options[:method] = :delete
+        options[:data] = { confirm: "Are you sure you want to turn off '#{service.name}' service for this facility?\nNotes associated with this service will also be deleted." }
       else
         target_url = admin_facility_services_path(facility_id: facility.id, service_id: service.id)
-        method = :post
+        options[:method] = :post
       end
 
-      link_to(target_url, method: method, class: "button is-white is-pulled-right")  do
+      link_to(target_url, options)  do
         render Shared::StatusComponent.new(provides_service?(service))
       end
     end
