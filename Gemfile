@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "2.7.2" # "3.0.0"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
-gem "rails", "~> 6.1.3"
+gem "rails", "~> 6.1.4"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.2.3"
 # Use Puma as the app server
@@ -12,7 +12,7 @@ gem "puma", "~> 5.2.2"
 # Use SCSS for stylesheets
 gem "sass-rails", "~> 6.0.0"
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem "webpacker", "~> 5.2.1"
+gem "webpacker", "~> 5.4.2"
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 # gem "turbolinks", "~> 5.2.1"
 
@@ -55,7 +55,7 @@ group :development do
   gem "spring"
 
   # powerful developer console.
-  gem "pry", "~> 0.14.0"
+  gem "pry", "~> 0.13.1"
   gem "pry-rails"
   gem "pry-stack_explorer", "~> 0.6.1"
   gem "pry-remote"
