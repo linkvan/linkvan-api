@@ -25,8 +25,8 @@ class FacilityTimeSlot < ApplicationRecord
 
   private
 
-    def facility_availabity_is_set_times
-      errors.add(:facility_schedule, "availabity must not be open all day") if facility_schedule.open_all_day?
-      errors.add(:facility_schedule, "availabity must not be closed all day") if facility_schedule.closed_all_day?
-    end
+  def facility_availabity_is_set_times
+    errors.add(:facility_schedule, "availabity must not be open all day") if facility_schedule.open_all_day?
+    errors.add(:facility_schedule, "availabity must not be closed all day") if facility_schedule.closed_all_day?
+  end
 end
