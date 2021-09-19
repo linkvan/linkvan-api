@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_08_326371) do
+ActiveRecord::Schema.define(version: 2021_09_19_174614) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -131,8 +131,8 @@ ActiveRecord::Schema.define(version: 2021_08_08_326371) do
     t.boolean "closed_all_day", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["facility_id", "week_day"], name: "index_facility_schedules_on_facility_id_and_week_day", unique: true
     t.index ["facility_id"], name: "index_facility_schedules_on_facility_id"
-    t.index ["week_day"], name: "index_facility_schedules_on_week_day"
   end
 
   create_table "facility_services", force: :cascade do |t|
