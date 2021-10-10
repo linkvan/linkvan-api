@@ -74,13 +74,21 @@ class Facilities::ShowComponent < ViewComponent::Base
       if provides_service?(service)
         target_url = admin_facility_service_path(facility_id: facility.id, service_id: service.id)
         options[:method] = :delete
-        options[:data] = { confirm: "Are you sure you want to turn off '#{service.name}' service for this facility?\nNotes associated with this service will also be deleted." }
+
+        if notes_for(service).present?
+          options[:data] = {
+            confirm: [
+              "Are you sure you want to turn off '#{service.name}' service for this facility?",
+              "Notes associated with this service will also be deleted."
+            ].join("\n")
+          }
+        end
       else
         target_url = admin_facility_services_path(facility_id: facility.id, service_id: service.id)
         options[:method] = :post
       end
 
-      link_to(target_url, options)  do
+      link_to(target_url, options) do
         render Shared::StatusComponent.new(provides_service?(service))
       end
     end
@@ -145,7 +153,7 @@ class Facilities::ShowComponent < ViewComponent::Base
         options[:method] = :post
       end
 
-      link_to(target_url, options)  do
+      link_to(target_url, options) do
         render Shared::StatusComponent.new(welcomes?(customer_value))
       end
     end
@@ -171,17 +179,131 @@ class Facilities::ShowComponent < ViewComponent::Base
     attr_reader :facility
 
     def initialize(facility:)
+      super()
+
       @facility = facility
     end
 
     private
 
+    def switch_button(schedule)
+      options = {
+        class: "button is-white is-pulled-right"
+      }
+
+      schedule_params = {
+        week_day: schedule.week_day,
+        closed_all_day: false,
+        open_all_day: true
+      }
+
+      if schedule.new_record?
+        # Create a new Schedule
+        target_url = admin_facility_schedules_path(facility_id: facility.id,
+                                                   schedule: schedule_params)
+
+        options[:method] = :post
+      else
+        if schedule.closed_all_day?
+          # Schedule is closed_all_day. Update it to open_all_day
+          schedule_params[:closed_all_day] = false
+          schedule_params[:open_all_day] = true
+        else
+          # Schedule is open_all_day or set_times. Update it to closed_all_day
+          schedule_params[:closed_all_day] = true
+          schedule_params[:open_all_day] = false
+
+          if schedule.time_slots.exists?
+            options[:data] = {
+              confirm: [
+                "Are you sure you want to switch the #{schedule.week_day} schedule to closed all day?",
+                "Time Slots associated with this schedule will also be deleted."
+              ].join("\n")
+            }
+          end
+
+        end
+
+        target_url = admin_facility_schedule_path(facility_id: facility.id,
+                                                  id: schedule.id,
+                                                  schedule: schedule_params)
+        options[:method] = :put
+      end
+
+      link_to(target_url, options) do
+        render Shared::StatusComponent.new(schedule.availability != :closed)
+      end
+    end
+
+    def full_schedule
+      return to_enum(:full_schedule) unless block_given?
+
+      week_days.each do |week_day|
+        # data = { week_day: week_day, schedule: schedule_for(week_day) }
+        data = schedule_for(week_day)
+        yield data
+      end
+    end
+
+    def week_days
+      FacilitySchedule.week_days.values
+    end
+
+    def schedule_for(week_day)
+      schedules.find_by(week_day: week_day) ||
+        FacilitySchedule.new(facility: facility, week_day: week_day)
+    end
+
+    def schedule_exists?
+      schedules.find_by(week_day: week_day).present?
+    end
+
     def schedules
       facility.schedules
     end
 
+    def link_to_add_time_slot(schedule)
+      action = new_admin_facility_time_slot_path(facility_id: facility.id, schedule_id: schedule.id)
+
+      link_to action, class: "button is-pulled-right is-white" do
+        icon_element("fa-plus-square")
+      end
+    end
+
     def link_to_edit(schedule)
-      link_to "Edit", "#", class: "button"
+      action = if schedule.new_record?
+        new_admin_facility_schedule_path(facility_id: facility.id)
+      else
+        edit_admin_facility_schedule_path(id: schedule.id, facility_id: facility.id)
+      end
+
+      link_to action, class: "button is-pulled-right is-white" do
+        icon_element("fa-edit")
+      end
+    end
+
+    def link_to_destroy(time_slot)
+      schedule_id = time_slot.facility_schedule.id
+
+      action = admin_facility_time_slot_path(facility_id: facility.id,
+                                             schedule_id: schedule_id,
+                                             id: time_slot.id)
+
+      link_to action, method: :delete, class: "button is-pulled-right is-white" do
+        icon_element("fa-trash")
+      end
+    end
+
+    def icon_for(schedule)
+      icon_class = "fa-plus-square"
+
+      icon_element(icon_class)
+    end
+
+    def icon_element(icon_classes)
+      tag.span(class: "icon") do
+        tag.i(class: "fas #{icon_classes}")
+      end
     end
   end
 end

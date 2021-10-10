@@ -4,12 +4,7 @@ class Shared::CardComponent < ViewComponent::Base
   # include ActionView::RecordIdentifier
 
   renders_one :footer
-  # renders_many :buttons
   renders_many :buttons, 'ButtonComponent'
-  # renders_many :buttons, ->(**args) {
-    # Rails.logger.info "BUTTON: #{args.inspect}"
-    # header_component.button(args)
-  # }
 
   attr_reader :card_id
 
@@ -19,10 +14,7 @@ class Shared::CardComponent < ViewComponent::Base
     @header_classes = options.dig(:header, :classes)
   end
 
-  # delegate :action_content, to: :header_component
-
   def header_component
-    # @header_component ||= HeaderComponent.new title: @title, classes: @header_classes
     HeaderComponent.new title: @title, classes: @header_classes, buttons: buttons
   end
 

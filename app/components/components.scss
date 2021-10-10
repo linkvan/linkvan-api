@@ -11,3 +11,9 @@
 .has-full-borders {
   border: 1px $grey-light solid;
 }
+
+table.is-vertically-centered {
+  th, td {
+    vertical-align: middle;
+  }
+}

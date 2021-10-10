@@ -13,10 +13,9 @@ class FacilityTimeSlot < ApplicationRecord
                                                 greater_than_or_equal_to: 0,
                                                 less_than: 60 }
 
-  validate :facility_availabity_is_set_times
+  validate :validate_non_overlaping_time_slot_range
 
-  after_create :update_schedule_availability
-  after_destroy :update_schedule_availability
+  delegate :week_day, to: :facility_schedule, allow_nil: true
 
   def start_time
     start_time_string.to_time
@@ -24,6 +23,10 @@ class FacilityTimeSlot < ApplicationRecord
 
   def end_time
     end_time_string.to_time
+  end
+
+  def as_range
+    start_time..end_time
   end
 
   def start_time_string
@@ -72,9 +75,5 @@ class FacilityTimeSlot < ApplicationRecord
   def facility_availabity_is_set_times
     errors.add(:facility_schedule, "availabity must not be open all day") if facility_schedule.open_all_day?
     errors.add(:facility_schedule, "availabity must not be closed all day") if facility_schedule.closed_all_day?
-  end
-
-  def update_schedule_availability
-    schedule.update_schedule_availability
   end
 end

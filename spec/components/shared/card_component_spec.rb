@@ -10,17 +10,17 @@ RSpec.describe Shared::CardComponent, type: :component do
   it { expect(render_inline(component)).to have_text title }
 
   describe "action_content" do
-    let(:content1) { "CARD ACTION CONTENT 1" }
-    let(:content2) { "CARD ACTION CONTENT 2" }
+    let(:content1) { { title: "CARD ACTION CONTENT 1", path: 'action1' } }
+    let(:content2) { { title: "CARD ACTION CONTENT 2", path: 'action2' } }
     before do
-      component.action_content { content1 }
-      component.action_content { content2 }
+      component.button(**content1)
+      component.button(**content2)
 
       render_inline(component)
     end
 
-    it { expect(rendered_component).to have_text content1 }
-    it { expect(rendered_component).to have_text content2 }
+    it { expect(rendered_component).to have_text content1[:title] }
+    it { expect(rendered_component).to have_text content2[:title] }
   end
 
   describe "content" do

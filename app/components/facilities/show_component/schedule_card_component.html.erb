@@ -1,10 +1,12 @@
 <%= render Shared::CardComponent.new(title: 'Schedule') do |card| %>
-    <table class='table is-fullwidth is-hoverable'>
+    <%# card.button(title: "Edit", path: "#") %>
+
+    <table class='table is-fullwidth is-hoverable is-vertically-centered'>
         <tbody>
-            <% schedules.each do |schedule| %>
+            <% full_schedule.each do |schedule| %>
                 <tr>
                     <th>
-                      <%= schedule.week_day.titleize %>:
+                        <%= schedule.week_day.titleize %>:
                     </th>
 
                     <td>
@@ -12,34 +14,42 @@
                             <% schedule.time_slots.each do |time_slot| %>
                                 <div class='level'>
                                     <div class='level-right'>
-                                        <div>
-                                            <div>
-                                                Starts at:
-                                                <%= time_slot.from_time %>
-                                            </div>
+                                        <div class='level-item'>
+                                            <%= link_to_destroy(time_slot) %>
+                                        </div>
 
+                                        <div class='level-item'>
                                             <div>
-                                                Ends at:
-                                                <%= time_slot.to_time %>
+                                                <div>
+                                                    Starts at:
+                                                    <%= time_slot.start_time_string %>
+                                                </div>
+
+                                                <div>
+                                                    Ends at:
+                                                    <%= time_slot.end_time_string %>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class='level-left'>
-                                        <%= link_to_edit(schedule) %>
-                                    </div>
                                 </div>
                             <% end %>
                         <% else %>
-                                <div class='level'>
-                                    <div class='level-right'>
-                                        <%= schedule.availability.to_s.titleize %>
-                                    </div>
-
-                                    <div class='level-left'>
-                                        <%= link_to_edit(schedule) %>
-                                    </div>
+                            <div class='level'>
+                                <div class='level-right'>
+                                    <%= schedule.availability.to_s.titleize %>
                                 </div>
+                            </div>
+                        <% end %>
+                    </td>
+
+                    <td>
+                        <%= switch_button(schedule) %>
+
+                        <% unless schedule.closed_all_day? %>
+                            <%#= link_to_edit(schedule) %>
+                            <%= link_to_add_time_slot(schedule) %>
                         <% end %>
                     </td>
                 </tr>
