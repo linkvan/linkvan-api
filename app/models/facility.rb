@@ -18,6 +18,7 @@ class Facility < ApplicationRecord
 
   validates :name, :lat, :long, presence: true
 
+  before_validation :clean_data
   # is_impressionable
 
   scope :is_verified, -> { where(verified: true) }
@@ -88,24 +89,18 @@ class Facility < ApplicationRecord
     distance(*params).to_kilometers
   end
 
-  def is_open?(ctime = Facility.adjusted_current_time)
-    cday = ctime.wday
-    wday = self.class.weekdays[cday]
-    ret = false
-    if self["open_all_day_#{wday}"]
-      ret = true
-    elsif self["closed_all_day_#{wday}"]
-      ret = false
-    elsif self["second_time_#{wday}"]
-      ret = true
-    elsif time_in_range?(ctime, wday)
-      ret = true
-    end
-    ret
-  end
 
-  def is_closed?(ctime = Facility.adjusted_current_time)
-    !is_open?(ctime)
+  private
+
+  def clean_data
+    %i[name phone website address].each do |attrb|
+      # squish (ActiveSupport's more in-depth strip whitespaces)
+      send("#{attrb}=", send(attrb).squish)
+    end
+
+    %i[description notes].each do |attrb|
+      send("#{attrb}=", send(attrb).strip)
+    end
   end
 
   # def time_in_range?(ctime, wday)
