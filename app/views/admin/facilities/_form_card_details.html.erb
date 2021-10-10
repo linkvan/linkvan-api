@@ -1,4 +1,15 @@
 <%= render Shared::CardComponent.new(title: "Details") do |card| %>
+    <% card.action_content do %>
+        <div class="field mr-4">
+            <%= form.label :verified, class: "label" do %>
+                <div class="control">
+                    Verified
+                    <%= form.check_box :verified %>
+                </div>
+            <% end %>
+        </div>
+    <% end %>
+
     <!-- Name -->
     <div class="field">
         <%= form.label :name, "Name:", class: "label" %>
@@ -8,21 +19,19 @@
         <p class="help is-danger">This is a help text</p>
     </div>
 
-    <!-- Welcomes -->
-    <div class="field" id='welcomes_field'>
-        <%= form.label :welcomes, "Welcomes:", class: "label" %>
-
-        <div class="columns is-multiline">
-            <% @facility.welcomes_list.each_pair do |welcome_key, welcome| %>
-                <div class="column is-half">
-                    <%= label_tag "facility_welcomes_list_#{welcome_key}", class: 'svg-icons' do %>
-                        <%= check_box_tag "facility[welcomes_list][#{welcome_key}]", welcome_key, welcome.present? %>
-                        <%= render Facilities::WelcomesIconComponent.new(welcome_key) %>
-                        <%= welcome_key.to_s.titleize %>
-                    <% end %>
-                </div>
-            <% end %>
+    <!-- Phone -->
+    <div class="field">
+        <%= form.label :phone, "Phone:", class: "label" %>
+        <div class="control">
+            <%= form.text_field :phone, class: "input" %>
         </div>
+    </div>
 
+    <!-- Website -->
+    <div class="field">
+        <%= form.label :website, "Website:", class: "label" %>
+        <div class="control">
+            <%= form.text_field :website, class: "input" %>
+        </div>
     </div>
 <% end %>

@@ -3,6 +3,7 @@
 class Shared::CardComponent < ViewComponent::Base
   # include ActionView::RecordIdentifier
 
+  renders_one :action_content
   renders_one :footer
   renders_many :buttons, 'ButtonComponent'
 

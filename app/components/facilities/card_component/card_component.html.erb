@@ -1,5 +1,5 @@
-<div class="card facility mb-3", id: <%= card_id %> >
-    <header class="card-header level">
+<div class="card facility mb-2", id: <%= card_id %> >
+    <header class="card-header level mb-1">
         <div class="level-left">
             <div class="card-header-title">
 
@@ -57,13 +57,10 @@
         </div>
     </header>
 
-    <div class="card-content">
+    <div class="card-content pt-2 pb-2">
         <div class="columns">
 
             <div class="column">
-                <%= facility.address %>
-
-                <br/>
                 Services:
                 <% if facility.services.blank? %>
                     <span class="tag is-danger">None</span>
@@ -79,11 +76,14 @@
                     <% if facility.welcomes.blank? %>
                         <span class='tag is-danger'>None</span>
                     <% else %>
-                        <% facility.welcomes_list.each do |welcome| %>
-                            <%= render Facilities::WelcomesIconComponent.new(welcome) %>
+                        <% facility.facility_welcomes.each do |welcome| %>
+                            <%= render Facilities::WelcomesIconComponent.new(welcome.customer) %>
                         <% end %>
                     <% end %>
                 </div>
+
+                <br/>
+                <%= facility.address %>
             </div>
 
             <div class="column">
@@ -112,7 +112,7 @@
     </div>
 
     <footer class="card-footer">
-        <div class="card-footer-item has-text-weight-light is-size-7">
+        <div class="card-footer-item has-text-weight-light is-size-7 pt-1 pb-1">
             <time datetime="<%= facility.updated_at %>">
                 Last Updated on
                 <%= facility.updated_at %>.

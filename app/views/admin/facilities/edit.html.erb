@@ -1,6 +1,5 @@
 <div class="container">
     <%= form_with model: [:admin, @facility] do |form| %>
-
         <!-- Action Buttons -->
         <div class="field is-grouped is-grouped-right">
             <p class="control">
@@ -11,35 +10,17 @@
             </p>
         </div>
 
-        <div class="field">
-            <%= form.label :verified, class: "label" do %>
-                <div class="control">
-                    <%= form.check_box :verified %>
-                    Verified
-                </div>
-            <% end %>
-        </div>
-
         <div class="columns">
-            <div class="column is-one-third">
+            <div class="column">
                 <%= render 'form_card_details', form: form %>
             </div>
 
             <div class="column">
-                <%= render 'form_card_descriptions', form: form %>
-            </div>
-        </div>
-
-        <div class="columns">
-            <div class="column">
                 <%= render 'form_card_location', form: form %>
             </div>
-            <div class="column is-one-third">
-                <%= render 'form_card_contacts', form: form %>
-            </div>
         </div>
 
-        <%= render 'form_card_services', form: form %>
 
+        <%= render 'form_card_descriptions', form: form %>
     <% end %>
 </div>

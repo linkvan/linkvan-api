@@ -1,6 +1,8 @@
 <div class="card facility mb-3", id: <%= card_id %> >
     <!-- Card Header -->
-    <%= render header_component %>
+    <%= render header_component do %>
+        <%= action_content %>
+    <% end %>
 
     <!-- Card Content -->
     <div class="card-content">

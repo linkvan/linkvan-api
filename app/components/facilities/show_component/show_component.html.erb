@@ -57,8 +57,8 @@
         <div class='level-right'>
             <div class='level-item'>
                 <div>
-                <%= link_to 'Edit', edit_admin_facility_path(facility), class: "button" %>
-                <a class="button">Delete</a>
+                    <%= link_to 'Edit', edit_admin_facility_path(facility), class: "button" %>
+                    <a class="button">Delete</a>
                 </div>
             </div>
         </div>
@@ -85,3 +85,28 @@
         <%= render ScheduleCardComponent.new(facility: facility) %>
     </div>
 </div>
+
+<!-- Descriptions -->
+<%= render Shared::CardComponent.new(title: 'Descriptions') do |card| %>
+    <div class='columns'>
+        <div class='column'>
+            <div class='field'>
+                <span class='label'>Description</span>
+
+                <div class='container'>
+                    <%= facility.description %>
+                </div>
+            </div>
+        </div>
+
+        <div class='column'>
+            <div class='field'>
+                <span class='label'>Notes</span>
+
+                <div class='container'>
+                    <%= facility.notes %>
+                </div>
+            </div>
+        </div>
+    </div>
+<% end %>
