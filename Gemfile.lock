@@ -110,7 +110,7 @@ GEM
     mini_portile2 (2.5.0)
     minitest (5.14.4)
     msgpack (1.4.2)
-    nio4r (2.5.7)
+    nio4r (2.5.8)
     nokogiri (1.11.2)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
@@ -133,7 +133,7 @@ GEM
       binding_of_caller (~> 0.7)
       pry (~> 0.13)
     public_suffix (4.0.6)
-    puma (4.3.7)
+    puma (4.3.9)
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
@@ -259,7 +259,7 @@ DEPENDENCIES
   pry-rails
   pry-remote
   pry-stack_explorer (~> 0.5.0)
-  puma (~> 4.1)
+  puma (~> 4.3)
   rack-cors
   rails (~> 6.0.3.6)
   rspec-rails (>= 4.0.1)
