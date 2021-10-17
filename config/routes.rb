@@ -10,6 +10,12 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :dashboard, only: %i[index show]
-    resources :facilities, only: %i[index show]
+
+    resources :facilities do
+      resources :schedules, only: %i[new create edit update], controller: :facility_schedules
+      resources :time_slots, only: %i[new create destroy], controller: :facility_time_slots
+      resources :services, only: %i[create update destroy], controller: :facility_services
+      resources :welcomes, only: %i[create destroy], controller: :facility_welcomes
+    end
   end
 end

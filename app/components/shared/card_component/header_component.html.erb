@@ -1,0 +1,19 @@
+<header class='<%= classes %>'>
+    <div class="level-left">
+        <div class="level-item">
+            <div class="card-header-title">
+                <%= title %>
+            </div>
+        </div>
+    </div>
+
+    <div class="level-right">
+        <% @buttons.each do |button| %>
+            <div class="level-item mr-1">
+                <%= button %>
+            </div>
+        <% end %>
+
+        <%= content %>
+    </div>
+</header>

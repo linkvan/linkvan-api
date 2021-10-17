@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/fabionl/haversine.git
+  revision: 6e0157b53456833141ed5d09e59f85efde5f4a9f
+  specs:
+    haversine (0.3.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -64,6 +70,10 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     ast (2.4.2)
     bcrypt (3.1.16)
+    better_errors (2.9.1)
+      coderay (>= 1.0.0)
+      erubi (>= 1.0.0)
+      rack (>= 0.9.0)
     bindex (0.8.1)
     binding_of_caller (1.0.0)
       debug_inspector (>= 0.0.1)
@@ -93,7 +103,9 @@ GEM
       railties (>= 5.0.0)
     faker (2.17.0)
       i18n (>= 1.6, < 2)
-    ffi (1.15.3)
+    ffi (1.15.4)
+    geo_coord (0.2.0)
+    geocoder (1.6.7)
     globalid (0.5.2)
       activesupport (>= 5.0)
     hotwire-rails (0.1.3)
@@ -102,6 +114,9 @@ GEM
       turbo-rails
     i18n (1.8.10)
       concurrent-ruby (~> 1.0)
+    inline_svg (1.7.2)
+      activesupport (>= 3.0)
+      nokogiri (>= 1.6)
     listen (3.4.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -117,19 +132,19 @@ GEM
     minitest (5.14.4)
     msgpack (1.4.2)
     nio4r (2.5.8)
-    nokogiri (1.12.3-x86_64-darwin)
+    nokogiri (1.12.4-x86_64-darwin)
       racc (~> 1.4)
     pagy (3.12.0)
     parallel (1.20.1)
     parser (3.0.2.0)
       ast (~> 2.4.1)
     pg (1.2.3)
-    pry (0.14.1)
+    pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
-    pry-byebug (3.8.0)
+    pry-byebug (3.9.0)
       byebug (~> 11.0)
-      pry (~> 0.10)
+      pry (~> 0.13.0)
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     pry-remote (0.1.8)
@@ -145,7 +160,7 @@ GEM
     rack (2.2.3)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
-    rack-mini-profiler (2.3.2)
+    rack-mini-profiler (2.3.3)
       rack (>= 1.2.0)
     rack-proxy (0.7.0)
       rack
@@ -218,7 +233,7 @@ GEM
     rubocop-performance (1.11.5)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
-    rubocop-rails (2.11.3)
+    rubocop-rails (2.12.2)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.7.0, < 2.0)
@@ -240,7 +255,7 @@ GEM
     shoulda-matchers (5.0.0)
       activesupport (>= 5.2.0)
     slop (3.6.0)
-    spring (2.1.1)
+    spring (3.0.0)
     sprockets (4.0.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -249,19 +264,16 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     stackprof (0.2.17)
-    stimulus-rails (0.3.9)
+    stimulus-rails (0.5.1)
       rails (>= 6.0.0)
     thor (1.1.0)
     tilt (2.0.10)
-    turbo-rails (0.7.7)
+    turbo-rails (0.7.11)
       rails (>= 6.0.0)
-    turbolinks (5.2.1)
-      turbolinks-source (~> 5.2)
-    turbolinks-source (5.2.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.0.0)
-    view_component (2.38.0)
+    view_component (2.40.0)
       activesupport (>= 5.0.0, < 8.0)
       method_source (~> 1.0)
     web-console (4.1.0)
@@ -269,7 +281,7 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
-    webpacker (5.2.2)
+    webpacker (5.4.2)
       activesupport (>= 5.2)
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
@@ -283,21 +295,27 @@ GEM
 
 PLATFORMS
   x86_64-darwin-19
+  x86_64-darwin-20
 
 DEPENDENCIES
   bcrypt (~> 3.1.16)
+  better_errors
   bootsnap (~> 1.7.2)
   byebug
   capybara
   colorize
   factory_bot_rails (~> 6.1.0)
   faker (~> 2.17.0)
+  geo_coord
+  geocoder (~> 1.6)
+  haversine!
   hotwire-rails
+  inline_svg
   listen (~> 3.4.1)
   memory_profiler
   pagy (~> 3.12.0)
   pg (~> 1.2.3)
-  pry (~> 0.14.0)
+  pry (~> 0.13.1)
   pry-byebug
   pry-rails
   pry-remote
@@ -305,7 +323,7 @@ DEPENDENCIES
   puma (~> 5.2.2)
   rack-cors
   rack-mini-profiler (~> 2.3.1)
-  rails (~> 6.1.3)
+  rails (~> 6.1.4)
   redis (~> 4.2.5)
   rspec-rails (~> 5.0.0)
   rubocop (>= 1.11.0)
@@ -317,14 +335,14 @@ DEPENDENCIES
   shoulda-matchers (>= 4.5.1)
   spring
   stackprof
-  turbolinks (~> 5.2.1)
+  turbo-rails
   tzinfo-data
   view_component
   web-console (~> 4.1.0)
-  webpacker (~> 5.2.1)
+  webpacker (~> 5.4.2)
 
 RUBY VERSION
-   ruby 2.7.2p137
+   ruby 2.7.4p191
 
 BUNDLED WITH
-   2.2.3
+   2.2.29

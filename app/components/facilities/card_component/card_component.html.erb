@@ -1,113 +1,122 @@
-<div class="card facility">
-  <header class="card-header level">
-    <div class="level-left">
-      <div class="card-header-title">
+<div class="card facility mb-2", id: <%= card_id %> >
+    <header class="card-header level mb-1">
+        <div class="level-left">
+            <div class="card-header-title">
 
-        <span class="icon-text">
-          <% if facility.verified? %>
-            <span class="icon has-text-success">
-              <i class="fas fa-check-square"></i>
-            </span>
-          <% else %>
-            <span class="icon has-text-danger">
-              <i class="fas fa-times"></i>
-            </span>
-          <% end %>
+                <span class="icon-text">
+                    <% if facility.verified? %>
+                        <span class="icon has-text-success">
+                            <i class="fas fa-check-square"></i>
+                        </span>
+                    <% else %>
+                        <span class="icon has-text-danger">
+                            <i class="fas fa-times"></i>
+                        </span>
+                    <% end %>
 
-          <span>
-            <%= facility.name %>
-          </span>
-        </span>
-
-      </div>
-    </div>
-
-    <div class="level-right">
-      <div class="field is-grouped">
-        <div class="control">
-          <%= check_box_tag :verified, :toggle, facility.verified, class: 'switch is-rtl' %>
-          <%= label_tag :verified, facility.verified ? 'Live' : 'Pending Reviews' %>
-        </div>
-
-        <div class="control is-right">
-          <div class="dropdown is-hoverable">
-            <div class="dropdown-trigger">
-              <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-                <span class="icon is-small">
-                  <i class="fas fa-bars" aria-hidden="true"></i>
+                    <span>
+                        <%= facility.name %>
+                    </span>
                 </span>
-              </button>
+
             </div>
-            <div class="dropdown-menu" id="dropdown-menu6" role="menu">
-              <div class="dropdown-content">
-                <a class="dropdown-item">Edit</a>
-                <a class="dropdown-item">Delete</a>
-                <hr class="dropdown-divider"/>
-                <div class="dropdown-item">
-                  <p>Add the <code>is-right</code> modifier for a <strong>right-aligned</strong> dropdown.</p>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
-      </div>
-    </div>
-  </header>
+        <div class="level-right">
+            <div class="field is-grouped">
+                <div class="control">
+                    
+                    <%= label_tag :verified, facility.verified? ? 'Live' : 'Pending Reviews' %>
+                </div>
 
-  <div class="card-content">
-    <div class="content is-pulled-right">
-      User:
-      <% if facility.user.blank? %>
-        <%= tag.span 'Not Present', class: 'tag is-danger'%>
-      <% else %>
-        <% if facility.user.verified? %>
-          <span class="icon is-small">
-            <i class="fas fa-user-check"></i>
-          </span>
-          <%= tag.span 'Verified', class: 'tag is-light'%>
-        <% else %>
-          <span class="icon is-small">
-            <i class="fas fa-user-times"></i>
-          </span>
-          <%= tag.span 'Not Verified', class: 'tag is-danger'%>
-        <% end %>
-        <br/>
-        <%= facility.user.name %> |
-        <%= facility.user.email %>
-      <% end %>
+                <div class="control is-right">
+                    <div class="dropdown is-hoverable is-right">
+                        <div class="dropdown-trigger">
+                            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                                <span class="icon is-small">
+                                    <i class="fas fa-bars" aria-hidden="true"></i>
+                                </span>
+                            </button>
+                        </div>
+                        <div class="dropdown-menu" id="dropdown-menu6" role="menu">
+                            <div class="dropdown-content">
+                                <%= link_to 'Edit', edit_admin_facility_path(facility), class: "dropdown-item" %>
+
+                                <a class="dropdown-item">Delete</a>
+
+                                <hr class="dropdown-divider"/>
+                                <div class="dropdown-item">
+                                    <p>Add the <code>is-right</code> modifier for a <strong>right-aligned</strong> dropdown.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <div class="card-content pt-2 pb-2">
+        <div class="columns">
+
+            <div class="column">
+                Services:
+                <% if facility.services.blank? %>
+                    <span class="tag is-danger">None</span>
+                <% else %>
+                    <% facility.services.compact_blank.each do |service| %>
+                        <span class="tag is-light"><%= service.name %></span>
+                    <% end %>
+                <% end %>
+
+                <br/>
+                <div class='svg-icons'>
+                    <span>Welcomes:</span>
+                    <% if facility.welcomes.blank? %>
+                        <span class='tag is-danger'>None</span>
+                    <% else %>
+                        <% facility.facility_welcomes.each do |welcome| %>
+                            <%= render Facilities::WelcomesIconComponent.new(welcome.customer) %>
+                        <% end %>
+                    <% end %>
+                </div>
+
+                <br/>
+                <%= facility.address %>
+            </div>
+
+            <div class="column">
+                User:
+                <% if facility.user.blank? %>
+                    <%= tag.span 'Not Present', class: 'tag is-danger'%>
+                <% else %>
+                    <% if facility.user.verified? %>
+                        <span class="icon is-small">
+                            <i class="fas fa-user-check"></i>
+                        </span>
+                        <%= tag.span 'Verified', class: 'tag is-light'%>
+                    <% else %>
+                        <span class="icon is-small">
+                            <i class="fas fa-user-times"></i>
+                        </span>
+                        <%= tag.span 'Not Verified', class: 'tag is-danger'%>
+                    <% end %>
+                    <br/>
+                    <%= facility.user.name %> |
+                    <%= facility.user.email %>
+                <% end %>
+            </div>
+
+        </div>
     </div>
 
-    <div class="content">
-      <%= facility.address %>
-      <br/>
-      Services:
-      <% if facility.services_list.blank? %>
-        <span class="tag is-danger">None</span>
-      <% else %>
-        <% facility.services_list.each do |service| %>
-          <span class="tag is-light"><%= service.titleize %></span>
-        <% end %>
-      <% end %>
-    </div>
-
-    <div class="content">
-      <%= facility.description %>
-    </div>
-
-    <div class="content">
-      <time datetime="<%= facility.updated_at %>">
-        Last Updated on
-        <%= facility.updated_at %>.
-      </time>
-    </div>
-  </div>
-
-  <footer class="card-footer">
-    <div class="card-footer-item">
-      <pre>
-          <%= facility.pretty_inspect %>
-      </pre>
-    </div>
-  </footer>
-    </div>
+    <footer class="card-footer">
+        <div class="card-footer-item has-text-weight-light is-size-7 pt-1 pb-1">
+            <time datetime="<%= facility.updated_at %>">
+                Last Updated on
+                <%= facility.updated_at %>.
+            </time>
+        </div>
+    </footer>
+</div>

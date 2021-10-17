@@ -1,0 +1,20 @@
+<div class="card facility mb-3", id: <%= card_id %> >
+    <!-- Card Header -->
+    <%= render header_component do %>
+        <%= action_content %>
+    <% end %>
+
+    <!-- Card Content -->
+    <div class="card-content">
+        <%= content %>
+    </div>
+
+    <!-- Card Footer -->
+    <% if footer.present? %>
+        <footer class="card-footer">
+            <div class="card-footer-item has-text-weight-light is-size-7">
+                <%= footer %>
+            </div>
+        </footer>
+    <% end %>
+</div>

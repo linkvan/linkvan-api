@@ -25,7 +25,7 @@ class Api::HomeController < Api::BaseController
     result = {}
 
     Notice.notice_types.each_key do |type|
-      result[type] = Notice.published.where(notice_type: type).exists?
+      result[type] = Notice.published.exists?(notice_type: type)
     end
 
     result

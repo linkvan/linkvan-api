@@ -22,7 +22,7 @@ namespace :json do
     raise "ERROR: This rake task is supposed to be used only by developers." if Rails.env.production?
 
     file = File.open args[:jsonfile]
-    data = JSON.load file
+    data = JSON.load file # rubocop:disable Security/JSONLoad
     file.close
 
     # expected structure:

@@ -8,4 +8,8 @@ class Facilities::CardComponent < ViewComponent::Base
 
     @facility = facility
   end
+
+  def card_id
+    dom_id(facility)
+  end
 end

@@ -1,0 +1,21 @@
+<%= render Shared::CardComponent.new(title: 'Welcomes') do |card| %>
+    <% all_customers.each do |customer| %>
+        <div class="container has-borders">
+            <div class="columns">
+                <div class="column">
+                    <div class="py-2">
+                    <span class='icon-text'>
+                        <%= render Facilities::WelcomesIconComponent.new(customer.value).with_variant(:icon) %>
+                        <span><%= customer.name %></span>
+                    </span>
+                    </div>
+                </div>
+
+                <div class="column is-1">
+                    <%= switch_button(customer) %>
+                </div>
+            </div>
+        </div>
+    <% end %>
+<% end %>
+

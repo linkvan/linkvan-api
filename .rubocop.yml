@@ -12,11 +12,13 @@ AllCops:
   DisabledByDefault: false #true
   SuggestExtensions: false
   Exclude:
+    - 'config/application.rb'
+    - 'config/environments/*'
     - 'Gemfile*'
     - 'Rakefile'
     - 'bin/*'
     - 'config.ru'
-    - 'db/schema.rb'
+    - 'db/**/*'
     - 'tmp/**/*'
     - 'log/**/*'
     - 'vendor/**/*'
@@ -89,6 +91,10 @@ Layout/EndAlignment:
 Layout/EmptyLineAfterMagicComment:
   Enabled: true
 
+Layout/EmptyLinesAroundAccessModifier:
+  Enabled: false
+  EnforcedStyle: only_before
+
 Layout/EmptyLinesAroundBlockBody:
   Enabled: true
 
@@ -103,6 +109,9 @@ Layout/EmptyLinesAroundMethodBody:
 # In a regular module definition, no empty lines around the body.
 Layout/EmptyLinesAroundModuleBody:
   Enabled: true
+
+Layout/LineLength:
+  Enabled: false
 
 # Use Ruby >= 1.9 syntax for hashes. Prefer { a: :b } over { :a => :b }.
 Style/HashSyntax:

@@ -1,0 +1,37 @@
+<%= render Shared::CardComponent.new(title: "Details") do |card| %>
+    <% card.action_content do %>
+        <div class="field mr-4">
+            <%= form.label :verified, class: "label" do %>
+                <div class="control">
+                    Verified
+                    <%= form.check_box :verified %>
+                </div>
+            <% end %>
+        </div>
+    <% end %>
+
+    <!-- Name -->
+    <div class="field">
+        <%= form.label :name, "Name:", class: "label" %>
+        <div class="control">
+            <%= form.text_field :name, class: "input" %>
+        </div>
+        <p class="help is-danger">This is a help text</p>
+    </div>
+
+    <!-- Phone -->
+    <div class="field">
+        <%= form.label :phone, "Phone:", class: "label" %>
+        <div class="control">
+            <%= form.text_field :phone, class: "input" %>
+        </div>
+    </div>
+
+    <!-- Website -->
+    <div class="field">
+        <%= form.label :website, "Website:", class: "label" %>
+        <div class="control">
+            <%= form.text_field :website, class: "input" %>
+        </div>
+    </div>
+<% end %>

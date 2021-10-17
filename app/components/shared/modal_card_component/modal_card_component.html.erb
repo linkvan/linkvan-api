@@ -1,0 +1,26 @@
+<%# add class is-active to show the modal window %>
+<div id="<%= id %>" class="modal modal_card">
+    <div class="modal-background"></div>
+
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Modal title</p>
+            <button type="button" class="delete" aria-label="close" data-bulma-modal="close"></button>
+        </header>
+
+        <section class="modal-card-body">
+            <!-- Content ... -->
+            <%= content %>
+        </section>
+
+        <footer class="modal-card-foot">
+            <% if action_buttons.blank? %>
+                <button type="button" class="button" data-bulma-modal="close">Close</button>
+            <% end %>
+
+            <% action_buttons.each do |action_button| %>
+                <%= action_button %>
+            <% end %>
+        </footer>
+    </div>
+</div>

@@ -1,0 +1,112 @@
+<div class='box' id='<% card_id %>'>
+    <div class='level'>
+        <div class='level-left'>
+            <div class='level-item'>
+                <div>
+                    <span class="icon-text">
+                        <%= status_icon %>
+                        <span class='title'>
+                            <%= facility.name %>
+                        </span>
+                    </span>
+
+                    <div>
+                        Phone:
+                        <%= facility.phone %>
+                    </div>
+
+                    <div>
+                        Website:
+                        <%= link_to_website %>
+                    </div>
+
+                    <div>
+                        <time datetime="<%= facility.updated_at %>">
+                            Last Updated:
+                            <%= facility.updated_at %>.
+                        </time>
+                    </div>
+
+                    <div>
+                        User:
+                        <% if user.blank? %>
+                            <%= tag.span 'Not Present', class: 'tag is-danger'%>
+                        <% else %>
+                            <% if user.verified? %>
+                                <span class="icon is-small">
+                                    <i class="fas fa-user-check"></i>
+                                </span>
+                                <%= tag.span 'Verified', class: 'tag is-light'%>
+                            <% else %>
+                                <span class="icon is-small">
+                                    <i class="fas fa-user-times"></i>
+                                </span>
+                                <%= tag.span 'Not Verified', class: 'tag is-danger'%>
+                            <% end %>
+
+                            <br/>
+                            <%= user.name %> |
+                            <%= user.email %>
+                        <% end %>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class='level-right'>
+            <div class='level-item'>
+                <div>
+                    <%= link_to 'Edit', edit_admin_facility_path(facility), class: "button" %>
+                    <a class="button">Delete</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class='columns'>
+    <div class='column'>
+        <%= render WelcomesCardComponent.new(facility: facility) %>
+    </div>
+
+    <div class='column'>
+        <%= render ServicesCardComponent.new(facility: facility) %>
+    </div>
+</div>
+
+<div class='columns'>
+    <div class='column'>
+        <%= render LocationCardComponent.new(facility: facility) %>
+    </div>
+
+    <div class='column'>
+        <%= render ScheduleCardComponent.new(facility: facility) %>
+    </div>
+</div>
+
+<!-- Descriptions -->
+<%= render Shared::CardComponent.new(title: 'Descriptions') do |card| %>
+    <div class='columns'>
+        <div class='column'>
+            <div class='field'>
+                <span class='label'>Description</span>
+
+                <div class='container'>
+                    <%= facility.description %>
+                </div>
+            </div>
+        </div>
+
+        <div class='column'>
+            <div class='field'>
+                <span class='label'>Notes</span>
+
+                <div class='container'>
+                    <%= facility.notes %>
+                </div>
+            </div>
+        </div>
+    </div>
+<% end %>

@@ -1,0 +1,19 @@
+@import "~bulma/bulma";
+
+.has-borders {
+  border-bottom: 1px $grey-light solid;
+
+  &:first-child {
+  border-top: 1px $grey-light solid;
+  }
+}
+
+.has-full-borders {
+  border: 1px $grey-light solid;
+}
+
+table.is-vertically-centered {
+  th, td {
+    vertical-align: middle;
+  }
+}

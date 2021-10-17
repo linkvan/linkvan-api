@@ -1,0 +1,36 @@
+<%= render Shared::CardComponent.new(title: 'Services') do |card| %>
+    <% all_services.each do |service| %>
+        <div class="container has-borders">
+            <div class="columns">
+                <div class="column">
+                    <p class="py-2"><%= service.name %></p>
+                </div>
+
+                <div class="column is-1">
+                    <%= show_notes_button(service) %>
+                </div>
+
+                <div class="column is-1">
+                    <%= switch_button(service) %>
+                </div>
+            </div>
+        </div>
+
+        <%= form_with model: facility_service_for(service), url: admin_facility_service_path(facility_id: facility.id, service_id: service.id), method: :put, id: "form_note_#{service.id}" do |form| %>
+            <%= render Shared::ModalCardComponent.new(id: note_modal_id(service)) do |c| %>
+                <div class='field'>
+                    <%= form.label :note %>
+                    <%= form.text_area :note, rows: 5, class: 'textarea', id: "note_#{service.id}" %>
+                </div>
+
+                <% c.action_button do %>
+                    <button type="button" class="button" data-bulma-modal="close">Close</button>
+                <% end %>
+
+                <% c.action_button do %>
+                    <button class="button is-success">Save changes</button>
+                <% end %>
+            <% end %>
+        <% end %>
+    <% end %>
+<% end %>

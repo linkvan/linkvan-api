@@ -1,0 +1,12 @@
+<%= render Shared::CardComponent.new(title: 'Location') do |card| %>
+    <div class='field is-horizontal'>
+        <span class='label mr-1'>Address:</span>
+        <span class='control is-expanded'><%= facility.address %></span>
+    </div>
+
+    <div class='container'>
+        <figure class='image image is-5by3 map'>
+            <img src="">
+        </figure>
+    </div>
+<% end %>

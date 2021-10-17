@@ -1,0 +1,27 @@
+<div class="container">
+    <%#= form_for [:admin, @time_slot] do |form| %>
+    <%= form_with model: @time_slot, url: admin_facility_time_slots_path(schedule_id: @time_slot.facility_schedule_id) do |form| %>
+
+        <div class='level'>
+        <div class='level-left'>
+            <h1 class='title level-item'><%= @time_slot.facility.name.titleize %></h1>
+            <h2 class='subtitle level-item'>new <%= @time_slot.week_day.to_s.titleize %> time slot</h2>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="field is-grouped is-grouped-right">
+            <p class="control">
+            <%= form.submit class: "button is-primary" %>
+            </p>
+            <p class="control">
+            <%= link_to "Back", admin_facility_path(@facility.id), class: "button is-light" %>
+            </p>
+        </div>
+        </div>
+
+        <%= render Shared::CardComponent.new(title: "Schedule") do |card| %>
+            <%= render 'form_card_schedule', form: form %>
+        <% end %>
+    <% end %>
+</div>
+

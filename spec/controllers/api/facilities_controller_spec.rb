@@ -1,11 +1,13 @@
 require "rails_helper"
 
 RSpec.describe Api::FacilitiesController do # , type: :request do
-  let(:test_services) { "Test AnotherTest Yet_Another_Test" }
+  # let(:test_services) { "shelter legal" }
 
   describe "GET #index" do
+    let(:all_day_facility) { create(:open_all_day_facility, :with_services) }
     before do
-      @all_day_facility = create(:open_all_day_facility, services: test_services)
+      all_day_facility
+
       get :index
     end
 
@@ -19,12 +21,10 @@ RSpec.describe Api::FacilitiesController do # , type: :request do
       expect(Facility).to receive(:is_verified).and_call_original
       get :index
     end
-    it "uses Facilities::IndexFacilitySerializer class" do
-      expect_any_instance_of(FacilitiesSerializer).to receive(:serialize).with(Facilities::IndexFacilitySerializer)
-      get :index
-    end
-    it "calls FacilitiesSerializer to_json" do
-      expect_any_instance_of(FacilitiesSerializer).to receive(:to_json)
+
+    it "calls Serializers" do
+      expect_any_instance_of(FacilitySerializer).to receive(:call).and_call_original
+      expect_any_instance_of(SiteStatsSerializer).to receive(:call).and_call_original
       get :index
     end
 

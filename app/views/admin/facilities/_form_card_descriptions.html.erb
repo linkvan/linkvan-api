@@ -1,0 +1,21 @@
+<%= render Shared::CardComponent.new(title: 'Descriptions') do |card| %>
+    <div class="columns">
+        <div class="column">
+            <div class="field">
+                <%= form.label :description, "Description:", class: "label" %>
+                <div class="control">
+                    <%= form.text_area :description, rows: 12, class: "textarea" %>
+                </div>
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="field">
+                <%= form.label :notes, "Notes:", class: "label" %>
+                <div class="control">
+                    <%= form.text_area :notes, rows: 12, class: "textarea" %>
+                </div>
+            </div>
+        </div>
+    </div>
+<% end %>
