@@ -10,7 +10,15 @@ class Api::FacilitiesController < Api::BaseController
     @facilities = Facility.includes(:zone).is_verified.order(:updated_at)
     @facilities = @facilities.with_service(params[:service]) if params[:service].present?
 
-    result[:facilities] = FacilitiesSerializer.new(@facilities, Facilities::IndexFacilitySerializer).build
+    result[:facilities] = []
+    @facilities.each do |facility|
+      serializer = FacilitySerializer.call(facility, complete: false)
+      result[:facilities] << serializer.data
+    end
+    # result[:facilities] = FacilitiesSerializer.new(@facilities, Facilities::IndexFacilitySerializer).build
+
+    # services
+    # search => name, type, service, welcomes
 
     render json: result.as_json, status: :ok
   end

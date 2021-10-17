@@ -1,6 +1,5 @@
 FactoryBot.define do
   factory :facility do
-    id { 1 }
     name { "Test Facility" }
     lat { 49.2450424 }
     long { -123.02894679999997 }
@@ -22,15 +21,28 @@ FactoryBot.define do
 
     # Facility is open and has time set.
     factory :open_facility do
+      after(:build) do |facility|
+        FacilitySchedule.week_days.each_key do |week_day|
+          facility.schedules << build(:facility_schedule, :with_time_slot, facility: facility, week_day: week_day)
+        end
+      end
+    end
 
-      # Facility has two times set for the same day.
-      factory :open2_facility do
-
+    factory :open_facility_with_2_time_slots do
+      after(:build) do |facility|
+        FacilitySchedule.week_days.each_key do |week_day|
+          facility.schedules << build(:facility_schedule, :with_2_time_slots, facility: facility, week_day: week_day)
+        end
       end
     end
 
     # Facility is closed and has time set.
-    factory :close_facility do
+    factory :close_facility
+  end
+
+  trait :with_services do
+    after(:build) do |facility|
+      facility.facility_services << build(:facility_service, facility: facility)
     end
   end
 

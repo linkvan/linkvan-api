@@ -8,6 +8,6 @@ class Api::BaseController < ApplicationController
   end
 
   def site_stats
-    { site_stats: SiteStatsSerializer.new(SiteStats.new).build }
+    { site_stats: SiteStatsSerializer.call(SiteStats.new).data }
   end
 end
