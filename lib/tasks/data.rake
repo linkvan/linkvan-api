@@ -62,6 +62,6 @@ namespace :data do
 
   def load_fake_data
     json_data_location = Rails.root.join("db", "fake_data.json")
-    JSON.load(json_data_location)
+    JSON.load(json_data_location) # rubocop:disable Security/JSONLoad
   end
 end

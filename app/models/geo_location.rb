@@ -19,34 +19,32 @@ module GeoLocation
       coord(*Geocoder.coordinates(address, params))
     end
 
-    def search(*args)  #, &block)
+    # , &block)
+    def search(*args)
       Geocoder.search(*args)
     end
   end
 end
 
-
-
-
 # These are previous distance related calculations on Facility model.
 #   Keeping it just for historical reasons, and will probably remove them.
 #
-# 
+#
 # def distance(from_lat, from_long, to_lat, to_long)
 # haversine(from_lat, from_long, to_lat, to_long)
 # end
-# 
+#
 # def redist_sort(inArray, ulat, ulong)
 # ulat = ulat.to_d
 # ulong = ulong.to_d
 # distarr = []
-# 
+#
 # inArray.each do |a|
 # distarr.push(Facility.haversine(a.lat, a.long, ulat, ulong))
 # end
-# 
+#
 # arr = Facility.bubble_sort(distarr, inArray)
-# 
+#
 # arr
 # end
 
@@ -55,38 +53,38 @@ end
 # def self.haversine(from_lat, from_long, to_lat, to_long)
 # dtor = Math::PI / 180
 # r = 6378.14 * 1000 # delete 1000 to get kms
-# 
+#
 # rfrom_lat = from_lat * dtor
 # rfrom_long = from_long * dtor
 # rto_lat = to_lat * dtor
 # rto_long = to_long * dtor
-# 
+#
 # dlon = rfrom_long - rto_long
 # dlat = rfrom_lat - rto_lat
-# 
+#
 # a = power(Math.sin(dlat / 2), 2) + Math.cos(rfrom_lat) * Math.cos(rto_lat) * power(Math.sin(dlon / 2), 2)
 # c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 # d = r * c
-# 
+#
 # d
 # end
 
 # def haversine_km(from_lat, from_long, to_lat, to_long)
 # dtor = Math::PI / 180
 # r = 6378.14
-# 
+#
 # rfrom_lat = from_lat * dtor
 # rfrom_long = from_long * dtor
 # rto_lat = to_lat * dtor
 # rto_long = to_long * dtor
-# 
+#
 # dlon = rfrom_long - rto_long
 # dlat = rfrom_lat - rto_lat
-# 
+#
 # a = power(Math.sin(dlat / 2), 2) + Math.cos(rfrom_lat) * Math.cos(rto_lat) * power(Math.sin(dlon / 2), 2)
 # c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 # d = r * c
-# 
+#
 # d
 # end
 
@@ -104,18 +102,18 @@ end
 #   Used in #contains_service to sort facilities by distance
 # def bubble_sort(list, alist)
 # return alist if list.size <= 1 # already sorted
-# 
+#
 # swapped = true
 # while swapped
 # swapped = false
 # 0.upto(list.size - 2) do |i|
 # next unless list[i] > list[i + 1]
-# 
+#
 # list[i], list[i + 1] = list[i + 1], list[i] # swap values
 # alist[i], alist[i + 1] = alist[i + 1], alist[i]
 # swapped = true
 # end
 # end
-# 
+#
 # alist
 # end

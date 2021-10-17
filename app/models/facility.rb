@@ -89,7 +89,6 @@ class Facility < ApplicationRecord
     distance(*params).to_kilometers
   end
 
-
   private
 
   def clean_data

@@ -3,7 +3,7 @@
 class User < ApplicationRecord
   has_secure_password
   has_many :facilities, dependent: :nullify
-  has_and_belongs_to_many :zones
+  has_and_belongs_to_many :zones # rubocop:disable Rails/HasAndBelongsToMany
 
   validates :name, presence: true
   validates :email, presence: true,
