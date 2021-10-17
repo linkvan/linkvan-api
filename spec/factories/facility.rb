@@ -10,14 +10,11 @@ FactoryBot.define do
     notes { "small notes about facility" }
     verified { true }
 
-
     # Facility is open all day
-    factory :open_all_day_facility do
-    end
+    factory :open_all_day_facility
 
     # Facility is closed all day
-    factory :close_all_day_facility do
-    end
+    factory :close_all_day_facility
 
     # Facility is open and has time set.
     factory :open_facility do

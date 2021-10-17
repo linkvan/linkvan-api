@@ -13,12 +13,12 @@ AllCops:
   SuggestExtensions: false
   Exclude:
     - 'config/application.rb'
-    - 'config/environments'
+    - 'config/environments/*'
     - 'Gemfile*'
     - 'Rakefile'
     - 'bin/*'
     - 'config.ru'
-    - 'db'
+    - 'db/**/*'
     - 'tmp/**/*'
     - 'log/**/*'
     - 'vendor/**/*'
