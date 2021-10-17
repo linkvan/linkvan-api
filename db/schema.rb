@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_19_174614) do
+ActiveRecord::Schema.define(version: 2021_10_17_201435) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,8 +44,6 @@ ActiveRecord::Schema.define(version: 2021_09_19_174614) do
 
   create_table "facilities", id: :serial, force: :cascade do |t|
     t.string "name"
-    t.string "welcomes"
-    t.string "services"
     t.decimal "lat"
     t.decimal "long"
     t.string "address"
@@ -55,60 +53,11 @@ ActiveRecord::Schema.define(version: 2021_09_19_174614) do
     t.text "notes"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.time "startsmon_at"
-    t.time "endsmon_at"
-    t.time "startstues_at"
-    t.time "endstues_at"
-    t.time "startswed_at"
-    t.time "endswed_at"
-    t.time "startsthurs_at"
-    t.time "endsthurs_at"
-    t.time "startsfri_at"
-    t.time "endsfri_at"
-    t.time "startssat_at"
-    t.time "endssat_at"
-    t.time "startssun_at"
-    t.time "endssun_at"
     t.boolean "r_pets", default: false
     t.boolean "r_id", default: false
     t.boolean "r_cart", default: false
     t.boolean "r_phone", default: false
     t.boolean "r_wifi", default: false
-    t.time "startsmon_at2"
-    t.time "endsmon_at2"
-    t.time "startstues_at2"
-    t.time "endstues_at2"
-    t.time "startswed_at2"
-    t.time "endswed_at2"
-    t.time "startsthurs_at2"
-    t.time "endsthurs_at2"
-    t.time "startsfri_at2"
-    t.time "endsfri_at2"
-    t.time "startssat_at2"
-    t.time "endssat_at2"
-    t.time "startssun_at2"
-    t.time "endssun_at2"
-    t.boolean "open_all_day_mon"
-    t.boolean "open_all_day_tues"
-    t.boolean "open_all_day_wed"
-    t.boolean "open_all_day_thurs"
-    t.boolean "open_all_day_fri"
-    t.boolean "open_all_day_sat"
-    t.boolean "open_all_day_sun"
-    t.boolean "closed_all_day_mon"
-    t.boolean "closed_all_day_tues"
-    t.boolean "closed_all_day_wed"
-    t.boolean "closed_all_day_thurs"
-    t.boolean "closed_all_day_fri"
-    t.boolean "closed_all_day_sat"
-    t.boolean "closed_all_day_sun"
-    t.boolean "second_time_mon", default: false
-    t.boolean "second_time_tues", default: false
-    t.boolean "second_time_wed", default: false
-    t.boolean "second_time_thurs", default: false
-    t.boolean "second_time_fri", default: false
-    t.boolean "second_time_sat", default: false
-    t.boolean "second_time_sun", default: false
     t.integer "user_id"
     t.boolean "verified", default: false
     t.text "shelter_note"
@@ -234,6 +183,7 @@ ActiveRecord::Schema.define(version: 2021_09_19_174614) do
     t.boolean "activation_email_sent", default: false
     t.string "phone_number"
     t.boolean "verified", default: false
+    t.index ["email"], name: "index_users_on_email", unique: true
   end
 
   create_table "users_zones", id: false, force: :cascade do |t|
