@@ -68,15 +68,15 @@ RSpec.describe FacilityTimeSlot, type: :model do
         context "with from_hour before" do
           let(:from_hour) { 8 }
 
-          include_examples 'includes another time slot same to_hour'
-          include_examples 'includes another time slot to_hour before'
+          include_examples "includes another time slot same to_hour"
+          include_examples "includes another time slot to_hour before"
         end
 
         context "with same from_hour" do
           let(:from_hour) { 9 }
 
-          include_examples 'includes another time slot same to_hour'
-          include_examples 'includes another time slot to_hour before'
+          include_examples "includes another time slot same to_hour"
+          include_examples "includes another time slot to_hour before"
         end
       end
 
@@ -88,15 +88,15 @@ RSpec.describe FacilityTimeSlot, type: :model do
         context "with from_hour before" do
           let(:from_hour) { 8 }
 
-          include_examples 'includes another time slot same to_hour'
-          include_examples 'includes another time slot to_hour after'
+          include_examples "includes another time slot same to_hour"
+          include_examples "includes another time slot to_hour after"
         end
 
         context "with same from_hour" do
           let(:from_hour) { 9 }
 
-          include_examples 'includes another time slot same to_hour'
-          include_examples 'includes another time slot to_hour before'
+          include_examples "includes another time slot same to_hour"
+          include_examples "includes another time slot to_hour before"
         end
       end
     end
@@ -114,15 +114,15 @@ RSpec.describe FacilityTimeSlot, type: :model do
         context "with from_hour after" do
           let(:from_hour) { 10 }
 
-          include_examples 'includes another time slot same to_hour'
-          include_examples 'includes another time slot to_hour before'
+          include_examples "includes another time slot same to_hour"
+          include_examples "includes another time slot to_hour before"
         end
 
         context "with same from_hour" do
           let(:from_hour) { 9 }
 
-          include_examples 'includes another time slot same to_hour'
-          include_examples 'includes another time slot to_hour before'
+          include_examples "includes another time slot same to_hour"
+          include_examples "includes another time slot to_hour before"
         end
       end
 
@@ -134,15 +134,15 @@ RSpec.describe FacilityTimeSlot, type: :model do
         context "with from_hour after" do
           let(:from_hour) { 10 }
 
-          include_examples 'includes another time slot same to_hour'
-          include_examples 'includes another time slot to_hour after'
+          include_examples "includes another time slot same to_hour"
+          include_examples "includes another time slot to_hour after"
         end
 
         context "with same from_hour" do
           let(:from_hour) { 9 }
 
-          include_examples 'includes another time slot same to_hour'
-          include_examples 'includes another time slot to_hour before'
+          include_examples "includes another time slot same to_hour"
+          include_examples "includes another time slot to_hour before"
         end
       end
     end

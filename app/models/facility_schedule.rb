@@ -43,7 +43,7 @@ class FacilitySchedule < ApplicationRecord
 
   private
 
-  SLOT_TIME_PRESENCE_ERROR = "must not be present if facility availability is %{availability} all day for %{week_day}".freeze
+  SLOT_TIME_PRESENCE_ERROR = "must not be present if facility availability is %<availability>s all day for %<week_day>s"
 
   def time_slots_presence
     open_error_msg = format(SLOT_TIME_PRESENCE_ERROR, availability: :open, week_day: week_day)

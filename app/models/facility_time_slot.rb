@@ -30,11 +30,11 @@ class FacilityTimeSlot < ApplicationRecord
   end
 
   def start_time_string
-    "#{from_hour.to_s.rjust(2, "0")}:#{from_min.to_s.rjust(2, "0")}"
+    "#{from_hour.to_s.rjust(2, '0')}:#{from_min.to_s.rjust(2, '0')}"
   end
 
   def end_time_string
-    "#{to_hour.to_s.rjust(2, "0")}:#{to_min.to_s.rjust(2, "0")}"
+    "#{to_hour.to_s.rjust(2, '0')}:#{to_min.to_s.rjust(2, '0')}"
   end
 
   # To double check overlapping logic
@@ -69,7 +69,7 @@ class FacilityTimeSlot < ApplicationRecord
   end
 
   def validate_non_overlaping_time_slot_range
-    errors.add(:time_slot, "can't overlap for the same Facility Schedule") if overlapping_time_slots.exists? #if as_range.overlaps?()
+    errors.add(:time_slot, "can't overlap for the same Facility Schedule") if overlapping_time_slots.exists? # if as_range.overlaps?()
   end
 
   def facility_availabity_is_set_times

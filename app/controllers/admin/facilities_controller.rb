@@ -4,8 +4,7 @@ class Admin::FacilitiesController < Admin::BaseController
   before_action :load_facilities, only: [:index]
   before_action :load_facility, only: %i[show edit update destroy]
 
-  def index
-  end
+  def index; end
 
   def show; end
 

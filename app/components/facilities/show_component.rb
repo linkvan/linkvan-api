@@ -4,6 +4,8 @@ class Facilities::ShowComponent < ViewComponent::Base
   attr_reader :facility
 
   def initialize(facility:)
+    super()
+
     @facility = facility
   end
 
@@ -53,6 +55,8 @@ class Facilities::ShowComponent < ViewComponent::Base
     attr_reader :facility
 
     def initialize(facility:)
+      super()
+
       @facility = facility
     end
   end
@@ -61,6 +65,8 @@ class Facilities::ShowComponent < ViewComponent::Base
     attr_reader :facility
 
     def initialize(facility:)
+      super()
+
       @facility = facility
     end
 
@@ -94,12 +100,12 @@ class Facilities::ShowComponent < ViewComponent::Base
     end
 
     def show_notes_button(service)
-      if facility_service_for(service).present?
-        button_data = { modal_id: note_modal_id(service) }
-        tag.button class: "button is-white show_notes_button is-pulled-right", data: button_data do
-          tag.span class: "icon" do
-            tag.i class: "fas fa-edit"
-          end
+      return if facility_service_for(service).blank?
+
+      button_data = { modal_id: note_modal_id(service) }
+      tag.button class: "button is-white show_notes_button is-pulled-right", data: button_data do
+        tag.span class: "icon" do
+          tag.i class: "fas fa-edit"
         end
       end
     end
@@ -129,6 +135,8 @@ class Facilities::ShowComponent < ViewComponent::Base
     attr_reader :facility
 
     def initialize(facility:)
+      super()
+
       @facility = facility
     end
 
@@ -294,7 +302,7 @@ class Facilities::ShowComponent < ViewComponent::Base
       end
     end
 
-    def icon_for(schedule)
+    def icon_for(_schedule)
       icon_class = "fa-plus-square"
 
       icon_element(icon_class)

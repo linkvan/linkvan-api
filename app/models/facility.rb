@@ -76,7 +76,7 @@ class Facility < ApplicationRecord
 
   def distance(to_coord = nil, to_lat: nil, to_long: nil, to_facility: nil)
     to_coord = to_facility.coord if to_facility.respond_to?(:coord) && to_coord.blank?
-    to_coord = GeoLocation.coord(to_lat, to_long) unless to_coord.present?
+    to_coord = GeoLocation.coord(to_lat, to_long) if to_coord.blank?
 
     GeoLocation.distance(coord, to_coord)
   end

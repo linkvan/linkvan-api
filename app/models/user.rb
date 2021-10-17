@@ -2,7 +2,7 @@
 
 class User < ApplicationRecord
   has_secure_password
-  has_many :facilities
+  has_many :facilities, dependent: :nullify
   has_and_belongs_to_many :zones
 
   validates :name, presence: true
@@ -22,7 +22,7 @@ class User < ApplicationRecord
     CSV.generate(headers: true) do |csv|
       csv << attributes
 
-      all.each do |user|
+      all.find_each do |user|
         csv << attributes.map { |attr| user.send(attr) }
       end
     end

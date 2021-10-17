@@ -47,7 +47,7 @@ class Admin::FacilityWelcomesController < Admin::BaseController
   def load_facility_welcome
     relevant_welcomes = @facility.facility_welcomes
     @facility_welcome = relevant_welcomes.find_by(id: params[:id]) ||
-      relevant_welcomes.find_by(customer: params[:customer])
+                        relevant_welcomes.find_by(customer: params[:customer])
   end
 
   def load_facility

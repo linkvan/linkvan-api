@@ -16,4 +16,3 @@ Service.find_or_create_by(name: "Legal")
 Service.find_or_create_by(name: "Learning")
 Service.find_or_create_by(name: "Overdose Prevention")
 Service.find_or_create_by(name: "Phone")
-

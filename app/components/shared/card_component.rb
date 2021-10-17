@@ -5,11 +5,13 @@ class Shared::CardComponent < ViewComponent::Base
 
   renders_one :action_content
   renders_one :footer
-  renders_many :buttons, 'ButtonComponent'
+  renders_many :buttons, "ButtonComponent"
 
   attr_reader :card_id
 
   def initialize(title:, card_id: nil, options: {})
+    super()
+
     @card_id = card_id
     @title = title
     @header_classes = options.dig(:header, :classes)
@@ -20,9 +22,11 @@ class Shared::CardComponent < ViewComponent::Base
   end
 
   class HeaderComponent < ViewComponent::Base
-    attr_reader :title, :classes
+    attr_reader :title
 
     def initialize(title:, classes:, buttons: nil)
+      super()
+
       @title = title
       @classes = classes
       @buttons = buttons.presence || []
@@ -37,6 +41,8 @@ class Shared::CardComponent < ViewComponent::Base
 
   class ButtonComponent < ViewComponent::Base
     def initialize(title:, path:)
+      super()
+
       @title = title
       @path = path
     end

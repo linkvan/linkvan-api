@@ -6,6 +6,8 @@ class Shared::ModalCardComponent < ViewComponent::Base
   attr_reader :id
 
   def initialize(id: nil)
+    super()
+
     @id = id
   end
 

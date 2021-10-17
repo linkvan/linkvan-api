@@ -11,6 +11,8 @@ class Shared::StatusComponent < ViewComponent::Base
   }.freeze
 
   def initialize(status, show_title: false, size: :large)
+    super()
+
     @status = ActiveModel::Type::Boolean.new.cast(status)
     @show_title = show_title
     @size = size
@@ -42,7 +44,6 @@ class Shared::StatusComponent < ViewComponent::Base
     @status ? "Yes" : "No"
   end
 
-
   def status_classes
     STATUS_CLASSES[status]
   end
@@ -50,6 +51,4 @@ class Shared::StatusComponent < ViewComponent::Base
   def status
     @status ? :on : :off
   end
-
-
 end
