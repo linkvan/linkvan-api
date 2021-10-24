@@ -6,6 +6,18 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+# Create an admin user:
+if User.find_by(email: "admin@example.com").blank?
+  User.create!(
+    name: "Admin",
+    email: "admin@example.com",
+    password: "password",
+    password_confirmation: "password",
+    admin: true,
+    verified: true
+  )
+end
+
 # Creates Services options provided by facilities.
 Service.find_or_create_by(name: "Shelter")
 Service.find_or_create_by(name: "Food")

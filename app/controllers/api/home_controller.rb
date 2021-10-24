@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::HomeController < Api::BaseController
-  skip_before_action :require_signin
+  # skip_before_action :authenticate_user!
 
   def index
     result = base_result

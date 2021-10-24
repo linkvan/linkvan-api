@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::FacilitiesController < Api::BaseController
-  skip_before_action :require_signin
+  # skip_before_action :authenticate_user!
 
   # GET /facilities
   def index
