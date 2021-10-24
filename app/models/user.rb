@@ -1,7 +1,13 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  has_secure_password
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  # devise :database_authenticatable, :registerable,
+         # :recoverable, :rememberable, :validatable
+  devise :database_authenticatable, :rememberable, :validatable
+  # has_secure_password
+
   has_many :facilities, dependent: :nullify
   has_and_belongs_to_many :zones # rubocop:disable Rails/HasAndBelongsToMany
 
@@ -10,10 +16,10 @@ class User < ApplicationRecord
                     format: /\A\S+@\S+\z/,
                     uniqueness: { case_sensitive: false }
 
-  def self.authenticate(email, password)
-    user = User.find_by(email: email)
-    user&.authenticate(password)
-  end
+  # def self.authenticate(email, password)
+    # user = User.find_by(email: email)
+    # user&.authenticate(password)
+  # end
 
   def self.to_csv
     attributes = %w[id name email password_digest created_at updated_at admin activation_email_sent phone_number

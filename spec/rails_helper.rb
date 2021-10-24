@@ -25,6 +25,7 @@ require "capybara/rspec" # for system specs
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
+# TODO: Confirm 'spec/support/devise.rb' is indeed required
 Dir[Rails.root.join("spec", "support", "**", "*.rb")].sort.each { |f| require f }
 
 Capybara.server = :puma # , { Silent: true } # To clean up your test output
