@@ -21,18 +21,18 @@ class User < ApplicationRecord
     # user&.authenticate(password)
   # end
 
-  def self.to_csv
-    attributes = %w[id name email password_digest created_at updated_at admin activation_email_sent phone_number
-                    verified]
-
-    CSV.generate(headers: true) do |csv|
-      csv << attributes
-
-      all.find_each do |user|
-        csv << attributes.map { |attr| user.send(attr) }
-      end
-    end
-  end
+  # def self.to_csv
+    # attributes = %w[id name email password_digest created_at updated_at admin activation_email_sent phone_number
+                    # verified]
+# 
+    # CSV.generate(headers: true) do |csv|
+      # csv << attributes
+# 
+      # all.find_each do |user|
+        # csv << attributes.map { |attr| user.send(attr) }
+      # end
+    # end
+  # end
 
   def manages
     return Facility.all if super_admin?
