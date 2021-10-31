@@ -40,11 +40,12 @@ class Shared::CardComponent < ViewComponent::Base
   end
 
   class ButtonComponent < ViewComponent::Base
-    def initialize(title:, path:)
+    def initialize(title:, path:, icon_class: "fa-pen")
       super()
 
       @title = title
       @path = path
+      @icon_class = icon_class
     end
 
     def render?
@@ -63,7 +64,7 @@ class Shared::CardComponent < ViewComponent::Base
 
     def edit_icon
       tag.span(class: "icon") do
-        tag.i class: "fas fa-pen"
+        tag.i class: "fas #{@icon_class}"
       end
     end
   end

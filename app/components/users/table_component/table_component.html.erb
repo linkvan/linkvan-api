@@ -1,0 +1,18 @@
+<table class='table is-hoverable is-fullwidth'>
+    <thead>
+        <tr>
+            <th class="is-size-7">Status</th>
+            <th class="is-size-7">Name</th>
+            <th class="is-size-7">Email</th>
+            <th class="is-size-7">Organization</th>
+            <th class="is-size-7">Updated At</th>
+            <th class="is-size-7">MORE</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <% users.each do |user| %>
+            <%= render UserRowComponent.new(user, table_component: self) %>
+        <% end %>
+    </tbody>
+</table>

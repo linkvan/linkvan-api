@@ -1,0 +1,8 @@
+<div class="container">
+    <%= render Users::TableComponent.new(users: @users) %>
+</div>
+
+<hr/>
+<div class="container">
+    <%== pagy_bulma_combo_nav_js(@pagy) %>
+</div>
