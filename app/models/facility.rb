@@ -94,11 +94,11 @@ class Facility < ApplicationRecord
   def clean_data
     %i[name phone website address].each do |attrb|
       # squish (ActiveSupport's more in-depth strip whitespaces)
-      send("#{attrb}=", send(attrb).squish)
+      send("#{attrb}=", send(attrb)&.squish)
     end
 
     %i[description notes].each do |attrb|
-      send("#{attrb}=", send(attrb).strip)
+      send("#{attrb}=", send(attrb)&.strip)
     end
   end
 
