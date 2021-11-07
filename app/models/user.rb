@@ -16,6 +16,10 @@ class User < ApplicationRecord
                     format: /\A\S+@\S+\z/,
                     uniqueness: { case_sensitive: false }
 
+  scope :verified, -> { where(verified: true) }
+  scope :not_verified, -> { where(verified: false) }
+  scope :super_admins, -> { verified.where(admin: true) }
+
   # def self.authenticate(email, password)
     # user = User.find_by(email: email)
     # user&.authenticate(password)

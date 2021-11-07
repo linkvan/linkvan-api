@@ -1,4 +1,13 @@
 <div class="container">
+    <div class="level"> 
+        <div class="level-left">
+        </div>
+
+        <div class="level-right">
+            <%= link_to "New User", new_admin_user_path, class: "button is-light level-item" %>
+        </div>
+    </div>
+
     <%= render Users::TableComponent.new(users: @users) %>
 </div>
 
