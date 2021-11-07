@@ -62,10 +62,10 @@
 
             <div class="column">
                 Services:
-                <% if facility.services.blank? %>
+                <% if facility.facility_services.blank? %>
                     <span class="tag is-danger">None</span>
                 <% else %>
-                    <% facility.services.compact_blank.each do |service| %>
+                    <% facility.facility_services.compact_blank.each do |service| %>
                         <span class="tag is-light"><%= service.name %></span>
                     <% end %>
                 <% end %>
@@ -73,7 +73,7 @@
                 <br/>
                 <div class='svg-icons'>
                     <span>Welcomes:</span>
-                    <% if facility.welcomes.blank? %>
+                    <% if facility.facility_welcomes.blank? %>
                         <span class='tag is-danger'>None</span>
                     <% else %>
                         <% facility.facility_welcomes.each do |welcome| %>
