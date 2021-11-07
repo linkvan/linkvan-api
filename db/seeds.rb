@@ -28,3 +28,19 @@ Service.find_or_create_by(name: "Legal")
 Service.find_or_create_by(name: "Learning")
 Service.find_or_create_by(name: "Overdose Prevention")
 Service.find_or_create_by(name: "Phone")
+
+
+# Zones
+if Zone.find_by(name: "Vancouver").blank?
+  Zone.create!(
+    name: "Vancouver",
+    description: "Vancouver city zone"
+  )
+end
+
+if Zone.find_by(name: "New Westminster").blank?
+  Zone.create!(
+    name: "New Westminster",
+    description: "New Westminster city zone"
+  )
+end
