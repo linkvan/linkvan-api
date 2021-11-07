@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_31_165820) do
+ActiveRecord::Schema.define(version: 2021_11_07_185106) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,22 +53,9 @@ ActiveRecord::Schema.define(version: 2021_10_31_165820) do
     t.text "notes"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean "r_pets", default: false
-    t.boolean "r_id", default: false
-    t.boolean "r_cart", default: false
-    t.boolean "r_phone", default: false
-    t.boolean "r_wifi", default: false
     t.integer "user_id"
     t.boolean "verified", default: false
-    t.text "shelter_note"
-    t.text "food_note"
-    t.text "medical_note"
-    t.text "hygiene_note"
-    t.text "technology_note"
-    t.text "legal_note"
-    t.text "learning_note"
     t.integer "zone_id"
-    t.text "overdose_note"
     t.index ["user_id"], name: "index_facilities_on_user_id"
     t.index ["zone_id"], name: "index_facilities_on_zone_id"
   end
@@ -186,6 +173,7 @@ ActiveRecord::Schema.define(version: 2021_10_31_165820) do
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
+    t.string "organization"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
