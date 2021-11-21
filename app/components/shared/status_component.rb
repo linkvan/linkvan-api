@@ -23,13 +23,13 @@ class Shared::StatusComponent < ViewComponent::Base
   end
 
   def call_icon
-    tag.span class: "icon" do
+    tag.span class: "icon #{color_classes}" do
       tag.i class: "fas #{size_classes} #{status_classes}"
     end
   end
 
   def call_title
-    tag.span class: "icon-text has-text" do
+    tag.span class: "icon-text #{color_classes}" do
       call_icon + tag.span(title)
     end
   end
@@ -46,6 +46,10 @@ class Shared::StatusComponent < ViewComponent::Base
 
   def status_classes
     STATUS_CLASSES[status]
+  end
+
+  def color_classes
+    nil
   end
 
   def status

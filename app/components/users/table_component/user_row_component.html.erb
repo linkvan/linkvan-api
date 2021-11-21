@@ -1,11 +1,7 @@
 <tr>
     <td>
         <%#= render status_component %>
-        <% if user.verified? %>
-            Verified
-        <% else %>
-            Not Verified
-        <% end %>
+        <%= render Users::StatusComponent.new(user, show_title: false) %>
     </td>
     <td>
         <%= link_to user.name, admin_user_path(id: user.id) %>
@@ -14,7 +10,7 @@
         <%= user.email %>
     </td>
     <td>
-        <%#= user.organization %>
+        <%= user.organization %>
     </td>
 
     <td>

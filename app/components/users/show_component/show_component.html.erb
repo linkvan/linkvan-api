@@ -1,6 +1,7 @@
 <div class='columns'>
     <div class='column'>
         <%= render Shared::CardComponent.new(title: 'User Details') do |card| %>
+            <% card.button(title: 'Reset Password', path: new_admin_user_password_path(user)) %>
             <% card.button(title: 'Edit', path: edit_admin_user_path(user)) %>
             <% card.button(title: 'Delete', path: admin_user_path(user.id), method: :delete, icon_class: 'fa-trash-alt') %>
 
@@ -35,8 +36,7 @@
                 <tr>
                     <th>Status</th>
                     <td>
-                        <%= status_icon %>
-                        <%= status_title %>
+                        <%= render Users::StatusComponent.new(user, show_title: true) %>
                     </td>
                 </tr>
 

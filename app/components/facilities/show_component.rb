@@ -16,7 +16,7 @@ class Facilities::ShowComponent < ViewComponent::Base
   end
 
   def link_to_website
-    link_to facility.website, URI::HTTP.build({ host: facility.website }).to_s
+    link_to facility.website_url, facility.website_url, target: "_blank", rel: "noopener"
   end
 
   def status_icon
