@@ -1,73 +1,13 @@
 <div class="columns">
     <div class="column">
-        <%= render Shared::CardComponent.new(title: 'Details') do |card| %>
-            <div class="field">
-                <%= form.label :name, "Name:", class: "label" %>
-                <div class="control">
-                    <%= form.text_field :name, class: "input" %>
-                </div>
-            </div>
-
-            <div class="field">
-                <%= form.label :email, "Email:", class: "label" %>
-                <div class="control">
-                    <%= form.email_field :email, class: "input" %>
-                </div>
-            </div>
-
-            <div class="field">
-                <%= form.label :phone_number, "Phone Number:", class: "label" %>
-                <div class="control">
-                    <%= form.telephone_field :phone_number, class: "input" %>
-                </div>
-            </div>
-
-            <div class="field">
-                <%= form.label :organization, "Organization:", class: "label" %>
-                <div class="control">
-                    <%= form.text_field :organization, class: "input" %>
-                </div>
-            </div>
-        <% end %>
+        <%= render partial: 'admin/shared/user_details', locals: { form: form, disabled: false } %>
     </div>
 
     <div class="column">
-        <%= render Shared::CardComponent.new(title: 'Config') do |card| %>
-            <div class="field">
-                <div class="control">
-                    <%= form.label :verified, class: "checkbox" do %>
-                        Verified:
-                        <%= form.check_box :verified, class: "checkbox" %>
-                    <% end %>
-                </div>
-            </div>
-
-            <div class="field">
-                <div class="control">
-                    <%= form.label :admin, class: "checkbox" do %>
-                        Admin:
-                        <%= form.check_box :admin, class: "checkbox" %>
-                    <% end %>
-                </div>
-            </div>
-        <% end %>
+        <%= render partial: 'admin/shared/user_configs', locals: { form: form, disabled: false } %>
 
         <% if @user.new_record? %>
-            <%= render Shared::CardComponent.new(title: 'Password') do |card| %>
-                <div class="field">
-                    <%= form.label :password, "Password:", class: "label" %>
-                    <div class="control">
-                        <%= form.password_field :password, class: "input" %>
-                    </div>
-                </div>
-
-                <div class="field">
-                    <%= form.label :password_confirmation, "Password Confirmation:", class: "label" %>
-                    <div class="control">
-                        <%= form.password_field :password_confirmation, class: "input" %>
-                    </div>
-                </div>
-            <% end %>
+            <%= render partial: "admin/shared/user_password", locals: { form: form, disabled: false } %>
         <% end %>
     </div>
 </div>

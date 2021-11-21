@@ -1,0 +1,24 @@
+<%# Expects to receive a form object and a disabled boolean
+    @params form -> a Rails' form builder object
+    @params disabled -> boolean to configure if the fields are supposed to be disabled
+#%>
+<%= render Shared::CardComponent.new(title: 'Config') do |card| %>
+    <div class="field">
+        <div class="control">
+            <%= form.label :verified, class: "checkbox" do %>
+                Verified:
+                <%= form.check_box :verified, class: "checkbox", disabled: disabled %>
+            <% end %>
+        </div>
+    </div>
+
+    <div class="field">
+        <div class="control">
+            <%= form.label :admin, class: "checkbox" do %>
+                Admin:
+                <%= form.check_box :admin, class: "checkbox", disabled: disabled %>
+            <% end %>
+        </div>
+    </div>
+<% end %>
+
