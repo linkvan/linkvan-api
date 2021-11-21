@@ -70,6 +70,16 @@ class Facility < ApplicationRecord
     end
   end
 
+  def website_url
+    return nil if website.blank?
+
+    if URI.parse(website).scheme.present?
+      website
+    else
+      "http://#{website}"
+    end
+  end
+
   def coord
     GeoLocation.coord(lat, long)
   end
