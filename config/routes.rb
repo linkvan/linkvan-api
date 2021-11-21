@@ -23,7 +23,9 @@ Rails.application.routes.draw do
       # root to: "dashboard#index"
     # end
 
-    resources :users
+    resources :users do
+      resources :passwords, only: %i[new create]
+    end
 
     resources :facilities do
       resources :schedules, only: %i[new create edit update], controller: :facility_schedules
