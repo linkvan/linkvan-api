@@ -1,0 +1,47 @@
+<%= tag.div id: alert_dom_id do %>
+    <div class='columns'>
+        <div class='column'>
+            <%= render Shared::CardComponent.new(title: 'Alert Details') do |card| %>
+                <% card.button(title: 'Edit', path: edit_admin_alert_path(alert)) %>
+                <% card.button(title: 'Delete', path: admin_alert_path(alert.id), method: :delete, icon_class: 'fa-trash-alt') %>
+
+                <table class='table'>
+                    <tr>
+                        <th>Title:</th>
+                        <td><%= alert.title %></td>
+                    </tr>
+                </table>
+            <% end %>
+        </div>
+
+        <div class='column'>
+            <!-- Descriptions -->
+            <%= render Shared::CardComponent.new(title: 'Info') do |card| %>
+                <table class='table'>
+                    <tr>
+                        <th>Status</th>
+                        <td>
+                            <%= alert.active? ? "Active" : "Not Active" %>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>Last Updated</th>
+                        <td>
+                            <time datetime="<%= alert.updated_at %>">
+                                <%= alert.updated_at %>
+                            </time>
+                        </td>
+                    </tr>
+                </table>
+            <% end %>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <%= render Shared::CardComponent.new(title: 'Content') do |card| %>
+        <div class="content">
+            <%= alert.content %>
+        </div>
+    <% end %>
+<% end %>

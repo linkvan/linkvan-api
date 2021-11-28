@@ -1,0 +1,20 @@
+<tr>
+    <td>
+        <%= alert.active? ? "Active" : "Not Active" %>
+    </td>
+    <td>
+        <%= link_to alert.title, admin_alert_path(id: alert.id) %>
+    </td>
+    <td>
+        <%= truncate(alert.content.to_plain_text, length: 80) %>
+    </td>
+
+    <td>
+        <%= alert.updated_at %>
+    </td>
+
+    <!-- MORE -->
+    <td>
+      <%= render more_menu_component %>
+    </td>
+</tr>
