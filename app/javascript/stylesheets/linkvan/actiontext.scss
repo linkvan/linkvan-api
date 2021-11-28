@@ -1,0 +1,7 @@
+.trix-content {
+  // min-height: 4rem;
+  // max-height: 6rem;
+}
+
+// Hides Attachment button to support disabling ActionText attachments
+.trix-button-group--file-tools { display: none !important; }

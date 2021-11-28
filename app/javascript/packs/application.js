@@ -18,11 +18,21 @@ import "bulma"
 
 import "../stylesheets/application"
 
+import "controllers"
+
+require("trix")
+require("@rails/actiontext")
+
 import Linkvan from '../src/linkvan/linkvan'
 
 document.addEventListener("turbo:load", () => {
-
   Linkvan.start();
+
+  // Disable ActionText attachments
+  window.addEventListener("trix-file-accept", function(event) {
+    event.preventDefault()
+    alert("File attachment not supported!")
+  })
 })
 
-import "controllers"
+

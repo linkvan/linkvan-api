@@ -82,6 +82,9 @@ group :rubocop, :development do
   gem "rubocop-rspec", require: false
   gem "rubocop-performance", require: false
   gem "rubocop-packaging", require: false
+
+  # security checks
+  gem "brakeman"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
