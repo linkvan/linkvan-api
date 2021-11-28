@@ -1,0 +1,17 @@
+<div class="container">
+    <%= form_with model: [:admin, @alert] do |form| %>
+        <!-- Action Buttons -->
+        <div class="field is-grouped is-grouped-right">
+            <p class="control">
+            <%= form.submit class: "button is-primary" %>
+            </p>
+
+            <p class="control">
+            <%= link_to "Back", admin_alerts_path, class: "button is-light" %>
+            </p>
+        </div>
+
+        <%= render 'form', form: form %>
+    <% end %>
+</div>
+

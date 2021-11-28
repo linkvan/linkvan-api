@@ -33,5 +33,7 @@ Rails.application.routes.draw do
       resources :services, only: %i[create update destroy], controller: :facility_services
       resources :welcomes, only: %i[create destroy], controller: :facility_welcomes
     end
+
+    resources :alerts
   end
 end

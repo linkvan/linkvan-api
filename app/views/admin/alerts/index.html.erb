@@ -1,0 +1,17 @@
+<div class="container">
+    <div class="level"> 
+        <div class="level-left">
+        </div>
+
+        <div class="level-right">
+            <%= link_to "New Alert", new_admin_alert_path, class: "button is-light level-item" %>
+        </div>
+    </div>
+
+    <%= render Alerts::TableComponent.new(alerts: @alerts) %>
+</div>
+
+<hr/>
+<div class="container">
+    <%== pagy_bulma_combo_nav_js(@pagy) %>
+</div>
