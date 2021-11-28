@@ -61,6 +61,9 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def user_params
-    params.require(:user).permit(:name, :email, :phone_number, :organization, :verified, :admin, :password, :password_confirmation)
+    parameters = params.require(:user).permit(:name, :email, :phone_number, :organization, :verified, :password, :password_confirmation)
+    parameters[:admin] = params.dig(:user, :admin) if current_user_admin?
+
+    parameters
   end
 end
