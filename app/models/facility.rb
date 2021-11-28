@@ -70,6 +70,16 @@ class Facility < ApplicationRecord
     end
   end
 
+  def website_url
+    return nil if website.blank?
+
+    if URI.parse(website).scheme.present?
+      website
+    else
+      "http://#{website}"
+    end
+  end
+
   def coord
     GeoLocation.coord(lat, long)
   end
@@ -94,11 +104,11 @@ class Facility < ApplicationRecord
   def clean_data
     %i[name phone website address].each do |attrb|
       # squish (ActiveSupport's more in-depth strip whitespaces)
-      send("#{attrb}=", send(attrb).squish)
+      send("#{attrb}=", send(attrb)&.squish)
     end
 
     %i[description notes].each do |attrb|
-      send("#{attrb}=", send(attrb).strip)
+      send("#{attrb}=", send(attrb)&.strip)
     end
   end
 

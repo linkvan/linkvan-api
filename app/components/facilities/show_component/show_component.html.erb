@@ -32,17 +32,7 @@
                         <% if user.blank? %>
                             <%= tag.span 'Not Present', class: 'tag is-danger'%>
                         <% else %>
-                            <% if user.verified? %>
-                                <span class="icon is-small">
-                                    <i class="fas fa-user-check"></i>
-                                </span>
-                                <%= tag.span 'Verified', class: 'tag is-light'%>
-                            <% else %>
-                                <span class="icon is-small">
-                                    <i class="fas fa-user-times"></i>
-                                </span>
-                                <%= tag.span 'Not Verified', class: 'tag is-danger'%>
-                            <% end %>
+                            <%= render Users::StatusComponent.new(user, show_title: true) %>
 
                             <br/>
                             <%= user.name %> |

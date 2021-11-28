@@ -1,0 +1,35 @@
+<%# Expects to receive a form object and a disabled boolean
+    @params form -> a Rails' form builder object
+    @params disabled -> boolean to configure if the fields are supposed to be disabled
+#%>
+
+<%= render Shared::CardComponent.new(title: 'Details') do |card| %>
+    <div class="field">
+        <%= form.label :name, "Name:", class: "label" %>
+        <div class="control">
+            <%= form.text_field :name, class: "input", disabled: disabled %>
+        </div>
+    </div>
+
+    <div class="field">
+        <%= form.label :email, "Email:", class: "label" %>
+        <div class="control">
+            <%= form.email_field :email, class: "input", disabled: disabled %>
+        </div>
+    </div>
+
+    <div class="field">
+        <%= form.label :phone_number, "Phone Number:", class: "label" %>
+        <div class="control">
+            <%= form.telephone_field :phone_number, class: "input", disabled: disabled %>
+        </div>
+    </div>
+
+    <div class="field">
+        <%= form.label :organization, "Organization:", class: "label" %>
+        <div class="control">
+            <%= form.text_field :organization, class: "input", disabled: disabled %>
+        </div>
+    </div>
+<% end %>
+

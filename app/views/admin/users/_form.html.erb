@@ -1,0 +1,13 @@
+<div class="columns">
+    <div class="column">
+        <%= render partial: 'admin/shared/user_details', locals: { form: form, disabled: false } %>
+    </div>
+
+    <div class="column">
+        <%= render partial: 'admin/shared/user_configs', locals: { form: form, disabled: false } %>
+
+        <% if @user.new_record? %>
+            <%= render partial: "admin/shared/user_password", locals: { form: form, disabled: false } %>
+        <% end %>
+    </div>
+</div>

@@ -1,0 +1,59 @@
+<div class='columns'>
+    <div class='column'>
+        <%= render Shared::CardComponent.new(title: 'User Details') do |card| %>
+            <% card.button(title: 'Reset Password', path: new_admin_user_password_path(user)) %>
+            <% card.button(title: 'Edit', path: edit_admin_user_path(user)) %>
+            <% card.button(title: 'Delete', path: admin_user_path(user.id), method: :delete, icon_class: 'fa-trash-alt') %>
+
+            <table class='table'>
+                <tr>
+                    <th>Name:</th>
+                    <td><%= user.name %></td>
+                </tr>
+
+                <tr>
+                    <th>Email:</th>
+                    <td><%= user.email %></td>
+                </tr>
+
+                <tr>
+                    <th>Organization:</th>
+                    <td><%= user.organization %></td>
+                </tr>
+
+                <tr>
+                    <th>Phone Number:</th>
+                    <td><%= user.phone_number %></td>
+                </tr>
+            </table>
+        <% end %>
+    </div>
+
+    <div class='column'>
+        <!-- Descriptions -->
+        <%= render Shared::CardComponent.new(title: 'Info') do |card| %>
+            <table class='table'>
+                <tr>
+                    <th>Status</th>
+                    <td>
+                        <%= render Users::StatusComponent.new(user, show_title: true) %>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Admin:</th>
+                    <td><%= user.admin.to_s.titleize %></td>
+                </tr>
+
+                <tr>
+                    <th>Last Updated</th>
+                    <td>
+                        <time datetime="<%= user.updated_at %>">
+                            <%= user.updated_at %>
+                        </time>
+                    </td>
+                </tr>
+            </table>
+        <% end %>
+    </div>
+</div>

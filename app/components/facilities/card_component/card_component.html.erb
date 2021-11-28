@@ -2,22 +2,23 @@
     <header class="card-header level mb-1">
         <div class="level-left">
             <div class="card-header-title">
+                <%= link_to admin_facility_path(facility) do %>
+                    <span class="icon-text">
+                        <% if facility.verified? %>
+                            <span class="icon has-text-success">
+                                <i class="fas fa-check-square"></i>
+                            </span>
+                        <% else %>
+                            <span class="icon has-text-danger">
+                                <i class="fas fa-times"></i>
+                            </span>
+                        <% end %>
 
-                <span class="icon-text">
-                    <% if facility.verified? %>
-                        <span class="icon has-text-success">
-                            <i class="fas fa-check-square"></i>
+                        <span>
+                            <%= facility.name %>
                         </span>
-                    <% else %>
-                        <span class="icon has-text-danger">
-                            <i class="fas fa-times"></i>
-                        </span>
-                    <% end %>
-
-                    <span>
-                        <%= facility.name %>
                     </span>
-                </span>
+                <% end %>
 
             </div>
         </div>
@@ -25,7 +26,6 @@
         <div class="level-right">
             <div class="field is-grouped">
                 <div class="control">
-                    
                     <%= label_tag :verified, facility.verified? ? 'Live' : 'Pending Reviews' %>
                 </div>
 
@@ -40,6 +40,8 @@
                         </div>
                         <div class="dropdown-menu" id="dropdown-menu6" role="menu">
                             <div class="dropdown-content">
+                                <%= link_to 'Show', admin_facility_path(facility), class: "dropdown-item" %>
+
                                 <%= link_to 'Edit', edit_admin_facility_path(facility), class: "dropdown-item" %>
 
                                 <a class="dropdown-item">Delete</a>
@@ -62,10 +64,10 @@
 
             <div class="column">
                 Services:
-                <% if facility.services.blank? %>
+                <% if facility.facility_services.blank? %>
                     <span class="tag is-danger">None</span>
                 <% else %>
-                    <% facility.services.compact_blank.each do |service| %>
+                    <% facility.facility_services.compact_blank.each do |service| %>
                         <span class="tag is-light"><%= service.name %></span>
                     <% end %>
                 <% end %>
@@ -73,7 +75,7 @@
                 <br/>
                 <div class='svg-icons'>
                     <span>Welcomes:</span>
-                    <% if facility.welcomes.blank? %>
+                    <% if facility.facility_welcomes.blank? %>
                         <span class='tag is-danger'>None</span>
                     <% else %>
                         <% facility.facility_welcomes.each do |welcome| %>
@@ -91,17 +93,8 @@
                 <% if facility.user.blank? %>
                     <%= tag.span 'Not Present', class: 'tag is-danger'%>
                 <% else %>
-                    <% if facility.user.verified? %>
-                        <span class="icon is-small">
-                            <i class="fas fa-user-check"></i>
-                        </span>
-                        <%= tag.span 'Verified', class: 'tag is-light'%>
-                    <% else %>
-                        <span class="icon is-small">
-                            <i class="fas fa-user-times"></i>
-                        </span>
-                        <%= tag.span 'Not Verified', class: 'tag is-danger'%>
-                    <% end %>
+                    <%= render Users::StatusComponent.new(facility.user, show_title: true) %>
+
                     <br/>
                     <%= facility.user.name %> |
                     <%= facility.user.email %>

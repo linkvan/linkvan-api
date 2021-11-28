@@ -1,0 +1,24 @@
+<tr>
+    <td>
+        <%#= render status_component %>
+        <%= render Users::StatusComponent.new(user, show_title: false) %>
+    </td>
+    <td>
+        <%= link_to user.name, admin_user_path(id: user.id) %>
+    </td>
+    <td>
+        <%= user.email %>
+    </td>
+    <td>
+        <%= user.organization %>
+    </td>
+
+    <td>
+        <%= user.updated_at %>
+    </td>
+
+    <!-- MORE -->
+    <td>
+      <%= render more_menu_component %>
+    </td>
+</tr>

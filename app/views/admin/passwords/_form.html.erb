@@ -1,0 +1,11 @@
+<div class="columns">
+    <div class="column">
+        <%= render partial: 'admin/shared/user_details', locals: { form: form, disabled: true } %>
+    </div>
+
+    <div class="column">
+        <%= render partial: 'admin/shared/user_configs', locals: { form: form, disabled: true} %>
+
+        <%= render partial: "admin/shared/user_password", locals: { form: form, disabled: false } %>
+    </div>
+</div>
