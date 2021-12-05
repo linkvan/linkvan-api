@@ -19,11 +19,8 @@ jobs:
         ports: ["5432:5432"]
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup Ruby #and install gems
-        uses: ruby/setup-ruby@v1
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7
           bundler-cache: true
