@@ -7,41 +7,74 @@ env:
 name: CI RSpec tests
 on: [push, pull_request]
 jobs:
-  test:
-    name: CI
+  tests:
+    name: Tests
     runs-on: ubuntu-latest
-
     services:
       postgres:
         image: postgres:latest
-        ports: ["5432:5432"]
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        # options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
         env:
-          POSTGRES_USER: ${{ env.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_USER: linkvan_api
+          POSTGRES_DB: linkvan_api_test
+          POSTGRES_PASSWORD: ""  # ${{ env.POSTGRES_PASSWORD }}
+        ports: ["5432:5432"]
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: ruby/setup-ruby@v1
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Ruby and install gems
+        uses: ruby/setup-ruby@v1
         with:
-          ruby-version: ${{ env.RUBY_VERSION }}
+          # ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
-      - name: Install postgres client
-        run: sudo apt-get install libpq-dev
-      - name: Install dependencies
-        run: |
-          gem install bundler
-          bundler install
-      - name: Create database
-        run: |
-          bundler exec rails db:create RAILS_ENV=test
-          bundler exec rails db:migrate RAILS_ENV=test
-      - name: Run tests
-        run: bundler exec rake
-      - name: Upload coverage results    
-        uses: actions/upload-artifact@master
-        if: always()
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
         with:
-          name: coverage-report
-          path: coverage
+          node-version: 15.14.0
+      - name: Find yarn cache location
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: JS package cache
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install packages
+        run: |
+          yarn install --pure-lockfile
+
+      - name: Setup test database
+        env:
+          RAILS_ENV: test
+          PGHOST: localhost
+          PGUSER: linkvan_api
+          run: |
+            bin/rails db:setup
+
+      - name: Run tests
+        run: bin/rspec
+
+      # - name: Install postgres client
+        # run: sudo apt-get install libpq-dev
+      # - name: Install dependencies
+        # run: |
+          # gem install bundler
+          # bundler install
+      # - name: Create database
+        # run: |
+          # bundler exec rails db:create RAILS_ENV=test
+          # bundler exec rails db:migrate RAILS_ENV=test
+      # - name: Run tests
+        # run: bundler exec rake
+      # - name: Upload coverage results    
+        # uses: actions/upload-artifact@master
+        # if: always()
+        # with:
+          # name: coverage-report
+          # path: coverage
 
