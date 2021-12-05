@@ -21,6 +21,14 @@ class Notice < ApplicationRecord
   scope :published, -> { where(published: true) }
   scope :draft, -> { where(published: false) }
 
+  def self.notice_types_for_display
+    result = {}.with_indifferent_access
+    notice_types.each_key do |k|
+      result[k] = k.to_s.titleize
+    end
+    result
+  end
+
   private
 
   def set_slug

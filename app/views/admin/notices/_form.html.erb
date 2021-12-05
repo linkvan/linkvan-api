@@ -1,0 +1,31 @@
+<%= render Shared::CardComponent.new(title: 'Notice Details') do |card| %>
+    <div class="field">
+        <div class="control">
+            <%= form.label :active, class: "checkbox" do %>
+                Published:
+                <%= form.check_box :published, class: "checkbox" %>
+            <% end %>
+        </div>
+    </div>
+
+    <div class="field">
+        <%= form.label :notice_type, "Type:", class: "label" %>
+        <div class="control select">
+            <%= form.select :notice_type, Notice.notice_types_for_display.invert %>
+        </div>
+    </div>
+
+    <div class="field">
+        <%= form.label :title, "Title:", class: "label" %>
+        <div class="control">
+            <%= form.text_field :title, class: "input" %>
+        </div>
+    </div>
+
+    <div class="field">
+        <%= form.label :content, "Content:", class: "label" %>
+        <div class="control">
+            <%= form.rich_text_area :content %>
+        </div>
+    </div>
+<% end %>

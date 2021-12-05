@@ -1,0 +1,18 @@
+<table class='table is-hoverable is-fullwidth'>
+    <thead>
+        <tr>
+            <th class="is-size-7" width="100px">Status</th>
+            <th class="is-size-7" width="100px">Type</th>
+            <th class="is-size-7">Title</th>
+            <th class="is-size-7">Content</th>
+            <th class="is-size-7">Updated At</th>
+            <th class="is-size-7" width="80px">MORE</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <% notices.each do |notice| %>
+            <%= render NoticeRowComponent.new(notice, table_component: self) %>
+        <% end %>
+    </tbody>
+</table>
