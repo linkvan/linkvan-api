@@ -35,5 +35,6 @@ Rails.application.routes.draw do
     end
 
     resources :alerts
+    resources :notices
   end
 end
