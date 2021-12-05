@@ -3,11 +3,11 @@ on:
   push:
     branches: [ master, develop ]
     pull_request: [ develop ]
-
 jobs:
   rspec-test:
     name: RSpec Tests
     runs-on: ubuntu-latest
+
     services:
       postgres:
         image: postgres:latest
