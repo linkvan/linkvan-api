@@ -5,10 +5,14 @@ env:
   POSTGRES_DB: postgres
 
 name: CI RSpec tests
-on: [push, pull_request]
+on:
+  push:
+    branches: [ master, develop ]
+    pull_request: [ develop ]
+
 jobs:
-  test:
-    name: Tests
+  rspec-test:
+    name: RSpec Tests
     runs-on: ubuntu-latest
     services:
       postgres:
