@@ -1,0 +1,23 @@
+<tr>
+    <td>
+        <%= notice.published? ? "Published" : "Draft" %>
+    </td>
+    <td>
+        <%= notice.notice_type %>
+    </td>
+    <td>
+        <%= link_to notice.title, admin_notice_path(id: notice.id) %>
+    </td>
+    <td>
+        <%= truncate(notice.content.to_plain_text, length: 80) %>
+    </td>
+
+    <td>
+        <%= notice.updated_at %>
+    </td>
+
+    <!-- MORE -->
+    <td>
+      <%= render more_menu_component %>
+    </td>
+</tr>

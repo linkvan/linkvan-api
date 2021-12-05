@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_28_211239) do
+ActiveRecord::Schema.define(version: 2021_12_05_183141) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,7 +55,6 @@ ActiveRecord::Schema.define(version: 2021_11_28_211239) do
 
   create_table "alerts", id: :serial, force: :cascade do |t|
     t.string "title"
-    t.text "old_content"
     t.boolean "active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -177,11 +176,11 @@ ActiveRecord::Schema.define(version: 2021_11_28_211239) do
   create_table "notices", id: :serial, force: :cascade do |t|
     t.string "title"
     t.string "slug"
-    t.text "content"
     t.boolean "published"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "notice_type"
+    t.index ["slug"], name: "index_notices_on_slug", unique: true
   end
 
   create_table "services", force: :cascade do |t|

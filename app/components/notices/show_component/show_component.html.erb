@@ -1,0 +1,47 @@
+<%= tag.div id: notice_dom_id do %>
+    <div class='columns'>
+        <div class='column'>
+            <%= render Shared::CardComponent.new(title: 'Notice Details') do |card| %>
+                <% card.button(title: 'Edit', path: edit_admin_notice_path(notice)) %>
+                <% card.button(title: 'Delete', path: admin_notice_path(notice.id), method: :delete, icon_class: 'fa-trash-alt') %>
+
+                <table class='table'>
+                    <tr>
+                        <th>Title:</th>
+                        <td><%= notice.title %></td>
+                    </tr>
+                </table>
+            <% end %>
+        </div>
+
+        <div class='column'>
+            <!-- Descriptions -->
+            <%= render Shared::CardComponent.new(title: 'Info') do |card| %>
+                <table class='table'>
+                    <tr>
+                        <th>Status</th>
+                        <td>
+                            <%= notice.published? ? "Published" : "Draft" %>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>Last Updated</th>
+                        <td>
+                            <time datetime="<%= notice.updated_at %>">
+                                <%= notice.updated_at %>
+                            </time>
+                        </td>
+                    </tr>
+                </table>
+            <% end %>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <%= render Shared::CardComponent.new(title: 'Content') do |card| %>
+        <div class="content">
+            <%= notice.content %>
+        </div>
+    <% end %>
+<% end %>

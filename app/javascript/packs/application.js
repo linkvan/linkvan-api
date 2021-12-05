@@ -22,6 +22,8 @@ import "controllers"
 
 require("trix")
 require("@rails/actiontext")
+// Add ability to set colors headings on Trix editor (ActionText)
+require("../src/richtext")
 
 import Linkvan from '../src/linkvan/linkvan'
 
