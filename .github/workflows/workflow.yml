@@ -33,24 +33,41 @@ jobs:
         with:
           ruby-version: 2.7
 
-      - name: Setup Node 14
+      - name: Setup Node 15
         uses: actions/setup-node@v1
         with:
-          node-version: 14.x
+          node-version: 15.x
 
       - name: Install dependencies
         run: |
           npm install -g npm
           sudo apt-get -yqq install libpq-dev
-          gem install rails
 
-      # Clean up git repo so the new rails template doesn't conflict
-      - name: Remove git repo
+      - name: Find yarn cache location
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: JS package cache
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install packages
         run: |
-          rm -rf .git
+          yarn install --pure-lockfile
+
+      - name: Setup test database
+        env:
+          RAILS_ENV: test
+          PGHOST: localhost
+          PGUSER: linkvan_api
+          run: |
+            bin/rails db:setup
 
       - name: Run tests
         env:
           TEST_APP_DATABASE_PASSWORD: password
         run: |
-          rake
+          bin/rspec
+
