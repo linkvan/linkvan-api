@@ -42,6 +42,8 @@ jobs:
         run: |
           npm install -g npm
           sudo apt-get -yqq install libpq-dev
+          gem install bundler
+          bundle install
 
       - name: Find yarn cache location
         id: yarn-cache
