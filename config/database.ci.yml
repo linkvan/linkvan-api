@@ -2,6 +2,6 @@ test:
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  database: <%= ENV.fetch("POSTGRES_DB" %>
+  database: <%= ENV.fetch("POSTGRES_DB") %>
   password: <%= ENV.fetch("POSTGRES_PASSWORD") %>
   username: <%= ENV.fetch("POSTGRES_USER") %>
