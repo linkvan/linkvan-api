@@ -15,8 +15,8 @@ jobs:
       postgres:
         image: postgres:14
         env:
-          POSTGRES_DB: rails_github_actions
-          POSTGRES_USER: rails_github_actions_test
+          POSTGRES_DB: rails_github_actions_test
+          POSTGRES_USER: rails_github_actions
           POSTGRES_PASSWORD: password
         ports: ['5432:5432']
         options: >-
@@ -67,5 +67,5 @@ jobs:
           PGPORT: ${{ job.services.postgres.ports[5432] }}
           RAILS_ENV: test
         run: |
-          rspec
+          bundle exec rspec
 
