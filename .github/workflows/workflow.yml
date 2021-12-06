@@ -31,7 +31,7 @@ jobs:
       - name: Setup Ruby 2.7
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.7.x
+          ruby-version: 2.7.5
 
       - name: Setup Node 15
         uses: actions/setup-node@v1
