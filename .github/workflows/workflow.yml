@@ -56,8 +56,6 @@ jobs:
           cp config/database.ci.yml config/database.yml
           rake db:create db:migrate
 
-        # bin/rails db:setup
-
       - name: Run tests
         env:
           PGHOST: localhost
