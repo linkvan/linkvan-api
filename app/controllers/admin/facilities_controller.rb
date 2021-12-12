@@ -43,6 +43,22 @@ class Admin::FacilitiesController < Admin::BaseController
       facilities = facilities.pending_reviews
     end
 
+    if params[:service_id].present?
+      facilities = facilities.joins(:services)
+                             .where(services: { id: params[:service_id] })
+    end
+
+    if params[:welcome_customer].present?
+      facilities = facilities.joins(:facility_welcomes)
+                             .where(facility_welcomes: { customer: params[:welcome_customer] })
+    end
+
+    if params[:q].present?
+      facilities = facilities.name_search(params[:q]).or(
+        facilities.address_search(params[:q])
+      )
+    end
+
     @pagy, @facilities = pagy(facilities)
   end
 

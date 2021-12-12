@@ -14,8 +14,6 @@ class Facility < ApplicationRecord
   has_many :schedules, class_name: "FacilitySchedule", dependent: :destroy
   has_many :time_slots, through: :schedules
 
-  # WELCOMES = %w[male female transgender children youth adult senior].freeze
-
   validates :name, :lat, :long, presence: true
 
   before_validation :clean_data
@@ -24,10 +22,8 @@ class Facility < ApplicationRecord
   scope :live, -> { is_verified }
   scope :is_verified, -> { where(verified: true) }
   scope :pending_reviews, -> { where(verified: false) }
-
-  scope :keywordSearch, lambda  { |word|
-    where(["services ILIKE ? OR welcomes ILIKE ?", "%#{word}%", "%#{word}%"]) unless word == "all"
-  }
+  scope :name_search, ->(name) { where(arel_table[:name].matches("%#{name}%")) }
+  scope :address_search, ->(value) { where(arel_table[:address].matches("%#{value}%")) }
 
   def managed_by?(user)
     f_user_id = if user.respond_to? :id
@@ -46,16 +42,6 @@ class Facility < ApplicationRecord
 
   def self.managed_by(user)
     user.manages
-  end
-
-  def self.search(search)
-    return all if search.empty?
-
-    where("name ILIKE ?", "%#{search}%")
-  end
-
-  def self.search_by_services(search)
-    where("services ILIKE ?", "%#{search}%")
   end
 
   def self.adjusted_current_time

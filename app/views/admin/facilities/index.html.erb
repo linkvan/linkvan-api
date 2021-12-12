@@ -14,8 +14,33 @@
                                         data: { action: "change->auto-submit#change" }
                                     }) %>
                 </div>
+
+                <div class="select">
+                    <%= form.select(:service_id,
+                                    Service.pluck(:name, :id),
+                                    { include_blank: "Service", selected: params[:service_id] },
+                                    {
+                                        data: { action: "change->auto-submit#change" }
+                                    }) %>
+                </div>
+
+                <div class="select">
+                    <%= form.select(:welcome_customer,
+                                    FacilityWelcome.customers.map{|k, v| [k.titleize, v]},
+                                    { include_blank: "Welcome", selected: params[:welcome_customer] },
+                                    {
+                                        data: { action: "change->auto-submit#change" }
+                                    }) %>
+                </div>
             </div>
 
+            <div class="column is-3">
+                <div class="field">
+                    <div class="control">
+                        <%= form.text_field :q, value: params[:q], class: "input", placeholder: "Search" %>
+                    </div>
+                </div>
+            </div>
         </div>
     <% end %>
 </nav>
