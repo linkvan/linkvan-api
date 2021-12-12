@@ -21,8 +21,9 @@ class Facility < ApplicationRecord
   before_validation :clean_data
   # is_impressionable
 
+  scope :live, -> { is_verified }
   scope :is_verified, -> { where(verified: true) }
-  scope :with_service, ->(service) { where("services ILIKE ?", "%#{service}%") }
+  scope :pending_reviews, -> { where(verified: false) }
 
   scope :keywordSearch, lambda  { |word|
     where(["services ILIKE ? OR welcomes ILIKE ?", "%#{word}%", "%#{word}%"]) unless word == "all"
@@ -60,6 +61,10 @@ class Facility < ApplicationRecord
   def self.adjusted_current_time
     # Returns current server time subtracted by 8 hours.
     8.hours.ago
+  end
+
+  def self.statuses
+    %i[live pending_reviews]
   end
 
   def status

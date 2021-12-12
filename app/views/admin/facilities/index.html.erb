@@ -1,7 +1,30 @@
+<nav class="container">
+    <div class="title">
+        Facilities (<%= @pagy.count %>)
+    </div>
+
+        <%= form_with url: admin_facilities_path, method: :get, data: { controller: "auto-submit" } do |form| %>
+        <div class="columns">
+            <div class="column">
+                <div class="select">
+                    <%= form.select(:status,
+                                    Facility.statuses.map{[_1.to_s.titleize, _1]},
+                                    { include_blank: "Status", selected: params[:status] },
+                                    {
+                                        data: { action: "change->auto-submit#change" }
+                                    }) %>
+                </div>
+            </div>
+
+        </div>
+    <% end %>
+</nav>
+
+<hr/>
 <div class="container">
-  <% @facilities.each do |facility| %>
-          <%= render Facilities::CardComponent.new(facility: facility) %>
-  <% end %>
+    <% @facilities.each do |facility| %>
+        <%= render Facilities::CardComponent.new(facility: facility) %>
+    <% end %>
 </div>
 
 <hr/>

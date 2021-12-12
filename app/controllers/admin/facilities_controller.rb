@@ -35,6 +35,14 @@ class Admin::FacilitiesController < Admin::BaseController
 
   def load_facilities
     facilities = Facility.all
+
+    case params[:status]
+    when "live"
+      facilities = facilities.live
+    when "pending_reviews"
+      facilities = facilities.pending_reviews
+    end
+
     @pagy, @facilities = pagy(facilities)
   end
 
