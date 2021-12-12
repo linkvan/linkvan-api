@@ -18,6 +18,7 @@ import "bulma"
 
 import "../stylesheets/application"
 
+// Stimulus
 import "controllers"
 
 require("trix")
