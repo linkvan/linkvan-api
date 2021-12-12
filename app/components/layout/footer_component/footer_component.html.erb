@@ -4,17 +4,7 @@
   <div class="container">
     <p>
       <small>
-        Welcome Back, [USER]!
-      </small>
-    </p>
-
-    <p>
-      <small>
-        <span>Disclaimer</span>
-        <span class='text-white'>|</span>
-        <span>About Us</span>
-        <span class='text-white'>|</span>
-        <span>Sign Out</span>
+          Welcome Back, <%= link_to current_user.name, admin_user_path(current_user) %>
       </small>
     </p>
   </div>

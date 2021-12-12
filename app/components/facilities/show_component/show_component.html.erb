@@ -1,58 +1,55 @@
 <div class='box' id='<% card_id %>'>
-    <div class='level'>
-        <div class='level-left'>
-            <div class='level-item'>
-                <div>
-                    <span class="icon-text">
-                        <%= status_icon %>
-                        <span class='title'>
-                            <%= facility.name %>
-                        </span>
-                    </span>
+    <div class="columns">
+        <div class="column">
+            <span class="icon-text">
+                <%= status_icon %>
+                <span class='title'>
+                    <%= facility.name %>
+                </span>
+            </span>
 
-                    <div>
-                        Phone:
-                        <%= facility.phone %>
-                    </div>
+            <div>
+                Phone:
+                <%= facility.phone %>
+            </div>
 
-                    <div>
-                        Website:
-                        <%= link_to_website %>
-                    </div>
+            <div>
+                Website:
+                <%= link_to_website %>
+            </div>
 
-                    <div>
-                        <time datetime="<%= facility.updated_at %>">
-                            Last Updated:
-                            <%= facility.updated_at %>.
-                        </time>
-                    </div>
+            <div>
+                <time datetime="<%= facility.updated_at %>">
+                    Last Updated:
+                    <%= facility.updated_at %>.
+                </time>
+            </div>
 
-                    <div>
-                        User:
-                        <% if user.blank? %>
-                            <%= tag.span 'Not Present', class: 'tag is-danger'%>
-                        <% else %>
-                            <%= render Users::StatusComponent.new(user, show_title: true) %>
+            <div>
+                User:
+                <% if user.blank? %>
+                    <%= tag.span 'Not Present', class: 'tag is-danger'%>
+                <% else %>
+                    <%= render Users::StatusComponent.new(user, show_title: true) %>
 
-                            <br/>
-                            <%= user.name %> |
-                            <%= user.email %>
-                        <% end %>
-                    </div>
-                </div>
-
+                    <br/>
+                    <%= user.name %> |
+                    <%= user.email %>
+                <% end %>
             </div>
         </div>
 
-        <div class='level-right'>
-            <div class='level-item'>
-                <div>
-                    <%= link_to 'Edit', edit_admin_facility_path(facility), class: "button" %>
-                    <a class="button">Delete</a>
-                </div>
+        <div class="column is-1-fullhd is-2-desktop is-2-tablet">
+            <div class="buttons">
+                <%= link_to 'Edit', edit_admin_facility_path(facility), class: "button is-fullwidth" %>
+
+                <%= link_to('Delete',
+                            admin_facility_path(facility),
+                            method: :delete,
+                            class: "button is-fullwidth",
+                            data: delete_confirmation) %>
             </div>
         </div>
-
     </div>
 </div>
 

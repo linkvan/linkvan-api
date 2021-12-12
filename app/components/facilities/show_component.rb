@@ -19,6 +19,12 @@ class Facilities::ShowComponent < ViewComponent::Base
     link_to facility.website_url, facility.website_url, target: "_blank", rel: "noopener"
   end
 
+  def delete_confirmation
+    {
+      confirm: "Are you sure you want to delete '#{facility.name}' facility? This action can't be undone"
+    }
+  end
+
   def status_icon
     tag.span class: status_icon_span_class do
       tag.i title: status_title, class: status_icon_class
