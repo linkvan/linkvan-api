@@ -97,6 +97,7 @@ gem "pagy", "~> 3.12.0"
 # https://github.com/hotwired/hotwire-rails
 gem "hotwire-rails"
 gem "turbo-rails"
+gem "requestjs-rails"
 
 # Colorize terminal output
 gem "colorize"

@@ -1,69 +1,74 @@
 <!-- Header -->
 <nav class="navbar is-light" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <%= link_to admin_dashboard_index_path, class: 'navbar-item' do %>
-      <%#= image_tag 'linkvan_horizontal.png', width: 112, height: 28 %>
-        <%= image_tag 'linkvan_horizontal.png' %>
-    <% end %>
-  
-    <%= link_to 'Home', admin_dashboard_index_path, class: 'navbar-item' %>
+    <div class="navbar-brand">
+        <%= link_to admin_dashboard_index_path, class: 'navbar-item' do %>
+            <%#= image_tag 'linkvan_horizontal.png', width: 112, height: 28 %>
+            <%= image_tag 'linkvan_horizontal.png' %>
+        <% end %>
 
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      </a>
-  </div>
+        <%= link_to 'Home', admin_dashboard_index_path, class: 'navbar-item' %>
 
-  <div id="navbarBasicExample" class="navbar-menu">
-    <div class="navbar-start">
-      <%= link_to 'Facilities', admin_facilities_path, class: 'navbar-item' %>
-      <%= link_to 'Users', admin_users_path, class: 'navbar-item' %>
-      <%= link_to 'Alerts', admin_alerts_path, class: 'navbar-item' %>
-      <%= link_to 'Notices', admin_notices_path, class: 'navbar-item' %>
-
-      <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">
-          More
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
         </a>
-
-        <div class="navbar-dropdown">
-          <a class="navbar-item">
-            About
-          </a>
-          <a class="navbar-item">
-            Jobs
-          </a>
-          <a class="navbar-item">
-            Contact
-          </a>
-          <hr class="navbar-divider">
-          <a class="navbar-item">
-            Report an issue
-          </a>
-        </div>
-      </div>
     </div>
 
-    <div class="navbar-end">
-        <% if helpers.user_signed_in? %>
-            <div class="navbar-item">
-                <span>Logged in as <strong><%= helpers.current_user.email %></strong></span>
-                <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "button is-light" %>
-            </div>
-        <% else %>
-            <div class="navbar-item">
-                <div class="buttons">
-                    <!--
-                    <%#= link_to new_user_registration_path, class: "button is-primary" do %>
-                        <strong>Sign up</strong>
-                    <%# end %>
-                    -->
+    <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+            <%= link_to 'Facilities', admin_facilities_path, class: 'navbar-item' %>
+            <%= link_to 'Users', admin_users_path, class: 'navbar-item' %>
+            <%= link_to 'Alerts', admin_alerts_path, class: 'navbar-item' %>
+            <%= link_to 'Notices', admin_notices_path, class: 'navbar-item' %>
 
-                    <%= link_to "Log in", new_user_session_path, class: "button is-light" %>
+            <!--
+            <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link">
+                    More
+                </a>
+
+                <div class="navbar-dropdown">
+                    <a class="navbar-item">
+                        About
+                    </a>
+                    <a class="navbar-item">
+                        Jobs
+                    </a>
+                    <a class="navbar-item">
+                        Contact
+                    </a>
+                    <hr class="navbar-divider">
+                    <a class="navbar-item">
+                        Report an issue
+                    </a>
                 </div>
             </div>
-        <% end %>
+            -->
+        </div>
+
+        <div class="navbar-end">
+            <% if helpers.user_signed_in? %>
+                <div class="navbar-item">
+                    <%= link_to admin_user_path(current_user), class: 'button is-light' do %>
+                        <span>Logged in as <strong><%= helpers.current_user.email %></strong></span>
+                    <% end %>
+
+                    <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "button is-light" %>
+                </div>
+            <% else %>
+                <div class="navbar-item">
+                    <div class="buttons">
+                    <!--
+                        <%#= link_to new_user_registration_path, class: "button is-primary" do %>
+                            <strong>Sign up</strong>
+                        <%# end %>
+                    -->
+
+                            <%= link_to "Log in", new_user_session_path, class: "button is-light" %>
+                    </div>
+                </div>
+            <% end %>
+        </div>
     </div>
-  </div>
 </nav>

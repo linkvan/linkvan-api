@@ -211,6 +211,8 @@ GEM
       ffi (~> 1.0)
     redis (4.2.5)
     regexp_parser (2.1.1)
+    requestjs-rails (0.0.5)
+      rails (>= 6.0.0)
     responders (3.0.1)
       actionpack (>= 5.0)
       railties (>= 5.0)
@@ -345,6 +347,7 @@ DEPENDENCIES
   rack-mini-profiler (~> 2.3.1)
   rails (~> 6.1.4)
   redis (~> 4.2.5)
+  requestjs-rails
   rspec-rails (~> 5.0.0)
   rubocop (>= 1.11.0)
   rubocop-packaging
