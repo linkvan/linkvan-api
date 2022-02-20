@@ -143,6 +143,8 @@ GEM
     nio4r (2.5.8)
     nokogiri (1.13.1-x86_64-darwin)
       racc (~> 1.4)
+    nokogiri (1.13.1-x86_64-linux)
+      racc (~> 1.4)
     orm_adapter (0.5.0)
     pagy (3.12.0)
     parallel (1.21.0)
@@ -164,7 +166,7 @@ GEM
       binding_of_caller (~> 1.0)
       pry (~> 0.13)
     public_suffix (4.0.6)
-    puma (5.2.2)
+    puma (5.6.2)
       nio4r (~> 2.0)
     racc (1.6.0)
     rack (2.2.3)
@@ -312,6 +314,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   bcrypt (~> 3.1.16)
@@ -338,7 +341,7 @@ DEPENDENCIES
   pry-rails
   pry-remote
   pry-stack_explorer (~> 0.6.1)
-  puma (~> 5.2.2)
+  puma (~> 5.6.2)
   rack-cors
   rack-mini-profiler (~> 2.3.1)
   rails (~> 6.1.4)
