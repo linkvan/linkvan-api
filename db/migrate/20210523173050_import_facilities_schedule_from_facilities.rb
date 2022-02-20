@@ -34,7 +34,7 @@ class ImportFacilitiesScheduleFromFacilities < ActiveRecord::Migration[6.1]
       open_all_day = weekday_data[:open_all_day] 
       closed_all_day = weekday_data[:closed_all_day]
 
-      schedule = FacilitySchedule.create!({
+      schedule = FacilitySchedule.create({
         facility: facility,
         week_day: WEEKDAY_NAMES[abbr_weekday],
         open_all_day: open_all_day || false,
@@ -45,7 +45,7 @@ class ImportFacilitiesScheduleFromFacilities < ActiveRecord::Migration[6.1]
 
       # Slot 1
       if slot1.present?
-        FacilityTimeSlot.create!(
+        FacilityTimeSlot.create(
           facility_schedule: schedule,
           from_hour: slot1[:from].hour,
           from_min: slot1[:from].min,
@@ -56,7 +56,7 @@ class ImportFacilitiesScheduleFromFacilities < ActiveRecord::Migration[6.1]
 
       # Slot 2
       if slot2.present?
-        FacilityTimeSlot.create!(
+        FacilityTimeSlot.create(
           facility_schedule: schedule,
           from_hour: slot2[:from].hour,
           from_min: slot2[:from].min,
