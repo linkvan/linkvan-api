@@ -24,6 +24,7 @@ class Facility < ApplicationRecord
   scope :pending_reviews, -> { where(verified: false) }
   scope :name_search, ->(name) { where(arel_table[:name].matches("%#{name}%")) }
   scope :address_search, ->(value) { where(arel_table[:address].matches("%#{value}%")) }
+  scope :with_service, ->(service_name) { joins(:services).where(services: Service.name_search(service_name)) }
 
   def managed_by?(user)
     f_user_id = if user.respond_to? :id
