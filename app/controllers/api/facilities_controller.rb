@@ -29,7 +29,7 @@ class Api::FacilitiesController < Api::BaseController
     # result[:site_stats] = SiteStatsSerializer.new(SiteStats.new).build
 
     @facility = Facility.find(params[:id])
-    result[:facility] = FacilitySerializer.new(@facility)
+    result[:facility] = FacilitySerializer.call(@facility).data
 
     render json: result.as_json, status: :ok
   end
