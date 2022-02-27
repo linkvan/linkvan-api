@@ -45,9 +45,10 @@ class FacilitySerializer < ApplicationService
   end
 
   def hashify_schedules
-    data = []
+    data = {}
     @facility.schedules.each do |schedule|
-      data << hashify_facility_schedule(schedule)
+      result_key = "schedule_#{schedule.week_day}".to_sym
+      data[result_key] = hashify_facility_schedule(schedule)
     end
 
     data
@@ -56,8 +57,7 @@ class FacilitySerializer < ApplicationService
   def hashify_facility_schedule(schedule)
     result = FacilityScheduleSerializer.call(schedule)
 
-    result_key = "schedule_#{schedule.week_day}".to_sym
 
-    { result_key => result.data }
+    result.data
   end
 end
