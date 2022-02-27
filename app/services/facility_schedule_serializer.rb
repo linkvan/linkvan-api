@@ -8,7 +8,7 @@ class FacilityScheduleSerializer < ApplicationService
   end
 
   def call
-    data = @facility_schedule.as_json(only: %i[availability])
+    data = { availability: @facility_schedule.availability }
     data[:times] = hashify_time_slots
 
     Result.new(data: data)
