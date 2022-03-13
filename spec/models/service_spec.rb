@@ -1,5 +1,11 @@
 require "rails_helper"
 
 RSpec.describe Service, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  subject(:facility) { build(:facility) }
+
+  it { expect(facility).to be_valid }
+  describe "scopes" do
+    describe ".with_service" do
+    end
+  end
 end
