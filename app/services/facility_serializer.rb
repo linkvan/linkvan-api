@@ -19,6 +19,7 @@ class FacilitySerializer < ApplicationService
       hashify(@facility, NON_COMPLETE_ATTRIBUTES)
     end
 
+    data[:welcomes] = hashify_welcomes
     data[:services] = hashify_services
     data[:zone] = hashify_zone(@facility.zone)
     data[:schedule] = hashify_schedules
@@ -32,11 +33,23 @@ class FacilitySerializer < ApplicationService
     data = []
     @facility.facility_services.each do |facility_service|
       data << {
+        key: facility_service.key,
         name: facility_service.name,
         note: facility_service.note
       }
     end
 
+    data
+  end
+
+  def hashify_welcomes
+    data = []
+    @facility.facility_welcomes.each do |facility_welcome|
+      data << {
+        key: facility_welcome.customer,
+        name: facility_welcome.name
+      }
+    end
     data
   end
 

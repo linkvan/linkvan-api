@@ -28,7 +28,7 @@ describe FacilitySerializer do
 
       let(:call) { described_class.call(facility, complete: true) }
       let(:facility) { now_open_facility }
-      let(:expected_keys) { Facility.attribute_names + %w[schedule zone services] }
+      let(:expected_keys) { Facility.attribute_names + %w[schedule zone services welcomes] }
 
       it { expect(returned_keys.count).to eq(expected_keys.count) }
       it { is_expected.to contain_exactly(*expected_keys) }

@@ -7,15 +7,24 @@ class Api::FacilitiesController < Api::BaseController
   def index
     result = base_result
 
-    @facilities = Facility.includes(:zone).is_verified.order(:updated_at)
+    @facilities = Facility.is_verified.order(:updated_at)
     @facilities = @facilities.with_service(params[:service]) if params[:service].present?
+
+    # Includes related objects to avoid N+1 queries
+    @facilities = @facilities.includes(
+      :zone,
+      :schedules,
+      :time_slots,
+      :services,
+      :facility_welcomes,
+      :facility_services
+    )
 
     result[:facilities] = []
     @facilities.each do |facility|
       serializer = FacilitySerializer.call(facility, complete: false)
       result[:facilities] << serializer.data
     end
-    # result[:facilities] = FacilitiesSerializer.new(@facilities, Facilities::IndexFacilitySerializer).build
 
     # services
     # search => name, type, service, welcomes

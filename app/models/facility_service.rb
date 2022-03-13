@@ -7,5 +7,5 @@ class FacilityService < ApplicationRecord
   validates :facility, :service, presence: true
   validates :service, uniqueness: { scope: :facility }
 
-  delegate :name, to: :service
+  delegate :key, :name, to: :service
 end
