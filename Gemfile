@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "2.7.5" # "3.0.0"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
-gem "rails", "~> 6.1.5"
+gem "rails", "~> 7.0.2.3"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.2.3"
 # Use Puma as the app server
@@ -32,6 +32,9 @@ gem "bootsnap", "~> 1.7.2", require: false
 # Framework building reusable, tetable and encapsulated ViewComponents in Rails
 # docs: viewcomponent.org
 gem "view_component", require: "view_component/engine"
+
+# As of Rails 7.0, sprockets is optional
+gem "sprockets-rails"
 
 # Authentication
 gem "devise", "~> 4.8"
