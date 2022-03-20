@@ -17,7 +17,7 @@
 
                 <div class="select">
                     <%= form.select(:service_id,
-                                    Service.pluck(:name, :id),
+                                    @services_dropdown,
                                     { include_blank: "Service", selected: params[:service_id] },
                                     {
                                         data: { action: "change->auto-submit#change" }
@@ -26,7 +26,7 @@
 
                 <div class="select">
                     <%= form.select(:welcome_customer,
-                                    FacilityWelcome.customers.map{|k, v| [k.titleize, v]},
+                                    @welcomes_dropdown,
                                     { include_blank: "Welcome", selected: params[:welcome_customer] },
                                     {
                                         data: { action: "change->auto-submit#change" }

@@ -2,6 +2,8 @@
 
 class Admin::FacilitiesController < Admin::BaseController
   before_action :load_facilities, only: [:index]
+  before_action :load_services_dropdown, only: [:index]
+  before_action :load_welcomes_dropdown, only: [:index]
   before_action :load_facility, only: %i[show edit update destroy]
 
   def index; end
@@ -43,12 +45,16 @@ class Admin::FacilitiesController < Admin::BaseController
       facilities = facilities.pending_reviews
     end
 
-    if params[:service_id].present?
+    if params[:service_id] == "none"
+      facilities = facilities.without_services
+    elsif params[:service_id].present?
       facilities = facilities.joins(:services)
                              .where(services: { id: params[:service_id] })
     end
 
-    if params[:welcome_customer].present?
+    if params[:welcome_customer] == "none"
+      facilities = facilities.without_welcomes
+    elsif params[:welcome_customer].present?
       facilities = facilities.joins(:facility_welcomes)
                              .where(facility_welcomes: { customer: params[:welcome_customer] })
     end
@@ -64,6 +70,14 @@ class Admin::FacilitiesController < Admin::BaseController
 
   def load_facility
     @facility = Facility.find(params[:id])
+  end
+
+  def load_services_dropdown
+    @services_dropdown = [["No Services", :none]] + Service.pluck(:name, :id)
+  end
+
+  def load_welcomes_dropdown
+    @welcomes_dropdown = [["No Welcomes", :none]] + FacilityWelcome.customers.map { |k, v| [k.titleize, v] }
   end
 
   def facility_params
