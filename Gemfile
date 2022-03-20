@@ -34,7 +34,7 @@ gem "bootsnap", "~> 1.11.1", require: false
 gem "view_component"
 
 # As of Rails 7.0, sprockets is optional
-gem "sprockets-rails"
+# gem "sprockets-rails"
 
 # Authentication
 gem "devise", "~> 4.8"
