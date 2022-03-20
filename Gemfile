@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "2.7.5" # "3.0.0"
+ruby "3.0.3" #"2.7.5"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "rails", "~> 7.0.2.3"
@@ -27,11 +27,11 @@ gem "bcrypt", "~> 3.1.16"
 # gem "image_processing", "~> 1.2"
 
 # Reduces boot times through caching; required in config/boot.rb
-gem "bootsnap", "~> 1.7.2", require: false
+gem "bootsnap", "~> 1.11.1", require: false
 
 # Framework building reusable, tetable and encapsulated ViewComponents in Rails
 # docs: viewcomponent.org
-gem "view_component", require: "view_component/engine"
+gem "view_component"
 
 # As of Rails 7.0, sprockets is optional
 gem "sprockets-rails"
@@ -43,7 +43,7 @@ gem "devise", "~> 4.8"
 gem 'rack-cors'
 
 group :development, :test do
-  gem "rspec-rails", "~> 5.0.0"
+  gem "rspec-rails", "~> 5.1.1"
   gem "shoulda-matchers", ">= 4.5.1"
   gem "capybara"
 
@@ -94,7 +94,7 @@ end
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # Pagination
-gem "pagy", "~> 3.12.0"
+gem "pagy", "~> 5.10.1"
 
 # Alternative approach to web apps development.
 # https://github.com/hotwired/hotwire-rails
