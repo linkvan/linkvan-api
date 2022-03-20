@@ -25,6 +25,8 @@ class Facility < ApplicationRecord
   scope :name_search, ->(name) { where(arel_table[:name].matches("%#{name}%")) }
   scope :address_search, ->(value) { where(arel_table[:address].matches("%#{value}%")) }
   scope :with_service, ->(service_name) { joins(:services).where(services: Service.name_search(service_name)) }
+  scope :without_services, -> { where.not(facility_services: FacilityService.all) }
+  scope :without_welcomes, -> { where.not(facility_welcomes: FacilityWelcome.all) }
 
   def managed_by?(user)
     f_user_id = if user.respond_to? :id
