@@ -28,10 +28,10 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Setup Ruby 2.7
+      - name: Setup Ruby 3.0
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.7.5
+          ruby-version: 3.0.3
 
       - name: Setup Node 15
         uses: actions/setup-node@v1
