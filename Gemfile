@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "2.7.5" # "3.0.0"
+ruby "3.0.3" # "2.7.5"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "rails", "~> 6.1.4"
@@ -91,7 +91,7 @@ end
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # Pagination
-gem "pagy", "~> 3.12.0"
+gem "pagy", "~> 5.10.1"
 
 # Alternative approach to web apps development.
 # https://github.com/hotwired/hotwire-rails
