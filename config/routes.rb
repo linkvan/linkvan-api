@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     resources :facilities, only: %i[index show]
     resources :zones, only: [:index]
+    resources :home, only: [:index]
   end
 
   namespace :admin do
