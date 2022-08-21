@@ -3,20 +3,8 @@
         <div class="level-left">
             <div class="card-header-title">
                 <%= link_to admin_facility_path(facility) do %>
-                    <span class="icon-text">
-                        <% if facility.verified? %>
-                            <span class="icon has-text-success">
-                                <i class="fas fa-check-square"></i>
-                            </span>
-                        <% else %>
-                            <span class="icon has-text-danger">
-                                <i class="fas fa-times"></i>
-                            </span>
-                        <% end %>
-
-                        <span>
-                            <%= facility.name %>
-                        </span>
+                    <span>
+                        <%= facility.name %>
                     </span>
                 <% end %>
 
@@ -24,32 +12,20 @@
         </div>
 
         <div class="level-right">
-            <div class="field is-grouped">
-                <div class="control">
-                    <%= label_tag :verified, facility.verified? ? 'Live' : 'Pending Reviews' %>
-                </div>
+            <div class="level-item mr-3">
+                <span class="icon-text">
+                    <% if facility.verified? %>
+                        <span class="icon has-text-success">
+                            <i class="fas fa-check-square"></i>
+                        </span>
+                    <% else %>
+                        <span class="icon has-text-danger">
+                            <i class="fas fa-times"></i>
+                        </span>
+                    <% end %>
 
-                <div class="control is-right">
-                    <div class="dropdown is-hoverable is-right">
-                        <div class="dropdown-trigger">
-                            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-                                <span class="icon is-small">
-                                    <i class="fas fa-bars" aria-hidden="true"></i>
-                                </span>
-                            </button>
-                        </div>
-                        <div class="dropdown-menu" id="dropdown-menu6" role="menu">
-                            <div class="dropdown-content">
-                                <%= link_to 'Show', admin_facility_path(facility), class: "dropdown-item" %>
-
-                                <%= link_to 'Edit', edit_admin_facility_path(facility), class: "dropdown-item" %>
-
-                                <a class="dropdown-item">Delete</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                    <%= facility.verified? ? 'Live' : 'Pending Reviews' %>
+                </span>
             </div>
         </div>
     </header>

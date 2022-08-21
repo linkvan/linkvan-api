@@ -9,55 +9,11 @@ class Facilities::ShowComponent < ViewComponent::Base
     @facility = facility
   end
 
-  delegate :user, to: :facility
-
   def card_id
     dom_id(facility)
   end
 
-  def link_to_website
-    link_to facility.website_url, facility.website_url, target: "_blank", rel: "noopener"
-  end
-
-  def delete_confirmation
-    {
-      confirm: "Are you sure you want to delete '#{facility.name}' facility? This action can't be undone"
-    }
-  end
-
-  def status_icon
-    tag.span class: status_icon_span_class do
-      tag.i title: status_title, class: status_icon_class
-    end
-  end
-
-  def status_title
-    facility.status.to_s.titleize
-  end
-
-  def status_icon_class
-    case facility.status
-    when :live
-      "fas fa-check-square"
-    when :pending_reviews
-      "fas fa-times"
-    else
-      "fas"
-    end
-  end
-
-  def status_icon_span_class
-    case facility.status
-    when :live
-      "icon has-text-success"
-    when :pending_reviews
-      "icon has-text-danger"
-    else
-      "icon"
-    end
-  end
-
-  class LocationCardComponent < ViewComponent::Base
+  class ShowComponentBase < ViewComponent::Base
     attr_reader :facility
 
     def initialize(facility:)
@@ -67,15 +23,58 @@ class Facilities::ShowComponent < ViewComponent::Base
     end
   end
 
-  class ServicesCardComponent < ViewComponent::Base
-    attr_reader :facility
+  class DetailsCardComponent < ShowComponentBase
+    delegate :user, to: :facility
 
-    def initialize(facility:)
-      super()
+    private
 
-      @facility = facility
+    def delete_confirmation
+      {
+        confirm: "Are you sure you want to delete '#{facility.name}' facility? This action can't be undone"
+      }
     end
 
+    def link_to_website
+      link_to facility.website_url, facility.website_url, target: "_blank", rel: "noopener"
+    end
+
+    def status_icon
+      tag.span class: status_icon_span_class do
+        tag.i title: status_title, class: status_icon_class
+      end
+    end
+
+    def status_title
+      facility.status.to_s.titleize
+    end
+
+    def status_icon_class
+      case facility.status
+      when :live
+        "fas fa-check-square"
+      when :pending_reviews
+        "fas fa-times"
+      else
+        "fas"
+      end
+    end
+
+    def status_icon_span_class
+      case facility.status
+      when :live
+        "icon has-text-success"
+      when :pending_reviews
+        "icon has-text-danger"
+      else
+        "icon"
+      end
+    end
+  end
+
+  class LocationCardComponent < ShowComponentBase
+  end
+
+  class ServicesCardComponent < ShowComponentBase
     private
 
     def switch_button(service)
@@ -137,15 +136,7 @@ class Facilities::ShowComponent < ViewComponent::Base
     end
   end
 
-  class WelcomesCardComponent < ViewComponent::Base
-    attr_reader :facility
-
-    def initialize(facility:)
-      super()
-
-      @facility = facility
-    end
-
+  class WelcomesCardComponent < ShowComponentBase
     private
 
     def switch_button(customer)
@@ -189,15 +180,7 @@ class Facilities::ShowComponent < ViewComponent::Base
     end
   end
 
-  class ScheduleCardComponent < ViewComponent::Base
-    attr_reader :facility
-
-    def initialize(facility:)
-      super()
-
-      @facility = facility
-    end
-
+  class ScheduleCardComponent < ShowComponentBase
     private
 
     def switch_button(schedule)
