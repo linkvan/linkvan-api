@@ -40,13 +40,14 @@ class Shared::CardComponent < ViewComponent::Base
   end
 
   class ButtonComponent < ViewComponent::Base
-    def initialize(title:, path:, method: :get, icon_class: "fa-pen")
+    def initialize(title:, path:, method: :get, icon_class: "fa-pen", data: nil)
       super()
 
       @title = title
       @path = path
       @method = method
       @icon_class = icon_class
+      @data = data
     end
 
     def render?
@@ -56,6 +57,7 @@ class Shared::CardComponent < ViewComponent::Base
     def call
       params = { class: "button" }
       params[:method] = @method if @method.present? && @method != :get
+      params[:data] = @data if @data.present?
 
       link_to @path, params do
         button_content

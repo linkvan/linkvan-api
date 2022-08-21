@@ -1,0 +1,83 @@
+<!-- Details -->
+<%= render Shared::CardComponent.new(title: 'Details') do |card| %>
+    <% card.button(title: 'Edit', path: edit_admin_facility_path(facility)) %>
+    <% card.button(title: 'Delete', path: admin_facility_path(facility), method: :delete, icon_class: 'fa-trash-alt', data: delete_confirmation) %>
+
+    <div class='columns'>
+        <div class='column'>
+            <table class='table'>
+                <tr>
+                    <th>Status:</th>
+                    <td>
+                        <%= status_icon %>
+                        <%= facility.status.to_s.titleize %>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Name:</th>
+                    <td><%= facility.name %></td>
+                </tr>
+
+                <tr>
+                    <th>Phone Number:</th>
+                    <td><%= facility.phone %></td>
+                </tr>
+
+                <tr>
+                    <th>Website:</th>
+                    <td><%= link_to_website %></td>
+                </tr>
+                <tr>
+                    <th>User:</th>
+                    <td>
+                        <% if user.blank? %>
+                            <%= tag.span 'Not Present', class: 'tag is-danger'%>
+                        <% else %>
+                            <%= render Users::StatusComponent.new(user, show_title: true) %>
+
+                            <br/>
+                            <%= user.name %> |
+                            <%= user.email %>
+                        <% end %>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Last Updated:</th>
+                    <td>
+                        <time datetime="<%= facility.updated_at %>">
+                            <%= facility.updated_at %>
+                        </time>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class='column'>
+            <!-- Descriptions -->
+            <table class='table'>
+                <tr>
+                    <th>Address:</th>
+                    <td><%= facility.address %></td>
+                </tr>
+
+                <tr>
+                    <th>Description:</th>
+
+                    <td>
+                        <%= simple_format facility.description %>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Notes:</th>
+
+                    <td>
+                        <%= simple_format facility.notes %>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+<% end %>

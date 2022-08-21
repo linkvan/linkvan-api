@@ -2,98 +2,31 @@
     <div class="columns">
         <div class="column">
             <span class="icon-text">
-                <%= status_icon %>
                 <span class='title'>
                     <%= facility.name %>
                 </span>
             </span>
-
-            <div>
-                Phone:
-                <%= facility.phone %>
-            </div>
-
-            <div>
-                Website:
-                <%= link_to_website %>
-            </div>
-
-            <div>
-                <time datetime="<%= facility.updated_at %>">
-                    Last Updated:
-                    <%= facility.updated_at %>.
-                </time>
-            </div>
-
-            <div>
-                User:
-                <% if user.blank? %>
-                    <%= tag.span 'Not Present', class: 'tag is-danger'%>
-                <% else %>
-                    <%= render Users::StatusComponent.new(user, show_title: true) %>
-
-                    <br/>
-                    <%= user.name %> |
-                    <%= user.email %>
-                <% end %>
-            </div>
-        </div>
-
-        <div class="column is-1-fullhd is-2-desktop is-2-tablet">
-            <div class="buttons">
-                <%= link_to 'Edit', edit_admin_facility_path(facility), class: "button is-fullwidth" %>
-
-                <%= link_to('Delete',
-                            admin_facility_path(facility),
-                            method: :delete,
-                            class: "button is-fullwidth",
-                            data: delete_confirmation) %>
-            </div>
         </div>
     </div>
 </div>
 
 <div class='columns'>
     <div class='column'>
-        <%= render WelcomesCardComponent.new(facility: facility) %>
-    </div>
-
-    <div class='column'>
-        <%= render ServicesCardComponent.new(facility: facility) %>
+        <%= render DetailsCardComponent.new(facility: facility) %>
     </div>
 </div>
 
 <div class='columns'>
     <div class='column'>
+        <%= render ScheduleCardComponent.new(facility: facility) %>
+
         <%= render LocationCardComponent.new(facility: facility) %>
     </div>
 
     <div class='column'>
-        <%= render ScheduleCardComponent.new(facility: facility) %>
+        <%= render WelcomesCardComponent.new(facility: facility) %>
+
+        <%= render ServicesCardComponent.new(facility: facility) %>
     </div>
 </div>
 
-<!-- Descriptions -->
-<%= render Shared::CardComponent.new(title: 'Descriptions') do |card| %>
-    <div class='columns'>
-        <div class='column'>
-            <div class='field'>
-                <span class='label'>Description</span>
-
-                <div class='container'>
-                    <%= facility.description %>
-                </div>
-            </div>
-        </div>
-
-        <div class='column'>
-            <div class='field'>
-                <span class='label'>Notes</span>
-
-                <div class='container'>
-                    <%= facility.notes %>
-                </div>
-            </div>
-        </div>
-    </div>
-<% end %>
