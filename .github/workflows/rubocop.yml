@@ -14,10 +14,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Ruby 2.7
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 2.7
+    - name: Setup Ruby 3.0.3
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0.3
     - name: Cache gems
       uses: actions/cache@v1
       with:
@@ -32,3 +32,4 @@ jobs:
         bundle install --jobs 4 --retry 3
     - name: Run RuboCop
       run: bundle exec rubocop --parallel
+
