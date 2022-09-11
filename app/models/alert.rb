@@ -10,4 +10,8 @@ class Alert < ApplicationRecord
   scope :timeline, -> { order(updated_at: :desc) }
   scope :active, -> { where(active: true) }
   scope :inactive, -> { where(active: false) }
+
+  def content_html
+    content.to_s
+  end
 end
