@@ -7,12 +7,8 @@ class Api::HomeController < Api::BaseController
     result = base_result
 
     alert = Alert.active.timeline.first
-    result[:alert] = alert.nil? ? nil : AlertSerializer.new(alert).as_json
-
+    result[:alert] = AlertSerializer.call(alert).data
     result[:notices] = compute_notices
-
-    facilities = Facility.includes(:zone).is_verified.order(:updated_at)
-    result[:facilities] = FacilitiesSerializer.new(facilities, Facilities::IndexFacilitySerializer).build
 
     render json: result.as_json, status: :ok
   end
