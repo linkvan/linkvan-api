@@ -14,17 +14,9 @@
         <div class="level-right">
             <div class="level-item mr-3">
                 <span class="icon-text">
-                    <% if facility.verified? %>
-                        <span class="icon has-text-success">
-                            <i class="fas fa-check-square"></i>
-                        </span>
-                    <% else %>
-                        <span class="icon has-text-danger">
-                            <i class="fas fa-times"></i>
-                        </span>
-                    <% end %>
+                    <%= render status_component %>
+                    <span><%= render status_component.with_variant(:title_only) %></span>
 
-                    <%= facility.verified? ? 'Live' : 'Pending Reviews' %>
                 </span>
             </div>
         </div>

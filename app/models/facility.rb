@@ -5,6 +5,8 @@ require "bigdecimal"
 require "bigdecimal/util"
 
 class Facility < ApplicationRecord
+  include Discardable
+
   belongs_to :user, optional: true
   belongs_to :zone, optional: true
 
@@ -19,9 +21,9 @@ class Facility < ApplicationRecord
   before_validation :clean_data
   # is_impressionable
 
-  scope :live, -> { is_verified }
+  scope :live, -> { kept.is_verified }
   scope :is_verified, -> { where(verified: true) }
-  scope :pending_reviews, -> { where(verified: false) }
+  scope :pending_reviews, -> { kept.where(verified: false) }
   scope :name_search, ->(name) { where(arel_table[:name].matches("%#{name}%")) }
   scope :address_search, ->(value) { where(arel_table[:address].matches("%#{value}%")) }
   scope :with_service, ->(service_name) { joins(:services).where(services: Service.name_search(service_name)) }
@@ -53,11 +55,13 @@ class Facility < ApplicationRecord
   end
 
   def self.statuses
-    %i[live pending_reviews]
+    %i[live pending_reviews discarded]
   end
 
   def status
-    if verified?
+    if discarded?
+      :discarded
+    elsif verified?
       :live
     else
       :pending_reviews

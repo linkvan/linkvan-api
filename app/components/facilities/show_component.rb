@@ -30,7 +30,7 @@ class Facilities::ShowComponent < ViewComponent::Base
 
     def delete_confirmation
       {
-        confirm: "Are you sure you want to delete '#{facility.name}' facility? This action can't be undone"
+        confirm: "Are you sure you want to discard '#{facility.name}' facility? This action can't be undone"
       }
     end
 
@@ -38,36 +38,8 @@ class Facilities::ShowComponent < ViewComponent::Base
       link_to facility.website_url, facility.website_url, target: "_blank", rel: "noopener"
     end
 
-    def status_icon
-      tag.span class: status_icon_span_class do
-        tag.i title: status_title, class: status_icon_class
-      end
-    end
-
-    def status_title
-      facility.status.to_s.titleize
-    end
-
-    def status_icon_class
-      case facility.status
-      when :live
-        "fas fa-check-square"
-      when :pending_reviews
-        "fas fa-times"
-      else
-        "fas"
-      end
-    end
-
-    def status_icon_span_class
-      case facility.status
-      when :live
-        "icon has-text-success"
-      when :pending_reviews
-        "icon has-text-danger"
-      else
-        "icon"
-      end
+    def status_component
+      @status_component ||= Facilities::StatusComponent.new(facility.status)
     end
   end
 

@@ -1,7 +1,11 @@
 <!-- Details -->
 <%= render Shared::CardComponent.new(title: 'Details') do |card| %>
     <% card.button(title: 'Edit', path: edit_admin_facility_path(facility)) %>
-    <% card.button(title: 'Delete', path: admin_facility_path(facility), method: :delete, icon_class: 'fa-trash-alt', data: delete_confirmation) %>
+    <% if facility.undiscarded? %>
+        <% card.button(title: 'Discard', path: admin_facility_path(facility), method: :delete, icon_class: 'fa-trash-alt', data: delete_confirmation) %>
+    <% else %>
+        <% card.button(title: 'Undiscard', path: admin_facility_path(facility, undiscard: true), method: :put, icon_class: 'fa-trash-restore') %>
+    <% end %>
 
     <div class='columns'>
         <div class='column'>
@@ -9,8 +13,8 @@
                 <tr>
                     <th>Status:</th>
                     <td>
-                        <%= status_icon %>
-                        <%= facility.status.to_s.titleize %>
+                        <%= render status_component %>
+                        <%= render status_component.with_variant(:title_only) %>
                     </td>
                 </tr>
 

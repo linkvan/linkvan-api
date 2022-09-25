@@ -7,7 +7,7 @@ class Api::FacilitiesController < Api::BaseController
   def index
     result = base_result
 
-    @facilities = Facility.is_verified.order(:updated_at)
+    @facilities = Facility.undiscarded.is_verified.order(:updated_at)
     @facilities = @facilities.with_service(params[:service]) if params[:service].present?
 
     # Includes related objects to avoid N+1 queries

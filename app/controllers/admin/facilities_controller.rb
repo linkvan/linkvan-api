@@ -13,7 +13,13 @@ class Admin::FacilitiesController < Admin::BaseController
   def edit; end
 
   def update
-    if @facility.update(facility_params)
+    if params[:undiscard].present?
+      if @facility.undiscard
+        redirect_to [:admin, @facility], notice: "Successfully undiscarded facility (id: #{@facility.id})"
+      else
+        redirect_to [:admin, @facility], notice: "Failed to undiscarded facility (id: #{@facility.id}). Errors: #{@facility.errors.full_messages}"
+      end
+    elsif @facility.update(facility_params)
       redirect_to [:admin, @facility], notice: "Successfully updated facility (id: #{@facility.id})"
     else
       flash.now[:alert] = "Failed to update facility (id: #{@facility.id}). Errors: #{@facility.errors.full_messages.join('; ')}"
@@ -23,11 +29,11 @@ class Admin::FacilitiesController < Admin::BaseController
   end
 
   def destroy
-    if @facility.destroy
-      flash[:notice] = "Successfully deleted Facility #{@facility.name} (id: #{@facility.id}"
+    if @facility.discard
+      flash[:notice] = "Successfully discarded Facility #{@facility.name} (id: #{@facility.id})"
     else
       # Error when turning Welcome on.
-      flash[:error] = "Failed to delete Facility #{@facility.name} (id: #{@facility.id}). Errors: #{@facility.errors.full_messages.join('; ')}"
+      flash[:error] = "Failed to discard Facility #{@facility.name} (id: #{@facility.id}). Errors: #{@facility.errors.full_messages.join('; ')}"
     end
 
     redirect_back fallback_location: admin_facilities_path
@@ -43,6 +49,8 @@ class Admin::FacilitiesController < Admin::BaseController
       facilities = facilities.live
     when "pending_reviews"
       facilities = facilities.pending_reviews
+    when "discarded"
+      facilities = facilities.discarded
     end
 
     if params[:service_id] == "none"
