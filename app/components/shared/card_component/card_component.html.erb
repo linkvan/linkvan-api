@@ -1,4 +1,4 @@
-<div class="card facility mb-3", id: <%= card_id %> >
+<%= tag.div class: "card facility mb-3", id: card_id, **@card_html_options do %>
     <!-- Card Header -->
     <%= render header_component do %>
         <%= action_content %>
@@ -17,4 +17,4 @@
             </div>
         </footer>
     <% end %>
-</div>
+<% end %>

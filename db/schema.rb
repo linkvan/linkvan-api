@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_03_20_174146) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_16_161500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -39,10 +39,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_20_174146) do
     t.string "filename", null: false
     t.string "content_type"
     t.text "metadata"
-    t.string "service_name", null: false
     t.bigint "byte_size", null: false
     t.string "checksum"
     t.datetime "created_at", precision: nil, null: false
+    t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
@@ -92,6 +92,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_20_174146) do
     t.integer "user_id"
     t.boolean "verified", default: false
     t.integer "zone_id"
+    t.datetime "deleted_at"
+    t.string "discard_reason"
     t.index ["user_id"], name: "index_facilities_on_user_id"
     t.index ["zone_id"], name: "index_facilities_on_zone_id"
   end

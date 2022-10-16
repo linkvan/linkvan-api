@@ -13,7 +13,13 @@ class Admin::FacilitiesController < Admin::BaseController
   def edit; end
 
   def update
-    if @facility.update(facility_params)
+    if params[:undiscard].present?
+      if @facility.undiscard
+        redirect_to [:admin, @facility], notice: "Successfully undiscarded facility (id: #{@facility.id})"
+      else
+        redirect_to [:admin, @facility], notice: "Failed to undiscarded facility (id: #{@facility.id}). Errors: #{@facility.errors.full_messages}"
+      end
+    elsif @facility.update(facility_params)
       redirect_to [:admin, @facility], notice: "Successfully updated facility (id: #{@facility.id})"
     else
       flash.now[:alert] = "Failed to update facility (id: #{@facility.id}). Errors: #{@facility.errors.full_messages.join('; ')}"
@@ -23,14 +29,16 @@ class Admin::FacilitiesController < Admin::BaseController
   end
 
   def destroy
-    if @facility.destroy
-      flash[:notice] = "Successfully deleted Facility #{@facility.name} (id: #{@facility.id}"
+    @facility.assign_attributes(discard_facility_params)
+
+    if @facility.discard
+      flash[:notice] = "Successfully discarded Facility #{@facility.name} (id: #{@facility.id})"
+      redirect_back fallback_location: admin_facility_path(@facility)
     else
       # Error when turning Welcome on.
-      flash[:error] = "Failed to delete Facility #{@facility.name} (id: #{@facility.id}). Errors: #{@facility.errors.full_messages.join('; ')}"
+      flash[:error] = "Failed to discard Facility #{@facility.name} (id: #{@facility.id}). Errors: #{@facility.errors.full_messages.join('; ')}"
+      render action: :show, status: :unprocessable_entity
     end
-
-    redirect_back fallback_location: admin_facilities_path
   end
 
   private
@@ -43,6 +51,8 @@ class Admin::FacilitiesController < Admin::BaseController
       facilities = facilities.live
     when "pending_reviews"
       facilities = facilities.pending_reviews
+    when "discarded"
+      facilities = facilities.discarded
     end
 
     if params[:service_id] == "none"
@@ -82,5 +92,9 @@ class Admin::FacilitiesController < Admin::BaseController
 
   def facility_params
     params.require(:facility).permit(:verified, :name, :phone, :website, :address, :lat, :long, :description, :notes)
+  end
+
+  def discard_facility_params
+    params.require(:facility).permit(:discard_reason)
   end
 end

@@ -12,4 +12,8 @@ class Facilities::CardComponent < ViewComponent::Base
   def card_id
     dom_id(facility)
   end
+
+  def status_component
+    @status_component ||= Facilities::StatusComponent.new(facility.status)
+  end
 end

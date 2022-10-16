@@ -5,6 +5,8 @@ require "bigdecimal"
 require "bigdecimal/util"
 
 class Facility < ApplicationRecord
+  include Discardable
+
   belongs_to :user, optional: true
   belongs_to :zone, optional: true
 
@@ -14,14 +16,20 @@ class Facility < ApplicationRecord
   has_many :schedules, class_name: "FacilitySchedule", dependent: :destroy
   has_many :time_slots, through: :schedules
 
+  enum :discard_reason, {
+    none: nil,
+    closed: "closed",
+    duplicated: "duplicated"
+  }, prefix: true, default: :none
+
   validates :name, :lat, :long, presence: true
 
   before_validation :clean_data
   # is_impressionable
 
-  scope :live, -> { is_verified }
+  scope :live, -> { kept.is_verified }
   scope :is_verified, -> { where(verified: true) }
-  scope :pending_reviews, -> { where(verified: false) }
+  scope :pending_reviews, -> { kept.where(verified: false) }
   scope :name_search, ->(name) { where(arel_table[:name].matches("%#{name}%")) }
   scope :address_search, ->(value) { where(arel_table[:address].matches("%#{value}%")) }
   scope :with_service, ->(service_name) { joins(:services).where(services: Service.name_search(service_name)) }
@@ -53,11 +61,13 @@ class Facility < ApplicationRecord
   end
 
   def self.statuses
-    %i[live pending_reviews]
+    %i[live pending_reviews discarded]
   end
 
   def status
-    if verified?
+    if discarded?
+      :discarded
+    elsif verified?
       :live
     else
       :pending_reviews
@@ -96,6 +106,7 @@ class Facility < ApplicationRecord
   private
 
   def clean_data
+    # strips whitespaces from beginning and end
     %i[name phone website address].each do |attrb|
       # squish (ActiveSupport's more in-depth strip whitespaces)
       send("#{attrb}=", send(attrb)&.squish)
@@ -104,6 +115,9 @@ class Facility < ApplicationRecord
     %i[description notes].each do |attrb|
       send("#{attrb}=", send(attrb)&.strip)
     end
+
+    # handles discard
+    self.discard_reason = :none if undiscarded?
   end
 
   # def time_in_range?(ctime, wday)
