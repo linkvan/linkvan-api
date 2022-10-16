@@ -15,6 +15,7 @@ class Shared::CardComponent < ViewComponent::Base
     @card_id = card_id
     @title = title
     @header_classes = options.dig(:header, :classes)
+    @card_html_options = options.dig(:card, :html_options).to_h
   end
 
   def header_component
@@ -40,7 +41,7 @@ class Shared::CardComponent < ViewComponent::Base
   end
 
   class ButtonComponent < ViewComponent::Base
-    def initialize(title:, path:, method: :get, icon_class: "fa-pen", data: nil)
+    def initialize(title:, path: nil, method: :get, icon_class: "fa-pen", data: nil)
       super()
 
       @title = title
@@ -51,13 +52,15 @@ class Shared::CardComponent < ViewComponent::Base
     end
 
     def render?
-      @title.present? && @path.present?
+      @title.present? #&& @path.present?
     end
 
     def call
       params = { class: "button" }
       params[:method] = @method if @method.present? && @method != :get
       params[:data] = @data if @data.present?
+
+      return tag.span(button_content, **params) if @path.blank?
 
       link_to @path, params do
         button_content

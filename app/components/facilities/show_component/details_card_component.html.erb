@@ -1,10 +1,40 @@
 <!-- Details -->
-<%= render Shared::CardComponent.new(title: 'Details') do |card| %>
+<%= render Shared::CardComponent.new(title: 'Details', options: { card: { html_options: { data: { controller: 'modal' }}}}) do |card| %>
     <% card.button(title: 'Edit', path: edit_admin_facility_path(facility)) %>
-    <% if facility.undiscarded? %>
-        <% card.button(title: 'Discard', path: admin_facility_path(facility), method: :delete, icon_class: 'fa-trash-alt', data: delete_confirmation) %>
-    <% else %>
+
+    <% if facility.discarded? %>
         <% card.button(title: 'Undiscard', path: admin_facility_path(facility, undiscard: true), method: :put, icon_class: 'fa-trash-restore') %>
+    <% else %>
+        <% card.button(title: 'Discard', path: admin_facility_path(facility), method: :delete, icon_class: 'fa-trash-alt', data: { action: "click->modal#show" }) %>
+
+        <!-- Modal for the Discard action -->
+        <%= form_with model: facility, url: admin_facility_path(facility), method: :delete do |form| %>
+            <div id="reason_modal" class="modal" data-modal-target= "modal">
+                <div class="modal-background"></div>
+
+                <div class="modal-card">
+                    <header class="modal-card-head">
+                        <p class="modal-card-title">Confirm Facility Discard</p>
+                        <button class="delete" aria-label="close"></button>
+                    </header>
+
+                    <section class="modal-card-body">
+                        <!-- Content ... -->
+                        Please give a reason for discarding the
+                        <span class="is-underlined"><%= facility.name %></span> facility:
+
+                        <div class="select">
+                            <%= form.select :discard_reason, Facilities::DiscardReasonComponent.select_options %>
+                        </div>
+                    </section>
+
+                    <footer class="modal-card-foot">
+                        <button class="button is-success">Discard</button>
+                        <button class="button", data-action="click->modal#hide">Cancel</button>
+                    </footer>
+                </div>
+            </div>
+        <% end %>
     <% end %>
 
     <div class='columns'>
@@ -16,6 +46,11 @@
                         <%= render status_component %>
                         <%= render status_component.with_variant(:title_only) %>
                     </td>
+                </tr>
+
+                <tr>
+                    <th>Reason</th>
+                    <td><%= render Facilities::DiscardReasonComponent.new(facility.discard_reason) %></td>
                 </tr>
 
                 <tr>

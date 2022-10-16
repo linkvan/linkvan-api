@@ -29,14 +29,16 @@ class Admin::FacilitiesController < Admin::BaseController
   end
 
   def destroy
+    @facility.assign_attributes(discard_facility_params)
+
     if @facility.discard
       flash[:notice] = "Successfully discarded Facility #{@facility.name} (id: #{@facility.id})"
+      redirect_back fallback_location: admin_facility_path(@facility)
     else
       # Error when turning Welcome on.
       flash[:error] = "Failed to discard Facility #{@facility.name} (id: #{@facility.id}). Errors: #{@facility.errors.full_messages.join('; ')}"
+      render action: :show, status: :unprocessable_entity
     end
-
-    redirect_back fallback_location: admin_facilities_path
   end
 
   private
@@ -90,5 +92,9 @@ class Admin::FacilitiesController < Admin::BaseController
 
   def facility_params
     params.require(:facility).permit(:verified, :name, :phone, :website, :address, :lat, :long, :description, :notes)
+  end
+
+  def discard_facility_params
+    params.require(:facility).permit(:discard_reason)
   end
 end

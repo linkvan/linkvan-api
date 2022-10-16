@@ -28,12 +28,6 @@ class Facilities::ShowComponent < ViewComponent::Base
 
     private
 
-    def delete_confirmation
-      {
-        confirm: "Are you sure you want to discard '#{facility.name}' facility? This action can't be undone"
-      }
-    end
-
     def link_to_website
       link_to facility.website_url, facility.website_url, target: "_blank", rel: "noopener"
     end

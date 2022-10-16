@@ -37,6 +37,6 @@ class Facilities::StatusComponent < ViewComponent::Base
   private
 
   def title
-    title = status.to_s.titleize
+    status.to_s.titleize
   end
 end
