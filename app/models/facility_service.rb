@@ -8,4 +8,6 @@ class FacilityService < ApplicationRecord
   validates :service, uniqueness: { scope: :facility }
 
   delegate :key, :name, to: :service
+
+  scope :name_search, ->(value) { where(service: Service.name_search(value)) }
 end

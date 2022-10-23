@@ -15,6 +15,8 @@ class FacilityWelcome < ApplicationRecord
     senior: "senior"
   }
 
+  scope :name_search, ->(value) { where(customer: value.to_s.downcase) }
+
   def name
     customer.to_s.titleize
   end
@@ -24,6 +26,6 @@ class FacilityWelcome < ApplicationRecord
   end
 
   def self.names
-    all_customers.map(&:titleize)
+    all_customers.pluck(:name)
   end
 end
