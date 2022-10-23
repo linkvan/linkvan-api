@@ -8,7 +8,11 @@ FactoryBot.define do
     website { "www.facility.test" }
     description { "description of the facility" }
     notes { "small notes about facility" }
-    verified { true }
+    verified { false }
+
+    trait :verified do
+      verified { true }
+    end
 
     # Facility is open all day
     factory :open_all_day_facility
