@@ -50,6 +50,9 @@ end
 RSpec.configure do |config|
   config.include ViewComponent::TestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
+  # TimeHelpers to help with time dependent specs.
+  #   https://api.rubyonrails.org/v5.2.4/classes/ActiveSupport/Testing/TimeHelpers.html
+  config.include ActiveSupport::Testing::TimeHelpers
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
