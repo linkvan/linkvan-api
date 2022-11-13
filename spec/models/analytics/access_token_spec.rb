@@ -1,11 +1,14 @@
 require "rails_helper"
 
 RSpec.describe Analytics::AccessToken, type: :model do
+  before do
+    config_jwt
+  end
+
   describe ".load" do
     subject(:access_token) { described_class.load(params) }
 
     before do
-      config_jwt
       allow(SecureRandom).to receive(:hex).and_return("A_RANDOM_VALUE")
     end
 

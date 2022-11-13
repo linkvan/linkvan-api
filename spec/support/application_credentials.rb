@@ -1,6 +1,8 @@
-module ApiJwt
+require 'ostruct'
+
+module ApplicationCredentials
   def config_jwt(jwt_params = {})
-    jwt_credentials = double('jwt_credentials', **{
+    jwt_credentials = OpenStruct.new({
       secret_key: 'a_secret_key'
     }.merge(jwt_params))
 
@@ -9,5 +11,5 @@ module ApiJwt
 end
 
 RSpec.configure do |c|
-  c.include ApiJwt
+  c.include ApplicationCredentials
 end
