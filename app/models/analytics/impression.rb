@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Impression < ApplicationRecord
+class Analytics::Impression < ApplicationRecord
   belongs_to :event
   belongs_to :impressionable, polymorphic: true
 

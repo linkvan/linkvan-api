@@ -23,12 +23,12 @@ class Api::BaseController < ApplicationController
   end
 
   def access_token
-    @access_token ||= AccessToken.load(token_params)
+    @access_token ||= Analytics::AccessToken.load(token_params)
   end
 
   def token_params
     # @note: parameters take precedence over cookies.
-    AccessToken.extract_tokens_from(cookies['_linkvan_tokens'])
-      .merge(AccessToken.extract_tokens_from(params))
+    Analytics::AccessToken.extract_tokens_from(cookies['_linkvan_tokens'])
+      .merge(Analytics::AccessToken.extract_tokens_from(params))
   end
 end

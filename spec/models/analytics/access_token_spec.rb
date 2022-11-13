@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe AccessToken, type: :model do
+RSpec.describe Analytics::AccessToken, type: :model do
   describe ".load" do
     subject(:access_token) { described_class.load(params) }
 
@@ -41,7 +41,7 @@ RSpec.describe AccessToken, type: :model do
     let(:new_session_token) { 'a_new_session_token' }
 
     it "keeps uuid and updates session_token" do
-      expect(AccessToken::JSONWebToken).to receive(:encode).and_return(new_session_token)
+      expect(described_class::JSONWebToken).to receive(:encode).and_return(new_session_token)
       access_token.refresh
 
       expect(access_token.uuid).to eq(uuid)

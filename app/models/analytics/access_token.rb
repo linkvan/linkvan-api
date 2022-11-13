@@ -1,4 +1,4 @@
-class AccessToken
+class Analytics::AccessToken
   COOKIE_PREFIX = "_linkvanapi_".freeze
   MAPPING = {
     uuid: 'uuid',

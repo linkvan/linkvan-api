@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Event < ApplicationRecord
+class Analytics::Event < ApplicationRecord
   belongs_to :visit
 
   has_many :impressions, dependent: :destroy
