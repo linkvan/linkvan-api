@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_16_161500) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_07_003153) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -59,23 +59,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_16_161500) do
     t.datetime "updated_at", precision: nil, null: false
   end
 
-  create_table "analytics", id: :serial, force: :cascade do |t|
-    t.string "sessionID"
-    t.datetime "time", precision: nil
-    t.string "cookieID"
-    t.string "service", null: false
-    t.decimal "lat", null: false
-    t.decimal "long", null: false
-    t.decimal "facility"
-    t.boolean "dirClicked", default: false
-    t.string "dirType"
-  end
-
-  create_table "anaylitics", id: :serial, force: :cascade do |t|
+  create_table "events", force: :cascade do |t|
+    t.bigint "visit_id", null: false
+    t.string "controller_name", null: false
+    t.string "action_name", null: false
     t.decimal "lat"
     t.decimal "long"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
+    t.string "ip_address"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["visit_id"], name: "index_events_on_visit_id"
   end
 
   create_table "facilities", id: :serial, force: :cascade do |t|
@@ -140,7 +133,39 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_16_161500) do
     t.index ["facility_id"], name: "index_facility_welcomes_on_facility_id"
   end
 
-  create_table "impressions", id: :serial, force: :cascade do |t|
+  create_table "impressions", force: :cascade do |t|
+    t.bigint "event_id", null: false
+    t.string "impressionable_type", null: false
+    t.bigint "impressionable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_impressions_on_event_id"
+    t.index ["impressionable_type", "impressionable_id"], name: "index_impressions_on_impressionable"
+  end
+
+  create_table "notices", id: :serial, force: :cascade do |t|
+    t.string "title"
+    t.string "slug"
+    t.boolean "published"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.string "notice_type"
+    t.index ["slug"], name: "index_notices_on_slug", unique: true
+  end
+
+  create_table "old_analytics", id: :serial, force: :cascade do |t|
+    t.string "sessionID"
+    t.datetime "time", precision: nil
+    t.string "cookieID"
+    t.string "service", null: false
+    t.decimal "lat", null: false
+    t.decimal "long", null: false
+    t.decimal "facility"
+    t.boolean "dirClicked", default: false
+    t.string "dirType"
+  end
+
+  create_table "old_impressions", id: :serial, force: :cascade do |t|
     t.string "impressionable_type"
     t.integer "impressionable_id"
     t.integer "user_id"
@@ -161,27 +186,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_16_161500) do
     t.index ["impressionable_type", "impressionable_id", "request_hash"], name: "poly_request_index"
     t.index ["impressionable_type", "impressionable_id", "session_hash"], name: "poly_session_index"
     t.index ["impressionable_type", "message", "impressionable_id"], name: "impressionable_type_message_index"
-    t.index ["user_id"], name: "index_impressions_on_user_id"
+    t.index ["user_id"], name: "index_old_impressions_on_user_id"
   end
 
-  create_table "listed_options", id: :serial, force: :cascade do |t|
+  create_table "old_listed_options", id: :serial, force: :cascade do |t|
     t.integer "analytic_id"
     t.string "sessionID", null: false
     t.datetime "time", precision: nil, null: false
     t.string "facility", null: false
     t.decimal "position", null: false
     t.decimal "total", null: false
-    t.index ["analytic_id"], name: "index_listed_options_on_analytic_id"
-  end
-
-  create_table "notices", id: :serial, force: :cascade do |t|
-    t.string "title"
-    t.string "slug"
-    t.boolean "published"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
-    t.string "notice_type"
-    t.index ["slug"], name: "index_notices_on_slug", unique: true
+    t.index ["analytic_id"], name: "index_old_listed_options_on_analytic_id"
   end
 
   create_table "services", force: :cascade do |t|
@@ -223,6 +238,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_16_161500) do
     t.integer "zone_id", null: false
     t.index ["user_id", "zone_id"], name: "index_users_zones_on_user_id_and_zone_id"
     t.index ["zone_id", "user_id"], name: "index_users_zones_on_zone_id_and_user_id"
+  end
+
+  create_table "visits", force: :cascade do |t|
+    t.string "uuid", null: false
+    t.string "session_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["session_id"], name: "index_visits_on_session_id"
+    t.index ["uuid", "session_id"], name: "index_visits_on_uuid_and_session_id", unique: true
+    t.index ["uuid"], name: "index_visits_on_uuid"
   end
 
   create_table "zones", id: :serial, force: :cascade do |t|

@@ -4,6 +4,11 @@ require "rails_helper"
 #   RSpec.describe "Hello", type: :feature do
 #
 RSpec.describe "Facilities index" do
+
+  before do
+    config_jwt
+  end
+
   it "returns a json object" do
     visit api_facilities_path
 

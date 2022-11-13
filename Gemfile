@@ -6,7 +6,7 @@ ruby "3.0.3" #"2.7.5"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "rails", "~> 7.0.2.3"
 # Use postgresql as the database for Active Record
-gem "pg", "~> 1.3.4"
+gem "pg", "~> 1.4.4"
 # Use Puma as the app server
 gem "puma", "~> 5.6.2"
 # Use SCSS for stylesheets
@@ -111,3 +111,6 @@ gem "inline_svg"
 gem "haversine", git: "https://github.com/fabionl/haversine.git"
 gem "geo_coord", require: "geo/coord"
 gem 'geocoder', '~> 1.6'
+
+# Adds JSON Web token control
+gem "jwt"

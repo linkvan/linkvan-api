@@ -1,17 +1,18 @@
 require "rails_helper"
+require 'support/shared_examples/api_tokens'
 
 RSpec.describe Api::FacilitiesController do # , type: :request do
   let(:verified_facility) { create(:open_all_day_facility, :with_services, verified: true) }
   let(:nonverified_facility) { create(:open_all_day_facility, :with_services, verified: false) }
 
   before do
+    config_jwt
     load_data
   end
 
   describe "GET #index" do
     subject { response }
 
-    # let(:load_data) { [verified_facility, nonverified_facility] }
     let(:load_data) { nil }
     let(:parsed_response) { JSON.parse(response.body, symbolize_names: true) }
     let(:returned_facilities) { parsed_response[:facilities] }
@@ -20,6 +21,8 @@ RSpec.describe Api::FacilitiesController do # , type: :request do
     before do
       get :index, params: request_params
     end
+
+    include_examples :api_tokens
 
     it { is_expected.to have_http_status(:success) }
 

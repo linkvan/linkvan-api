@@ -29,6 +29,10 @@ class Notice < ApplicationRecord
     result
   end
 
+  def content_html
+    content.to_s
+  end
+
   private
 
   def set_slug

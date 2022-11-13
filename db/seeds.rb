@@ -26,3 +26,37 @@ Zone.create_with(description: "Vancouver city zone")
     .find_or_create_by!(name: 'Vancouver')
 Zone.create_with(description: "New Westminster city zone")
     .find_or_create_by!(name: 'New Westminster')
+
+facility_ids = Facility.all.ids
+
+# Analytics Examples
+1000.times.each do |n|
+  created_at = rand(90).days.ago
+  uuid = SecureRandom.hex
+  session_id = SecureRandom.hex
+
+  visit = Visit.create_with(created_at: created_at)
+               .find_or_create_by!(uuid: uuid,
+                                   session_id: session_id)
+  created_at = visit.created_at
+
+  rand(10).times.each do
+    event_date = rand(120).minutes.after(created_at)
+    event = visit.events.create!(controller_name: 'api/facilities',
+                                action_name: 'index',
+                                lat: Faker::Address.latitude,
+                                long: Faker::Address.longitude,
+                                ip_address: Faker::Internet.ip_v4_address,
+                                created_at: event_date)
+
+
+    n = rand(10) + 1
+    ids_to_filter = facility_ids.sample(n)
+    Facility.where(id: ids_to_filter).find_each do |facility|
+      event.impressions.create!(impressionable: facility,
+                                created_at: event_date)
+    end
+  end
+
+  print "."
+end
