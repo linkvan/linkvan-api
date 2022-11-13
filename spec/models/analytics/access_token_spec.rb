@@ -5,6 +5,8 @@ RSpec.describe Analytics::AccessToken, type: :model do
     subject(:access_token) { described_class.load(params) }
 
     before do
+      jwt_secrets = double('jws', secret_key: 'a_secret_key')
+      allow(Rails.application.credentials).to receive(:jwt).and_return(jwt_secrets)
       allow(SecureRandom).to receive(:hex).and_return("A_RANDOM_VALUE")
     end
 
