@@ -5,8 +5,7 @@ RSpec.describe Analytics::AccessToken, type: :model do
     subject(:access_token) { described_class.load(params) }
 
     before do
-      jwt_secrets = double('jws', secret_key: 'a_secret_key')
-      allow(Rails.application.credentials).to receive(:jwt).and_return(jwt_secrets)
+      config_jwt
       allow(SecureRandom).to receive(:hex).and_return("A_RANDOM_VALUE")
     end
 
@@ -17,11 +16,11 @@ RSpec.describe Analytics::AccessToken, type: :model do
       it { expect(access_token.session_token).to be_blank }
       it { expect(access_token.data).to be_blank }
     end
-  
+
     context "with params" do
       context "with uuid" do
         let(:params) { { uuid: 'PRESET_VALUE' } }
-      
+
         it { expect(access_token.uuid).to eq('PRESET_VALUE') }
       end
 

@@ -6,6 +6,7 @@ RSpec.describe Api::FacilitiesController do # , type: :request do
   let(:nonverified_facility) { create(:open_all_day_facility, :with_services, verified: false) }
 
   before do
+    config_jwt
     load_data
   end
 
