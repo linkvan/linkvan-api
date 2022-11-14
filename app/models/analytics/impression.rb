@@ -5,6 +5,4 @@ class Analytics::Impression < ApplicationRecord
   belongs_to :impressionable, polymorphic: true
 
   has_one :visit, through: :event
-
-  validates :impressionable, presence: true
 end

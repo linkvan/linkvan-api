@@ -6,9 +6,4 @@ class Analytics::Visit < ApplicationRecord
 
   validates :uuid, presence: true
   validates :session_id, presence: true, uniqueness: { scope: :uuid }
-
-  def self.find_or_create_from(access_token)
-    Visit.find_or_create_by(uuid: access_token.uuid,
-                            session_id: access_token.session_id)
-  end
 end

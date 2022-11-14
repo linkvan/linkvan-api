@@ -81,11 +81,9 @@ Layout/BeginEndAlignment:
   Enabled: true
   EnforcedStyleAlignWith: begin
 
-# Align `end` with the matching keyword or starting expression except for
-# assignments, where it should be aligned with the LHS.
 Layout/EndAlignment:
   Enabled: true
-  EnforcedStyleAlignWith: variable
+  EnforcedStyleAlignWith: keyword
   AutoCorrect: true
 
 Layout/EmptyLineAfterMagicComment:

@@ -5,6 +5,5 @@ class Analytics::Event < ApplicationRecord
 
   has_many :impressions, dependent: :destroy
 
-  validates :controller_name, presence: true
-  validates :action_name, presence: true
+  validates :controller_name, :action_name, :request_url, presence: true
 end

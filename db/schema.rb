@@ -65,7 +65,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_07_003153) do
     t.string "action_name", null: false
     t.decimal "lat"
     t.decimal "long"
-    t.string "ip_address"
+    t.string "request_url", null: false
+    t.string "request_ip"
+    t.string "request_user_agent"
+    t.jsonb "request_params"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["visit_id"], name: "index_events_on_visit_id"
