@@ -10,6 +10,31 @@ RSpec.describe Api::FacilitiesController do # , type: :request do
     load_data
   end
 
+  describe "analytics data" do
+    context "without facilities to return" do
+      let(:load_data) { nonverified_facility }
+
+      it "Creates Analytics data for the request" do
+        expect do
+          get :index, params: {}
+        end.to change(Analytics::Visit, :count).by(1)
+          .and change(Analytics::Event, :count).by(1)
+          .and not_change(Analytics::Impression, :count)
+      end
+    end
+
+    context "with facilities to return" do
+      let(:load_data) { [verified_facility, nonverified_facility] }
+
+      it "Creates Analytics data for the request" do
+        expect do
+          get :index, params: {}
+        end.to change(Analytics::Visit, :count).by(1)
+          .and change(Analytics::Event, :count).by(1)
+          .and change(Analytics::Impression, :count).by(1)
+      end
+    end
+  end
   describe "GET #index" do
     subject { response }
 
