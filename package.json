@@ -16,7 +16,6 @@
     "bulma-tooltip": "^3.0.2",
     "esbuild": "^0.15.14",
     "flatpickr": "^4.6.9",
-    "rails-erb-loader": "^5.5.2",
     "sass": "^1.56.1",
     "trix": "^2.0.0"
   },
