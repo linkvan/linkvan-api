@@ -2,31 +2,30 @@
   "name": "linkvan-api",
   "private": true,
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.4",
-    "@hotwired/turbo-rails": "^7.0.0-rc.3",
-    "@rails/actioncable": "^6.1.5",
-    "@rails/actiontext": "^6.1.4-1",
-    "@rails/activestorage": "^6.1.5",
-    "@rails/request.js": "^0.0.6",
-    "@rails/ujs": "^6.1.4-1",
-    "@rails/webpacker": "5.4.2",
+    "@fortawesome/fontawesome-free": "^6.2.1",
+    "@hotwired/stimulus": "^3.1.1",
+    "@hotwired/turbo-rails": "^7.2.4",
+    "@rails/actioncable": "^7.0.4",
+    "@rails/actiontext": "^7.0.4",
+    "@rails/activestorage": "^7.0.4",
+    "@rails/request.js": "^0.0.8",
     "babel-preset-react": "^6.24.1",
     "bootstrap": "^5.1.1",
-    "bulma": "^0.9.3",
-    "bulma-switch": "^2.0.0",
+    "bulma": "^0.9.4",
+    "bulma-switch": "^2.0.4",
     "bulma-tooltip": "^3.0.2",
+    "esbuild": "^0.15.14",
     "flatpickr": "^4.6.9",
     "rails-erb-loader": "^5.5.2",
-    "stimulus": "^2.0.0",
-    "trix": "^1.2.0",
-    "webpack": "^4.46.0",
-    "webpack-cli": "^3.3.12"
+    "sass": "^1.56.1",
+    "trix": "^2.0.0"
   },
   "version": "0.1.0",
   "devDependencies": {
-    "@webpack-cli/serve": "^1.5.2",
-    "jquery": "^3.6.0",
-    "popper.js": "^1.16.1",
-    "webpack-dev-server": "^3.11.2"
+    "jquery": "^3.6.0"
+  },
+  "scripts": {
+    "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=assets",
+    "build:css": "sass ./app/assets/stylesheets/application.bulma.scss:./app/assets/builds/application.css --no-source-map --load-path=node_modules"
   }
 }

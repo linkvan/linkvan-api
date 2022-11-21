@@ -11,10 +11,6 @@ gem "pg", "~> 1.4.4"
 gem "puma", "~> 5.6.2"
 # Use SCSS for stylesheets
 gem "sass-rails", "~> 6.0.0"
-# Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem "webpacker", "~> 5.4.2"
-# Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
-# gem "turbolinks", "~> 5.2.1"
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 #gem "jbuilder", "~> 2.7"
@@ -114,3 +110,6 @@ gem 'geocoder', '~> 1.6'
 
 # Adds JSON Web token control
 gem "jwt"
+
+gem "jsbundling-rails", "~> 1.0"
+gem "cssbundling-rails", "~> 1.1"
