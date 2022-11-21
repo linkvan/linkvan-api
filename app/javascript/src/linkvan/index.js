@@ -1,7 +1,5 @@
 import Notifications from "./base/notifications"
 import NavbarBurger from "./base/navbar_burger"
-import Pagy from "./base/pagy.js.erb"
-// import './base/pagy.js.erb'
 
 export default class Base {
   static start() {
@@ -9,6 +7,5 @@ export default class Base {
 
     Notifications.start();
     NavbarBurger.start();
-    Pagy.start();
   }
 }

@@ -12,3 +12,6 @@ application.register("hello", HelloController)
 
 import ModalController from "./modal_controller.js"
 application.register("modal", ModalController)
+
+import PagyController from "./pagy_controller.js"
+application.register("pagy", PagyController)
