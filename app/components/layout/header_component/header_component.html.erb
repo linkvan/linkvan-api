@@ -54,7 +54,7 @@
                         <span>Logged in as <strong><%= helpers.current_user.email %></strong></span>
                     <% end %>
 
-                    <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "button is-light" %>
+                    <%= link_to "Logout", destroy_user_session_path, class: "button is-light", data: { turbo_method: :delete } %>
                 </div>
             <% else %>
                 <div class="navbar-item">

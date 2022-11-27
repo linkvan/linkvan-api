@@ -45,27 +45,26 @@ class Facilities::ShowComponent < ViewComponent::Base
 
     def switch_button(service)
       options = {
-        class: "button is-white is-pulled-right"
+        class: "button is-white is-pulled-right",
+        data: {}
       }
 
       if provides_service?(service)
         target_url = admin_facility_service_path(facility_id: facility.id, service_id: service.id)
-        options[:method] = :delete
+        options[:data][:turbo_method] = :delete
 
         if notes_for(service).present?
-          options[:data] = {
-            confirm: [
-              "Are you sure you want to turn off '#{service.name}' service for this facility?",
-              "Notes associated with this service will also be deleted."
-            ].join("\n")
-          }
+          options[:data][:confirm] = [
+            "Are you sure you want to turn off '#{service.name}' service for this facility?",
+            "Notes associated with this service will also be deleted."
+          ].join("\n")
         end
       else
         target_url = admin_facility_services_path(facility_id: facility.id, service_id: service.id)
-        options[:method] = :post
+        options[:data][:turbo_method] = :post
       end
 
-      link_to(target_url, options) do
+      link_to(target_url, **options) do
         render Shared::StatusComponent.new(provides_service?(service))
       end
     end
@@ -116,15 +115,15 @@ class Facilities::ShowComponent < ViewComponent::Base
         target_url = admin_facility_welcome_path(id: facility_welcome_for(customer),
                                                  customer: customer_value,
                                                  facility_id: facility.id)
-        options[:method] = :delete
-        options[:data] = { confirm: "Are you sure you want to turn off welcome '#{customer_value}' for this facility?" }
+        options[:data] = { confirm: "Are you sure you want to turn off welcome '#{customer_value}' for this facility?",
+                           turbo_method: :delete }
       else
         target_url = admin_facility_welcomes_path(facility_id: facility.id,
                                                   customer: customer_value)
-        options[:method] = :post
+        options[:data] = { turbo_method: :post }
       end
 
-      link_to(target_url, options) do
+      link_to(target_url, **options) do
         render Shared::StatusComponent.new(welcomes?(customer_value))
       end
     end
@@ -151,7 +150,8 @@ class Facilities::ShowComponent < ViewComponent::Base
 
     def switch_button(schedule)
       options = {
-        class: "button is-white is-pulled-right"
+        class: "button is-white is-pulled-right",
+        data: {}
       }
 
       schedule_params = {
@@ -165,7 +165,7 @@ class Facilities::ShowComponent < ViewComponent::Base
         target_url = admin_facility_schedules_path(facility_id: facility.id,
                                                    schedule: schedule_params)
 
-        options[:method] = :post
+        options[:data][:turbo_method] = :post
       else
         if schedule.closed_all_day?
           # Schedule is closed_all_day. Update it to open_all_day
@@ -177,12 +177,10 @@ class Facilities::ShowComponent < ViewComponent::Base
           schedule_params[:open_all_day] = false
 
           if schedule.time_slots.exists?
-            options[:data] = {
-              confirm: [
-                "Are you sure you want to switch the #{schedule.week_day} schedule to closed all day?",
-                "Time Slots associated with this schedule will also be deleted."
-              ].join("\n")
-            }
+            options[:data][:confirm] = [
+              "Are you sure you want to switch the #{schedule.week_day} schedule to closed all day?",
+              "Time Slots associated with this schedule will also be deleted."
+            ].join("\n")
           end
 
         end
@@ -190,10 +188,10 @@ class Facilities::ShowComponent < ViewComponent::Base
         target_url = admin_facility_schedule_path(facility_id: facility.id,
                                                   id: schedule.id,
                                                   schedule: schedule_params)
-        options[:method] = :put
+        options[:data][:turbo_method] = :put
       end
 
-      link_to(target_url, options) do
+      link_to(target_url, **options) do
         render Shared::StatusComponent.new(schedule.availability != :closed)
       end
     end
@@ -252,7 +250,7 @@ class Facilities::ShowComponent < ViewComponent::Base
                                              schedule_id: schedule_id,
                                              id: time_slot.id)
 
-      link_to action, method: :delete, class: "button is-pulled-right is-white" do
+      link_to action, class: "button is-pulled-right is-white", data: { turbo_method: :delete } do
         icon_element("fa-trash")
       end
     end
