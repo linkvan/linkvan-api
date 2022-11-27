@@ -35,5 +35,9 @@
 yarn-debug.log*
 .yarn-integrity
 
+# Ignore generated assets
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+# Docker
+/vendor/bundle
