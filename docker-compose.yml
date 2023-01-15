@@ -14,6 +14,7 @@ x-app: &app
     context: .
     dockerfile: Dockerfile
     target: development
+  platform: linux/x86_64
   tmpfs:
     - /tmp
   environment:
