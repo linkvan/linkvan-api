@@ -10,7 +10,7 @@ end
 
 FileUtils.chdir APP_ROOT do
   puts "== Running Setup with LOAD_FAKE_DATA option =="
-  system! "LOAD_FAKE_DATA=true docker-compose run --rm web ./bin/setup"
+  system! "docker-compose run --rm web ./bin/setup load_fake_data"
 
   puts "== 🎉 Success, now you can run ./bin/docker/start"
 end
