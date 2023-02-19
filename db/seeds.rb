@@ -14,7 +14,7 @@ User.create_with(
 Service.create_with(key: 'shelter').find_or_create_by!(name: "Shelter")
 Service.create_with(key: 'food').find_or_create_by!(name: "Food")
 Service.create_with(key: 'medical').find_or_create_by!(name: "Medical")
-Service.create_with(key: 'hygience').find_or_create_by!(name: "Hygiene")
+Service.create_with(key: 'hygiene').find_or_create_by!(name: "Hygiene")
 Service.create_with(key: 'technology').find_or_create_by!(name: "Technology")
 Service.create_with(key: 'legal').find_or_create_by!(name: "Legal")
 Service.create_with(key: 'learning').find_or_create_by!(name: "Learning")
