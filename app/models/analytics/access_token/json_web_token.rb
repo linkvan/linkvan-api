@@ -20,7 +20,7 @@ module Analytics
         end
 
         def jwt_secret_key
-          Rails.application.credentials.jwt.secret_key
+          Rails.application.credentials&.jwt&.secret_key || ENV['SECRET_KEY']
         end
       end
     end
