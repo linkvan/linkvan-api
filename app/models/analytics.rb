@@ -20,9 +20,14 @@ module Analytics
                           [impressionable_or_impressionables]
                         end
 
-      impressionables.each do |impressionable|
-        event.impressions.create!(impressionable: impressionable)
+      impressions_params = impressionables.map do |impressionable|
+        { impressionable_type: impressionable.class,
+          impressionable_id: impressionable.id }
       end
+
+      event.impressions.upsert_all(impressions_params,
+                                   # unique_by: %i[impressionable_type impressionable_id],
+                                  record_timestamps: true)
     end
   end
 end

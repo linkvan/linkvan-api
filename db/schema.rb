@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_07_003153) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_19_183319) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -142,6 +142,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_07_003153) do
     t.bigint "impressionable_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["event_id", "impressionable_type", "impressionable_id"], name: "uk_index_impressions_on_event_and_impressionable", unique: true
     t.index ["event_id"], name: "index_impressions_on_event_id"
     t.index ["impressionable_type", "impressionable_id"], name: "index_impressions_on_impressionable"
   end
