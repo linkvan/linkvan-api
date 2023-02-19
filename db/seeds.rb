@@ -18,7 +18,7 @@ Service.create_with(key: 'hygience').find_or_create_by!(name: "Hygiene")
 Service.create_with(key: 'technology').find_or_create_by!(name: "Technology")
 Service.create_with(key: 'legal').find_or_create_by!(name: "Legal")
 Service.create_with(key: 'learning').find_or_create_by!(name: "Learning")
-Service.create_with(key: 'overdoze_preventiion').find_or_create_by!(name: "Overdose Prevention")
+Service.create_with(key: 'overdose_prevention').find_or_create_by!(name: "Overdose Prevention")
 Service.create_with(key: 'phone').find_or_create_by!(name: "Phone")
 
 # Zones
