@@ -22,10 +22,10 @@ jobs:
       uses: actions/checkout@v2
 
     # Customize the ruby version depending on your needs
-    - name: Setup Ruby
-      uses: actions/setup-ruby@v1
+    - name: Setup Ruby 3.0.3
+      uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '2.7'
+        ruby-version: 3.0.3
 
     - name: Setup Brakeman
       env:
