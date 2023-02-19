@@ -15,7 +15,7 @@ namespace :fake_data do
 
     selected_users = User.verified.where.not(id: User.super_admins).to_a + [nil]
 
-    500.times do
+    100.times do
       ActiveRecord::Base.transaction do
         params = {}
         params[:name] = [Faker::Company.name, Faker::Company.suffix].join(" ")

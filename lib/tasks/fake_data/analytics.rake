@@ -9,7 +9,7 @@ namespace :fake_data do
 
     facility_ids = Facility.all.ids
 
-    1000.times.each do |n|
+    20.times.each do |n|
       created_at = rand(90).days.ago
       uuid = SecureRandom.hex
       session_id = SecureRandom.hex
@@ -19,7 +19,7 @@ namespace :fake_data do
                             session_id: session_id)
       created_at = visit.created_at
 
-      rand(10).times.each do
+      rand(1..5).times.each do
         event_date = rand(120).minutes.after(created_at)
         event = visit.events.create!(controller_name: 'api/facilities',
                                      action_name: 'index',

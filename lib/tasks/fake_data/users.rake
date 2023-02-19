@@ -8,7 +8,7 @@ namespace :fake_data do
     Faker::Config.locale = "en-CA"
 
     verified_sample = ([true] * 5) + [false]
-    10.times.each do
+    5.times.each do
       verified = verified_sample.sample
 
       User.create!(
