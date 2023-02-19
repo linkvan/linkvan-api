@@ -64,6 +64,9 @@ class Api::FacilitiesController < Api::BaseController
   end
 
   def register_impressions
+    # There is saving the analytics data synchronously. If performance proves to be an issue,
+    #   we might need to move it to an ActiveJob.
+    # TODO: Move analytics registration to a background job.
     Analytics.register_analytics_impressions_for(event, @facility || @facilities)
   end
 
