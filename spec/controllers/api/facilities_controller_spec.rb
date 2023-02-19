@@ -11,10 +11,10 @@ RSpec.describe Api::FacilitiesController do # , type: :request do
   end
 
   describe "analytics data" do
-    context "without facilities to return" do
+    context "without facilities" do
       let(:load_data) { nonverified_facility }
 
-      it "Creates Analytics data for the request" do
+      it "adds analytics data for the request without any impressions" do
         expect do
           get :index, params: {}
         end.to change(Analytics::Visit, :count).by(1)
@@ -23,18 +23,41 @@ RSpec.describe Api::FacilitiesController do # , type: :request do
       end
     end
 
-    context "with facilities to return" do
-      let(:load_data) { [verified_facility, nonverified_facility] }
+    context "with facilities" do
+      let(:load_data) { [verified_facility, nonverified_facility, another_verified_facility] }
+      let(:another_verified_facility) { create(:open_all_day_facility, :with_services, verified: true) }
 
-      it "Creates Analytics data for the request" do
+      it "adds analytics data for the request with both verified facilities" do
+        expect do
+          get :index, params: {}
+        end.to change(Analytics::Visit, :count).by(1)
+          .and change(Analytics::Event, :count).by(1)
+          .and change(Analytics::Impression, :count).by(2)
+
+        saved_event = Analytics::Event.last
+
+        expect(saved_event.facilities).to include(verified_facility, another_verified_facility)
+        expect(saved_event.facilities).not_to include(nonverified_facility)
+      end
+    end
+
+    context "with duplicated facilities" do
+      let(:load_data) { [verified_facility, verified_facility] }
+
+      it "adds analytics data for the request with the duplicated facility onlhy once" do
         expect do
           get :index, params: {}
         end.to change(Analytics::Visit, :count).by(1)
           .and change(Analytics::Event, :count).by(1)
           .and change(Analytics::Impression, :count).by(1)
+
+        saved_event = Analytics::Event.last
+
+        expect(saved_event.facilities).to include(verified_facility).once
       end
     end
   end
+
   describe "GET #index" do
     subject { response }
 
