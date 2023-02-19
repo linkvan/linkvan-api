@@ -55,11 +55,9 @@ class Api::FacilitiesController < Api::BaseController
     # Includes related objects to avoid N+1 queries
     @facilities = @facilities.includes(
       :zone,
-      :schedules,
-      :time_slots,
-      :services,
       :facility_welcomes,
-      :facility_services
+      { facility_services: [:service] },
+      { schedules: [:time_slots] }
     )
   end
 
