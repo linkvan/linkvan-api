@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+require "fileutils"
+
+# path to your application root.
+APP_ROOT = File.expand_path("../../", __dir__)
+
+def system!(*args)
+  system(*args) || abort("\n== Command #{args} failed ==")
+end
+
+def docked!(*args)
+  system!("docker-compose run -rm web", *args)
+end
+
+FileUtils.chdir APP_ROOT do
+  puts "== Running: bin/docker/setup reset load_fake_data"
+  system!("bin/docker/setup", "reset", "load_fake_data")
+
+  puts "== Running: bin/docker/start"
+  system!("bin/docker/start")
+end

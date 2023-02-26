@@ -5,7 +5,12 @@ require "fileutils"
 APP_ROOT = File.expand_path("../../", __dir__)
 
 def system!(*args)
-  system(*args) || abort("\n== Command #{args} failed ==")
+  system(*args) || abort("\n== Command '#{args}' failed ==")
+end
+
+def docked!(*args)
+  command_line = ["docker-compose run --rm web"] + args
+  system!(command_line.join(" "))
 end
 
 FileUtils.chdir APP_ROOT do
@@ -19,8 +24,8 @@ FileUtils.chdir APP_ROOT do
   puts "== Building Container =="
   system! "docker-compose build"
 
-  puts "== Installing Libraries =="
-  system! "docker-compose run --rm web ./bin/setup #{ARGV.join(' ')}"
+  puts "== Running: bin/setup #{ARGV.join(' ')} =="
+  docked!("./bin/setup", ARGV)
 
   puts "== 🎉 Success, now you can run ./bin/docker/start"
 end
