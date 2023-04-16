@@ -9,6 +9,14 @@ linkvan-api is developed in [Ruby on Rails 6.1](https://rubyonrails.org/) and is
 
 The linkvan app is maintained by a community of volunteers based in Vancouver, Canada and the latest production version of the web app can be found at: https://linkvan.ca/
 
+## Running the backend in Docker to support frontend development
+
+We have a script that will build docker containers to have the API up and running. The `dev_reset` script will recreate the database, add seed data, and populate the database with fake data. (for details see: https://github.com/linkvan/linkvan-api/issues/116)
+
+After cloning the repository, or updating your branch, just follow the steps below to have an up and running API:
+1. cd `< directory where you cloned the project repository to >`
+2. bin/docker/dev_reset
+3. load http://localhost:3000/admin/dashboard on your web browser.
 
 ## Setting up an Environment
 The [Ruby on Rails Guides](https://guides.rubyonrails.org/) will provide you instructions to help you install, configure and use Ruby on Rails.
@@ -17,7 +25,7 @@ Once you have installed and configured Ruby on Rails please fork the [linkvan-ap
 
 To execute the app on your computer proceed as follows:
 
-1. cd < directory where you cloned the project repository to >
+1. cd `< directory where you cloned the project repository to >`
 2. Update your database configuration on `config/database.yml`
 3. bundle install
 4. rails db:create (to create a database)
