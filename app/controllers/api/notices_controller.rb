@@ -1,19 +1,12 @@
 # frozen_string_literal: true
 
 class Api::NoticesController < Api::BaseController
-  # skip_before_action :authenticate_user!
   before_action :load_notices
 
   # GET /notices
   def index
     result = base_result
-
-    result[:notices] = @notices.to_a
-    # result[:notices] = []
-    # @notices.each do |notices|
-    #   serializer = FacilitySerializer.call(facility, complete: false)
-    #   result[:notices] << notices.as_json
-    # end
+    result[:notices] = @notices.published.to_a
 
     render json: result.as_json, status: :ok
   end
