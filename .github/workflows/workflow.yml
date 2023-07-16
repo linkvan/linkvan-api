@@ -31,7 +31,7 @@ jobs:
       - name: Setup Ruby 3.0.3
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.0.3
+          ruby-version: 3.1.4
 
       - name: Setup Node 15
         uses: actions/setup-node@v1
