@@ -14,9 +14,10 @@
         <div class="level-right">
             <div class="level-item mr-3">
                 <span class="icon-text">
-                    <%= render status_component %>
-                    <span><%= render status_component.with_variant(:title_only) %></span>
-
+                    <%= render Facilities::StatusComponent.new(facility.status) %>
+                    <span>
+                        <%= render Facilities::StatusComponent.new(facility.status, variant: :title) %>
+                    </span>
                 </span>
             </div>
         </div>

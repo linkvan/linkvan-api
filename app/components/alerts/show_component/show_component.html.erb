@@ -2,8 +2,8 @@
     <div class='columns'>
         <div class='column'>
             <%= render Shared::CardComponent.new(title: 'Alert Details') do |card| %>
-                <% card.button(title: 'Edit', path: edit_admin_alert_path(alert)) %>
-                <% card.button(title: 'Delete', path: admin_alert_path(alert.id), method: :delete, icon_class: 'fa-trash-alt') %>
+                <% card.with_button(title: 'Edit', path: edit_admin_alert_path(alert)) %>
+                <% card.with_button(title: 'Delete', path: admin_alert_path(alert.id), method: :delete, icon_class: 'fa-trash-alt') %>
 
                 <table class='table'>
                     <tr>

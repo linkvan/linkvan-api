@@ -1,5 +1,5 @@
 <%= render Shared::CardComponent.new(title: "Details") do |card| %>
-    <% card.action_content do %>
+    <% card.with_action_content do %>
         <div class="field mr-4">
             <%= form.label :verified, class: "label" do %>
                 <div class="control">

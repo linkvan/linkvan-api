@@ -1,15 +1,18 @@
 # frozen_string_literal: true
 
 class Facilities::StatusComponent < ViewComponent::Base
-  attr_reader :status
+  attr_reader :status, :variant
 
-  def initialize(status)
+  def initialize(status, variant: :full)
     super()
 
+    @variant = variant
     @status = status.to_s.to_sym
   end
 
   def call
+    return call_title_only if variant == :title
+
     case status
     when :live
       icon_span_class = "icon has-text-success"

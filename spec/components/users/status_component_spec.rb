@@ -15,7 +15,7 @@ RSpec.describe Users::StatusComponent, type: :component do
       render_inline(component)
     end
 
-    it { expect(rendered_component).to have_selector ".icon .fa-user-check" }
+    it { expect(rendered_content).to have_selector ".icon .fa-user-check" }
   end
 
   context "when user is not verified" do
@@ -25,7 +25,7 @@ RSpec.describe Users::StatusComponent, type: :component do
       render_inline(component)
     end
 
-    it { expect(rendered_component).to have_selector ".icon .fa-user-times" }
+    it { expect(rendered_content).to have_selector ".icon .fa-user-times" }
   end
 
   context "with show_title" do
@@ -37,6 +37,6 @@ RSpec.describe Users::StatusComponent, type: :component do
       render_inline(component)
     end
 
-    it { expect(rendered_component).to have_text "Verified" }
+    it { expect(rendered_content).to have_text "Verified" }
   end
 end

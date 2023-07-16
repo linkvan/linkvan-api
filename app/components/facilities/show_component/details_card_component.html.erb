@@ -1,11 +1,11 @@
 <!-- Details -->
 <%= render Shared::CardComponent.new(title: 'Details', options: { card: { html_options: { data: { controller: 'modal' }}}}) do |card| %>
-    <% card.button(title: 'Edit', path: edit_admin_facility_path(facility)) %>
+    <% card.with_button(title: 'Edit', path: edit_admin_facility_path(facility)) %>
 
     <% if facility.discarded? %>
-        <% card.button(title: 'Undiscard', path: admin_facility_path(facility, undiscard: true), method: :put, icon_class: 'fa-trash-restore') %>
+        <% card.with_button(title: 'Undiscard', path: admin_facility_path(facility, undiscard: true), method: :put, icon_class: 'fa-trash-restore') %>
     <% else %>
-        <% card.button(title: 'Discard', path: admin_facility_path(facility), method: :delete, icon_class: 'fa-trash-alt', data: { action: "click->modal#show" }) %>
+        <% card.with_button(title: 'Discard', path: admin_facility_path(facility), method: :delete, icon_class: 'fa-trash-alt', data: { action: "click->modal#show" }) %>
 
         <!-- Modal for the Discard action -->
         <%= form_with model: facility, url: admin_facility_path(facility), method: :delete do |form| %>
@@ -43,8 +43,8 @@
                 <tr>
                     <th>Status:</th>
                     <td>
-                        <%= render status_component %>
-                        <%= render status_component.with_variant(:title_only) %>
+                        <%= render Facilities::StatusComponent.new(facility.status) %>
+                        <%= render Facilities::StatusComponent.new(facility.status, variant: :title) %>
                     </td>
                 </tr>
 
