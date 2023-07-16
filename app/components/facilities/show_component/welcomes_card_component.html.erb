@@ -5,7 +5,7 @@
                 <div class="column">
                     <div class="py-2">
                     <span class='icon-text'>
-                        <%= render Facilities::WelcomesIconComponent.new(customer.value).with_variant(:icon) %>
+                        <%= render Facilities::WelcomesIconComponent.new(customer.value, variant: :icon) %>
                         <span><%= customer.name %></span>
                     </span>
                     </div>

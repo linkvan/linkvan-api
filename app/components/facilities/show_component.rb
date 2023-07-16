@@ -73,7 +73,7 @@ class Facilities::ShowComponent < ViewComponent::Base
       return if facility_service_for(service).blank?
 
       button_data = { modal_id: note_modal_id(service) }
-      tag.button class: "button is-white show_notes_button is-pulled-right", data: button_data do
+      tag.with_button class: "button is-white show_notes_button is-pulled-right", data: button_data do
         tag.span class: "icon" do
           tag.i class: "fas fa-edit"
         end

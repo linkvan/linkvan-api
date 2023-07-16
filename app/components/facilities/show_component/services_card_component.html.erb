@@ -23,11 +23,11 @@
                     <%= form.text_area :note, rows: 5, class: 'textarea', id: "note_#{service.id}" %>
                 </div>
 
-                <% c.action_button do %>
+                <% c.with_action_button do %>
                     <button type="button" class="button" data-bulma-modal="close">Close</button>
                 <% end %>
 
-                <% c.action_button do %>
+                <% c.with_action_button do %>
                     <button class="button is-success">Save changes</button>
                 <% end %>
             <% end %>
