@@ -113,3 +113,7 @@ gem "jwt"
 
 gem "jsbundling-rails", "~> 1.0"
 gem "cssbundling-rails", "~> 1.1"
+
+# Aborts requests that are taking too long.
+#   Set the timeout by setting the RACK_TIMEOUT_SERVICE_TIMEOUT env var
+gem "rack-timeout"
