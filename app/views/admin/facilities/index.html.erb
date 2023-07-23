@@ -1,6 +1,14 @@
 <nav class="container">
-    <div class="title">
-        Facilities (<%= @pagy.count %>)
+    <div class="level">
+        <div class="level-left">
+            <h1 class="title">
+                Facilities (<%= @pagy.count %>)
+            </h1>
+        </div>
+      
+        <div class="level-right">
+            <%= link_to "New Facility", new_admin_facility_path, class: "button is-light level-item" %>
+        </div>
     </div>
 
         <%= form_with url: admin_facilities_path, method: :get, data: { controller: "auto-submit" } do |form| %>
