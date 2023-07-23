@@ -29,7 +29,7 @@ class Facilities::ShowComponent < ViewComponent::Base
     private
 
     def link_to_website
-      link_to facility.website_url, facility.website_url, target: "_blank", rel: "noopener"
+      link_to facility.website_url, facility.website_url, target: "_blank", rel: "noopener" if facility.website_url.present?
     end
 
     def status_component
@@ -46,12 +46,14 @@ class Facilities::ShowComponent < ViewComponent::Base
     def switch_button(service)
       options = {
         class: "button is-white is-pulled-right",
+        title: "",
         data: {}
       }
 
       if provides_service?(service)
         target_url = admin_facility_service_path(facility_id: facility.id, service_id: service.id)
         options[:data][:turbo_method] = :delete
+        options[:title] = "Switch '#{service.name}' service OFF"
 
         if notes_for(service).present?
           options[:data][:confirm] = [
@@ -62,6 +64,7 @@ class Facilities::ShowComponent < ViewComponent::Base
       else
         target_url = admin_facility_services_path(facility_id: facility.id, service_id: service.id)
         options[:data][:turbo_method] = :post
+        options[:title] = "Switch '#{service.name}' service ON"
       end
 
       link_to(target_url, **options) do
@@ -73,7 +76,7 @@ class Facilities::ShowComponent < ViewComponent::Base
       return if facility_service_for(service).blank?
 
       button_data = { modal_id: note_modal_id(service) }
-      tag.with_button class: "button is-white show_notes_button is-pulled-right", data: button_data do
+      tag.with_button class: "button is-white show_notes_button is-pulled-right", title: 'Show/Edit Notes', data: button_data do
         tag.span class: "icon" do
           tag.i class: "fas fa-edit"
         end
@@ -106,7 +109,8 @@ class Facilities::ShowComponent < ViewComponent::Base
 
     def switch_button(customer)
       options = {
-        class: "button is-white is-pulled-right"
+        class: "button is-white is-pulled-right",
+        title: ""
       }
 
       customer_value = customer_value_for(customer)
@@ -117,10 +121,12 @@ class Facilities::ShowComponent < ViewComponent::Base
                                                  facility_id: facility.id)
         options[:data] = { confirm: "Are you sure you want to turn off welcome '#{customer_value}' for this facility?",
                            turbo_method: :delete }
+        options[:title] = "Switch OFF"
       else
         target_url = admin_facility_welcomes_path(facility_id: facility.id,
                                                   customer: customer_value)
         options[:data] = { turbo_method: :post }
+        options[:title] = "Switch ON"
       end
 
       link_to(target_url, **options) do
@@ -151,6 +157,7 @@ class Facilities::ShowComponent < ViewComponent::Base
     def switch_button(schedule)
       options = {
         class: "button is-white is-pulled-right",
+        title: "",
         data: {}
       }
 
@@ -166,11 +173,13 @@ class Facilities::ShowComponent < ViewComponent::Base
                                                    schedule: schedule_params)
 
         options[:data][:turbo_method] = :post
+        options[:title] = "Switch to Open"
       else
         if schedule.closed_all_day?
           # Schedule is closed_all_day. Update it to open_all_day
           schedule_params[:closed_all_day] = false
           schedule_params[:open_all_day] = true
+        options[:title] = "Switch to Open"
         else
           # Schedule is open_all_day or set_times. Update it to closed_all_day
           schedule_params[:closed_all_day] = true
@@ -183,6 +192,7 @@ class Facilities::ShowComponent < ViewComponent::Base
             ].join("\n")
           end
 
+          options[:title] = "Switch to Closed"
         end
 
         target_url = admin_facility_schedule_path(facility_id: facility.id,
@@ -226,7 +236,7 @@ class Facilities::ShowComponent < ViewComponent::Base
     def link_to_add_time_slot(schedule)
       action = new_admin_facility_time_slot_path(facility_id: facility.id, schedule_id: schedule.id)
 
-      link_to action, class: "button is-pulled-right is-white" do
+      link_to action, class: "button is-pulled-right is-white", title: "Add open time slot" do
         icon_element("fa-plus-square")
       end
     end

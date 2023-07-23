@@ -12,6 +12,24 @@ class Admin::FacilitiesController < Admin::BaseController
 
   def edit; end
 
+  def new
+    @facility = Facility.new(
+      zone: current_user.zones.first
+    )
+  end
+
+  def create
+    @facility = Facility.new(new_facility_params)
+
+    if @facility.save
+      redirect_to [:admin, @facility], notice: "Successfully created facility (id: #{@facility.id})"
+    else
+      flash.now[:alert] = "Failed to create facility. Errors: #{@facility.errors.full_messages.join('; ')}"
+
+      render action: :new, status: :unprocessable_entity
+    end
+  end
+
   def update
     if params[:undiscard].present?
       if @facility.undiscard
@@ -88,6 +106,10 @@ class Admin::FacilitiesController < Admin::BaseController
 
   def load_welcomes_dropdown
     @welcomes_dropdown = [["No Welcomes", :none]] + FacilityWelcome.customers.map { |k, v| [k.titleize, v] }
+  end
+
+  def new_facility_params
+    facility_params.merge(user: current_user)
   end
 
   def facility_params

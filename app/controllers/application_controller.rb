@@ -17,7 +17,6 @@ class ApplicationController < ActionController::Base
 
   # Devise hook, expects a path to redirect to
   def after_sign_in_path_for(_resource)
-    # current_user_path
     admin_dashboard_index_path
   end
 
@@ -26,53 +25,13 @@ class ApplicationController < ActionController::Base
     new_user_session_path
   end
 
-  # def allow_iframe_requests
-  #   response.headers.delete('X-Frame-Options')
-  # end
-
-  # def require_signin
-    # retun if current_user
-# 
-    # # session[:intended_url] = request.url
-    # # redirect_to new_session_url, alert: "Please sign in first"
-    # head :unauthorized
-  # end
-
-  # def current_user
-    # # if !session[:user_id].blank?
-    # @current_user ||= User.find(session[:user_id]) if session[:user_id]
-    # # end
-  # end
-
   def require_admin
     return if current_user_admin?
 
     head :unauthorized
-    # redirect_to root_url, alert: "Unauthorized access!"
   end
 
   def current_user_admin?
     user_signed_in? && current_user&.admin?
   end
-
-  # def require_correct_user_or_admin
-    # redirect_to root_url unless current_user == User.find(params[:id]) || current_user_admin?
-  # end
-
-  # def correct_user_or_admin?
-    # return true if current_user_admin?
-    # return false unless user_signed_in?
-
-    # # if current_user_admin?
-      # # true
-    # # elsif current_user
-      # # current_user.facilities.each do |f|
-        # # return true if f.id == Facility.find(params[:id]).id
-      # # end
-      # # false
-    # # end
-    # current_user.facilities.exists?(id: params[:id])
-  # end
-
-  # helper_method :current_user, :current_user_admin?, :require_correct_user_or_admin, :correct_user_or_admin?
 end
