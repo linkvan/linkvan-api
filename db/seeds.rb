@@ -20,6 +20,7 @@ Service.create_with(key: 'legal').find_or_create_by!(name: "Legal")
 Service.create_with(key: 'learning').find_or_create_by!(name: "Learning")
 Service.create_with(key: 'overdose_prevention').find_or_create_by!(name: "Overdose Prevention")
 Service.create_with(key: 'phone').find_or_create_by!(name: "Phone")
+Service.create_with(key: 'water_fountain').find_or_create_by!(name: "Water Fountain")
 
 # Zones
 Zone.create_with(description: "Vancouver city zone")
