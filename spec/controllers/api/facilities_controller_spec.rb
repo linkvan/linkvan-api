@@ -77,24 +77,6 @@ RSpec.describe Api::FacilitiesController do # , type: :request do
     context "when no parameters is provided" do
       let(:load_data) { verified_facility }
 
-      it { expect(returned_facilities).to be_present }
-    end
-
-    context "with verified facilities" do
-      let(:load_data) { verified_facility }
-
-      it { expect(returned_facilities).to be_present }
-    end
-
-    context "with non-verified facilities" do
-      let(:load_data) { nonverified_facility }
-
-      it { expect(returned_facilities).to be_blank }
-    end
-
-    context "with discarded facilities" do
-      let(:load_data) { verified_facility.discard! }
-
       it { expect(returned_facilities).to be_blank }
     end
 
@@ -161,6 +143,8 @@ RSpec.describe Api::FacilitiesController do # , type: :request do
     end
 
     describe "JSON body response" do
+      let(:request_params) { { service: verified_facility.services.first.key } }
+
       let(:load_data) { verified_facility }
       let(:facility_content) { returned_facilities.first }
       let(:services_content) { facility_content[:services] }
