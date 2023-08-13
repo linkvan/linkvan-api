@@ -10,7 +10,8 @@ RSpec.describe Api::FacilitiesController do # , type: :request do
     load_data
   end
 
-  describe "analytics data" do
+  # TODO: Enable tests when analytics feature is re-enabled.
+  xdescribe "analytics data" do
     context "without facilities" do
       let(:load_data) { nonverified_facility }
 
