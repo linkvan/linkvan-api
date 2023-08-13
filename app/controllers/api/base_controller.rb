@@ -29,19 +29,23 @@ class Api::BaseController < ApplicationController
   end
 
   def event
-    @event ||= Analytics.register_event(analytics,
-                                        controller_name: params[:controller],
-                                        action_name: params[:action],
-                                        request_url: request.url,
-                                        request_params: request.params,
-                                        request_ip: request.ip,
-                                        request_user_agent: request.user_agent,
-                                        lat: nil,
-                                        long: nil)
+    # NOTE: Removed events registering to avoid next tier of database.
+    # @event ||= Analytics.register_event(
+    #   analytics,
+    #   controller_name: params[:controller],
+    #   action_name: params[:action],
+    #   request_url: request.url,
+    #   request_params: request.params,
+    #   request_ip: request.ip,
+    #   request_user_agent: request.user_agent,
+    #   lat: nil,
+    #   long: nil
+    # )
   end
 
   def analytics
-    @analytics ||= Analytics.find_or_create_visit_from(access_token)
+    # NOTE: Removed analytics registering to avoid next tier of database.
+    # @analytics ||= Analytics.find_or_create_visit_from(access_token)
   end
 
   def access_token
