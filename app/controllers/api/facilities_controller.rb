@@ -35,6 +35,14 @@ class Api::FacilitiesController < Api::BaseController
   private
 
   def load_facilities
+    # Returns no facilities when parameters are missing to avoid overwhelming the server.
+    # TODO: Properly implement pagination which will require working out distance calculations and sorting.
+    if search_params.values.all?(:blank?)
+      @facilities = Facility.none
+
+      return
+    end
+
     @facilities = Facility.undiscarded.is_verified.order(:updated_at)
     @facilities = @facilities.with_service(search_params[:service]) if search_params[:service].present?
 
