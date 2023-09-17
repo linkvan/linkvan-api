@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_19_183319) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_17_144505) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -92,6 +92,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_19_183319) do
     t.string "discard_reason"
     t.index ["user_id"], name: "index_facilities_on_user_id"
     t.index ["zone_id"], name: "index_facilities_on_zone_id"
+  end
+
+  create_table "facilities_locations", force: :cascade do |t|
+    t.bigint "facility_id", null: false
+    t.string "address", null: false
+    t.string "city", null: false
+    t.decimal "latitude"
+    t.decimal "longitude"
+    t.text "data_raw"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["facility_id"], name: "index_facilities_locations_on_facility_id"
   end
 
   create_table "facility_schedules", force: :cascade do |t|
