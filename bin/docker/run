@@ -2,4 +2,4 @@
 # Little helper to run a command from the docker container
 set -e
 
-exec docker-compose run --rm web "$@"
+exec docker compose run --rm web "$@"

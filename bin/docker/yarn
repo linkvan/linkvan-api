@@ -1,4 +1,4 @@
 #!/bin/bash
 set -e
 
-exec docker-compose --rm web yarn "$@"
+exec docker compose --rm web yarn "$@"

@@ -53,6 +53,9 @@ test:
 6. rails db:migrate
 6. rails server
 8. load http://localhost:3000/admin/dashboard on your web browser.
+9. login with:
+  name: "admin@example.com",
+  password: "password",
 
 
 ## Contributing to linkvan-web  
