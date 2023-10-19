@@ -26,12 +26,33 @@ Once you have installed and configured Ruby on Rails please fork the [linkvan-ap
 To execute the app on your computer proceed as follows:
 
 1. cd `< directory where you cloned the project repository to >`
-2. Update your database configuration on `config/database.yml`
-3. bundle install
-4. rails db:create (to create a database)
-5. rails db:migrate
+2. Start a postgres database locally, for example with docker:
+```
+docker run --name linkvan_postgres -e POSTGRES_PASSWORD=mysecretpassword -e -d postgres
+```
+3. Update your database configuration on `config/database.yml`. Based on the previous command, the updated development and test section could for example be:
+```
+development:
+  <<: *default
+  database: linkvan_api_development
+  host: localhost
+  port: 5432
+  username: postgres
+  password: mysecretpassword
+
+test:
+  <<: *default
+  database: linkvan_api_test
+  host: localhost
+  port: 5432
+  username: postgres
+  password: mysecretpassword
+```
+4. Run `bundle install`. You might need to use [rvm](https://rvm.io/).
+5. rails db:create (to create a database)
+6. rails db:migrate
 6. rails server
-7. load http://localhost:3000/admin/dashboard on your web browser.
+8. load http://localhost:3000/admin/dashboard on your web browser.
 
 
 ## Contributing to linkvan-web  
