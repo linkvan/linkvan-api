@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::BaseController < ApplicationController
-  layout "application_admin"
+  layout "application"
   # skip_before_action :authenticate_user!
 
   # helpers from devise. Example:

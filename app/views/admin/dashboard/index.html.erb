@@ -1,17 +1,31 @@
-<!-- Main container -->
-<nav class="level">
-  <!-- Left side -->
-  <div class="level-left">
-    <div class="level-item">
-    </div>
-    <div class="level-item">
+<div class="columns">
+  <div class="column">
+    <div class="box">
+      <div data-controller="chart" data-action="load->chart#init resize@window->chart#rsz" id="map"></div>
     </div>
   </div>
-
-  <!-- Right side -->
-  <div class="level-right">
-    <p class="level-item"><a class="button">Facilities CSV</a></p>
-    <p class="level-item"><a class="button">Users CSV</a></p>
+  <div class="column">
+    <div class="box">
+      <p>Tile 2</p>
+    </div>
   </div>
-</nav>
+</div>
+<div class="columns">
+  <div class="column">
+    <div class="box">
+      <p>Tile 3</p>
+    </div>
+  </div>
+  <div class="column">
+    <div class="box">
+      <p>Tile 4</p>
+    </div>
+  </div>
+</div>
 
+<style>
+  #map{
+    min-height: 500px;
+    width: 100%;
+  }
+  </style>
