@@ -1,12 +1,14 @@
-import { Controller } from "@hotwired/stimulus";
+import { Controller } from "@hotwired/stimulus"
 import * as echarts from 'echarts';
 
+
+// To connect use: data-controller="chart"
 export default class extends Controller {
   connect() {
-    console.log("Chart connected!!!");
-  
-    const container = this.element;
-    const chart = echarts.init(container);
+    console.log("Chart connect")
+   
+
+    this.element.Chart = echarts.init(this.element);
   
     var option;
     
@@ -28,13 +30,14 @@ export default class extends Controller {
       ]
     };
     
-    // Set the chart option
-    option && chart.setOption(option);
-  
-   
-  };
+    option && this.element.Chart.setOption(option);
+  }
+
   rsz(event){
       console.log("Resizing chart...");
+      this.element.Chart.resize();
      
   };
 }
+
+
