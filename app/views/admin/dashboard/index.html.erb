@@ -1,12 +1,12 @@
 <div class="columns">
   <div class="column">
     <div class="box">
-      <div data-controller="chart" data-action="resize@window->chart#rsz" id="map"></div>
+      <div data-controller="chart" data-action="resize@window->chart#rsz" class="inner-box"></div>
     </div>
   </div>
   <div class="column">
-    <div class="box">
-      <p>Tile 2</p>
+    <div class="box relative" id="map-container">
+      <div data-controller="map" data-action="resize@window->map#rsz" class="inner-box" id="map"></div>
     </div>
   </div>
 </div>
@@ -24,8 +24,15 @@
 </div>
 
 <style>
-  #map{
+  .inner-box {
     min-height: 500px;
     width: 100%;
   }
+
+#map {
+  width: 100%;
+  height: 500px;
+  margin: 0;
+  position: block;
+}
   </style>

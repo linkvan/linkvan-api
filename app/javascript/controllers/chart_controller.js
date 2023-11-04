@@ -5,7 +5,7 @@ import * as echarts from 'echarts';
 // To connect use: data-controller="chart"
 export default class extends Controller {
   connect() {
-    console.log("Chart connect")
+    console.log("Chart connect...")
    
 
     this.element.Chart = echarts.init(this.element);
