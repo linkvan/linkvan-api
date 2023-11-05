@@ -11,7 +11,7 @@ module Locations::Providers
     end
 
     def call
-      Locations::GeoCoderLocation.new(
+      GeoCoderLocation.new(
         address:,
         city:,
         state:,

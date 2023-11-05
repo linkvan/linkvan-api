@@ -1,15 +1,15 @@
 module Locations
-  GeoCoderLocation = Struct.new(:address,
-                                :city,
-                                :state,
-                                :country,
-                                :postal_code,
-                                :latitude,
-                                :longitude,
-                                :data,
-                                keyword_init: true)
-
   module Parser
+    GeoCoderLocation = Struct.new(:address,
+                                  :city,
+                                  :state,
+                                  :country,
+                                  :postal_code,
+                                  :latitude,
+                                  :longitude,
+                                  :data,
+                                  keyword_init: true)
+
     class << self
       def parse(geocoded_result, provider: nil)
         provider_class(provider)

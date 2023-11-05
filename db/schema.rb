@@ -39,10 +39,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_17_144505) do
     t.string "filename", null: false
     t.string "content_type"
     t.text "metadata"
+    t.string "service_name", null: false
     t.bigint "byte_size", null: false
     t.string "checksum"
     t.datetime "created_at", precision: nil, null: false
-    t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
@@ -94,16 +94,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_17_144505) do
     t.index ["zone_id"], name: "index_facilities_on_zone_id"
   end
 
-  create_table "facilities_locations", force: :cascade do |t|
+  create_table "facility_locations", force: :cascade do |t|
     t.bigint "facility_id", null: false
     t.string "address", null: false
     t.string "city", null: false
     t.decimal "latitude"
     t.decimal "longitude"
+    t.datetime "active_at"
     t.text "data_raw"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["facility_id"], name: "index_facilities_locations_on_facility_id"
+    t.index ["facility_id"], name: "index_facility_locations_on_facility_id"
   end
 
   create_table "facility_schedules", force: :cascade do |t|
@@ -242,8 +243,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_17_144505) do
     t.boolean "verified", default: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at", precision: nil
-    t.datetime "remember_created_at", precision: nil
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
     t.string "organization"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -276,6 +277,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_17_144505) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "facilities", "zones"
+  add_foreign_key "facility_locations", "facilities"
   add_foreign_key "facility_services", "facilities"
   add_foreign_key "facility_services", "services"
   add_foreign_key "facility_welcomes", "facilities"

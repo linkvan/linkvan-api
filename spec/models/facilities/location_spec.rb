@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Facilities::Location, type: :model do
+RSpec.describe FacilityLocation, type: :model do
   # subject(:location) { facility.location }
 # 
   # let(:facility) { build(:facility) }

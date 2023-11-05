@@ -34,6 +34,7 @@ Rails.application.routes.draw do
       resources :time_slots, only: %i[new create destroy], controller: :facility_time_slots
       resources :services, only: %i[create update destroy], controller: :facility_services
       resources :welcomes, only: %i[create destroy], controller: :facility_welcomes
+      resources :locations, controller: :facility_locations
     end
 
     resources :alerts

@@ -10,6 +10,8 @@ class Facility < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :zone, optional: true
 
+  has_one :facility_location, dependent: :destroy
+
   has_many :facility_welcomes, dependent: :destroy
   has_many :facility_services, dependent: :destroy
   has_many :services, through: :facility_services
@@ -82,6 +84,10 @@ class Facility < ApplicationRecord
     else
       "http://#{website}"
     end
+  end
+
+  def coordinates
+    [lat, long]
   end
 
   def coord

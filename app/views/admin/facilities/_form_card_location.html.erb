@@ -1,26 +1,36 @@
 <%= render Shared::CardComponent.new(title: 'Location') do |card| %>
-    <!-- Address -->
-    <div class="field">
-        <%= form.label :address, "Address:", class: "label" %>
-        <div class="control">
-            <%= form.text_field :address, class: "input" %>
+    <div data-controller="navigate">
+        <!-- Address -->
+        <div class="field">
+            <%= form.label :address, "Address:", class: "label" %>
+            <div class="control">
+                <%= form.text_field :address, class: "input" %>
+            </div>
         </div>
+
+        <!-- Location -->
+        <div class="field is-grouped">
+            <div class="control is-expanded">
+                <%= form.label :lat, "Lat:", class: "label" %>
+                <p class="control">
+                <%= form.text_field :lat, placeholder: "Lat", class: "input" %>
+                </P>
+            </div>
+
+            <div class="control is-expanded">
+                <%= form.label :long, "Long:", class: "label" %>
+                <div class="control">
+                    <%= form.text_field :long, placeholder: "Long", class: "input" %>
+                </div>
+            </div>
+        </div>
+
+        <%= turbo_frame_tag "locations", data: { "navigate-target": "container" } %>
     </div>
 
-    <!-- Location -->
-    <div class="field is-grouped">
-        <div class="control is-expanded">
-            <%= form.label :lat, "Lat:", class: "label" %>
-            <p class="control">
-            <%= form.text_field :lat, placeholder: "Lat", class: "input" %>
-            </P>
-        </div>
-
-        <div class="control is-expanded">
-            <%= form.label :long, "Long:", class: "label" %>
-            <div class="control">
-                <%= form.text_field :long, placeholder: "Long", class: "input" %>
-            </div>
+    <div class='container'>
+        <div style="width: 100%; margin-top: 50px;">
+            <%= render Locations::EmbedMapComponent.new(facility.lat, facility.long) %>
         </div>
     </div>
 <% end %>
