@@ -7,8 +7,6 @@ import View from 'ol/View.js';
 import { Heatmap as HeatmapLayer, Vector as VectorLayer } from 'ol/layer.js';
 import { Vector as VectorSource } from 'ol/source.js';
 import { GeoJSON } from 'ol/format.js';
-import Feature from 'ol/Feature.js';
-import Point from 'ol/geom/Point.js';
 
 useGeographic();
 
@@ -21,29 +19,28 @@ export default class extends Controller {
     fetch('/admin/dashboard/heatmap')
       .then(response => response.json())
       .then(data => {
-        // Handle the JSON data
         points = data;
 
         console.log(points)
 
-        // Create the vector source with the GeoJSON data
-        const vectorSource = new VectorSource({
-          features: new GeoJSON().readFeatures(points),
+        const heatLayer = new HeatmapLayer({
+          title: "HeatMap",
+          source: new VectorSource({
+            features: new GeoJSON().readFeatures(points,{
+              dataProjection: 'EPSG:4326',
+    featureProjection: "EPSG:3857"  
+            }
+              ),
+          })
         });
-
-        // Create the vector layer with the vector source
-        const vectorLayer = new VectorLayer({
-          source: vectorSource,
-        });
-
-        // Create the map with the vector layer
+      
         const map = new Map({
           target: "map",
           layers: [
             new TileLayer({
               source: new OSM(),
             }),
-            vectorLayer, // Add the vector layer to the layers array
+            heatLayer, 
           ],
           view: new View({
             center: [-123.11782250644546, 49.28062873449969],
@@ -52,9 +49,8 @@ export default class extends Controller {
         });
       })
       .catch(error => {
-        // Handle any errors from the HTTP request
         console.error(error);
-      });
+      }); 
   }
 
 }
