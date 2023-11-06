@@ -4,53 +4,59 @@ import OSM from 'ol/source/OSM.js';
 import { useGeographic } from 'ol/proj';
 import TileLayer from 'ol/layer/Tile.js';
 import View from 'ol/View.js';
-import {Heatmap as HeatmapLayer} from 'ol/layer.js';
+import { Heatmap as HeatmapLayer, Vector as VectorLayer } from 'ol/layer.js';
+import { Vector as VectorSource } from 'ol/source.js';
+import { GeoJSON } from 'ol/format.js';
+import Feature from 'ol/Feature.js';
+import Point from 'ol/geom/Point.js';
 
 useGeographic();
 
-
-const vector = new HeatmapLayer({
-    source: new VectorSource({
-      url: 'data/kml/2012_Earthquakes_Mag5.kml',
-      format: new KML({
-        extractStyles: false,
-      }),
-    }),
-    blur: parseInt(blur.value, 10),
-    radius: parseInt(radius.value, 10),
-    weight: function (feature) {
-      // 2012_Earthquakes_Mag5.kml stores the magnitude of each earthquake in a
-      // standards-violating <magnitude> tag in each Placemark.  We extract it from
-      // the Placemark's name instead.
-      const name = feature.get('name');
-      const magnitude = parseFloat(name.substr(2));
-      return magnitude - 5;
-    },
-  });
-
 export default class extends Controller {
   connect() {
-    console.log("Map connect...")
-  
-    const map = new Map({
-        target: "map",
-        layers: [
-          new TileLayer({
-            source: new OSM(),
+    console.log("Map connect...");
+
+    let points;
+
+    fetch('/admin/dashboard/heatmap')
+      .then(response => response.json())
+      .then(data => {
+        // Handle the JSON data
+        points = data;
+
+        // Create the vector source with the GeoJSON data
+        const vectorSource = new VectorSource({
+          features: new GeoJSON().readFeatures(points),
+        });
+
+        // Create the vector layer with the vector source
+        const vectorLayer = new VectorLayer({
+          source: vectorSource,
+        });
+
+        // Create the map with the vector layer
+        const map = new Map({
+          target: "map",
+          layers: [
+            new TileLayer({
+              source: new OSM(),
+            }),
+            vectorLayer, // Add the vector layer to the layers array
+          ],
+          view: new View({
+            center: [-123.11782250644546, 49.28062873449969],
+            zoom: 13,
           }),
-        ],
-        view: new View({
-          center: [-123.11782250644546, 49.28062873449969],
-          zoom: 13,
-        }),
+        });
+      })
+      .catch(error => {
+        // Handle any errors from the HTTP request
+        console.error(error);
       });
   }
 
-  rsz(event){
-      console.log("Resizing chart...");
-      this.element.Chart.resize();
-     
+  rsz(event) {
+    console.log("Resizing chart...");
+   
   };
 }
-
-
