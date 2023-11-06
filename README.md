@@ -50,8 +50,9 @@ test:
 ```
 4. Run `bundle install`. You might need to use [rvm](https://rvm.io/).
 5. rails db:create (to create a database)
-6. rails db:migrate
-7. rails db:seed
+5. rails db:migrate
+6. rails db:seed
+7. rails fake_data:all
 6. rails server
 8. load http://localhost:3000/admin/dashboard on your web browser.
 9. login with:
