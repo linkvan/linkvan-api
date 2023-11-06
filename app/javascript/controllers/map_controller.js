@@ -24,6 +24,8 @@ export default class extends Controller {
         // Handle the JSON data
         points = data;
 
+        console.log(points)
+
         // Create the vector source with the GeoJSON data
         const vectorSource = new VectorSource({
           features: new GeoJSON().readFeatures(points),
@@ -55,8 +57,4 @@ export default class extends Controller {
       });
   }
 
-  rsz(event) {
-    console.log("Resizing chart...");
-   
-  };
 }

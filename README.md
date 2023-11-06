@@ -28,7 +28,7 @@ To execute the app on your computer proceed as follows:
 1. cd `< directory where you cloned the project repository to >`
 2. Start a postgres database locally, for example with docker:
 ```
-docker run --name linkvan_postgres -e POSTGRES_PASSWORD=mysecretpassword -e -d postgres
+docker run --name linkvan_postgres -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres
 ```
 3. Update your database configuration on `config/database.yml`. Based on the previous command, the updated development and test section could for example be:
 ```
@@ -51,6 +51,7 @@ test:
 4. Run `bundle install`. You might need to use [rvm](https://rvm.io/).
 5. rails db:create (to create a database)
 6. rails db:migrate
+7. rails db:seed
 6. rails server
 8. load http://localhost:3000/admin/dashboard on your web browser.
 9. login with:
