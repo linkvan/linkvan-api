@@ -4,6 +4,20 @@ class Admin::DashboardController < Admin::BaseController
   def index
   end
 
+  # https://guides.rubyonrails.org/active_record_querying.html#retrieving-objects-from-the-database
+  def timeseries
+    impressions = Analytics::Visit.all
+    visits_per_day = impressions.group_by_day(:created_at).count
+
+    visits_per_day = visits_per_day.map do |date, count|
+      {
+        date: date.strftime('%Y-%m-%d'),
+        count: count
+      }
+    end
+  
+    render json: visits_per_day.to_json
+  end
   def heatmap
     data = {}
     # /admin/dashboard/heatmap?service=shelter

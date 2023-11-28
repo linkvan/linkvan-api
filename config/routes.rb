@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     resources :dashboard, only: %i[index show] do
       collection do
         get :heatmap, defaults: { format: :json }
+        get :timeseries, defaults: { format: :json }
       end
     end
 

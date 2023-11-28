@@ -125,6 +125,8 @@ GEM
     geocoder (1.8.2)
     globalid (1.1.0)
       activesupport (>= 5.0)
+    groupdate (6.4.0)
+      activesupport (>= 6.1)
     hotwire-livereload (1.3.0)
       actioncable (>= 6.0.0)
       listen (>= 3.0.0)
@@ -369,6 +371,7 @@ DEPENDENCIES
   faker (~> 2.17.0)
   geo_coord
   geocoder (~> 1.6)
+  groupdate
   haversine!
   hotwire-livereload (~> 1.3)
   hotwire-rails

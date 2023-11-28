@@ -21,8 +21,6 @@ export default class extends Controller {
       .then(data => {
         points = data;
 
-        console.log(points)
-
         const heatLayer = new HeatmapLayer({
           title: "HeatMap",
           source: new VectorSource({

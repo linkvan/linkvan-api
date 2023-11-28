@@ -119,3 +119,5 @@ gem "cssbundling-rails", "~> 1.1"
 gem "rack-timeout"
 
 gem "hotwire-livereload", "~> 1.3", :group => :development
+
+gem "groupdate"
