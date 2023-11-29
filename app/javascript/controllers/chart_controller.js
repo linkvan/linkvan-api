@@ -29,7 +29,18 @@ export default class extends Controller {
           },
           series: [
             {
-              type: 'line'
+              type: 'line',
+              encode: {
+                x: 'date',
+                y: 'actual'
+              }
+            },
+            {
+              type: 'line',
+              encode: {
+                x: 'date',
+                y: 'pred'
+              }
             }
           ]
         };
