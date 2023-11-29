@@ -23,6 +23,7 @@ Rails.application.routes.draw do
       collection do
         get :heatmap, defaults: { format: :json }
         get :timeseries, defaults: { format: :json }
+        get :districts, defaults: { format: :json }
       end
     end
 

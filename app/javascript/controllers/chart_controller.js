@@ -30,16 +30,17 @@ export default class extends Controller {
           series: [
             {
               type: 'line',
-              encode: {
-                x: 'date',
-                y: 'actual'
-              }
-            },
-            {
-              type: 'line',
+              showSymbol: false,
               encode: {
                 x: 'date',
                 y: 'pred'
+              }
+            },
+            {
+              type: 'scatter',
+              encode: {
+                x: 'date',
+                y: 'actual'
               }
             }
           ]

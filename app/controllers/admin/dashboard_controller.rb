@@ -6,6 +6,30 @@ class Admin::DashboardController < Admin::BaseController
   def index
   end
 
+  def districts
+
+    # https://gist.github.com/kidbrax/1236253
+
+    # Read the JSON file
+    json_file_path = Rails.root.join('lib', 'assets', 'local-area-boundary.json')
+    polygons = []
+
+    json_data = File.read(json_file_path)
+
+    data = eval(json_data)  
+
+    data.each do |row|
+      points = []
+      geom = row[:geom]
+      geom[:geometry][:coordinates][0].each do |coord|
+        points << [coord[0], coord[1]]
+      end
+
+      polygons << points
+    end
+
+  end
+
   # https://guides.rubyonrails.org/active_record_querying.html#retrieving-objects-from-the-database
   def timeseries
     impressions = Analytics::Visit.all
@@ -17,6 +41,7 @@ class Admin::DashboardController < Admin::BaseController
     m.fit(df)
     future = m.make_future_dataframe(periods: 14)
     forecast = m.predict(future).to_a
+
 
    time_series_json = forecast.zip(visits_per_day_transformed).map do |forecast_row, visits_per_day_row|
      {

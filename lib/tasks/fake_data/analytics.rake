@@ -9,33 +9,37 @@ namespace :fake_data do
 
     facility_ids = Facility.all.ids
 
-    100.times.each do |n|
-      created_at = rand(90).days.ago
-      uuid = SecureRandom.hex
-      session_id = SecureRandom.hex
+    start_date = 1.day.ago
+    30.times.each do |n|
+      created_at = start_date + n.days
+      x = n+1
+      puts "Creating #{x} visits"
+      x.times.each do
+        uuid = SecureRandom.hex
+        session_id = SecureRandom.hex
+        visit = Analytics::Visit.create_with(created_at: created_at)
+          .find_or_create_by!(uuid: uuid,
+                              session_id: session_id)
+        created_at = visit.created_at
 
-      visit = Analytics::Visit.create_with(created_at: created_at)
-        .find_or_create_by!(uuid: uuid,
-                            session_id: session_id)
-      created_at = visit.created_at
-
-      rand(1..5).times.each do
-        event_date = rand(120).minutes.after(created_at)
-        event = visit.events.create!(controller_name: 'api/facilities',
-                                     action_name: 'index',
-                                     lat: rand(49.260635..49.305427),
-                                     long: rand(-123.176651..-123.056488),
-                                     request_url: '/api/facilities',
-                                     request_ip: Faker::Internet.ip_v4_address,
-                                     request_params: { search: 'a search text'},
-                                     created_at: event_date)
+        rand(1..4).times.each do
+          event_date = rand(120).minutes.after(created_at)
+          event = visit.events.create!(controller_name: 'api/facilities',
+                                      action_name: 'index',
+                                      lat: rand(49.260635..49.305427),
+                                      long: rand(-123.176651..-123.056488),
+                                      request_url: '/api/facilities',
+                                      request_ip: Faker::Internet.ip_v4_address,
+                                      request_params: { search: 'a search text'},
+                                      created_at: event_date)
 
 
-        n = rand(1..10)
-        ids_to_filter = facility_ids.sample(n)
-        Facility.where(id: ids_to_filter).find_each do |facility|
-          event.impressions.create!(impressionable: facility,
-                                    created_at: event_date)
+          n = rand(1..10)
+          ids_to_filter = facility_ids.sample(n)
+          Facility.where(id: ids_to_filter).find_each do |facility|
+            event.impressions.create!(impressionable: facility,
+                                      created_at: event_date)
+          end
         end
       end
 
