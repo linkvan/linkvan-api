@@ -50,7 +50,7 @@ RUN apk --no-cache add \
 # COPY Aptfile /usr/src/app/Aptfile
 # RUN apk add --update $(cat /usr/src/app/Aptfile | xargs)
 # Install Bundler v1.3
-RUN gem install bundler -v "~> 2.3.23"
+RUN gem update --system && gem install bundler -v "2.3.23"
 
 FROM builder AS development
 
