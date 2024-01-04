@@ -155,7 +155,7 @@ GEM
     memory_profiler (1.0.1)
     method_source (1.0.0)
     mini_mime (1.1.2)
-    minitest (5.18.1)
+    minitest (5.20.0)
     msgpack (1.7.1)
     net-imap (0.3.6)
       date
@@ -328,7 +328,7 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.4.2)
-    view_component (3.4.0)
+    view_component (3.9.0)
       activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
