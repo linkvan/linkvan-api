@@ -2,21 +2,18 @@
     <%= form_with model: [:admin, @facility] do |form| %>
         <!-- Action Buttons -->
         <div class="field is-grouped is-grouped-right">
-            <p class="control">
-            <%= form.submit class: "button is-primary" %>
-            </p>
-            <p class="control">
-            <%= link_to "Back", admin_facilities_path, class: "button is-light" %>
-            </p>
+            <div class="control">
+                <%= form.submit class: "button is-primary" %>
+            </div>
+
+            <div class="control">
+                <%= link_to "Back", admin_facility_path(@facility), class: "button is-light" %>
+            </div>
         </div>
 
         <div class="columns">
             <div class="column">
                 <%= render 'form_card_details', form: form %>
-            </div>
-
-            <div class="column">
-                <%= render 'form_card_location', form: form, facility: @facility } %>
             </div>
         </div>
 

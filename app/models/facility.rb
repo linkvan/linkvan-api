@@ -10,8 +10,6 @@ class Facility < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :zone, optional: true
 
-  has_one :facility_location, dependent: :destroy
-
   has_many :facility_welcomes, dependent: :destroy
   has_many :facility_services, dependent: :destroy
   has_many :services, through: :facility_services
@@ -113,7 +111,7 @@ class Facility < ApplicationRecord
 
   def clean_data
     # strips whitespaces from beginning and end
-    %i[name phone website address].each do |attrb|
+    %i[name phone website address city].each do |attrb|
       # squish (ActiveSupport's more in-depth strip whitespaces)
       send("#{attrb}=", send(attrb)&.squish)
     end

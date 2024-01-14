@@ -1,0 +1,13 @@
+<div class="container">
+    <div class="columns">
+        <div class="column">
+            <%= render "search", facility: @facility, locations: nil %>
+        </div>
+
+        <div class="column">
+            <%= form_with model: @location, url: admin_facility_locations_path(facility_id: @facility.id), method: :post do |form| %>
+                <%= render "form", form: form, location: @location %>
+            <% end %>
+        </div>
+    </div>
+</div>

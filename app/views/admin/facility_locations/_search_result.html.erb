@@ -1,0 +1,28 @@
+<%= locations.each do |location| %>
+    <%= tag.div data: { location: { raw: location.data_raw }} do %>
+        <div class="columns">
+            <div class="column">
+                <p>Address: <%= location.address %></p>
+                <p>City: <%= location.city %></p>
+                <p>Country: <%= location.country %></p>
+                <p><%= tag.span location.coordinates.map(&:to_f).join(", "), class: "tag"%></p>
+
+                <div data-controller="">
+                    <!-- When the Use Button is clicked save the address and the coordinates on the form -->
+                        <!--
+                            facility_address
+                            facility_lat
+                            facility_long
+                        -->
+                    <button>
+                        Use
+                    </button>
+                </div>
+            </div>
+
+            <div class="column is-one-third">
+                <%= render Locations::EmbedMapComponent.new(location.latitude, location.longitude, height: "100%") %>
+            </div>
+        </div>
+    <% end %>
+<% end %>

@@ -1,11 +1,11 @@
 <%= render Shared::CardComponent.new(title: 'Location') do |card| %>
-    <% card.with_button(title: 'Add', path: new_admin_facility_location_path(facility_id: facility), icon_class: "fa-plus-square") %>
-    <% card.with_button(title: 'Edit', path: edit_admin_facility_location_path(facility_id: facility, id: facility.id)) %>
+    <% card.with_button(title: 'Assign', path: new_admin_facility_location_path(facility_id: facility.id), icon_class: 'fa-plus-square') %>
 
     <div class="columns">
         <div class="column">
             <p><span class="tag is-primary">Current</span></p>
             <p><%= facility.address %></p>
+            <p><%= facility.city %></p>
             <p><span class="tag"><%= facility.coordinates.map(&:to_f).join(", ") %></span></p>
         </div>
 
