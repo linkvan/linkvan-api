@@ -1,5 +1,5 @@
 module Locations::Providers
-  class PhotonParser < BaseParser
+  class GoogleParser < BaseParser
     # see:
     # - https://github.com/alexreisner/geocoder/blob/master/lib/geocoder/results/google.rb
     # - https://github.com/alexreisner/geocoder/blob/master/README_API_GUIDE.md

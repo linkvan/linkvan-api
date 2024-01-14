@@ -11,7 +11,7 @@ module Locations::Providers
     end
 
     def call
-      GeoCoderLocation.new(
+      Locations::GeocoderLocation.new(
         address:,
         city:,
         state:,
@@ -19,7 +19,8 @@ module Locations::Providers
         postal_code:,
         latitude:,
         longitude:,
-        data:
+        data:,
+        data_raw:
       )
     end
 
@@ -36,6 +37,10 @@ module Locations::Providers
 
     def address
       geocoded_result.street_address.to_s.strip
+    end
+
+    def data_raw
+      data.to_json
     end
   end
 end
