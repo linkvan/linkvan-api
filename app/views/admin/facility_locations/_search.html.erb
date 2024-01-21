@@ -1,28 +1,34 @@
-<%= form_with(url: admin_facility_locations_path(facility_id: facility&.id),
+<%= form_with(url: admin_facility_locations_path(facility_id: facility.id),
               data: { turbo_frame: "location_search" },
               method: :get) do |form| %>
 
     <%= render Shared::CardComponent.new(title: 'Assign New Address') do |card| %>
-        <div data-controller="navigate">
-            <p>Please, search the address and select the relevant address to assign to the facility</p>
+        <div class="mb-2">
+            <p>Please, search the address and select the <span class="has-background-light pl-2 pr-2">Assign</span> button of the address to be assigned to the facility</p>
+        </div>
 
-            <div class="field is-grouped">
-                <%= form.label :q, "Search:", class: "label" %>
+        <div class="field is-grouped">
+            <%= form.label :q, "Search:", class: "label" %>
 
-                <div class="control">
-                    <%= form.text_field :q, class: "input" %>
-
-                </div>
-
-                <div class="control">
-                    <%= form.submit "Search", class: "button is-primary" %>
-
-                </div>
+            <div class="control">
+                <%= form.text_field :q, class: "input" %>
             </div>
 
-            <%= turbo_frame_tag "location_search" do %>
-                <%= render("admin/facility_locations/search_result", locations: locations) if locations.present?%>
-            <% end %>
+            <div class="control">
+                <%= form.submit "Search", class: "button is-light is-primary" %>
+
+            </div>
         </div>
+
+        <%= turbo_frame_tag "location_search" do %>
+            <% if locations.present? %>
+                <%= render("admin/facility_locations/search_result", locations:, facility_id: facility.id) %>
+            <% elsif params[:q].present? %>
+                <div>
+                    No search results for
+                    <span class="has-background-light pl-2 pr-2"><%= params[:q] %></span>
+                </div>
+            <% end %>
+        <% end %>
     <% end %>
 <% end %>

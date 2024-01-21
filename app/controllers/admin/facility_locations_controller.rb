@@ -6,14 +6,13 @@ class Admin::FacilityLocationsController < Admin::BaseController
   before_action :load_location#, only: %i[new, index]
 
   def index
-    @locations = if search_params[:q].present?
-                   # Search using Google
-                   Locations::Searcher.call(address: search_params[:q])
-                 else
-                   []
-                 end
+    locations_result = if search_params[:q].present?
+                         Locations::Searcher.call(address: search_params[:q])
+                       else
+                         []
+                       end
 
-    @locations.to_a
+    @locations = locations_result.to_a
   end
 
   def new

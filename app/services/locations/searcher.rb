@@ -11,5 +11,6 @@ class Locations::Searcher < ApplicationService
     search_result
       .lazy
       .map { Locations::Parser.parse(_1) }
+      .map { Location.build_from(geocoder_location: _1) }
   end
 end

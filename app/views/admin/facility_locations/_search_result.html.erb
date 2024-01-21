@@ -1,28 +1,34 @@
-<%= locations.each do |location| %>
-    <%= tag.div data: { location: { raw: location.data_raw }} do %>
-        <div class="columns">
-            <div class="column">
-                <p>Address: <%= location.address %></p>
-                <p>City: <%= location.city %></p>
-                <p>Country: <%= location.country %></p>
-                <p><%= tag.span location.coordinates.map(&:to_f).join(", "), class: "tag"%></p>
+<% locations.each do |location| %>
+    <div>
+        <%= form_with(model: location, url: admin_facility_locations_path(facility_id: facility_id), method: :post) do |form| %>
+            <div class="columns">
+                <div class="column">
+                    <%= form.hidden_field :address %>
+                    <%= form.hidden_field :lat %>
+                    <%= form.hidden_field :long %>
+                    <%= form.hidden_field :city %>
+                    <div class="field is-grouped">
+                        <%= form.label :address, "Address:", class: "label" %>
+                        <span class="ml-2"><%= location.address %></span>
+                    </div>
+                    <div class="field is-grouped">
+                        <%= form.label :city, "City:", class: "label" %>
+                        <span class="ml-2"><%= location.city %></span>
+                    </div>
+                    <div class="field is-grouped">
+                        <%= form.label :coordinates, "Coordinates:", class: "label" %>
+                        <% location.coordinates.each do |coord_value| %>
+                            <span class="tag ml-2"><%= coord_value.to_f %></span>
+                        <% end %>
+                    </div>
 
-                <div data-controller="">
-                    <!-- When the Use Button is clicked save the address and the coordinates on the form -->
-                        <!--
-                            facility_address
-                            facility_lat
-                            facility_long
-                        -->
-                    <button>
-                        Use
-                    </button>
+                    <%= form.submit "Assign", class: "button is-primary" %>
+                </div>
+
+                <div class="column is-one-third">
+                    <%= render Locations::EmbedMapComponent.new(location.lat, location.long, height: "100%") %>
                 </div>
             </div>
-
-            <div class="column is-one-third">
-                <%= render Locations::EmbedMapComponent.new(location.latitude, location.longitude, height: "100%") %>
-            </div>
-        </div>
-    <% end %>
+        <% end %>
+    </div>
 <% end %>
