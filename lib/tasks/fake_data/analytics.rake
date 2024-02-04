@@ -10,10 +10,10 @@ namespace :fake_data do
     facility_ids = Facility.all.ids
 
     start_date = 1.day.ago
-    30.times.each do |n|
-      created_at = start_date + n.days
-      x = n+1
-      puts "Creating #{x} visits"
+    30.times.each do |x|
+      created_at = start_date + x.days
+      y = (0.2*x).ceil
+      puts "Creating #{y} visits"
       x.times.each do
         uuid = SecureRandom.hex
         session_id = SecureRandom.hex
@@ -34,8 +34,8 @@ namespace :fake_data do
                                       created_at: event_date)
 
 
-          n = rand(1..10)
-          ids_to_filter = facility_ids.sample(n)
+          p = rand(1..10)
+          ids_to_filter = facility_ids.sample(p)
           Facility.where(id: ids_to_filter).find_each do |facility|
             event.impressions.create!(impressionable: facility,
                                       created_at: event_date)

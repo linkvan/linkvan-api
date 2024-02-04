@@ -5,7 +5,6 @@ class Analytics::Event < ApplicationRecord
 
   has_many :impressions, dependent: :destroy
   has_many :impressionables, through: :impressions, source: :impressionable
-
   has_many :facilities, through: :impressions,
                         source: :impressionable,
                         source_type: "Facility"
