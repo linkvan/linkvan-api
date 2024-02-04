@@ -19,7 +19,13 @@ Rails.application.routes.draw do
   namespace :admin do
     root to: "admin/dashboard#index"
 
-    resources :dashboard, only: %i[index show]
+    resources :dashboard, only: %i[index show] do
+      collection do
+        get :heatmap, defaults: { format: :json }
+        get :timeseries, defaults: { format: :json }
+        get :districts, defaults: { format: :json }
+      end
+    end
 
     # resources :users, only: [] do
       # root to: "dashboard#index"
