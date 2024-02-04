@@ -1,34 +1,40 @@
-<%= form_with(url: admin_facility_locations_path(facility_id: facility.id),
-              data: { turbo_frame: "location_search" },
-              method: :get) do |form| %>
+<%= render Shared::CardComponent.new(title: 'Assign New Address') do |card| %>
+    <div class="mb-2">
+        <p>Please, search the address and select the <span class="has-background-light pl-2 pr-2">Assign</span> button of the address to be assigned to the facility</p>
+    </div>
 
-    <%= render Shared::CardComponent.new(title: 'Assign New Address') do |card| %>
-        <div class="mb-2">
-            <p>Please, search the address and select the <span class="has-background-light pl-2 pr-2">Assign</span> button of the address to be assigned to the facility</p>
-        </div>
+    <%= form_with(url: admin_facility_locations_path(facility_id: facility.id),
+                  data: { turbo_frame: "location_search" },
+                  method: :get) do |form| %>
 
         <div class="field is-grouped">
             <%= form.label :q, "Search:", class: "label" %>
-
             <div class="control">
                 <%= form.text_field :q, class: "input" %>
             </div>
 
             <div class="control">
                 <%= form.submit "Search", class: "button is-light is-primary" %>
-
             </div>
         </div>
+    <% end %>
 
-        <%= turbo_frame_tag "location_search" do %>
-            <% if locations.present? %>
+    <%= turbo_frame_tag "location_search" do %>
+        <% flash.each do |error_type, msg| %>
+            <div>
+                <%= error_type %> => <%= msg %>
+            </div>
+        <% end %>
+
+        <% if locations.present? %>
+            <div class="container mt-5">
                 <%= render("admin/facility_locations/search_result", locations:, facility_id: facility.id) %>
-            <% elsif params[:q].present? %>
-                <div>
-                    No search results for
-                    <span class="has-background-light pl-2 pr-2"><%= params[:q] %></span>
-                </div>
-            <% end %>
+            </div>
+        <% elsif params[:q].present? %>
+            <div>
+                No search results for
+                <span class="has-background-light pl-2 pr-2"><%= params[:q] %></span>
+            </div>
         <% end %>
     <% end %>
 <% end %>

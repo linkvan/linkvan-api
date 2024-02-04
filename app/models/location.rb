@@ -1,14 +1,13 @@
 class Location
   extend ActiveModel::Naming
 
-  attr_reader :address, :city, :lat, :long, :facility_id
+  attr_reader :address, :lat, :long, :facility
 
-  def initialize(address:, city:, lat:, long:, facility_id: nil)
+  def initialize(address:, lat:, long:, facility: nil)
     @address = address
-    @city = city
     @lat = lat
     @long = long
-    @facility_id = facility_id
+    @facility = facility
   end
 
   def self.build(params)
@@ -28,22 +27,23 @@ class Location
                           geocoder_location&.postal_code]
 
     address = address_components.compact.join(", ")
-    city = facility&.city || geocoder_location&.city
     lat = facility&.lat || geocoder_location.latitude
     long = facility&.long || geocoder_location.longitude
-    facility_id = facility&.id
 
     new(
       address:,
-      city:,
       lat:,
       long:,
-      facility_id:
+      facility:
     )
   end
 
+  def to_key
+    [coordinates.hash]
+  end
+
   def persisted?
-    @facility_id.present?
+    facility&.id.present?
   end
 
   def coordinates
@@ -56,20 +56,3 @@ class Location
     Haversine.distance(lat, long, *coords)
   end
 end
-
-# class FacilityLocation < ApplicationRecord
-  # belongs_to :facility
-# 
-  # validates :latitude, :longitude, presence: true
-  # validates :address, :city, presence: true
-# 
-  # def data
-    # JSON.parse(data_raw || "", symbolize_names: true)
-  # rescue JSON::ParserError
-    # nil
-  # end
-# 
-  # def coordinates
-    # [latitude, longitude]
-  # end
-# end

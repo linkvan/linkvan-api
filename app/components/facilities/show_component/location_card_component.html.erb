@@ -5,7 +5,6 @@
         <div class="column">
             <p><span class="tag is-primary">Current</span></p>
             <p><%= facility.address %></p>
-            <p><%= facility.city %></p>
             <p><span class="tag"><%= facility.coordinates.map(&:to_f).join(", ") %></span></p>
         </div>
 

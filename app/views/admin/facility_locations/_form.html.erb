@@ -6,7 +6,7 @@
             <%= form.submit class: "button is-primary" %>
             </p>
             <p class="control">
-            <%= link_to "Back", admin_facility_path(id: @facility.id), class: "button is-light" %>
+            <%= link_to "Back", admin_facility_path(id: facility.id), class: "button is-light" %>
             </p>
         </div>
     <% end %>
@@ -17,14 +17,6 @@
             <%= form.text_field :address, class: "input" %>
         </div>
     </div>
-
-    <div class="field">
-        <%= form.label :city, "City:", class: "label" %>
-        <div class="control">
-            <%= form.text_field :city, class: "input" %>
-        </div>
-    </div>
-
 
     <!-- Location -->
     <div class="field is-grouped">
@@ -43,11 +35,9 @@
         </div>
     </div>
 
-    <%#= turbo_frame_tag "locations", data: { "navigate-target": "container" } %>
-
     <div class='container'>
         <div style="width: 100%; margin-top: 50px;">
-            <%= render Locations::EmbedMapComponent.new(location.lat, location.long) %>
+            <%= render Locations::EmbedMapComponent.new(facility.lat, facility.long) %>
         </div>
     </div>
 <% end %>

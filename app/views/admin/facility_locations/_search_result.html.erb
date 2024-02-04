@@ -1,20 +1,17 @@
 <% locations.each do |location| %>
-    <div>
+    <div class="mt-2">
         <%= form_with(model: location, url: admin_facility_locations_path(facility_id: facility_id), method: :post) do |form| %>
             <div class="columns">
                 <div class="column">
                     <%= form.hidden_field :address %>
                     <%= form.hidden_field :lat %>
                     <%= form.hidden_field :long %>
-                    <%= form.hidden_field :city %>
+
                     <div class="field is-grouped">
                         <%= form.label :address, "Address:", class: "label" %>
                         <span class="ml-2"><%= location.address %></span>
                     </div>
-                    <div class="field is-grouped">
-                        <%= form.label :city, "City:", class: "label" %>
-                        <span class="ml-2"><%= location.city %></span>
-                    </div>
+
                     <div class="field is-grouped">
                         <%= form.label :coordinates, "Coordinates:", class: "label" %>
                         <% location.coordinates.each do |coord_value| %>

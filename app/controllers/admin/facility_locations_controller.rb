@@ -1,11 +1,29 @@
 # frozen_string_literal: true
 
 class Admin::FacilityLocationsController < Admin::BaseController
-  # before_action :set_default_request_format
-  before_action :load_facility#, only: %i[new, index]
-  before_action :load_location#, only: %i[new, index]
+  before_action :load_facility
+  before_action :load_location
+  before_action :search_and_load_locations
 
   def index
+  end
+
+  def new
+  end
+
+  def create
+    @facility.assign_attributes(location_params)
+    if @facility.save
+      redirect_to [:admin, @facility], notice: "Facility's address has been updated"
+    else
+      flash.now[:error] = location_params.inspect
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  private
+
+  def search_and_load_locations
     locations_result = if search_params[:q].present?
                          Locations::Searcher.call(address: search_params[:q])
                        else
@@ -14,15 +32,6 @@ class Admin::FacilityLocationsController < Admin::BaseController
 
     @locations = locations_result.to_a
   end
-
-  def new
-    # @location = Location.build_from(facility: @facility)
-  end
-
-  # def edit
-  # end
-
-  private
 
   def load_location
     @location = if @facility.present?
@@ -37,7 +46,9 @@ class Admin::FacilityLocationsController < Admin::BaseController
   end
 
   def location_params
-    params.permit(:address, :city, :lat, :long)
+    params
+      .require(:location)
+      .permit(:address, :lat, :long)
   end
 
   def search_params
