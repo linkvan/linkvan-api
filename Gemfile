@@ -39,6 +39,8 @@ gem "devise", "~> 4.8"
 gem 'rack-cors'
 
 group :development, :test do
+  gem 'dotenv-rails'
+
   gem "rspec-rails", "~> 5.1.1"
   gem "shoulda-matchers", ">= 4.5.1"
   gem "capybara"

@@ -113,7 +113,7 @@ class Admin::FacilitiesController < Admin::BaseController
   end
 
   def facility_params
-    params.require(:facility).permit(:verified, :name, :phone, :website, :address, :lat, :long, :description, :notes)
+    params.require(:facility).permit(:verified, :name, :phone, :website, :description, :notes)
   end
 
   def discard_facility_params

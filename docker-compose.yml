@@ -20,6 +20,7 @@ x-app: &app
   environment:
     # REDIS_URL: redis://@redis:6379/1
     DATABASE_URL: postgres://postgres:postgres@postgres:5432/
+    GOOGLE_MAPS_API_TOKEN: ${GOOGLE_MAPS_API_TOKEN-}
   entrypoint: ./bin/docker/entrypoints/wait-for-web.sh
   volumes:
     - .:/usr/src/app:cached
@@ -40,8 +41,8 @@ services:
     volumes:
       - postgresql:/var/lib/postgresql/data:delegated
     # Uncomment to access this containers Postgres instance via port 5432
-    #ports:
-      #- "127.0.0.1:5432:5432"
+    ports:
+      - "127.0.0.1:5432:5432"
     environment:
       PSQL_HISTFILE: /root/log/.psql_history
       POSTGRES_USER: postgres

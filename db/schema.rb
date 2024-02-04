@@ -39,10 +39,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_19_183319) do
     t.string "filename", null: false
     t.string "content_type"
     t.text "metadata"
+    t.string "service_name", null: false
     t.bigint "byte_size", null: false
     t.string "checksum"
     t.datetime "created_at", precision: nil, null: false
-    t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
@@ -230,8 +230,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_19_183319) do
     t.boolean "verified", default: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at", precision: nil
-    t.datetime "remember_created_at", precision: nil
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
     t.string "organization"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
