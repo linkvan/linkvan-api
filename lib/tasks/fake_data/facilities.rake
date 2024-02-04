@@ -7,6 +7,11 @@ namespace :fake_data do
 
     Faker::Config.locale = "en-CA"
 
+    LIMITS = {
+      lat: [49.1019545..49.3210142],
+      long: [-123.2358425..-122.4716322]
+      
+    }
     vancouver = Zone.where(name: "Vancouver").to_a
     new_west = Zone.where(name: "New Westminster").to_a
     zones = (vancouver * 2) + new_west + [nil]
@@ -20,8 +25,8 @@ namespace :fake_data do
         params = {}
         params[:name] = [Faker::Company.name, Faker::Company.suffix].join(" ")
         params[:address] = Faker::Address.full_address
-        params[:lat] = Faker::Address.latitude
-        params[:long] = Faker::Address.longitude
+        params[:lat] = rand(*LIMITS[:lat])
+        params[:long] = rand(*LIMITS[:long])
         params[:phone] = Faker::PhoneNumber.cell_phone
         params[:website] = Faker::Internet.url(path: "")
         params[:description] = Faker::Lorem.paragraph
