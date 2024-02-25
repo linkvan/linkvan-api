@@ -11,7 +11,9 @@ class Api::BaseController < ApplicationController
   private
 
   def base_result
-    site_stats.merge(tokens: access_token)
+    site_stats
+    #  NOTE: Removed tokens from result in favour of cookies
+    #  .merge(tokens: access_token)
   end
 
   def site_stats
@@ -20,7 +22,7 @@ class Api::BaseController < ApplicationController
 
   def handle_tokens
     access_token.refresh
-    cookies['_linkvan_tokens'] = access_token.to_json
+    access_token.save_to_cookies(cookies)
   end
 
   def handle_analytics_event
@@ -53,8 +55,7 @@ class Api::BaseController < ApplicationController
   end
 
   def token_params
-    # @note: parameters take precedence over cookies.
-    Analytics::AccessToken.extract_tokens_from(cookies['_linkvan_tokens'])
-      .merge(Analytics::AccessToken.extract_tokens_from(params))
+    Analytics::AccessToken.extract_tokens_from(cookies)
+  end
   end
 end
