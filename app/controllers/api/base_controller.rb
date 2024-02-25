@@ -31,23 +31,21 @@ class Api::BaseController < ApplicationController
   end
 
   def event
-    # NOTE: Removed events registering to avoid next tier of database.
-    # @event ||= Analytics.register_event(
-    #   analytics,
-    #   controller_name: params[:controller],
-    #   action_name: params[:action],
-    #   request_url: request.url,
-    #   request_params: request.params,
-    #   request_ip: request.ip,
-    #   request_user_agent: request.user_agent,
-    #   lat: nil,
-    #   long: nil
-    # )
+    @event ||= Analytics.register_event(
+      analytics,
+      controller_name: params[:controller],
+      action_name: params[:action],
+      request_url: request.url,
+      request_params: request.params,
+      request_ip: request.ip,
+      request_user_agent: request.user_agent,
+      lat: location_params[:lat],
+      long: location_params[:long]
+    )
   end
 
   def analytics
-    # NOTE: Removed analytics registering to avoid next tier of database.
-    # @analytics ||= Analytics.find_or_create_visit_from(access_token)
+    @analytics ||= Analytics.find_or_create_visit_from(access_token, visit_params)
   end
 
   def access_token
@@ -57,5 +55,21 @@ class Api::BaseController < ApplicationController
   def token_params
     Analytics::AccessToken.extract_tokens_from(cookies)
   end
+
+  def visit_params
+    location_params
+  end
+
+  def location_params
+    return {} if location_headers.blank?
+
+    data = JSON.parse(location_headers)
+    { lat: data["lat"], long: data["lng"] }
+  rescue JSON::ParserError
+    {}
+  end
+
+  def location_headers
+    request.headers["User-Location"]
   end
 end
