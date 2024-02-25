@@ -8,9 +8,11 @@ module Analytics
         end
 
         def decode(token)
+          return {} if token.blank?
+
           JWT.decode(token, jwt_secret_key)
         rescue JWT::DecodeError => e
-          []
+          {}
           # rescue JWT::VerificationError => e
           #   # token is invalid.
           #   raise e
@@ -20,7 +22,7 @@ module Analytics
         end
 
         def jwt_secret_key
-          Rails.application.credentials&.jwt&.secret_key || ENV['SECRET_KEY']
+          ENV.fetch('JWT_KEY')
         end
       end
     end

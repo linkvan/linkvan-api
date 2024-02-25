@@ -15,7 +15,13 @@ FactoryBot.define do
     end
 
     # Facility is open all day
-    factory :open_all_day_facility
+    factory :open_all_day_facility do
+      after(:build) do |facility|
+        FacilitySchedule.week_days.each_key do |week_day|
+          facility.schedules << build(:facility_schedule, open_all_day: true, facility: facility, week_day: week_day)
+        end
+      end
+    end
 
     # Facility is closed all day
     factory :close_all_day_facility

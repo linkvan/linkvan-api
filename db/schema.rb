@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_19_183319) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_11_191305) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -63,14 +63,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_19_183319) do
     t.bigint "visit_id", null: false
     t.string "controller_name", null: false
     t.string "action_name", null: false
-    t.decimal "lat"
-    t.decimal "long"
     t.string "request_url", null: false
     t.string "request_ip"
     t.string "request_user_agent"
     t.jsonb "request_params"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "long"
+    t.decimal "lat"
     t.index ["visit_id"], name: "index_events_on_visit_id"
   end
 
@@ -249,6 +249,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_19_183319) do
     t.string "session_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "lat"
+    t.decimal "long"
     t.index ["session_id"], name: "index_visits_on_session_id"
     t.index ["uuid", "session_id"], name: "index_visits_on_uuid_and_session_id", unique: true
     t.index ["uuid"], name: "index_visits_on_uuid"
