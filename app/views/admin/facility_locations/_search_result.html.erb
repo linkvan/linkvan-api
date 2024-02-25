@@ -1,0 +1,31 @@
+<% locations.each do |location| %>
+    <div class="mt-2">
+        <%= form_with(model: location, url: admin_facility_locations_path(facility_id: facility_id), method: :post) do |form| %>
+            <div class="columns">
+                <div class="column">
+                    <%= form.hidden_field :address %>
+                    <%= form.hidden_field :lat %>
+                    <%= form.hidden_field :long %>
+
+                    <div class="field is-grouped">
+                        <%= form.label :address, "Address:", class: "label" %>
+                        <span class="ml-2"><%= location.address %></span>
+                    </div>
+
+                    <div class="field is-grouped">
+                        <%= form.label :coordinates, "Coordinates:", class: "label" %>
+                        <% location.coordinates.each do |coord_value| %>
+                            <span class="tag ml-2"><%= coord_value.to_f %></span>
+                        <% end %>
+                    </div>
+
+                    <%= form.submit "Assign", class: "button is-primary" %>
+                </div>
+
+                <div class="column is-one-third">
+                    <%= render Locations::EmbedMapComponent.new(location.lat, location.long, height: "100%") %>
+                </div>
+            </div>
+        <% end %>
+    </div>
+<% end %>

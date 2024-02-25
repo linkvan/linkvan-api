@@ -1,5 +1,16 @@
-<%= render Shared::CardComponent.new(title: 'Location') do |card| %>
-    <!-- Address -->
+<%= render Shared::CardComponent.new(title: 'Current Address') do |card| %>
+    <% card.with_action_content do %>
+        <!-- Action Buttons -->
+        <div class="field mr-4 is-grouped is-grouped-right">
+            <p class="control mr-1">
+            <%= form.submit class: "button is-primary" %>
+            </p>
+            <p class="control">
+            <%= link_to "Back", admin_facility_path(id: facility.id), class: "button is-light" %>
+            </p>
+        </div>
+    <% end %>
+
     <div class="field">
         <%= form.label :address, "Address:", class: "label" %>
         <div class="control">
@@ -21,6 +32,12 @@
             <div class="control">
                 <%= form.text_field :long, placeholder: "Long", class: "input" %>
             </div>
+        </div>
+    </div>
+
+    <div class='container'>
+        <div style="width: 100%; margin-top: 50px;">
+            <%= render Locations::EmbedMapComponent.new(facility.lat, facility.long) %>
         </div>
     </div>
 <% end %>

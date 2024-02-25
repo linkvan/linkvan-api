@@ -1,19 +1,15 @@
 <%= render Shared::CardComponent.new(title: 'Location') do |card| %>
-    <div class='field is-horizontal'>
-        <span class='label mr-1'>Address:</span>
-        <span class='control is-expanded'><%= facility.address %></span>
-    </div>
+    <% card.with_button(title: 'Assign', path: new_admin_facility_location_path(facility_id: facility.id), icon_class: 'fa-plus-square') %>
 
-    <div class='field is-horizontal'>
-        <span class='label mr-1'>Coords:</span>
-        <span class='control is-expanded'>
-            (<%= facility.lat %>, <%= facility.long %>)
-        </span>
-    </div>
+    <div class="columns">
+        <div class="column">
+            <p><span class="tag is-primary">Current</span></p>
+            <p><%= facility.address %></p>
+            <p><span class="tag"><%= facility.coordinates.map(&:to_f).join(", ") %></span></p>
+        </div>
 
-    <div class='container'>
-        <figure class='image image is-5by3 map'>
-            <img src="">
-        </figure>
+        <div class="column is-one-third">
+            <%= render Locations::EmbedMapComponent.new(facility.lat, facility.long, height: "100%") %>
+        </div>
     </div>
 <% end %>

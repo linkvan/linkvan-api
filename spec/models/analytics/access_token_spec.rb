@@ -17,7 +17,8 @@ RSpec.describe Analytics::AccessToken, type: :model do
 
       it { expect(access_token.uuid).to eq "A_RANDOM_VALUE" }
       it { expect(access_token.session_token).to be_blank }
-      it { expect(access_token.data).to be_blank }
+      it { expect(access_token.data).to contain_exactly(["session_id", "A_RANDOM_VALUE"]) }
+      it { expect(access_token.data["session_id"]).to eq("A_RANDOM_VALUE") }
     end
 
     context "with params" do

@@ -8,7 +8,7 @@ gem "rails", "~> 7.0.6"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.4.4"
 # Use Puma as the app server
-gem "puma", "~> 5.6.2"
+gem "puma", "~> 5.6.7"
 # Use SCSS for stylesheets
 gem "sass-rails", "~> 6.0.0"
 
@@ -39,6 +39,8 @@ gem "devise", "~> 4.8"
 gem 'rack-cors'
 
 group :development, :test do
+  gem 'dotenv-rails'
+
   gem "rspec-rails", "~> 5.1.1"
   gem "shoulda-matchers", ">= 4.5.1"
   gem "capybara"
