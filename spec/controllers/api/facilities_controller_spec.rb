@@ -4,57 +4,106 @@ require 'support/shared_examples/api_tokens'
 RSpec.describe Api::FacilitiesController do # , type: :request do
   let(:verified_facility) { create(:open_all_day_facility, :with_services, verified: true) }
   let(:nonverified_facility) { create(:open_all_day_facility, :with_services, verified: false) }
+  let(:another_verified_facility) { create(:open_all_day_facility, :with_services, verified: true) }
 
   before do
     config_jwt
     load_data
   end
 
-  # TODO: Enable tests when analytics feature is re-enabled.
-  xdescribe "analytics data" do
-    context "without facilities" do
-      let(:load_data) { nonverified_facility }
+  describe "analytics data" do
+    let(:load_data) { [verified_facility, nonverified_facility, another_verified_facility] }
 
-      it "adds analytics data for the request without any impressions" do
+    context "GET #show" do
+      it "adds analytics data for the request with impression" do
         expect do
-          get :index, params: {}
-        end.to change(Analytics::Visit, :count).by(1)
-          .and change(Analytics::Event, :count).by(1)
-          .and not_change(Analytics::Impression, :count)
-      end
-    end
-
-    context "with facilities" do
-      let(:load_data) { [verified_facility, nonverified_facility, another_verified_facility] }
-      let(:another_verified_facility) { create(:open_all_day_facility, :with_services, verified: true) }
-
-      it "adds analytics data for the request with both verified facilities" do
-        expect do
-          get :index, params: {}
-        end.to change(Analytics::Visit, :count).by(1)
-          .and change(Analytics::Event, :count).by(1)
-          .and change(Analytics::Impression, :count).by(2)
-
-        saved_event = Analytics::Event.last
-
-        expect(saved_event.facilities).to include(verified_facility, another_verified_facility)
-        expect(saved_event.facilities).not_to include(nonverified_facility)
-      end
-    end
-
-    context "with duplicated facilities" do
-      let(:load_data) { [verified_facility, verified_facility] }
-
-      it "adds analytics data for the request with the duplicated facility onlhy once" do
-        expect do
-          get :index, params: {}
+          get :show, params: { id: verified_facility.id }
         end.to change(Analytics::Visit, :count).by(1)
           .and change(Analytics::Event, :count).by(1)
           .and change(Analytics::Impression, :count).by(1)
 
         saved_event = Analytics::Event.last
 
-        expect(saved_event.facilities).to include(verified_facility).once
+        expect(saved_event.facilities).to include(verified_facility)
+        expect(saved_event.facilities).not_to include(nonverified_facility)
+        expect(saved_event.facilities).not_to include(another_verified_facility)
+      end
+
+    end
+
+    context "GET #index" do
+      context "with facilities" do
+        it "adds analytics data for the request without any impressions" do
+          expect do
+            get :index, params: {}
+          end.to change(Analytics::Visit, :count).by(1)
+            .and change(Analytics::Event, :count).by(1)
+            .and not_change(Analytics::Impression, :count)
+        end
+      end
+
+      context "without facilities" do
+        let(:load_data) { nonverified_facility }
+
+        it "adds analytics data for the request without any impressions" do
+          expect do
+            get :index, params: {}
+          end.to change(Analytics::Visit, :count).by(1)
+            .and change(Analytics::Event, :count).by(1)
+            .and not_change(Analytics::Impression, :count)
+        end
+      end
+    end
+  end
+
+  describe "GET #show" do
+    subject { response }
+
+    let(:load_data) { verified_facility }
+    let(:parsed_response) { JSON.parse(response.body, symbolize_names: true) }
+    let(:returned_facility) { parsed_response[:facility] }
+    let(:request_params) { { id: verified_facility } }
+
+    before do
+      get :show, params: request_params
+    end
+
+    include_examples :api_tokens
+
+    it { is_expected.to have_http_status(:success) }
+
+    describe "JSON body response" do
+      let(:facility_content) { returned_facility }
+      let(:services_content) { facility_content[:services] }
+      let(:site_stats_content) { parsed_response[:site_stats] }
+
+      it { expect(parsed_response).to include(:facility) }
+
+      describe "facility attributes" do
+        it { expect(returned_facility.keys).to include(:id, :name, :lat, :long) }
+
+        it { expect(returned_facility[:id]).to eq(verified_facility.id) }
+        it { expect(returned_facility[:name]).to eq(verified_facility.name) }
+        it { expect(returned_facility[:lat]).to eq(verified_facility.lat.to_s) }
+        it { expect(returned_facility[:long]).to eq(verified_facility.long.to_s) }
+      end
+
+      describe "services" do
+        it do
+          facility_service = verified_facility.facility_services.first
+          service = facility_service.service
+          expect(services_content).to contain_exactly(
+            a_hash_including(key: service.key,
+                             name: service.name,
+                             note: facility_service.note)
+          )
+        end
+      end
+
+      it do
+        expect(site_stats_content).to match(
+          a_hash_including(last_updated: verified_facility.updated_at.as_json)
+        )
       end
     end
   end

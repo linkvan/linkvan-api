@@ -4,14 +4,17 @@
 
 import { application } from "./application"
 
-import AutoSubmitController from "./auto_submit_controller.js"
+import AutoSubmitController from "./auto_submit_controller"
 application.register("auto-submit", AutoSubmitController)
 
-import HelloController from "./hello_controller.js"
+import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 
-import ModalController from "./modal_controller.js"
+import ModalController from "./modal_controller"
 application.register("modal", ModalController)
 
-import PagyController from "./pagy_controller.js"
+import NavigateController from "./navigate_controller"
+application.register("navigate", NavigateController)
+
+import PagyController from "./pagy_controller"
 application.register("pagy", PagyController)

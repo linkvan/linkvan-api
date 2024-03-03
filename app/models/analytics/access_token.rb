@@ -1,11 +1,11 @@
 class Analytics::AccessToken
-  COOKIE_PREFIX = "_linkvanapi_".freeze
+  COOKIE_PREFIX = "_linkvanapi_tokens".freeze
   MAPPING = {
     uuid: 'uuid',
     session_token: 'session-token'
   }.freeze
 
-  attr_reader :uuid, :session_token, :session_id, :data
+  attr_reader :uuid, :session_token, :data
 
   def self.load(params)
     params = params.to_h.with_indifferent_access
@@ -20,15 +20,17 @@ class Analytics::AccessToken
   end
 
   def self.extract_tokens_from(params_or_cookie)
-    result = case params_or_cookie
+    value = params_or_cookie[COOKIE_PREFIX].presence || params_or_cookie
+
+    result = case value
              when String
                # Cookies are usually a json string.
-               JSON.parse(params_or_cookie, symbolize_names: true)
+               JSON.parse(value, symbolize_names: true)
              when ActionController::Parameters
                # Rails parameters ask to explicitly permit
-               params_or_cookie.permit(*MAPPING.values).to_h
+               value.permit(*MAPPING.values).to_h
              else
-               params_or_cookie.to_h
+               value.to_h
              end
 
     result.with_indifferent_access.slice(*MAPPING.values)
@@ -40,12 +42,21 @@ class Analytics::AccessToken
 
     decoded_data, _decoded_header = JSONWebToken.decode(session_token)
     @data = decoded_data.to_h.with_indifferent_access
-    @session_id = @data[:session_id] || SecureRandom.hex
+    # If session_id is not present, set it to a new random value
+    @data[:session_id] ||= SecureRandom.hex
   end
 
   def refresh
     # Update session_token with the latest data and expiration
     @session_token = JSONWebToken.encode(data, 30.minutes.from_now)
+  end
+
+  def session_id
+    @data[:session_id]
+  end
+
+  def save_to_cookies(cookies)
+    cookies[COOKIE_PREFIX] = to_json
   end
 
   def as_json(options=nil)

@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.1.4"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
-gem "rails", "~> 7.0.6"
+gem "rails", "~> 7.0.8"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.4.4"
 # Use Puma as the app server
@@ -39,6 +39,8 @@ gem "devise", "~> 4.8"
 gem 'rack-cors'
 
 group :development, :test do
+  gem 'dotenv-rails'
+
   gem "rspec-rails", "~> 5.1.1"
   gem "shoulda-matchers", ">= 4.5.1"
   gem "capybara"

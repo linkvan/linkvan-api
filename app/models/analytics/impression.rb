@@ -7,4 +7,6 @@ class Analytics::Impression < ApplicationRecord
   has_one :visit, through: :event
 
   validates :impressionable_id, uniqueness: { scope: %i[impressionable_type event_id] }
+
+  scope :facilities, -> { where(impressionable_type: 'Facility') }
 end

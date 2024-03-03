@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_19_183319) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_11_191305) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -39,10 +39,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_19_183319) do
     t.string "filename", null: false
     t.string "content_type"
     t.text "metadata"
+    t.string "service_name", null: false
     t.bigint "byte_size", null: false
     t.string "checksum"
     t.datetime "created_at", precision: nil, null: false
-    t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
@@ -63,14 +63,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_19_183319) do
     t.bigint "visit_id", null: false
     t.string "controller_name", null: false
     t.string "action_name", null: false
-    t.decimal "lat"
-    t.decimal "long"
     t.string "request_url", null: false
     t.string "request_ip"
     t.string "request_user_agent"
     t.jsonb "request_params"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "long"
+    t.decimal "lat"
     t.index ["visit_id"], name: "index_events_on_visit_id"
   end
 
@@ -230,8 +230,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_19_183319) do
     t.boolean "verified", default: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at", precision: nil
-    t.datetime "remember_created_at", precision: nil
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
     t.string "organization"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -249,6 +249,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_19_183319) do
     t.string "session_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "lat"
+    t.decimal "long"
     t.index ["session_id"], name: "index_visits_on_session_id"
     t.index ["uuid", "session_id"], name: "index_visits_on_uuid_and_session_id", unique: true
     t.index ["uuid"], name: "index_visits_on_uuid"

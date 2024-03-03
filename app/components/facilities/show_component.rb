@@ -38,6 +38,15 @@ class Facilities::ShowComponent < ViewComponent::Base
   end
 
   class LocationCardComponent < ShowComponentBase
+    private
+
+    def static_map_url
+      Locations::GoogleMaps::EmbedMapService.call(*coordinates)
+    end
+
+    def coordinates
+      [facility.lat, facility.long]
+    end
   end
 
   class ServicesCardComponent < ShowComponentBase
