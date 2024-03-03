@@ -47,9 +47,6 @@ class Analytics::AccessToken
   end
 
   def refresh
-    File.open("fabio.txt", "a") do |f|
-      f.puts data.to_json
-    end
     # Update session_token with the latest data and expiration
     @session_token = JSONWebToken.encode(data, 30.minutes.from_now)
   end
