@@ -3,6 +3,7 @@
 class Api::FacilitiesController < Api::BaseController
   # skip_before_action :authenticate_user!
   before_action :load_facilities, only: :index
+  before_action :load_facility, only: :show
   before_action :register_impressions
 
   # GET /facilities
@@ -26,13 +27,16 @@ class Api::FacilitiesController < Api::BaseController
     result = base_result
     # result[:site_stats] = SiteStatsSerializer.new(SiteStats.new).build
 
-    @facility = Facility.find(params[:id])
     result[:facility] = FacilitySerializer.call(@facility).data
 
     render json: result.as_json, status: :ok
   end
 
   private
+
+  def load_facility
+    @facility = Facility.find(params[:id])
+  end
 
   def load_facilities
     # Returns no facilities when parameters are missing to avoid overwhelming the server.
@@ -70,11 +74,11 @@ class Api::FacilitiesController < Api::BaseController
   end
 
   def register_impressions
+    return if @facility.blank?
+
     # This is saving the analytics data synchronously. If performance proves to be an issue,
     #   we might need to move it to an ActiveJob.
-    # TODO: Move analytics registration to a background job.
-    # NOTE: Removed impressions registering to avoid next tier of database.
-    # Analytics.register_analytics_impressions_for(event, @facility || @facilities)
+    Analytics.register_analytics_impressions_for(event, @facility)
   end
 
   def search_params

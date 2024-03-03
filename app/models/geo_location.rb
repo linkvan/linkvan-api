@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
-module GeoLocation
+class GeoLocation
   Coord = Struct.new(:lat, :long)
+
+  def initialize(address:, city:, lat:, long:)
+  end
 
   class << self
     def coord(lat, long)

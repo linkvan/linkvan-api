@@ -18,23 +18,23 @@ class FacilityTimeSlot < ApplicationRecord
   delegate :week_day, to: :facility_schedule, allow_nil: true
 
   def start_time
-    start_time_string.to_time
+    hour_min_to_time_string(from_hour, from_min).to_time
   end
 
   def end_time
-    end_time_string.to_time
+    hour_min_to_time_string(to_hour, to_min).to_time
   end
 
   def as_range
     start_time..end_time
   end
 
-  def start_time_string
-    "#{from_hour.to_s.rjust(2, '0')}:#{from_min.to_s.rjust(2, '0')}"
+  def start_time_for_displaying
+    start_time.strftime("%I:%M %p")
   end
 
-  def end_time_string
-    "#{to_hour.to_s.rjust(2, '0')}:#{to_min.to_s.rjust(2, '0')}"
+  def end_time_for_displaying
+    end_time.strftime("%I:%M %p")
   end
 
   # To double check overlapping logic
@@ -63,6 +63,10 @@ class FacilityTimeSlot < ApplicationRecord
   end
 
   private
+
+  def hour_min_to_time_string(hour, min)
+    "#{hour.to_s.rjust(2, '0')}:#{min.to_s.rjust(2, '0')}"
+  end
 
   def siblings_time_slots
     return FacilityTimeSlot.none if facility_schedule.blank?
