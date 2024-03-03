@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.1.4"
+ruby "3.2.3"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "rails", "~> 7.0.8"
@@ -60,7 +60,7 @@ group :development do
   # gem "spring"
 
   # powerful developer console.
-  gem "pry", "~> 0.13.1"
+  gem "pry", "~> 0.14.2"
   gem "pry-rails"
   gem "pry-stack_explorer", "~> 0.6.1"
   gem "pry-remote"
@@ -118,4 +118,4 @@ gem "cssbundling-rails", "~> 1.1"
 
 # Aborts requests that are taking too long.
 #   Set the timeout by setting the RACK_TIMEOUT_SERVICE_TIMEOUT env var
-gem "rack-timeout"
+# gem "rack-timeout"
