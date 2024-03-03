@@ -183,7 +183,7 @@ GEM
       ast (~> 2.4.1)
       racc
     pg (1.4.6)
-    pry (0.13.1)
+    pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
     pry-byebug (3.10.1)
@@ -353,6 +353,7 @@ GEM
 PLATFORMS
   x86_64-darwin-21
   x86_64-darwin-22
+  x86_64-darwin-23
   x86_64-linux
 
 DEPENDENCIES
@@ -379,7 +380,7 @@ DEPENDENCIES
   memory_profiler
   pagy (~> 5.10.1)
   pg (~> 1.4.4)
-  pry (~> 0.13.1)
+  pry (~> 0.14.2)
   pry-byebug
   pry-rails
   pry-remote
@@ -407,7 +408,7 @@ DEPENDENCIES
   web-console (~> 4.1.0)
 
 RUBY VERSION
-   ruby 3.1.4p223
+   ruby 3.2.3p157
 
 BUNDLED WITH
-   2.3.23
+   2.5.6
