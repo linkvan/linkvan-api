@@ -38,19 +38,19 @@ x-app: &app
 services:
   postgres:
     image: postgres:13.2-alpine
-    command: -p 35432
     volumes:
       - postgresql:/var/lib/postgresql/data:delegated
     expose:
       - "35432"
     ports:
-      - "35432:5432"
+      - "35432"
       # Uncomment to access this containers Postgres instance via port 5432
       # - "127.0.0.1:5432:5432"
     environment:
       PSQL_HISTFILE: /root/log/.psql_history
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      PGPORT: 35432
     restart: on-failure
     logging:
       driver: none
