@@ -27,8 +27,8 @@ class Location
                           geocoder_location&.postal_code]
 
     address = address_components.compact.join(", ")
-    lat = facility&.lat || geocoder_location.latitude
-    long = facility&.long || geocoder_location.longitude
+    lat = facility&.lat || geocoder_location&.latitude
+    long = facility&.long || geocoder_location&.longitude
 
     new(
       address:,

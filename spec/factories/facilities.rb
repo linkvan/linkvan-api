@@ -1,8 +1,6 @@
 FactoryBot.define do
   factory :facility do
     name { "Test Facility" }
-    lat { 49.2450424 }
-    long { -123.02894679999997 }
     address { "address of facility" }
     phone { "123" }
     website { "www.facility.test" }
@@ -10,7 +8,9 @@ FactoryBot.define do
     notes { "small notes about facility" }
     verified { false }
 
-    trait :verified do
+    trait :with_verified do
+      lat { 49.2450424 }
+      long { -123.02894679999997 }
       verified { true }
     end
 

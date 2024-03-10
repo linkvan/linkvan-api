@@ -61,15 +61,24 @@ class Api::BaseController < ApplicationController
   end
 
   def location_params
-    return {} if location_headers.blank?
-
-    data = JSON.parse(location_headers)
-    { lat: data["lat"], long: data["lng"] }
-  rescue JSON::ParserError
-    {}
+    {
+      lat: location_headers["lat"],
+      long: location_headers["lng"]
+    }
   end
 
   def location_headers
-    request.headers["User-Location"]
+    user_location = request.headers["User-Location"]
+
+    parse_user_location(user_location).with_indifferent_access
+  end
+
+  def parse_user_location(user_location)
+    return {} if user_location.blank?
+    return user_location if user_location.is_a?(Hash)
+
+    JSON.parse(user_location).to_h
+  rescue JSON::ParserError
+    {}
   end
 end

@@ -22,7 +22,11 @@ class Facility < ApplicationRecord
     duplicated: "duplicated"
   }, prefix: true, default: :none
 
-  validates :name, :lat, :long, presence: true
+  validates :name, presence: true
+
+  with_options if: :verified? do |verified_facility|
+    verified_facility.validates :lat, :long, presence: true
+  end
 
   before_validation :clean_data
   # is_impressionable
@@ -72,6 +76,17 @@ class Facility < ApplicationRecord
     else
       :pending_reviews
     end
+  end
+
+  def update_status(new_status)
+    case new_status.to_sym
+    when :live
+      assign_attributes(verified: true)
+    when :pending_reviews
+      assign_attributes(verified: false)
+    end
+
+    save
   end
 
   def website_url
