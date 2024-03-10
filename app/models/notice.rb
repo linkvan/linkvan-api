@@ -7,7 +7,8 @@ class Notice < ApplicationRecord
     general: "general",
     covid19: "covid19",
     warming_center: "warming_center",
-    cooling_center: "cooling_center"
+    cooling_center: "cooling_center",
+    water_fountain: "water_fountain"
   }
 
   validates :title, :content, :slug, presence: true

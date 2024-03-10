@@ -2,9 +2,9 @@ require "rails_helper"
 require 'support/shared_examples/api_tokens'
 
 RSpec.describe Api::FacilitiesController do # , type: :request do
-  let(:verified_facility) { create(:open_all_day_facility, :with_services, verified: true) }
-  let(:nonverified_facility) { create(:open_all_day_facility, :with_services, verified: false) }
-  let(:another_verified_facility) { create(:open_all_day_facility, :with_services, verified: true) }
+  let(:verified_facility) { create(:open_all_day_facility, :with_services, :with_verified) }
+  let(:nonverified_facility) { create(:open_all_day_facility, :with_services) }
+  let(:another_verified_facility) { create(:open_all_day_facility, :with_services, :with_verified) }
 
   before do
     config_jwt

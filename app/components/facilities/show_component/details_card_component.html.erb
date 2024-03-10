@@ -45,6 +45,10 @@
                     <td>
                         <%= render Facilities::StatusComponent.new(facility.status) %>
                         <%= render Facilities::StatusComponent.new(facility.status, variant: :title) %>
+
+                        <p class="is-size-4">
+                            <%= switch_status_button %>
+                        </p>
                     </td>
                 </tr>
 

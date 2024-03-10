@@ -4,7 +4,7 @@ class Admin::FacilitiesController < Admin::BaseController
   before_action :load_facilities, only: [:index]
   before_action :load_services_dropdown, only: [:index]
   before_action :load_welcomes_dropdown, only: [:index]
-  before_action :load_facility, only: %i[show edit update destroy]
+  before_action :load_facility, only: %i[show edit update destroy switch_status]
 
   def index; end
 
@@ -54,9 +54,21 @@ class Admin::FacilitiesController < Admin::BaseController
       redirect_back fallback_location: admin_facility_path(@facility)
     else
       # Error when turning Welcome on.
-      flash[:error] = "Failed to discard Facility #{@facility.name} (id: #{@facility.id}). Errors: #{@facility.errors.full_messages.join('; ')}"
+      flash[:alert] = "Failed to discard Facility #{@facility.name} (id: #{@facility.id}). Errors: #{@facility.errors.full_messages.join('; ')}"
       render action: :show, status: :unprocessable_entity
     end
+  end
+
+  def switch_status
+    new_status = params.permit(:status).fetch(:status, nil)
+
+    if @facility.update_status(new_status)
+      flash[:notice] = "Successfully switched Facility #{@facility.name} (id: #{@facility.id}) status to #{new_status}"
+    else
+      flash[:alert] = "Failed to discard Facility #{@facility.name} (id: #{@facility.id}). Errors: #{@facility.errors.full_messages.join('; ')}"
+    end
+
+    redirect_back fallback_location: admin_facility_path(@facility)
   end
 
   private
