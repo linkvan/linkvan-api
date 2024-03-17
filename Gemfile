@@ -108,7 +108,7 @@ gem "inline_svg"
 
 gem "haversine", git: "https://github.com/fabionl/haversine.git"
 gem "geo_coord", require: "geo/coord"
-gem 'geocoder', '~> 1.6'
+gem 'geocoder', '~> 1.8'
 
 # Adds JSON Web token control
 gem "jwt"
