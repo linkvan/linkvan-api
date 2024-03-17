@@ -372,7 +372,7 @@ DEPENDENCIES
   capybara
   colorize
   cssbundling-rails (~> 1.1)
-  devise (~> 4.8)
+  devise (~> 4.9.3)
   dotenv-rails
   factory_bot_rails (~> 6.1.0)
   faker (~> 2.17.0)
