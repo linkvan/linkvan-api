@@ -208,7 +208,7 @@ GEM
     rack (2.2.8.1)
     rack-cors (2.0.2)
       rack (>= 2.0.0)
-    rack-mini-profiler (2.3.4)
+    rack-mini-profiler (3.3.1)
       rack (>= 1.2.0)
     rack-test (2.1.0)
       rack (>= 1.3)
@@ -394,7 +394,7 @@ DEPENDENCIES
   pry-stack_explorer (~> 0.6.1)
   puma (~> 6.4.2)
   rack-cors
-  rack-mini-profiler (~> 2.3.1)
+  rack-mini-profiler (~> 3.3.1)
   rails (~> 7.0.8)
   redis (~> 5.1.0)
   requestjs-rails
