@@ -2,9 +2,11 @@
 
 module Analytics
   class << self
-    def find_or_create_visit_from(access_token)
-      Visit.find_or_create_by(uuid: access_token.uuid,
-                              session_id: access_token.session_id)
+    def find_or_create_visit_from(access_token, visit_params)
+      Visit.find_or_initialize_by(
+        uuid: access_token.uuid,
+        session_id: access_token.session_id
+      ).attempt_update_coordinates(visit_params)
     end
 
     def register_event(visit, event_params)

@@ -28,6 +28,29 @@ class Facilities::ShowComponent < ViewComponent::Base
 
     private
 
+    def switch_status_button
+      return if facility.discarded?
+
+      case facility.status
+      when :pending_reviews
+        new_status = :live
+        switch_icon = "fa-toggle-off"
+        title = "Switch to Live"
+      when :live
+        new_status = :pending_reviews
+        switch_icon = "fa-toggle-on"
+        title = "Switch to Pending Reviews"
+      end
+
+      target_url = switch_status_admin_facility_path(id: facility.id, status: new_status)
+
+      link_to target_url, data: { turbo_method: :put } do
+        tag.span(class: "icon", title: title) do
+          tag.i class: "fas #{switch_icon}"
+        end
+      end
+    end
+
     def link_to_website
       link_to facility.website_url, facility.website_url, target: "_blank", rel: "noopener" if facility.website_url.present?
     end
@@ -38,6 +61,11 @@ class Facilities::ShowComponent < ViewComponent::Base
   end
 
   class LocationCardComponent < ShowComponentBase
+    private
+
+    def static_map_url
+      Locations::GoogleMaps::EmbedMapService.call(*coordinates)
+    end
   end
 
   class ServicesCardComponent < ShowComponentBase

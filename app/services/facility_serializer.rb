@@ -58,9 +58,10 @@ class FacilitySerializer < ApplicationService
   end
 
   def hashify_schedules
-    data = {}
+    data = build_closed_all_day_schedule_data
+
     @facility.schedules.each do |schedule|
-      result_key = "schedule_#{schedule.week_day}".to_sym
+      result_key = schedule_key_for(schedule.week_day)
       data[result_key] = hashify_facility_schedule(schedule)
     end
 
@@ -70,7 +71,21 @@ class FacilitySerializer < ApplicationService
   def hashify_facility_schedule(schedule)
     result = FacilityScheduleSerializer.call(schedule)
 
-
     result.data
+  end
+
+  def schedule_key_for(week_day)
+    "schedule_#{week_day}".to_sym
+  end
+
+  def build_closed_all_day_schedule_data
+    result = {}
+    # Initialize all keys to make sure the schedule always contain them
+    FacilitySchedule.week_days.each_key.each do |week_day|
+      result[schedule_key_for(week_day)] = hashify_facility_schedule(
+        FacilitySchedule.new(closed_all_day: true)
+      )
+    end
+    result
   end
 end

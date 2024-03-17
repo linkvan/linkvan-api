@@ -1,6 +1,6 @@
 # based on Mike Rogers' Dockerfile from:
 # - https://github.com/Ruby-Starter-Kits/Docker-Rails-Template/blob/master/Dockerfile
-FROM ruby:3.1.4-alpine AS builder
+FROM ruby:3.2.3-alpine AS builder
 LABEL maintainer="Fabio Lima <fabionl@gmail.com>"
 
 RUN apk --no-cache add --virtual build-dependencies \
@@ -50,7 +50,7 @@ RUN apk --no-cache add \
 # COPY Aptfile /usr/src/app/Aptfile
 # RUN apk add --update $(cat /usr/src/app/Aptfile | xargs)
 # Install Bundler v1.3
-RUN gem install bundler -v "~> 2.3.23"
+RUN gem update --system && gem install bundler -v "2.5.6"
 
 FROM builder AS development
 

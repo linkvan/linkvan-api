@@ -11,7 +11,9 @@ class Api::BaseController < ApplicationController
   private
 
   def base_result
-    site_stats.merge(tokens: access_token)
+    site_stats
+    #  NOTE: Removed tokens from result in favour of cookies
+    #  .merge(tokens: access_token)
   end
 
   def site_stats
@@ -20,7 +22,7 @@ class Api::BaseController < ApplicationController
 
   def handle_tokens
     access_token.refresh
-    cookies['_linkvan_tokens'] = access_token.to_json
+    access_token.save_to_cookies(cookies)
   end
 
   def handle_analytics_event
@@ -29,23 +31,21 @@ class Api::BaseController < ApplicationController
   end
 
   def event
-    # NOTE: Removed events registering to avoid next tier of database.
-    # @event ||= Analytics.register_event(
-    #   analytics,
-    #   controller_name: params[:controller],
-    #   action_name: params[:action],
-    #   request_url: request.url,
-    #   request_params: request.params,
-    #   request_ip: request.ip,
-    #   request_user_agent: request.user_agent,
-    #   lat: nil,
-    #   long: nil
-    # )
+    @event ||= Analytics.register_event(
+      analytics,
+      controller_name: params[:controller],
+      action_name: params[:action],
+      request_url: request.url,
+      request_params: request.params,
+      request_ip: request.ip,
+      request_user_agent: request.user_agent,
+      lat: location_params[:lat],
+      long: location_params[:long]
+    )
   end
 
   def analytics
-    # NOTE: Removed analytics registering to avoid next tier of database.
-    # @analytics ||= Analytics.find_or_create_visit_from(access_token)
+    @analytics ||= Analytics.find_or_create_visit_from(access_token, visit_params)
   end
 
   def access_token
@@ -53,8 +53,32 @@ class Api::BaseController < ApplicationController
   end
 
   def token_params
-    # @note: parameters take precedence over cookies.
-    Analytics::AccessToken.extract_tokens_from(cookies['_linkvan_tokens'])
-      .merge(Analytics::AccessToken.extract_tokens_from(params))
+    Analytics::AccessToken.extract_tokens_from(cookies)
+  end
+
+  def visit_params
+    location_params
+  end
+
+  def location_params
+    {
+      lat: location_headers["lat"],
+      long: location_headers["lng"]
+    }
+  end
+
+  def location_headers
+    user_location = request.headers["User-Location"]
+
+    parse_user_location(user_location).with_indifferent_access
+  end
+
+  def parse_user_location(user_location)
+    return {} if user_location.blank?
+    return user_location if user_location.is_a?(Hash)
+
+    JSON.parse(user_location).to_h
+  rescue JSON::ParserError
+    {}
   end
 end

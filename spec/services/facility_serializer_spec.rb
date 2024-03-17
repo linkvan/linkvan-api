@@ -7,6 +7,12 @@ RSpec.shared_context "has the correct attributes" do
   facility_attribs.each do |field|
     it { is_expected.to include(field) }
   end
+
+  schedule_attribs = %i[schedule_monday schedule_tuesday schedule_wednesday schedule_thursday schedule_friday schedule_saturday schedule_sunday]
+
+  schedule_attribs.each do |schedule_attr|
+    it { expect(subject[:schedule]).to have_key(schedule_attr) }
+  end
 end
 
 describe FacilitySerializer do

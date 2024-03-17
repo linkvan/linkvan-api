@@ -9,7 +9,7 @@
 
         <!-- Modal for the Discard action -->
         <%= form_with model: facility, url: admin_facility_path(facility), method: :delete do |form| %>
-            <div id="reason_modal" class="modal" data-modal-target= "modal">
+            <div id="reason_modal" class="modal" data-modal-target= "modalContainer">
                 <div class="modal-background"></div>
 
                 <div class="modal-card">
@@ -45,6 +45,10 @@
                     <td>
                         <%= render Facilities::StatusComponent.new(facility.status) %>
                         <%= render Facilities::StatusComponent.new(facility.status, variant: :title) %>
+
+                        <p class="is-size-4">
+                            <%= switch_status_button %>
+                        </p>
                     </td>
                 </tr>
 
@@ -61,11 +65,6 @@
                 <tr>
                     <th>Phone Number:</th>
                     <td><%= facility.phone %></td>
-                </tr>
-
-                <tr>
-                    <th>Website:</th>
-                    <td><%= link_to_website %></td>
                 </tr>
                 <tr>
                     <th>User:</th>
@@ -97,8 +96,8 @@
             <!-- Descriptions -->
             <table class='table'>
                 <tr>
-                    <th>Address:</th>
-                    <td><%= facility.address %></td>
+                    <th>Website:</th>
+                    <td><%= link_to_website %></td>
                 </tr>
 
                 <tr>

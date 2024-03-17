@@ -13,7 +13,7 @@ class Admin::FacilityTimeSlotsController < Admin::BaseController
     # flash[:error] = "Not Implemented #{__method__}. PARAMS: #{params.inspect}"
     @time_slot = @schedule.time_slots.build(time_slot_params)
 
-    time_slot_description = "time slot (#{@time_slot.start_time_string} - #{@time_slot.end_time_string})"
+    time_slot_description = "time slot (#{@time_slot.start_time_for_displaying} - #{@time_slot.end_time_for_displaying})"
     if @time_slot.save && @schedule.update_schedule_availability
       flash[:notice] =
         "Successfully created #{time_slot_description} for #{facility_description}"

@@ -1,8 +1,6 @@
 FactoryBot.define do
   factory :facility do
     name { "Test Facility" }
-    lat { 49.2450424 }
-    long { -123.02894679999997 }
     address { "address of facility" }
     phone { "123" }
     website { "www.facility.test" }
@@ -10,12 +8,20 @@ FactoryBot.define do
     notes { "small notes about facility" }
     verified { false }
 
-    trait :verified do
+    trait :with_verified do
+      lat { 49.2450424 }
+      long { -123.02894679999997 }
       verified { true }
     end
 
     # Facility is open all day
-    factory :open_all_day_facility
+    factory :open_all_day_facility do
+      after(:build) do |facility|
+        FacilitySchedule.week_days.each_key do |week_day|
+          facility.schedules << build(:facility_schedule, open_all_day: true, facility: facility, week_day: week_day)
+        end
+      end
+    end
 
     # Facility is closed all day
     factory :close_all_day_facility

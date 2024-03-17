@@ -1,8 +1,5 @@
 require "rails_helper"
 
-# To set type of spec:
-#   RSpec.describe "Hello", type: :feature do
-#
 RSpec.describe "Facilities index" do
 
   before do

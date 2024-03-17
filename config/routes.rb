@@ -30,10 +30,15 @@ Rails.application.routes.draw do
     end
 
     resources :facilities do
+      member do
+        put :switch_status
+      end
+
       resources :schedules, only: %i[new create edit update], controller: :facility_schedules
       resources :time_slots, only: %i[new create destroy], controller: :facility_time_slots
       resources :services, only: %i[create update destroy], controller: :facility_services
       resources :welcomes, only: %i[create destroy], controller: :facility_welcomes
+      resources :locations, only: %i[index new create], controller: :facility_locations
     end
 
     resources :alerts
