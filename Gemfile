@@ -78,7 +78,7 @@ end
 
 # Ruby code analyzer and formatter
 group :rubocop, :development do
-  gem "rubocop", ">= 1.11.0", require: false
+  gem "rubocop", ">= 1.62.1", require: false
   gem "rubocop-rails", require: false
   gem "rubocop-rspec", require: false
   gem "rubocop-performance", require: false

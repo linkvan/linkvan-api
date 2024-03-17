@@ -399,7 +399,7 @@ DEPENDENCIES
   redis (~> 5.1.0)
   requestjs-rails
   rspec-rails (~> 6.1.1)
-  rubocop (>= 1.11.0)
+  rubocop (>= 1.62.1)
   rubocop-packaging
   rubocop-performance
   rubocop-rails
