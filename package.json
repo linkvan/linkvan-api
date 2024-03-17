@@ -14,7 +14,7 @@
     "bulma": "^0.9.4",
     "bulma-switch": "^2.0.4",
     "bulma-tooltip": "^3.0.2",
-    "esbuild": "^0.15.14",
+    "esbuild": "^0.20.2",
     "flatpickr": "^4.6.9",
     "sass": "^1.56.1",
     "trix": "^2.0.0"
