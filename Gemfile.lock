@@ -125,8 +125,8 @@ GEM
     factory_bot_rails (6.4.3)
       factory_bot (~> 6.4)
       railties (>= 5.0.0)
-    faker (2.17.0)
-      i18n (>= 1.6, < 2)
+    faker (3.2.3)
+      i18n (>= 1.8.11, < 2)
     ffi (1.16.3)
     geo_coord (0.2.0)
     geocoder (1.8.2)
@@ -375,7 +375,7 @@ DEPENDENCIES
   devise (~> 4.9.3)
   dotenv-rails
   factory_bot_rails (~> 6.4.3)
-  faker (~> 2.17.0)
+  faker (~> 3.2.3)
   geo_coord
   geocoder (~> 1.6)
   haversine!
