@@ -92,7 +92,7 @@ end
 gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # Pagination
-gem "pagy", "~> 5.10.1"
+gem "pagy", "~> 7.0.10"
 
 # Alternative approach to web apps development.
 # https://github.com/hotwired/hotwire-rails
