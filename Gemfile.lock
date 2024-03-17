@@ -265,14 +265,14 @@ GEM
     rspec-mocks (3.13.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
-    rspec-rails (5.1.2)
-      actionpack (>= 5.2)
-      activesupport (>= 5.2)
-      railties (>= 5.2)
-      rspec-core (~> 3.10)
-      rspec-expectations (~> 3.10)
-      rspec-mocks (~> 3.10)
-      rspec-support (~> 3.10)
+    rspec-rails (6.1.1)
+      actionpack (>= 6.1)
+      activesupport (>= 6.1)
+      railties (>= 6.1)
+      rspec-core (~> 3.12)
+      rspec-expectations (~> 3.12)
+      rspec-mocks (~> 3.12)
+      rspec-support (~> 3.12)
     rspec-support (3.13.1)
     rubocop (1.62.1)
       json (~> 2.3)
@@ -398,14 +398,14 @@ DEPENDENCIES
   rails (~> 7.0.8)
   redis (~> 5.1.0)
   requestjs-rails
-  rspec-rails (~> 5.1.1)
+  rspec-rails (~> 6.1.1)
   rubocop (>= 1.11.0)
   rubocop-packaging
   rubocop-performance
   rubocop-rails
   rubocop-rspec
   sass-rails (~> 6.0.0)
-  shoulda-matchers (>= 4.5.1)
+  shoulda-matchers (>= 6.2.0)
   sprockets-rails
   stackprof
   turbo-rails
