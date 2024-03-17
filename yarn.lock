@@ -117,28 +117,28 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.20.2.tgz#9c907b21e30a52db959ba4f80bb01a0cc403d5cc"
   integrity sha512-N49X4lJX27+l9jbLKSqZ6bKNjzQvHaT8IIFUy+YIqmXQdjYCToGWwOItDrfby14c78aDd5NHQl29xingXfCdLQ==
 
-"@fortawesome/fontawesome-free@^6.2.1":
-  version "6.2.1"
-  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-6.2.1.tgz#344baf6ff9eaad7a73cff067d8c56bfc11ae5304"
-  integrity sha512-viouXhegu/TjkvYQoiRZK3aax69dGXxgEjpvZW81wIJdxm5Fnvp3VVIP4VHKqX4SvFw6qpmkILkD4RJWAdrt7A==
+"@fortawesome/fontawesome-free@^6.5.1":
+  version "6.5.1"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-6.5.1.tgz#55cc8410abf1003b726324661ce5b0d1c10de258"
+  integrity sha512-CNy5vSwN3fsUStPRLX7fUYojyuzoEMSXPl7zSLJ8TgtRfjv24LOnOWKT2zYwaHZCJGkdyRnTmstR0P+Ah503Gw==
 
-"@hotwired/stimulus@^3.1.1":
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/@hotwired/stimulus/-/stimulus-3.1.1.tgz#652f08a8e1d5edcb407340e58818fcff463b5848"
-  integrity sha512-e0JpzIaYLsRRXevRDVs0yevabiCvieIWWCwh7VqVXjXM5AOHdjb7AjaKIj34zYFmY1N6HIRRfk915WVMYlHnDA==
+"@hotwired/stimulus@^3.2.2":
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/@hotwired/stimulus/-/stimulus-3.2.2.tgz#071aab59c600fed95b97939e605ff261a4251608"
+  integrity sha512-eGeIqNOQpXoPAIP7tC1+1Yc1yl1xnwYqg+3mzqxyrbE5pg5YFBZcA6YoTiByJB6DKAEsiWtl6tjTJS4IYtbB7A==
 
-"@hotwired/turbo-rails@^7.2.4":
-  version "7.2.4"
-  resolved "https://registry.yarnpkg.com/@hotwired/turbo-rails/-/turbo-rails-7.2.4.tgz#d155533e79c4ebdac23e8fe12697d821d5c06307"
-  integrity sha512-givDUQqaccd19BvErz1Cf2j6MXF74m0G6I75oqFJGeXAa7vwkz9nDplefVNrALCR9Xi9j9gy32xmSI6wD0tZyA==
+"@hotwired/turbo-rails@^7.3.0":
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@hotwired/turbo-rails/-/turbo-rails-7.3.0.tgz#422c21752509f3edcd6c7b2725bbe9e157815f51"
+  integrity sha512-fvhO64vp/a2UVQ3jue9WTc2JisMv9XilIC7ViZmXAREVwiQ2S4UC7Go8f9A1j4Xu7DBI6SbFdqILk5ImqVoqyA==
   dependencies:
-    "@hotwired/turbo" "^7.2.4"
+    "@hotwired/turbo" "^7.3.0"
     "@rails/actioncable" "^7.0"
 
-"@hotwired/turbo@^7.2.4":
-  version "7.2.4"
-  resolved "https://registry.yarnpkg.com/@hotwired/turbo/-/turbo-7.2.4.tgz#0d35541be32cfae3b4f78c6ab9138f5b21f28a21"
-  integrity sha512-c3xlOroHp/cCZHDOuLp6uzQYEbvXBUVaal0puXoGJ9M8L/KHwZ3hQozD4dVeSN9msHWLxxtmPT1TlCN7gFhj4w==
+"@hotwired/turbo@^7.3.0":
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@hotwired/turbo/-/turbo-7.3.0.tgz#2226000fff1aabda9fd9587474565c9929dbf15d"
+  integrity sha512-Dcu+NaSvHLT7EjrDrkEmH4qET2ZJZ5IcCWmNXxNQTBwlnE5tBZfN6WxZ842n5cHV52DH/AKNirbPBtcEXDLW4g==
 
 "@rails/actioncable@^7.0":
   version "7.0.4"
@@ -444,10 +444,10 @@ regenerator-runtime@^0.11.0:
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.11.1.tgz#be05ad7f9bf7d22e056f9726cee5017fbf19e2e9"
   integrity sha512-MguG95oij0fC3QV3URf4V2SDYGJhJnJGqvIIgdECeODCT98wSWDAJ94SSuVpYQUoTcGUIL6L4yNB7j1DFFHSBg==
 
-sass@^1.56.1:
-  version "1.56.1"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.56.1.tgz#94d3910cd468fd075fa87f5bb17437a0b617d8a7"
-  integrity sha512-VpEyKpyBPCxE7qGDtOcdJ6fFbcpOM+Emu7uZLxVrkX8KVU/Dp5UF7WLvzqRuUhB6mqqQt1xffLoG+AndxTZrCQ==
+sass@^1.72.0:
+  version "1.72.0"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.72.0.tgz#5b9978943fcfb32b25a6a5acb102fc9dabbbf41c"
+  integrity sha512-Gpczt3WA56Ly0Mn8Sl21Vj94s1axi9hDIzDFn9Ph9x3C3p4nNyvsqJoQyVXKou6cBlfFWEgRW4rT8Tb4i3XnVA==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
@@ -475,7 +475,7 @@ to-regex-range@^5.0.1:
   dependencies:
     is-number "^7.0.0"
 
-trix@^2.0.0:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/trix/-/trix-2.0.5.tgz#f54880ab38e24d47829a04e04afaf03a8607f772"
-  integrity sha512-OiCbDf17F7JahEwhyL1MvK9DxAAT1vkaW5sn+zpwfemZAcc4RfQB4ku18/1mKP58LRwBhjcy+6TBho7ciXz52Q==
+trix@^2.0.10:
+  version "2.0.10"
+  resolved "https://registry.yarnpkg.com/trix/-/trix-2.0.10.tgz#43f1ff7a94c42f708bd2bad3a2783147c0583698"
+  integrity sha512-a24w8rNVL+g9nDDdiDZwQVQ9AEWiXAmk9r0ZbwimczJi/xlaM+m0d6upAi0vysDNu0HsiYDFS1/VrR7HbX0Aig==
