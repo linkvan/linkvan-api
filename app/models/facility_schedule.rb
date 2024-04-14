@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class FacilitySchedule < ApplicationRecord
-  belongs_to :facility
+  belongs_to :facility, touch: true
   has_many :time_slots, class_name: "FacilityTimeSlot", dependent: :destroy
 
   enum week_day: {
