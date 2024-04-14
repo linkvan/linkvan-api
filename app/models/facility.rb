@@ -131,7 +131,7 @@ class Facility < ApplicationRecord
       send("#{attrb}=", send(attrb)&.squish)
     end
 
-    %i[description notes].each do |attrb|
+    %i[notes].each do |attrb|
       send("#{attrb}=", send(attrb)&.strip)
     end
 
