@@ -13,6 +13,26 @@ RSpec.shared_context "has the correct attributes" do
   schedule_attribs.each do |schedule_attr|
     it { expect(subject[:schedule]).to have_key(schedule_attr) }
   end
+
+  describe "website" do
+    before do
+      facility.website = website
+    end
+
+    context "when protocol is missing" do
+      let(:website) { "www.facility.com/path" }
+      let(:expected_website) { "https://#{website}" }
+
+      it { expect(returned_data[:website]).to eq(expected_website) }
+    end
+
+    context "when protocol is present" do
+      let(:website) { "http://www.facility.com/path" }
+      let(:expected_website) { website }
+
+      it { expect(returned_data[:website]).to eq(expected_website) }
+    end
+  end
 end
 
 describe FacilitySerializer do
