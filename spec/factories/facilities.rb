@@ -4,7 +4,6 @@ FactoryBot.define do
     address { "address of facility" }
     phone { "123" }
     website { "www.facility.test" }
-    description { "description of the facility" }
     notes { "small notes about facility" }
     verified { false }
 

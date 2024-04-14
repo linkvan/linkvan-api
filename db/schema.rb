@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_11_191305) do
+ActiveRecord::Schema[7.0].define(version: 2024_04_14_180502) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -63,14 +63,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_11_191305) do
     t.bigint "visit_id", null: false
     t.string "controller_name", null: false
     t.string "action_name", null: false
+    t.decimal "lat"
+    t.decimal "long"
     t.string "request_url", null: false
     t.string "request_ip"
     t.string "request_user_agent"
     t.jsonb "request_params"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.decimal "long"
-    t.decimal "lat"
     t.index ["visit_id"], name: "index_events_on_visit_id"
   end
 
@@ -81,7 +81,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_11_191305) do
     t.string "address"
     t.string "phone"
     t.string "website"
-    t.text "description"
     t.text "notes"
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
@@ -230,8 +229,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_11_191305) do
     t.boolean "verified", default: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
+    t.datetime "reset_password_sent_at", precision: nil
+    t.datetime "remember_created_at", precision: nil
     t.string "organization"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

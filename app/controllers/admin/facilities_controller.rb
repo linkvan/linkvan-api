@@ -105,6 +105,8 @@ class Admin::FacilitiesController < Admin::BaseController
       )
     end
 
+    facilities = facilities.order(updated_at: :asc)
+
     @pagy, @facilities = pagy(facilities)
   end
 
@@ -125,7 +127,7 @@ class Admin::FacilitiesController < Admin::BaseController
   end
 
   def facility_params
-    params.require(:facility).permit(:verified, :name, :phone, :website, :description, :notes)
+    params.require(:facility).permit(:verified, :name, :phone, :website, :notes)
   end
 
   def discard_facility_params

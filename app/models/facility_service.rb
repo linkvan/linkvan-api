@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class FacilityService < ApplicationRecord
-  belongs_to :facility
+  belongs_to :facility, touch: true
   belongs_to :service
 
   validates :facility, :service, presence: true
