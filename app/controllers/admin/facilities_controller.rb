@@ -105,6 +105,8 @@ class Admin::FacilitiesController < Admin::BaseController
       )
     end
 
+    facilities = facilities.order(updated_at: :asc)
+
     @pagy, @facilities = pagy(facilities)
   end
 
