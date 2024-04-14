@@ -95,7 +95,7 @@ class Facility < ApplicationRecord
     if URI.parse(website).scheme.present?
       website
     else
-      "http://#{website}"
+      "https://#{website}"
     end
   end
 
