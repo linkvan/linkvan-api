@@ -13,15 +13,34 @@ class Admin::FacilityLocationsController < Admin::BaseController
 
   def create
     @facility.assign_attributes(location_params)
-    if @facility.save
-      redirect_to [:admin, @facility], notice: "Facility's address has been updated"
-    else
-      flash.now[:error] = location_params.inspect
-      render :new, status: :unprocessable_entity
+
+    respond_to do |format|
+      if @facility.save
+        success_msg = "Facility's address has been updated"
+        success_path = admin_facility_path(@facility)
+        format.turbo_stream do
+          flash[:notice] = success_msg
+
+          turbo_stream_redirect_to(success_path)
+        end
+
+        format.html do
+          redirect_to success_path, notice: success_msg
+        end
+      else
+        flash.now[:error] = location_params.inspect
+        render :new, status: :unprocessable_entity
+      end
     end
   end
 
   private
+
+  # Redirects out of the turbo frame.
+  # see: https://stackoverflow.com/questions/75738570/getting-a-turbo-frame-error-of-content-missing/75750578#75750578
+  def turbo_stream_redirect_to(target_path)
+    render turbo_stream: turbo_stream.action(:redirect, target_path)
+  end
 
   def search_and_load_locations
     locations_result = if search_params[:q].present?

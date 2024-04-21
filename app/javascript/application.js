@@ -1,5 +1,5 @@
 // Entry point for the build script in your package.json
-import "@hotwired/turbo-rails"
+import { Turbo } from "@hotwired/turbo-rails";
 import "./controllers"
 
 // import "@fortawesome/fontawesome-free/js/all";
@@ -26,4 +26,8 @@ document.addEventListener("turbo:load", () => {
   })
 })
 
-
+// Redirects out of the turbo frame.
+// see: https://stackoverflow.com/questions/75738570/getting-a-turbo-frame-error-of-content-missing/75750578#75750578
+Turbo.StreamActions.redirect = function () {
+  Turbo.visit(this.target);
+};

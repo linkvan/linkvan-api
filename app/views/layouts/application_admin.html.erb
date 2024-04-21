@@ -1,26 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>LinkvanApi</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+      <title>LinkvanApi</title>
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <%= csrf_meta_tags %>
+      <%= csp_meta_tag %>
 
-    <%#= stylesheet_packs_with_chunks_tag 'application', media: 'all', 'data-turbolinks-track': true %>
-    <%#= javascript_packs_with_chunks_tag 'application', 'data-turbolinks-track': true %>
-
-    <%#= stylesheet_packs_with_chunks_tag 'components', media: 'all', 'data-turbolinks-track': true %>
-    <%#= javascript_packs_with_chunks_tag 'components', 'data-turbolinks-track': true %>
-
-    <%#= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%#= javascript_pack_tag 'application', 'data-turbolinks-track': true %>
-    <%#= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%#= javascript_pack_tag 'components', 'data-turbolinks-track': true %>
-    <%#= stylesheet_pack_tag 'components', media: 'all', 'data-turbolinks-track': 'reload' %>
-
-
-     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
-     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+      <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+      <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   </head>
 
   <body>
@@ -43,6 +30,5 @@
     <footer class="footer">
       <%= render Layout::FooterComponent.new %>
     </footer>
-
   </body>
 </html>
