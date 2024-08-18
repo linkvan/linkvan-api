@@ -9,9 +9,6 @@ gem "rails", "~> 7.0.8"
 gem "pg", "~> 1.5.6"
 # Use Puma as the app server
 gem "puma", "~> 6.4.2"
-# Use SCSS for stylesheets
-gem "sass-rails", "~> 6.0.0"
-
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 #gem "jbuilder", "~> 2.7"
 # Use Redis adapter to run Action Cable in production
@@ -29,6 +26,8 @@ gem "bootsnap", "~> 1.18.3", require: false
 # docs: viewcomponent.org
 gem "view_component"
 
+# Use SCSS for stylesheets
+#gem "sass-rails", "~> 6.0.0"
 # As of Rails 7.0, sprockets is optional
 gem "sprockets-rails"
 gem "dartsass-sprockets"
