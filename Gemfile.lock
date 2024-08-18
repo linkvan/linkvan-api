@@ -316,7 +316,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    shoulda-matchers (6.2.0)
+    shoulda-matchers (6.4.0)
       activesupport (>= 5.2.0)
     slop (3.6.0)
     sprockets (4.2.1)
