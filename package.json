@@ -8,7 +8,7 @@
     "@rails/actioncable": "^7.0.4",
     "@rails/actiontext": "^7.0.4",
     "@rails/activestorage": "^7.0.4",
-    "@rails/request.js": "^0.0.8",
+    "@rails/request.js": "^0.0.9",
     "babel-preset-react": "^6.24.1",
     "bootstrap": "^5.3.3",
     "bulma": "^0.9.4",
