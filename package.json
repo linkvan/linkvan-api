@@ -17,7 +17,7 @@
     "esbuild": "^0.20.2",
     "flatpickr": "^4.6.9",
     "sass": "^1.72.0",
-    "trix": "^2.0.10"
+    "trix": "^2.1.4"
   },
   "version": "0.1.0",
   "devDependencies": {
