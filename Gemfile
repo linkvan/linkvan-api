@@ -31,6 +31,7 @@ gem "view_component"
 
 # As of Rails 7.0, sprockets is optional
 gem "sprockets-rails"
+gem "dartsass-sprockets"
 
 # Authentication
 gem "devise", "~> 4.9.3"
