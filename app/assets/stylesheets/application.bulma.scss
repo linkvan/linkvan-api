@@ -36,9 +36,10 @@
 // @import "bulma/sass/layout/hero.sass";
 // @import "bulma/sass/layout/section.sass";
 
-@import 'bulma/bulma';
-@import 'bulma-switch/src/sass';
-// @import 'bulma-switch/dist/css/bulma-switch.min.css';
+//@import 'bulma/bulma';
+@import "bulma/sass";
+//@import 'bulma-switch/src/sass';
+//@import 'bulma-switch/dist/css/bulma-switch.min.css';
 
 
 // Font Awesome
@@ -52,3 +53,5 @@ $fa-font-path: ".";
 
 
 @import './src/application.scss';
+
+
