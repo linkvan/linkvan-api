@@ -145,22 +145,22 @@
   resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-7.0.4.tgz#70a3ca56809f7aaabb80af2f9c01ae51e1a8ed41"
   integrity sha512-tz4oM+Zn9CYsvtyicsa/AwzKZKL+ITHWkhiu7x+xF77clh2b4Rm+s6xnOgY/sGDWoFWZmtKsE95hxBPkgQQNnQ==
 
-"@rails/actioncable@^7.0.4":
-  version "7.0.6"
-  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-7.0.6.tgz#60765c8e9c357a0ba0840fb1e409caedc233ea0d"
-  integrity sha512-ybBsUrIsu5geM8BtqnpM7ZA9D8uzSz+e1B4JR57NaCmasHKWap6AX5DT7NHIbp21opVet1qqoVSdsoLDqXeB2A==
+"@rails/actioncable@^7.0.8":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-7.2.0.tgz#dee66d21bc125a9819dc8080ce896eac78d8c63f"
+  integrity sha512-crcsPF3skrqJkFZLxesZoyUEt8ol25XtTuOAUMdLa5qQKWTZpL8eLVW71bDCwKDQLbV2z5sBZ/XGEC0i+ZZa+A==
 
-"@rails/actiontext@^7.0.4":
-  version "7.0.6"
-  resolved "https://registry.yarnpkg.com/@rails/actiontext/-/actiontext-7.0.6.tgz#42b2b275ce6b24031242c731828de9c02d58b53f"
-  integrity sha512-WHHkYmypUjlo6fvNxfKRluuHmIxZCEoK+g/hBsufoxvjvWSBx61qu0Xq0tCrGUYd4mUZ/kk8OqP96/UBI3vS/w==
+"@rails/actiontext@^7.0.8":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@rails/actiontext/-/actiontext-7.2.0.tgz#ac05f705a5dc26e6200d3eec7a9276a587385332"
+  integrity sha512-vBxIQXpXRnzp24NCF2Y45SHrtcD63udfnfFidFNrZBIMlwZ1VrEMaSUrkM0Rp0bE+GZRvm53VKHjXIfaHAUoOg==
   dependencies:
-    "@rails/activestorage" ">= 7.0.0-alpha1"
+    "@rails/activestorage" ">= 7.2.0-alpha"
 
-"@rails/activestorage@>= 7.0.0-alpha1", "@rails/activestorage@^7.0.4":
-  version "7.0.6"
-  resolved "https://registry.yarnpkg.com/@rails/activestorage/-/activestorage-7.0.6.tgz#8b762e7142eb8332541dffa0f841d7a5026f64fd"
-  integrity sha512-sLr5Uj8cnWkX9lLV7wk8mIVFt6XFOJR7mAXm0QmDnrR/YGMF4Ho5tcVRUHzlyAisRQcHp6D0zHSVgOUukF8OHg==
+"@rails/activestorage@>= 7.2.0-alpha", "@rails/activestorage@^7.0.8":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@rails/activestorage/-/activestorage-7.2.0.tgz#bc03b52a687ba2bb9d2e6381f25795cda037494e"
+  integrity sha512-jXK9tKDZn/j+ZeJuFdrtyrLNLWjzYRyp+mejWTfSp+egAp1okXsdfFNe8jqqgwcP8gytqJSPwo0sZwQVdQpuIA==
   dependencies:
     spark-md5 "^3.0.1"
 
