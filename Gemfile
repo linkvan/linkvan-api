@@ -33,7 +33,7 @@ gem "sprockets-rails"
 gem "dartsass-sprockets"
 
 # Authentication
-gem "devise", "~> 4.9.3"
+gem "devise", "~> 4.9.4"
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
