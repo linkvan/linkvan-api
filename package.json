@@ -19,7 +19,7 @@
   },
   "version": "0.1.0",
   "devDependencies": {
-    "jquery": "^3.6.0"
+    "jquery": "^3.7.1"
   },
   "scripts": {
     "build": "NODE_PATH=\"$(bundle show 'pagy')/lib/javascripts\" esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=assets",
