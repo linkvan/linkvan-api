@@ -187,7 +187,7 @@ GEM
       timeout
     net-smtp (0.4.0.1)
       net-protocol
-    nio4r (2.7.0)
+    nio4r (2.7.3)
     nokogiri (1.16.7-x86_64-darwin)
       racc (~> 1.4)
     nokogiri (1.16.7-x86_64-linux)
@@ -214,7 +214,7 @@ GEM
       binding_of_caller (~> 1.0)
       pry (~> 0.13)
     public_suffix (5.0.4)
-    puma (6.4.2)
+    puma (6.4.3)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (2.2.9)
@@ -403,7 +403,7 @@ DEPENDENCIES
   pry-rails
   pry-remote
   pry-stack_explorer (~> 0.6.1)
-  puma (~> 6.4.2)
+  puma (~> 6.4.3)
   rack-cors
   rack-mini-profiler (~> 3.3.1)
   rails (~> 7.0.8)
