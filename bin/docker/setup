@@ -9,7 +9,7 @@ def system!(*args)
 end
 
 def docked!(*args)
-  command_line = ["docker-compose run --rm web"] + args
+  command_line = ["docker-compose -p linkvan-dev run --rm web"] + args
   system!(command_line.join(" "))
 end
 
@@ -19,10 +19,10 @@ FileUtils.chdir APP_ROOT do
   FileUtils.cp ".env.template", ".env" unless File.exist?(".env")
 
   puts "== Pulling Images =="
-  system! "docker-compose pull"
+  system! "docker-compose -p linkvan-dev pull"
 
   puts "== Building Container =="
-  system! "docker-compose build"
+  system! "docker-compose -p linkvan-dev build"
 
   puts "== Running: bin/setup #{ARGV.join(' ')} =="
   docked!("./bin/setup", ARGV)
