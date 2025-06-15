@@ -7,7 +7,6 @@
 # docker-compose build
 # docker-compose run --rm web bin/setup
 # docker-compose up
-version: "3"
 
 x-app: &app
   build:
