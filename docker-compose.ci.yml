@@ -17,6 +17,8 @@ x-ci-app: &ci-app
     RAILS_ENV: test
     RACK_ENV: test
     BUNDLE_PATH: /usr/src/app/vendor/bundle
+    POSTGRES_HOST: postgres
+    POSTGRES_PORT: 5432
   entrypoint: ./bin/docker/entrypoints/wait-for-postgres.sh
   volumes:
     - .:/usr/src/app:cached

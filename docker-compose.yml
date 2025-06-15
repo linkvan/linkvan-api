@@ -20,6 +20,8 @@ x-app: &app
     # REDIS_URL: redis://@redis:6379/1
     DATABASE_URL: postgres://postgres:postgres@postgres:35432/
     GOOGLE_MAPS_API_TOKEN: ${GOOGLE_MAPS_API_TOKEN-}
+    POSTGRES_HOST: postgres
+    POSTGRES_PORT: 35432
   entrypoint: ./bin/docker/entrypoints/wait-for-web.sh
   volumes:
     - .:/usr/src/app:cached
@@ -32,7 +34,7 @@ x-app: &app
     - letter_opener:/usr/src/app/tmp/letter_opener:delegated
   depends_on:
     - postgres
-    # - redis
+# - redis
 
 services:
   postgres:
@@ -44,8 +46,8 @@ services:
     ports:
       - "35432"
       - "127.0.0.1:35432:35432"
-      # Uncomment to access this containers Postgres instance via port 5432
-      # - "127.0.0.1:5432:5432"
+    # Uncomment to access this containers Postgres instance via port 5432
+    # - "127.0.0.1:5432:5432"
     environment:
       PSQL_HISTFILE: /root/log/.psql_history
       POSTGRES_USER: postgres
@@ -74,17 +76,17 @@ services:
       - "127.0.0.1:3000:3000"
     restart: on-failure
 
-  # worker:
-  #   <<: *app
-  #   command: bundle exec sidekiq -C config/sidekiq.yml
+# worker:
+#   <<: *app
+#   command: bundle exec sidekiq -C config/sidekiq.yml
 
-  # webpacker:
-  #   <<: *app
-  #   command: yarn --build
-  #   environment:
-  #     WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
-  #   ports:
-  #     - "127.0.0.1:3035:3035"
+# webpacker:
+#   <<: *app
+#   command: yarn --build
+#   environment:
+#     WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
+#   ports:
+#     - "127.0.0.1:3035:3035"
 
 volumes:
   postgresql:
