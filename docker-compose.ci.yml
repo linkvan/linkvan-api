@@ -5,7 +5,6 @@
 #
 # docker-compose -f docker-compose.ci.yml build test
 # docker-compose -f docker-compose.ci.yml run --rm test
-version: '3'
 
 x-ci-app: &ci-app
   build:
