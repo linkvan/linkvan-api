@@ -28,6 +28,7 @@ namespace :data do
       "#{header} #{msg}\n"
     end
 
+    attention_logger = ActiveSupport::Logger.new("#{Rails.root}/log/import.log")
     logger = Rails.logger
     logger.extend(ActiveSupport::Logger.broadcast(stdout_logger))
 
@@ -135,6 +136,7 @@ namespace :data do
           next if time_slot.save
 
           logger.warn "[seed_fake] Can't create #{idx + 1}#{(idx + 1).ordinal} time slot for facility (id: #{facility.id}). Errors: #{time_slot.errors.full_messages}"
+          attention_logger.warn "[import] Can't create #{idx + 1}#{(idx + 1).ordinal} time slot for facility '#{facility.name}' (id: #{facility.id}). Errors: #{time_slot.errors.full_messages}"
           failed_schedules  << facility.id
         end
       end
@@ -168,6 +170,7 @@ namespace :data do
       ApplicationRecord.transaction do
         unless facility.save
           logger.error "[seed_fake] Failed to create Facility (id: #{facility_attribs["id"]}). Errors: #{facility.errors.full_messages}"
+          attention_logger.error "[import] Failed to create Facility '#{facility.name}' (id: #{facility_attribs["id"]}). Errors: #{facility.errors.full_messages}"
 
           next
         end
