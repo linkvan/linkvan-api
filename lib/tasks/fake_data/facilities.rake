@@ -29,7 +29,6 @@ namespace :fake_data do
         params[:long] = rand(*LIMITS[:long])
         params[:phone] = Faker::PhoneNumber.cell_phone
         params[:website] = Faker::Internet.url(path: "")
-        params[:description] = Faker::Lorem.paragraph
         params[:notes] = Faker::Lorem.paragraphs.join("\n\n")
         params[:verified] = (rand > 0.4)
         params[:zone] = zones.sample
