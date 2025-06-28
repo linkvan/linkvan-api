@@ -46,8 +46,8 @@ services:
     ports:
       - "35432"
       - "127.0.0.1:35432:35432"
-    # Uncomment to access this containers Postgres instance via port 5432
-    # - "127.0.0.1:5432:5432"
+      # Uncomment to access this containers Postgres instance via port 5432
+      # - "127.0.0.1:5432:5432"
     environment:
       PSQL_HISTFILE: /root/log/.psql_history
       POSTGRES_USER: postgres
