@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    root to: "admin/dashboard#index"
+    root to: "dashboard#index"
 
     resources :dashboard, only: %i[index show]
 
