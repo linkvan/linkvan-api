@@ -119,3 +119,6 @@ gem "cssbundling-rails", "~> 1.4"
 # Aborts requests that are taking too long.
 #   Set the timeout by setting the RACK_TIMEOUT_SERVICE_TIMEOUT env var
 # gem "rack-timeout"
+
+# Http client for making API requests
+gem "faraday", "~> 2.13.1"
