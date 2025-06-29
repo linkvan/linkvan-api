@@ -2,7 +2,7 @@
 
 require 'faraday'
 
-module VancouverApi
+module External::VancouverCity
   module Adapters
     # Faraday HTTP adapter for the Vancouver API client
     # Uses the builder pattern for flexible configuration

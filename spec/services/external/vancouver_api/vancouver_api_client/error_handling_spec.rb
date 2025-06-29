@@ -3,11 +3,11 @@
 require 'rails_helper'
 require_relative 'shared_helpers'
 
-RSpec.describe VancouverApi::VancouverApiClient, 'error handling', type: :service do
+RSpec.describe External::VancouverCity::VancouverApiClient, 'error handling', type: :service do
   include_context 'vancouver api client shared setup'
 
   let(:dataset_id) { 'drinking-fountains' }
-  let(:mock_adapter) { instance_double(VancouverApi::Adapters::FaradayAdapter) }
+  let(:mock_adapter) { instance_double(External::VancouverCity::Adapters::FaradayAdapter) }
   let(:test_client) { create_test_client_with_mock_adapter(mock_adapter) }
 
   describe 'HTTP error responses' do
@@ -27,7 +27,7 @@ RSpec.describe VancouverApi::VancouverApiClient, 'error handling', type: :servic
       it 'raises VancouverApiError with appropriate message' do
         expect {
           test_client.get_dataset_records('invalid-dataset')
-        }.to raise_error(VancouverApi::VancouverApiError) do |error|
+        }.to raise_error(External::VancouverCity::VancouverApiError) do |error|
           expect(error.message).to include('API request failed with status 404')
           expect(error.status_code).to eq(404)
           expect(error.response_body).to include('Page not found')
@@ -51,7 +51,7 @@ RSpec.describe VancouverApi::VancouverApiClient, 'error handling', type: :servic
       it 'raises VancouverApiError with JSON error message' do
         expect {
           test_client.get_dataset_records(dataset_id)
-        }.to raise_error(VancouverApi::VancouverApiError) do |error|
+        }.to raise_error(External::VancouverCity::VancouverApiError) do |error|
           expect(error.message).to include('Internal Server Error')
           expect(error.status_code).to eq(500)
         end
@@ -75,7 +75,7 @@ RSpec.describe VancouverApi::VancouverApiClient, 'error handling', type: :servic
       it 'truncates very long error messages' do
         expect {
           test_client.get_dataset_records(dataset_id)
-        }.to raise_error(VancouverApi::VancouverApiError) do |error|
+        }.to raise_error(External::VancouverCity::VancouverApiError) do |error|
           expect(error.message).to include('...')
           expect(error.message.length).to be < 280  # Adjusted for actual truncation behavior
         end
@@ -92,7 +92,7 @@ RSpec.describe VancouverApi::VancouverApiClient, 'error handling', type: :servic
       it 'raises VancouverApiError for timeout' do
         expect {
           test_client.get_dataset_records(dataset_id)
-        }.to raise_error(VancouverApi::VancouverApiError) do |error|
+        }.to raise_error(External::VancouverCity::VancouverApiError) do |error|
           expect(error.message).to include('Request timeout')
           expect(error.status_code).to be_nil
         end
@@ -107,7 +107,7 @@ RSpec.describe VancouverApi::VancouverApiClient, 'error handling', type: :servic
       it 'raises VancouverApiError for connection failure' do
         expect {
           test_client.get_dataset_records(dataset_id)
-        }.to raise_error(VancouverApi::VancouverApiError) do |error|
+        }.to raise_error(External::VancouverCity::VancouverApiError) do |error|
           expect(error.message).to include('Connection failed')
         end
       end
@@ -134,7 +134,7 @@ RSpec.describe VancouverApi::VancouverApiClient, 'error handling', type: :servic
       it 'raises VancouverApiError for JSON parsing error' do
         expect {
           test_client.get_dataset_records(dataset_id)
-        }.to raise_error(VancouverApi::VancouverApiError) do |error|
+        }.to raise_error(External::VancouverCity::VancouverApiError) do |error|
           expect(error.message).to include('Failed to parse JSON response')
         end
       end
@@ -150,7 +150,7 @@ RSpec.describe VancouverApi::VancouverApiClient, 'error handling', type: :servic
       it 'raises VancouverApiError for unexpected errors' do
         expect {
           test_client.get_dataset_records(dataset_id)
-        }.to raise_error(VancouverApi::VancouverApiError) do |error|
+        }.to raise_error(External::VancouverCity::VancouverApiError) do |error|
           expect(error.message).to include('Unexpected error')
           expect(error.status_code).to be_nil
         end

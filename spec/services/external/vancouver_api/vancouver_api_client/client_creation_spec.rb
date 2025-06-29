@@ -3,19 +3,19 @@
 require 'rails_helper'
 require_relative 'shared_helpers'
 
-RSpec.describe VancouverApi::VancouverApiClient, 'client creation and initialization', type: :service do
+RSpec.describe External::VancouverCity::VancouverApiClient, 'client creation and initialization', type: :service do
   include_context 'vancouver api client shared setup'
 
   describe '.default' do
     it 'creates a client with the default adapter' do
       client = described_class.default
-      expect(client.adapter).to eq(VancouverApi::DEFAULT_ADAPTER)
+      expect(client.adapter).to eq(External::VancouverCity::DEFAULT_ADAPTER)
     end
   end
 
   describe '.with_config' do
     it 'creates a client with custom configuration' do
-      config = VancouverApi::VancouverApiConfig.new(timeout: 60, open_timeout: 20)
+      config = External::VancouverCity::VancouverApiConfig.new(timeout: 60, open_timeout: 20)
       client = described_class.with_config(config)
       
       adapter = client.adapter
@@ -43,7 +43,7 @@ RSpec.describe VancouverApi::VancouverApiClient, 'client creation and initializa
     end
 
     context 'with custom adapter' do
-      let(:mock_adapter) { instance_double(VancouverApi::Adapters::FaradayAdapter) }
+      let(:mock_adapter) { instance_double(External::VancouverCity::Adapters::FaradayAdapter) }
       let(:client) { described_class.new(adapter: mock_adapter) }
 
       it 'uses the provided adapter' do

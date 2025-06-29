@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe VancouverApi::Adapters::FaradayAdapter, type: :service do
+RSpec.describe External::VancouverCity::Adapters::FaradayAdapter, type: :service do
   let(:base_url) { 'https://api.example.com' }
 
   describe '.builder' do

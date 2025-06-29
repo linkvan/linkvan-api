@@ -25,6 +25,12 @@ Rails.application.routes.draw do
       # root to: "dashboard#index"
     # end
 
+    resources :tools do
+      collection do
+        post :import_facilities
+      end
+    end
+
     resources :users do
       resources :passwords, only: %i[new create]
     end

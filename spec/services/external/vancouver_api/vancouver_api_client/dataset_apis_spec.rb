@@ -3,12 +3,12 @@
 require 'rails_helper'
 require_relative 'shared_helpers'
 
-RSpec.describe VancouverApi::VancouverApiClient, 'dataset APIs', type: :service do
+RSpec.describe External::VancouverCity::VancouverApiClient, 'dataset APIs', type: :service do
   include_context 'vancouver api client shared setup'
 
   describe '#get_dataset' do
     let(:dataset_id) { 'drinking-fountains' }
-    let(:mock_adapter) { instance_double(VancouverApi::Adapters::FaradayAdapter) }
+    let(:mock_adapter) { instance_double(External::VancouverCity::Adapters::FaradayAdapter) }
     let(:test_client) { create_test_client_with_mock_adapter(mock_adapter) }
     let(:response_body) do
       {
@@ -47,7 +47,7 @@ RSpec.describe VancouverApi::VancouverApiClient, 'dataset APIs', type: :service 
   end
 
   describe '#get_datasets' do
-    let(:mock_adapter) { instance_double(VancouverApi::Adapters::FaradayAdapter) }
+    let(:mock_adapter) { instance_double(External::VancouverCity::Adapters::FaradayAdapter) }
     let(:test_client) { create_test_client_with_mock_adapter(mock_adapter) }
     let(:response_body) do
       {
@@ -84,7 +84,7 @@ RSpec.describe VancouverApi::VancouverApiClient, 'dataset APIs', type: :service 
   describe '#get_dataset_record' do
     let(:dataset_id) { 'drinking-fountains' }
     let(:record_id) { 'DFPB0001' }
-    let(:mock_adapter) { instance_double(VancouverApi::Adapters::FaradayAdapter) }
+    let(:mock_adapter) { instance_double(External::VancouverCity::Adapters::FaradayAdapter) }
     let(:test_client) { create_test_client_with_mock_adapter(mock_adapter) }
     let(:response_body) do
       {

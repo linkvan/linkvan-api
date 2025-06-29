@@ -3,10 +3,10 @@
 require 'rails_helper'
 require_relative 'shared_helpers'
 
-RSpec.describe VancouverApi::VancouverApiClient, 'request structure and parameters', type: :service do
+RSpec.describe External::VancouverCity::VancouverApiClient, 'request structure and parameters', type: :service do
   include_context 'vancouver api client shared setup'
 
-  let(:mock_adapter) { instance_double(VancouverApi::Adapters::FaradayAdapter) }
+  let(:mock_adapter) { instance_double(External::VancouverCity::Adapters::FaradayAdapter) }
   let(:test_client) { create_test_client_with_mock_adapter(mock_adapter) }
   let(:mock_response) { create_successful_mock_response('{"results": []}') }
 

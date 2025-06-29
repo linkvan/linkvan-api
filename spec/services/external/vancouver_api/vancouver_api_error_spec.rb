@@ -2,8 +2,11 @@
 
 require 'rails_helper'
 
+# Trigger autoloading
+External::VancouverCity::VancouverApiClient if defined?(External::VancouverCity)
+
 # Test the custom error class
-RSpec.describe VancouverApi::VancouverApiError, type: :service do
+RSpec.describe External::VancouverCity::VancouverApiError, type: :service do
   describe '#initialize' do
     it 'sets message, status_code, and response_body' do
       error = described_class.new('Test error', 404, '{"error": "Not found"}')

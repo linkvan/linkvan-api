@@ -4,7 +4,7 @@ require 'faraday'
 require 'json'
 require_relative 'adapters/faraday_adapter'
 
-module VancouverApi
+module External::VancouverCity
   class VancouverApiConfig
     BASE_URL = 'https://opendata.vancouver.ca/api/explore/v2.1'
     DEFAULT_TIMEOUT = 30 # seconds
@@ -31,12 +31,12 @@ module VancouverApi
   #
   # Example usage:
   #   # Using the default adapter
-  #   client = VancouverApi::VancouverApiClient.new(adapter: VancouverApi::DEFAULT_ADAPTER)
+  #   client = VancouverAPI::VancouverApiClient.new(adapter: VancouverAPI::DEFAULT_ADAPTER)
   #   
   #   # Using a custom configuration
-  #   config = VancouverApi::VancouverApiConfig.new(timeout: 60)
-  #   adapter = VancouverApi::Adapters::FaradayAdapter.create(config)
-  #   client = VancouverApi::VancouverApiClient.new(adapter: adapter)
+  #   config = VancouverAPI::VancouverApiConfig.new(timeout: 60)
+  #   adapter = VancouverAPI::Adapters::FaradayAdapter.create(config)
+  #   client = VancouverAPI::VancouverApiClient.new(adapter: adapter)
   #   
   #   response = client.get_dataset_records('drinking-fountains', limit: 20)
   #   records = response.body

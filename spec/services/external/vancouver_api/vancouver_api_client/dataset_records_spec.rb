@@ -3,11 +3,11 @@
 require 'rails_helper'
 require_relative 'shared_helpers'
 
-RSpec.describe VancouverApi::VancouverApiClient, '#get_dataset_records', type: :service do
+RSpec.describe External::VancouverCity::VancouverApiClient, '#get_dataset_records', type: :service do
   include_context 'vancouver api client shared setup'
 
   let(:dataset_id) { 'drinking-fountains' }
-  let(:mock_adapter) { instance_double(VancouverApi::Adapters::FaradayAdapter) }
+  let(:mock_adapter) { instance_double(External::VancouverCity::Adapters::FaradayAdapter) }
   let(:test_client) { create_test_client_with_mock_adapter(mock_adapter) }
   let(:response_body) do
     {

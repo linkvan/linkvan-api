@@ -2,8 +2,8 @@
 require_relative 'vancouver_api_client'
 
 def test_client
-  client = VancouverApi::VancouverApiClient.new
-  
+  client = External::VancouverCity::VancouverApiClient.new
+
   puts "=== Vancouver API Client Integration Test ==="
   
   # Test 1: Basic dataset records request
@@ -56,7 +56,7 @@ def test_client
     client.get_dataset_records('non-existent-dataset')
     puts "✗ Failed: Should have raised an error for non-existent dataset"
     return false
-  rescue VancouverApi::VancouverApiError => e
+  rescue VancouverAPI::VancouverApiError => e
     puts "✓ Success: Properly handled error - #{e.message[0..50]}..."
   end
   
