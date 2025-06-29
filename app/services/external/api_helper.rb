@@ -15,6 +15,12 @@ class External::ApiHelper
       SUPPORTED_APIS.map { |key, name| [name, key] }
     end
 
+    # Get all supported API keys
+    # @return [Array<String>] Array of API keys
+    def supported_api_keys
+      SUPPORTED_APIS.keys
+    end
+
     # Check if an API is supported
     # @param api_key [String] The API key to check
     # @return [Boolean] True if the API is supported

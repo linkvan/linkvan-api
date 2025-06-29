@@ -6,9 +6,9 @@ require_relative 'shared_helpers'
 RSpec.describe External::VancouverCity::VancouverApiClient, 'client creation and initialization', type: :service do
   include_context 'vancouver api client shared setup'
 
-  describe '.default' do
+  describe '.default_client' do
     it 'creates a client with the default adapter' do
-      client = described_class.default
+      client = described_class.default_client
       expect(client.adapter).to eq(External::VancouverCity::DEFAULT_ADAPTER)
     end
   end

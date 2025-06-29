@@ -31,12 +31,11 @@ module External::VancouverCity
   #
   # Example usage:
   #   # Using the default adapter
-  #   client = VancouverAPI::VancouverApiClient.new(adapter: VancouverAPI::DEFAULT_ADAPTER)
+  #   client = External::VancouverCity::VancouverApiClient.default_client
   #   
   #   # Using a custom configuration
-  #   config = VancouverAPI::VancouverApiConfig.new(timeout: 60)
-  #   adapter = VancouverAPI::Adapters::FaradayAdapter.create(config)
-  #   client = VancouverAPI::VancouverApiClient.new(adapter: adapter)
+  #   config = External::VancouverCity::VancouverApiConfig.new(timeout: 60)
+  #   client = External::VancouverCity::VancouverApiClient.with_config(config)
   #   
   #   response = client.get_dataset_records('drinking-fountains', limit: 20)
   #   records = response.body
@@ -45,7 +44,7 @@ module External::VancouverCity
 
     # Create a client with the default adapter
     # @return [VancouverApiClient] Client instance with default configuration
-    def self.default
+    def self.default_client
       new(adapter: DEFAULT_ADAPTER)
     end
 
