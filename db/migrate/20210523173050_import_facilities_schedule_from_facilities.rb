@@ -7,8 +7,12 @@ class ImportFacilitiesScheduleFromFacilities < ActiveRecord::Migration[6.1]
                     fri: :friday,
                     sat: :saturday }.freeze
 
+  class MigrationFacility < ActiveRecord::Base
+    self.table_name = 'facilities'
+  end
+
   def up
-    Facility.all.find_each do |facility|
+    MigrationFacility.all.find_each do |facility|
       say_with_time "Facility: #{facility.id}" do
         create_schedules(facility)
       end
