@@ -11,7 +11,7 @@ class Admin::ToolsController < Admin::BaseController
     api_key = params[:api]
 
     # Validate that both parameters are present and supported
-    unless External::SupportedApisConfig.supported_api?(api_key)
+    unless External::ApiHelper.supported_api?(api_key)
       redirect_to admin_tools_path, alert: "Invalid API selected. Please choose from the supported APIs."
       return
     end
@@ -23,7 +23,7 @@ class Admin::ToolsController < Admin::BaseController
   private
 
   def api_options_for_select
-    [['Select an API...', '']] + External::SupportedApisConfig.api_options
+    External::ApiHelper.api_options
   end
 
   def enforce_admin_user

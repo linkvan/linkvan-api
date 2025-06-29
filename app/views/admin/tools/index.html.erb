@@ -12,7 +12,7 @@
 <div class="container">
     <%= render Shared::CardComponent.new(title: "Vancouver City API") do |card| %>
         <div class="content">
-            <p class="mb-4">Import facilities from Vancouver City's Open Data API. Select an API endpoint and the type of service to associate with the imported facilities.</p>
+            <p class="mb-4">Choose which facilities to import from Vancouver City's Open Data API.</p>
             
             <%= form_with url: import_facilities_admin_tools_path, method: :post, class: "form" do |form| %>
                 <div class="field">
@@ -21,11 +21,10 @@
                         <div class="select is-fullwidth">
                             <%= form.select :api, 
                                 options_for_select(api_options_for_select), 
-                                { include_blank: false }, 
+                                { include_blank: 'Select an API...' }, 
                                 { class: "select", required: true } %>
                         </div>
                     </div>
-                    <p class="help">Choose which facilities to import from Vancouver City's Open Data API.</p>
                 </div>
 
                 <div class="field">

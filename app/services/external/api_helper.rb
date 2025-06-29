@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Configuration class for supported Vancouver City APIs and facility services
-class External::SupportedApisConfig
+class External::ApiHelper
   # Available Vancouver City Facilities APIs
   # Each API represents a different type of facility data available from Vancouver's Open Data portal
   SUPPORTED_APIS = {
