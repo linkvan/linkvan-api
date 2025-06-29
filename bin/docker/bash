@@ -1,4 +1,4 @@
 #!/bin/bash
 set -e
 
-docker-compose run --rm web bash
+docker-compose -p linkvan-dev run --rm web bash
