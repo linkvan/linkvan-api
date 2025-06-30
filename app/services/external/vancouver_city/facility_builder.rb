@@ -96,19 +96,9 @@ module External::VancouverCity
     # @param record [Hash] Single API response record
     # @return [Facility, nil] Built Facility object or nil if invalid
     def build_facility_from_record
-      # For Vancouver Open Data API, fields are at the top level of the record
-      facility_data = extract_facility_data
-      Facility.new(facility_data)
-    end
-
-    # Extract basic facility data from API fields
-    # @param fields [Hash] API record fields
-    # @param geometry [Hash] API record geometry
-    # @return [Hash] Facility attributes hash
-    def extract_facility_data
       coords = extract_coordinates || extract_coordinates_from_geo_point
 
-      {
+      facility_data = {
         name: extract_name(record),
         address: extract_address(record),
         phone: extract_phone(record),
@@ -119,6 +109,8 @@ module External::VancouverCity
         verified: true,
         external_id: record['mapid'] || "#{api_key}-unknown-id",
       }.compact
+
+      Facility.new(facility_data)
     end
 
     # Extract facility name from fields
