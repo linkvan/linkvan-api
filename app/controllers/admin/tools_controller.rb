@@ -15,6 +15,19 @@ class Admin::ToolsController < Admin::BaseController
       redirect_to admin_tools_path, alert: "Invalid API selected. Please choose from the supported APIs."
       return
     end
+
+    result = External::VancouverCity::Syncer.call(
+      api_key: api_key,
+      api_client: External::VancouverCity.default_client
+    )
+
+    if result.success?
+      total_count = result.data[:total_count] || 0
+      redirect_to admin_tools_path, notice: "#{total_count} Facilities imported successfully from #{External::ApiHelper.api_name(api_key)}."
+    else
+      error_messages = result.errors.join(', ')
+      redirect_to admin_tools_path, alert: "Failed to import facilities: #{error_messages}"
+    end
   end
 
   # Helper method for the view
