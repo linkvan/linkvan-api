@@ -116,8 +116,8 @@ module External::VancouverCity
         notes: extract_notes(record),
         lat: coords[:lat],
         long: coords[:long],
-        verified: false, # New imported facilities need verification
         # TODO: Add external_id field to the Facility model
+        verified: true,
       }.compact
     end
 
