@@ -6,7 +6,7 @@ module External::VancouverCity
   class Syncer < ApplicationService
     attr_reader :api_key, :api_client
 
-    LIMIT = 50 # Maximum records per request allowed by the API
+    PAGE_SIZE = 50 # Maximum records per request allowed by the API
 
     # Initialize the syncer with required parameters
     # @param api_key [String] One of the supported API keys from External::ApiHelper
@@ -26,10 +26,10 @@ module External::VancouverCity
       offset = 0
 
       loop do
-        Rails.logger.info "Fetching facilities from #{api_key} API (offset: #{offset}, limit: #{LIMIT})"
+        Rails.logger.info "Fetching facilities from #{api_key} API (offset: #{offset}, limit: #{PAGE_SIZE})"
 
         begin
-          response = api_client.get_dataset_records(api_key, limit: LIMIT, offset: offset)
+          response = api_client.get_dataset_records(api_key, limit: PAGE_SIZE, offset: offset)
           records = response.body.dig('results') || []
 
           break if records.empty?
@@ -39,9 +39,9 @@ module External::VancouverCity
           facilities.concat(batch_facilities)
 
           # If we got fewer records than the limit, we've reached the end
-          break if records.size < LIMIT
+          break if records.size < PAGE_SIZE
 
-          offset += LIMIT
+          offset += PAGE_SIZE
         rescue VancouverApiError => e
           add_error("API request failed: #{e.message}")
           break
