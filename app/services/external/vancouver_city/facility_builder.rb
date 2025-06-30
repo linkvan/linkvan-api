@@ -81,22 +81,14 @@ module External::VancouverCity
     private
 
     def valid_geometry?
-      valid_geometry_coordinates? || valid_geo_point_2d?
-    end
-
-    def valid_geometry_coordinates?
-      coordinates.is_a?(Array) && coordinates.size == 2
-    end
-
-    def valid_geo_point_2d?
-      geo_point_2d.is_a?(Hash) && geo_point_2d.has_key?('lat') && geo_point_2d.has_key?('lon')
+      coordinates.present? || geo_point_2d.present?
     end
 
     # Build a Facility object from an API record
     # @param record [Hash] Single API response record
     # @return [Facility, nil] Built Facility object or nil if invalid
     def build_facility_from_record
-      coords = extract_coordinates || extract_coordinates_from_geo_point
+      coords = coordinates.presence || geo_point_2d
 
       facility_data = {
         name: extract_name(record),
@@ -169,31 +161,22 @@ module External::VancouverCity
 
     # Extract coordinates from geometry
     # @return [Hash] Hash with :lat and :long keys
-    def extract_coordinates
-      return nil unless coordinates.is_a?(Array) && coordinates.size == 2
+    def coordinates
+      coords = record.dig('geom', 'geometry', 'coordinates').presence || []
+      return {} unless coords.size == 2
 
       # GeoJSON coordinates are [longitude, latitude]
-      { lat: coordinates[1], long: coordinates[0] }
+      { lat: coords[1], long: coords[0] }
     end
 
     # Extract coordinates from geo_point_2d field
     # @return [Hash] Hash with :lat and :long keys
-    def extract_coordinates_from_geo_point
-      return { lat: nil, long: nil } unless geo_point_2d || geo_point_2d.is_a?(Hash)
-
-      { lat: geo_point_2d['lat'], long: geo_point_2d['lon'] }
-    end
-
-    def geometry
-      record.dig('geom', 'geometry')
-    end
-
-    def coordinates
-      record.dig('geom', 'geometry', 'coordinates')
-    end
-
     def geo_point_2d
-      record.dig('geo_point_2d')
+      geo_point = record.dig('geo_point_2d').presence || {}
+      return {} unless geo_point.is_a?(Hash)
+      return {} unless geo_point.key?('lat') && geo_point.key?('lon')
+
+      { lat: geo_point['lat'], long: geo_point['lon'] }
     end
   end
 end

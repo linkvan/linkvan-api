@@ -7,6 +7,7 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
 
   let(:valid_record) do
     {
+      'mapid' => '12345',
       'name' => 'Test Fountain',
       'location' => 'Test Park',
       'geo_local_area' => 'Downtown',
@@ -96,6 +97,7 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
         result = builder.call
         facility = result.data[:facility]
 
+        expect(facility.external_id).to eq('12345')
         expect(facility.name).to eq('Test Fountain')
         expect(facility.address).to eq('Test Park, Downtown')
         expect(facility.phone).to eq('604-123-4567')
