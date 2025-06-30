@@ -102,7 +102,7 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
         expect(facility.website).to eq('https://vancouver.ca')
         expect(facility.lat).to eq(49.2827)
         expect(facility.long).to eq(-123.1207)
-        expect(facility.verified).to be false
+        expect(facility.verified).to be true
       end
 
       it 'builds notes from multiple fields' do
