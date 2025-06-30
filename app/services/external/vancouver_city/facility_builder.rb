@@ -116,8 +116,8 @@ module External::VancouverCity
         notes: extract_notes(record),
         lat: coords[:lat],
         long: coords[:long],
-        # TODO: Add external_id field to the Facility model
         verified: true,
+        external_id: record['mapid'] || "#{api_key}-unknown-id",
       }.compact
     end
 
