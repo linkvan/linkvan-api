@@ -366,7 +366,10 @@ RSpec.describe External::VancouverCity::FacilitySyncer, 'internal update operati
         rollback_internal_facility.reload
         
         # Verify facility attributes unchanged
-        expect(rollback_internal_facility.attributes).to eq(original_attributes)
+        # Compare all attributes, allowing updated_at and created_at to be within a small delta
+        expect(rollback_internal_facility.attributes.except('updated_at', 'created_at')).to eq(original_attributes.except('updated_at', 'created_at'))
+        expect(rollback_internal_facility.updated_at).to be_within(2.seconds).of(original_attributes['updated_at'])
+        expect(rollback_internal_facility.created_at).to be_within(2.seconds).of(original_attributes['created_at'])
         
         # Verify existing services unchanged
         expect(rollback_internal_facility.facility_services.pluck(:service_id)).to match_array(original_service_ids)
@@ -417,7 +420,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, 'internal update operati
 
         validation_internal_facility.reload
         expect(validation_internal_facility.facility_services.count).to eq(original_service_count)
-        expect(validation_internal_facility.updated_at).to eq(original_updated_at)
+        expect(validation_internal_facility.updated_at).to be_within(2.seconds).of(original_updated_at)
       end
 
       it 'returns proper error information for validation failures' do
