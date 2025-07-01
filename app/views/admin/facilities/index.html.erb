@@ -24,9 +24,9 @@
                 </div>
 
                 <div class="select">
-                    <%= form.select(:service_id,
+                    <%= form.select(:service,
                                     @services_dropdown,
-                                    { include_blank: "Service", selected: params[:service_id] },
+                                    { include_blank: "Service", selected: params[:service] },
                                     {
                                         data: { action: "change->auto-submit#change" }
                                     }) %>

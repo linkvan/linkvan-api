@@ -85,11 +85,10 @@ class Admin::FacilitiesController < Admin::BaseController
       facilities = facilities.discarded
     end
 
-    if params[:service_id] == "none"
+    if params[:service] == "none"
       facilities = facilities.without_services
-    elsif params[:service_id].present?
-      facilities = facilities.joins(:services)
-                             .where(services: { id: params[:service_id] })
+    elsif params[:service].present?
+      facilities = facilities.with_service(params[:service])
     end
 
     if params[:welcome_customer] == "none"
@@ -115,7 +114,7 @@ class Admin::FacilitiesController < Admin::BaseController
   end
 
   def load_services_dropdown
-    @services_dropdown = [["No Services", :none]] + Service.pluck(:name, :id)
+    @services_dropdown = [["No Services", :none]] + Service.pluck(:name, :key)
   end
 
   def load_welcomes_dropdown
