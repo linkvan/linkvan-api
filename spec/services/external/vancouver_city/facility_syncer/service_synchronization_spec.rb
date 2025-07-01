@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe External::VancouverCity::FacilitySyncer, 'service synchronization', type: :service do
   let(:api_key) { 'drinking-fountains' }
-  let(:service) { create(:service, key: api_key) }
+  let(:service) { create(:water_fountain_service) }
   let(:other_service) { create(:service, key: 'public-washrooms') }
   let(:third_service) { create(:service, key: 'parks') }
 

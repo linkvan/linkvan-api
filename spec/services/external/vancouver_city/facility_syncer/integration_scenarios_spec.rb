@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe External::VancouverCity::FacilitySyncer, 'integration scenarios', type: :service do
   let(:api_key) { 'drinking-fountains' }
-  let(:service) { create(:service, key: api_key) }
+  let(:service) { create(:water_fountain_service) }
   let(:secondary_service) { create(:service, key: 'public-washrooms') }
 
   before do
@@ -55,7 +55,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, 'integration scenarios',
         
         # Services
         expect(facility.facility_services.count).to eq(1)
-        expect(facility.services.first.key).to eq(api_key)
+        expect(facility.services.first.key).to eq('water_fountain')
         
         # Schedules - should have open-all-day for all weekdays
         expect(facility.schedules.count).to eq(7)
@@ -212,7 +212,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, 'integration scenarios',
       
       # Verify services
       expect(facility.facility_services.count).to eq(1)
-      expect(facility.facility_services.first.service.key).to eq(api_key)
+      expect(facility.facility_services.first.service.key).to eq('water_fountain')
       
       # Verify schedules
       expect(facility.schedules.count).to eq(7)

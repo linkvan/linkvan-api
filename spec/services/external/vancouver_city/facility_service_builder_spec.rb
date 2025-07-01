@@ -87,7 +87,7 @@ RSpec.describe External::VancouverCity::FacilityServiceBuilder, type: :service d
 
   describe '#call' do
     context 'with valid parameters and existing service' do
-      let(:service) { create(:service, key: api_key) }
+      let(:service) { create(:water_fountain_service) }
       let(:builder) { described_class.new(facility: facility, fields: fields, api_key: api_key) }
 
       before do
@@ -144,7 +144,7 @@ RSpec.describe External::VancouverCity::FacilityServiceBuilder, type: :service d
   end
 
   describe '.call class method' do
-    let(:service) { create(:service, key: api_key) }
+    let(:service) { create(:water_fountain_service) }
 
     before do
       service # Ensure service exists

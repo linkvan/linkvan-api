@@ -76,7 +76,7 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
   end
 
   describe '#call' do
-    let(:service) { create(:service, key: valid_api_key) }
+    let(:service) { create(:water_fountain_service) }
 
     before do
       service # Ensure service exists
@@ -492,7 +492,7 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
   end
 
   describe '.call class method' do
-    let(:service) { create(:service, key: valid_api_key) }
+    let(:service) { create(:water_fountain_service) }
 
     before do
       service # Ensure service exists

@@ -36,19 +36,19 @@ module External::VancouverCity
     def validate
       @errors = []
 
-      if facility.nil?
+      if facility.blank?
         add_error("Facility is required")
       elsif !facility.is_a?(Facility)
         add_error("Facility must be a Facility object")
       end
 
-      if fields.nil?
+      if fields.blank?
         add_error("Fields are required")
       elsif !fields.is_a?(Hash)
         add_error("Fields must be a Hash")
       end
 
-      if api_key.nil? || api_key.empty?
+      if api_key.blank?
         add_error("API key is required")
       end
 
@@ -59,7 +59,10 @@ module External::VancouverCity
 
     # Add services to facility based on API key
     def add_facility_services
-      service = Service.find_by(key: api_key)
+      service_key = External::ApiHelper.service_key_for(api_key)
+      return if service_key.nil?
+
+      service = Service.find_by(key: service_key)
       return if service.blank?
       
       # Build FacilityService association without saving

@@ -10,51 +10,55 @@
 
 <hr/>
 <div class="container">
-    <%= render Shared::CardComponent.new(title: "Vancouver City API") do |card| %>
-        <div class="content">
-            <p class="mb-4">Choose which facilities to import from Vancouver City's Open Data API.</p>
-            
-            <%= form_with url: import_facilities_admin_tools_path, method: :post, class: "form" do |form| %>
-                <div class="field">
-                    <%= form.label :api, "API Endpoint", class: "label" %>
-                    <div class="control">
-                        <div class="select is-fullwidth">
-                            <%= form.select :api, 
-                                options_for_select(api_options_for_select), 
-                                { include_blank: 'Select an API...' }, 
-                                { class: "select", required: true } %>
-                        </div>
-                    </div>
-                </div>
+    <div class="columns">
+        <div class="column is-6">
+            <%= render Shared::CardComponent.new(title: "Vancouver City API") do |card| %>
+                <div class="content">
+                    <p class="mb-4">Choose which facilities to import from Vancouver City's Open Data API.</p>
 
-                <div class="field">
-                    <div class="control">
-                        <%= form.submit "Import Facilities", class: "button is-primary", id: "import-button", data: { disable_with: "Importing..." } %>
+                    <%= form_with url: import_facilities_admin_tools_path, method: :post, class: "form", id: "import-form" do |form| %>
+                        <div class="field">
+                            <%= form.label :api, "API Endpoint", class: "label" %>
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    <%= form.select :api, 
+                                        options_for_select(api_options_for_select), 
+                                        { include_blank: 'Select an API...' }, 
+                                        { class: "select", required: true } %>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="control">
+                                <%= form.submit "Import Facilities", class: "button is-primary", id: "import-button", data: { disable_with: "Importing..." } %>
+                            </div>
+                        </div>
+                    <% end %>
+
+                    <!-- Progress indicator -->
+                    <div id="import-progress" class="notification is-info is-hidden mt-4">
+                        <div class="level">
+                            <div class="level-left">
+                                <div class="level-item">
+                                    <span class="icon">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                    </span>
+                                    <span>Importing facilities from Vancouver City API...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <progress class="progress is-primary" max="100">Importing...</progress>
                     </div>
                 </div>
             <% end %>
-            
-            <!-- Progress indicator -->
-            <div id="import-progress" class="notification is-info is-hidden mt-4">
-                <div class="level">
-                    <div class="level-left">
-                        <div class="level-item">
-                            <span class="icon">
-                                <i class="fas fa-spinner fa-spin"></i>
-                            </span>
-                            <span>Importing facilities from Vancouver City API...</span>
-                        </div>
-                    </div>
-                </div>
-                <progress class="progress is-primary" max="100">Importing...</progress>
-            </div>
         </div>
-    <% end %>
+    </div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('form[action="<%= import_facilities_admin_tools_path %>"]');
+    const form = document.getElementById('import-form');
     const importButton = document.getElementById('import-button');
     const progressIndicator = document.getElementById('import-progress');
     
