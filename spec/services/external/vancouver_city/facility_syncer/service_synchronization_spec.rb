@@ -6,12 +6,10 @@ RSpec.describe External::VancouverCity::FacilitySyncer, 'service synchronization
   let(:api_key) { 'drinking-fountains' }
   let(:service) { create(:water_fountain_service) }
   let(:other_service) { create(:service, key: 'public-washrooms') }
-  let(:third_service) { create(:service, key: 'parks') }
 
   before do
     service
     other_service  
-    third_service
   end
 
   describe 'service synchronization logic' do
@@ -90,40 +88,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, 'service synchronization
       end
     end
 
-    context 'when built facility has no services' do
-      let!(:existing_facility) do
-        facility = create(:facility, external_id: 'NO_SERVICES123')
-        facility.facility_services.create!(service: other_service)
-        facility
-      end
 
-      # Using an api_key that doesn't match any service
-      let(:record_with_no_services) do
-        {
-          'mapid' => 'NO_SERVICES123',
-          'name' => 'No Services Test',
-          'geo_point_2d' => { 'lat' => 49.2827, 'lon' => -123.1207 }
-        }
-      end
-
-      it 'does not add any new services when built facility has none' do
-        initial_count = existing_facility.facility_services.count
-
-        syncer = described_class.new(record: record_with_no_services, api_key: 'non-existent-service')
-        result = syncer.call
-
-        facility = result.data.facility
-        expect(facility.facility_services.count).to eq(initial_count)
-      end
-
-      it 'keeps existing services intact' do
-        syncer = described_class.new(record: record_with_no_services, api_key: 'non-existent-service')
-        result = syncer.call
-
-        facility = result.data.facility
-        expect(facility.services).to include(other_service)
-      end
-    end
 
     context 'when built facility has duplicate services in builder' do
       # This tests the .uniq call in add_missing_services
@@ -157,35 +122,6 @@ RSpec.describe External::VancouverCity::FacilitySyncer, 'service synchronization
       end
     end
 
-    context 'service creation edge cases' do
-      let!(:existing_facility) do
-        create(:facility, external_id: 'EDGE_CASE123')
-      end
 
-      let(:record) do
-        {
-          'mapid' => 'EDGE_CASE123',
-          'name' => 'Edge Case Test',
-          'geo_point_2d' => { 'lat' => 49.2827, 'lon' => -123.1207 }
-        }
-      end
-
-      context 'when service does not exist in database' do
-        it 'does not create facility_service for non-existent service' do
-          syncer = described_class.new(record: record, api_key: 'non-existent-api-key')
-          result = syncer.call
-
-          facility = result.data.facility
-          expect(facility.facility_services).to be_empty
-        end
-
-        it 'still succeeds the operation' do
-          syncer = described_class.new(record: record, api_key: 'non-existent-api-key')
-          result = syncer.call
-
-          expect(result).to be_success
-        end
-      end
-    end
   end
 end

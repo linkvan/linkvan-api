@@ -50,6 +50,8 @@ module External::VancouverCity
 
       if api_key.blank?
         add_error("API key is required")
+      elsif !External::ApiHelper.supported_api?(api_key)
+        add_error("Unsupported API key: #{api_key}")
       end
 
       errors

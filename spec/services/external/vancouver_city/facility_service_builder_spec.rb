@@ -110,24 +110,6 @@ RSpec.describe External::VancouverCity::FacilityServiceBuilder, type: :service d
       end
     end
 
-    context 'when service does not exist' do
-      let(:builder) { described_class.new(facility: facility, fields: fields, api_key: 'non-existent-service') }
-
-      it 'returns successful result but does not create association' do
-        result = builder.call
-        
-        expect(result).to be_success
-        expect(result.errors).to be_empty
-        expect(result.data[:services_count]).to eq(0)
-      end
-
-      it 'does not associate any service with facility' do
-        builder.call
-
-        expect(facility.facility_services).to be_empty
-      end
-    end
-
     context 'with invalid parameters' do
       let(:builder) { described_class.new(facility: nil, fields: nil, api_key: nil) }
 
