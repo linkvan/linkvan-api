@@ -90,13 +90,12 @@ module External::VancouverCity
       facilities = []
 
       records.each do |record|
-        builder_result = FacilityBuilder.call(record: record, api_key: api_key)
-        
-        if builder_result.success?
-          facilities << builder_result.data[:facility]
+        syncer_result = FacilitySyncer.call(record: record, api_key: api_key)
+
+        if syncer_result.success?
+          facilities << syncer_result.data[:facility]
         else
-          # Add builder errors to syncer errors
-          add_errors(builder_result.errors)
+          add_errors(syncer_result.errors)
         end
       end
 

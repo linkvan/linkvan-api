@@ -70,6 +70,10 @@ class Facility < ApplicationRecord
     %i[live pending_reviews discarded]
   end
 
+  def external?
+    external_id.present?
+  end
+
   def status
     if discarded?
       :discarded
