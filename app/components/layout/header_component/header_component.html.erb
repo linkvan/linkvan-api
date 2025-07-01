@@ -49,6 +49,12 @@
 
         <div class="navbar-end">
             <% if helpers.user_signed_in? %>
+                <% if helpers.current_user.admin? %>
+                    <div class="navbar-item">
+                        <%= link_to 'Tools', admin_tools_path, class: 'button is-light' %>
+                    </div>
+                <% end %>
+
                 <div class="navbar-item">
                     <%= link_to admin_user_path(current_user), class: 'button is-light' do %>
                         <span>Logged in as <strong><%= helpers.current_user.email %></strong></span>

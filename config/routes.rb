@@ -17,13 +17,19 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    root to: "admin/dashboard#index"
+    root to: "dashboard#index"
 
     resources :dashboard, only: %i[index show]
 
     # resources :users, only: [] do
       # root to: "dashboard#index"
     # end
+
+    resources :tools do
+      collection do
+        post :import_facilities
+      end
+    end
 
     resources :users do
       resources :passwords, only: %i[new create]

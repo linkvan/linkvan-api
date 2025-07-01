@@ -39,6 +39,8 @@ class Facility < ApplicationRecord
   scope :with_service, ->(service_key_or_name) { joins(:services).where(services: Service.exact_search(service_key_or_name)) }
   scope :without_services, -> { where.not(facility_services: FacilityService.all) }
   scope :without_welcomes, -> { where.not(facility_welcomes: FacilityWelcome.all) }
+  scope :external, -> { where.not(external_id: nil) }
+  scope :not_external, -> { where(external_id: nil) }
 
   def managed_by?(user)
     f_user_id = if user.respond_to? :id
@@ -66,6 +68,10 @@ class Facility < ApplicationRecord
 
   def self.statuses
     %i[live pending_reviews discarded]
+  end
+
+  def external?
+    external_id.present?
   end
 
   def status
