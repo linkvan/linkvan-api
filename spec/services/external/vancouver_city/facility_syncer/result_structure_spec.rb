@@ -8,7 +8,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, 'result structure', type
 
   before { service }
 
-  describe 'SyncerResultData structure' do
+  describe 'ResultData structure' do
     let(:valid_record) do
       {
         'mapid' => 'RESULT123',
@@ -19,11 +19,11 @@ RSpec.describe External::VancouverCity::FacilitySyncer, 'result structure', type
       }
     end
 
-    it 'returns SyncerResultData with operation and facility' do
+    it 'returns ResultData with operation and facility' do
       syncer = described_class.new(record: valid_record, api_key: api_key)
       result = syncer.call
 
-      expect(result.data).to be_a(External::VancouverCity::SyncerResultData)
+      expect(result.data).to be_a(External::VancouverCity::FacilitySyncer::ResultData)
       expect(result.data).to respond_to(:operation)
       expect(result.data).to respond_to(:facility)
     end
@@ -48,7 +48,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, 'result structure', type
         }
       end
 
-      it 'SyncerResultData reflects early failure state' do
+      it 'ResultData reflects early failure state' do
         syncer = described_class.new(record: invalid_record, api_key: api_key)
         result = syncer.call
 
@@ -67,7 +67,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, 'result structure', type
         }
       end
 
-      it 'SyncerResultData shows nil operation and facility' do
+      it 'ResultData shows nil operation and facility' do
         syncer = described_class.new(record: malformed_record, api_key: api_key)
         result = syncer.call
 

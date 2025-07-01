@@ -54,7 +54,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, 'FacilityBuilder integra
         expect(result.errors).to be_present
       end
 
-      it 'returns SyncerResultData with operation: nil, facility: nil' do
+      it 'returns ResultData with operation: nil, facility: nil' do
         syncer = described_class.new(record: invalid_record, api_key: api_key)
         result = syncer.call
 

@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
 module External::VancouverCity
-  ResultData = Struct.new(:facility, keyword_init: true) do
-    def blank?
-      facility.nil?
-    end
-  end
-
   # Service for building facility objects from Vancouver City Open Data API records
   # Inherits from ApplicationService and handles record validation and error recovery
   class FacilityBuilder < ApplicationService
     attr_reader :record, :api_key
+
+    ResultData = Struct.new(:facility, keyword_init: true) do
+      def blank?
+        facility.nil?
+      end
+    end
 
     # Initialize the builder with required parameters
     # @param record [Hash] Single API response record

@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 module External::VancouverCity
-  SyncerResultData = Struct.new(:operation, :facility, keyword_init: true) do
-    delegate :present?, :blank?, to: :facility
-  end
-
   # Service for syncing facility data from Vancouver City Open Data API
   # Inherits from ApplicationService and handles pagination to fetch all facilities
   class FacilitySyncer < ApplicationService
     attr_reader :record, :api_key, :logger
+
+    ResultData = Struct.new(:operation, :facility, keyword_init: true) do
+      delegate :present?, :blank?, to: :facility
+    end
 
     def initialize(record:, api_key:, logger: Rails.logger)
       @record = record
@@ -21,7 +21,7 @@ module External::VancouverCity
         if builder_result.failed?
           add_errors(builder_result.errors)
           return Result.new(
-            data: SyncerResultData.new(operation: nil, facility: nil),
+            data: ResultData.new(operation: nil, facility: nil),
             errors: errors)
         end
 
@@ -72,7 +72,7 @@ module External::VancouverCity
         end
 
         Result.new(
-          data: SyncerResultData.new(operation: operation, facility: result_facility),
+          data: ResultData.new(operation: operation, facility: result_facility),
           errors: errors
         )
     end
