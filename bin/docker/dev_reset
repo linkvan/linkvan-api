@@ -9,7 +9,7 @@ def system!(*args)
 end
 
 def docked!(*args)
-  system!("docker-compose run -rm web", *args)
+  system!("docker-compose -p linkvan-dev run -rm web", *args)
 end
 
 FileUtils.chdir APP_ROOT do
