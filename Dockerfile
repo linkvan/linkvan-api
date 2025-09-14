@@ -1,6 +1,6 @@
 # based on Mike Rogers' Dockerfile from:
 # - https://github.com/Ruby-Starter-Kits/Docker-Rails-Template/blob/master/Dockerfile
-FROM ruby:3.2.3-alpine AS builder
+FROM ruby:3.4.5-alpine AS builder
 LABEL maintainer="Fabio Lima <fabionl@gmail.com>"
 
 RUN apk --no-cache add --virtual build-dependencies \
@@ -18,13 +18,15 @@ RUN apk --no-cache add --virtual build-dependencies \
       # FFI Bindings in ruby (Run C Commands)
       libffi-dev \
       # Fixes watch file issues with things like HMR
-      libnotify-dev
+      libnotify-dev \
+      # YAML library for psych gem
+      yaml-dev
 
 # Dockerize allows us to wait for other containers to be ready before we run our own code.
 ENV DOCKERIZE_VERSION v0.6.1
 RUN wget -nv https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-    && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-    && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+      && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+      && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 # Rails Specific libraries
 RUN apk --no-cache add \
@@ -50,7 +52,7 @@ RUN apk --no-cache add \
 # COPY Aptfile /usr/src/app/Aptfile
 # RUN apk add --update $(cat /usr/src/app/Aptfile | xargs)
 # Install Bundler v1.3
-RUN gem update --system && gem install bundler -v "2.5.6"
+RUN gem update --system && gem install bundler -v "2.6.9"
 
 FROM builder AS development
 
