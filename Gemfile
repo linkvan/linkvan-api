@@ -122,3 +122,6 @@ gem "cssbundling-rails", "~> 1.4"
 
 # Http client for making API requests
 gem "faraday", "~> 2.13.1"
+
+# OpenStruct for easy data modeling - removed from standard library since ruby 3.5
+gem "ostruct"
