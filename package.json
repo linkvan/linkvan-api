@@ -12,7 +12,7 @@
     "babel-preset-react": "^6.24.1",
     "bulma": "^1.0.2",
     "bulma-tooltip": "^3.0.2",
-    "esbuild": "^0.20.2",
+    "esbuild": "^0.25.0",
     "flatpickr": "^4.6.9",
     "sass": "^1.77.8",
     "trix": "^2.1.4"
