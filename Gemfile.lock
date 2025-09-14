@@ -494,6 +494,7 @@ DEPENDENCIES
   factory_bot_rails (~> 6.4.3)
   faker (~> 3.4.2)
   faraday (~> 2.13.1)
+  faraday (~> 2.13.1)
   geo_coord
   geocoder (~> 1.8)
   haversine!
