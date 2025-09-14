@@ -50,7 +50,9 @@ Rails.application.configure do
   # config.assume_ssl = true
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = true
+  # Default: true (SSL is forced)
+  # To disable: set FORCE_SSL=false in environment variables
+  config.force_ssl = ENV["FORCE_SSL"] != "false"
 
   # Log to STDOUT by default
   config.logger = ActiveSupport::Logger.new(STDOUT)

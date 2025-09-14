@@ -1,0 +1,6 @@
+#!/bin/bash
+# Build production Docker images
+set -e
+
+echo "== Building Production Docker Images =="
+docker-compose -f docker-compose.production.yml -p linkvan-prod build

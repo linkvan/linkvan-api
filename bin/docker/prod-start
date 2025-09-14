@@ -1,0 +1,12 @@
+#!/bin/bash
+# Start production environment
+set -e
+
+echo "== Starting Production Environment =="
+echo "Application will be available at: http://localhost:3001"
+echo "Admin panel will be available at: http://localhost:3001/admin"
+echo ""
+echo "Press Ctrl+C to stop"
+echo ""
+
+docker-compose -f docker-compose.production.yml -p linkvan-prod up

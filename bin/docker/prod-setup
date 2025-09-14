@@ -1,0 +1,24 @@
+#!/bin/bash
+# Setup production environment (database, etc.)
+set -e
+
+echo "== Setting up Production Environment =="
+
+# Create database
+echo "Creating production database..."
+docker-compose -f docker-compose.production.yml -p linkvan-prod run --rm web-prod rails db:create
+
+# Run migrations
+echo "Running database migrations..."
+docker-compose -f docker-compose.production.yml -p linkvan-prod run --rm web-prod rails db:migrate
+
+# Optionally seed database (uncomment if you want sample data)
+echo "Seeding database..."
+docker-compose -f docker-compose.production.yml -p linkvan-prod run --rm web-prod rails db:seed
+
+echo "Production environment setup complete!"
+echo ""
+echo "To start the production environment, run:"
+echo "  ./bin/docker/prod-start"
+echo ""
+echo "The application will be available at: http://localhost:3001"

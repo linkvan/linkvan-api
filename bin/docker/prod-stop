@@ -1,0 +1,6 @@
+#!/bin/bash
+# Stop production environment
+set -e
+
+echo "== Stopping Production Environment =="
+docker-compose -f docker-compose.production.yml -p linkvan-prod down

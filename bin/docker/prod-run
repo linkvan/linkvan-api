@@ -1,0 +1,5 @@
+#!/bin/bash
+# Run commands in production environment (similar to bin/docker/run for dev)
+set -e
+
+exec docker-compose -f docker-compose.production.yml -p linkvan-prod run --rm web-prod "$@"

@@ -1,0 +1,20 @@
+#!/bin/bash
+# Clean up production environment (remove containers, volumes, etc.)
+set -e
+
+echo "== Cleaning Up Production Environment =="
+echo "This will remove all production containers, networks, and volumes"
+echo "Are you sure? (y/N)"
+read -r response
+
+if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+    echo "Stopping and removing production containers..."
+    docker-compose -f docker-compose.production.yml -p linkvan-prod down --volumes --remove-orphans
+    
+    echo "Removing production images..."
+    docker image rm linkvan-prod-web-prod 2>/dev/null || true
+    
+    echo "Production environment cleaned up!"
+else
+    echo "Cleanup cancelled."
+fi

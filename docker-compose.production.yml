@@ -1,0 +1,86 @@
+---
+# Production-like local environment for testing
+# This mimics production settings but runs locally for testing purposes
+#
+## Usage:
+#
+# ./bin/docker/prod-build
+# ./bin/docker/prod-setup  
+# ./bin/docker/prod-start
+
+x-app: &app
+  build:
+    context: .
+    dockerfile: Dockerfile
+    target: production
+  platform: linux/x86_64
+  tmpfs:
+    - /tmp
+  environment:
+    RAILS_ENV: production
+    RACK_ENV: production
+    NODE_ENV: production
+    DATABASE_URL: postgres://postgres:postgres@postgres-prod:35433/linkvan_production
+    GOOGLE_MAPS_API_TOKEN: ${GOOGLE_MAPS_API_TOKEN-}
+    POSTGRES_HOST: postgres-prod
+    POSTGRES_PORT: 35433
+    # Required for production
+    SECRET_KEY_BASE: ${SECRET_KEY_BASE:-your-secret-key-base-for-local-production-testing}
+    RAILS_SERVE_STATIC_FILES: "enabled"
+    RAILS_LOG_TO_STDOUT: "enabled"
+    RAILS_MASTER_KEY: ${RAILS_MASTER_KEY-}
+    # Disable SSL forcing for local production testing
+    FORCE_SSL: "false"
+  volumes:
+    # Mount only necessary volumes for production testing
+    - ./log:/usr/src/app/log:delegated
+    - ./tmp:/usr/src/app/tmp:delegated
+    - ./storage:/usr/src/app/storage:delegated
+  depends_on:
+    - postgres-prod
+
+services:
+  postgres-prod:
+    image: postgres:13.2-alpine
+    container_name: linkvan-prod-postgres
+    volumes:
+      - postgresql_prod:/var/lib/postgresql/data:delegated
+    expose:
+      - "35433"
+    ports:
+      - "127.0.0.1:35433:35433"
+    environment:
+      PSQL_HISTFILE: /root/log/.psql_history
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: linkvan_production
+      PGPORT: 35433
+    restart: on-failure
+    logging:
+      driver: none
+
+  web-prod:
+    <<: *app
+    container_name: linkvan-prod-web
+    entrypoint: ./bin/docker/entrypoints/wait-for-postgres.sh
+    command: bash -c "./bin/docker/prepare-to-start-rails && ./bin/rails server -p 3000 -b '0.0.0.0'"
+    ports:
+      - "127.0.0.1:3001:3000"  # Different port to avoid conflicts with dev
+    restart: on-failure
+    environment:
+      RAILS_ENV: production
+      RACK_ENV: production
+      NODE_ENV: production
+      DATABASE_URL: postgres://postgres:postgres@postgres-prod:35433/linkvan_production
+      GOOGLE_MAPS_API_TOKEN: ${GOOGLE_MAPS_API_TOKEN-}
+      POSTGRES_HOST: postgres-prod
+      POSTGRES_PORT: 35433
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE:-your-secret-key-base-for-local-production-testing}
+      RAILS_SERVE_STATIC_FILES: "enabled"
+      RAILS_LOG_TO_STDOUT: "enabled"
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY-}
+      # Disable SSL forcing for local production testing
+      FORCE_SSL: "false"
+
+volumes:
+  postgresql_prod:
