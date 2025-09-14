@@ -1,4 +1,4 @@
 #!/bin/bash
 set -e
 
-exec docker-compose --rm web yarn "$@"
+exec docker-compose -p linkvan-dev run --rm web yarn "$@"
