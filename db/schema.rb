@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_14_180502) do
+ActiveRecord::Schema[7.0].define(version: 2025_06_30_180209) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -89,6 +89,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_14_180502) do
     t.integer "zone_id"
     t.datetime "deleted_at"
     t.string "discard_reason"
+    t.string "external_id"
     t.index ["user_id"], name: "index_facilities_on_user_id"
     t.index ["zone_id"], name: "index_facilities_on_zone_id"
   end

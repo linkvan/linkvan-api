@@ -64,7 +64,7 @@ development:
 test:
   <<: *default
   # Uses linkvan-api/postgres container
-  # url: postgres://postgres:postgres@localhost:5432
+  url: <%= ENV.fetch('TEST_DATABASE_URL', 'postgres://postgres:postgres@localhost:5432') %>
   database: linkvan_api_test
 
 # As with config/credentials.yml, you never want to store sensitive information,
