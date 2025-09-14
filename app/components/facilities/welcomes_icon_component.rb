@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Facilities::WelcomesIconComponent < ViewComponent::Base
+  ERROR_ICON = "error.svg"
   ICONS = {
     female: "female.svg",
     male: "male.svg",
@@ -25,8 +26,6 @@ class Facilities::WelcomesIconComponent < ViewComponent::Base
   def call
     return call_icon if variant == :icon
 
-    tag.span "Error: #{@welcomes}", class: "tag is-danger"
-
     tag.div class: "svg-icon ml-1" do
       helpers.inline_svg_tag(icon_location, size: "20px")
     end
@@ -39,6 +38,7 @@ class Facilities::WelcomesIconComponent < ViewComponent::Base
   end
 
   def icon_location
-    "icons/#{ICONS[@welcomes]}"
+    selected_icon = ICONS[@welcomes].presence || ERROR_ICON
+    "icons/#{selected_icon}"
   end
 end
