@@ -7,8 +7,8 @@ import "@rails/actiontext"
 // Add ability to set colors headings on Trix editor (ActionText)
 import "src/richtext"
 
-import Linkvan from 'src/linkvan'
-import Components from 'src/components'
+import Linkvan from "src/linkvan"
+import Components from "src/components"
 
 document.addEventListener("turbo:load", () => {
   Linkvan.start();
