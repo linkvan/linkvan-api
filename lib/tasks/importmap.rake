@@ -1,10 +1,10 @@
 # lib/tasks/importmap.rake
+# This file prevents Rails from running importmap:install during Heroku deployment
+# which would overwrite our custom importmap configuration.
+
 namespace :importmap do
-  desc "Download Import Maps JavaScript dependencies"
-  task :install => :environment do
-    system("./bin/importmap install") || abort("Import Maps installation failed")
+  desc "Prevent importmap:install from overwriting config during deployment"
+  task :install do
+    puts "Skipping importmap:install - configuration already exists"
   end
 end
-
-# Ensure importmap dependencies are installed before assets:precompile
-Rake::Task["assets:precompile"].enhance(["importmap:install"])
