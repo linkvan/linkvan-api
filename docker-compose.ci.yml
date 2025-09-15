@@ -36,4 +36,4 @@ services:
 
   test:
     <<: *ci-app
-    command: bash -c "./bin/setup && ./bin/rake assets:precompile && ./bin/bundle exec rspec"
+    command: bash -c "./bin/setup && yarn build:css && ./bin/bundle exec rspec"

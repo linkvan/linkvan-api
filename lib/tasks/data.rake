@@ -28,7 +28,7 @@ namespace :data do
       "#{header} #{msg}\n"
     end
 
-    attention_logger = ActiveSupport::Logger.new("#{Rails.root}/log/import.log")
+    attention_logger = ActiveSupport::Logger.new("#{Rails.root.join("log", "import.log")}")
     logger = Rails.logger
     logger.extend(ActiveSupport::Logger.broadcast(stdout_logger))
 
@@ -145,7 +145,7 @@ namespace :data do
     # Starting processing
     logger.info "[seed_fake] Loading new facilities from database."
     json_data_location = Rails.root.join("db", "fake_data.json")
-    load_fake_data = JSON.load(json_data_location) # rubocop:disable Security/JSONLoad
+    load_fake_data = JSON.load(json_data_location)
     new_facilities = load_fake_data.dig("v1", "facilities")
 
     if new_facilities.blank?

@@ -12,7 +12,6 @@
     "babel-preset-react": "^6.24.1",
     "bulma": "^1.0.2",
     "bulma-tooltip": "^3.0.2",
-    "esbuild": "^0.20.2",
     "flatpickr": "^4.6.9",
     "sass": "^1.77.8",
     "trix": "^2.1.4"
@@ -22,7 +21,6 @@
     "jquery": "^3.6.0"
   },
   "scripts": {
-    "build": "NODE_PATH=\"$(bundle show 'pagy')/lib/javascripts\" esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=assets",
-    "build:css": "sass ./app/assets/stylesheets/application.bulma.scss:./app/assets/builds/application.css --no-source-map --load-path=node_modules"
+    "build:css": "sass ./app/assets/stylesheets/application.scss:./app/assets/builds/application.css --no-source-map --load-path=node_modules"
   }
 }

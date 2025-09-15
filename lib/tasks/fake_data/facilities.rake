@@ -3,7 +3,21 @@
 namespace :fake_data do
   desc "Create Facilities fake data to help development"
   task facilities: :environment do
-    abort "This script can only be run on development environment" unless Rails.env.development?
+    # Allow running in production if ALLOW_FAKE_DATA is set (for local testing)
+    unless Rails.env.development? || ENV['ALLOW_FAKE_DATA'].present?
+      abort "This script can only be run on development environment. Set ALLOW_FAKE_DATA=true to override."
+    end
+
+    # Check if Faker is available
+    begin
+      require 'faker'
+    rescue LoadError
+      if Rails.env.production?
+        abort "Faker gem is not available in production. To use fake data in production, set ALLOW_FAKE_DATA=true and rebuild the Docker image."
+      else
+        abort "Faker gem is not available. Please run 'bundle install' to install required gems."
+      end
+    end
 
     Faker::Config.locale = "en-CA"
 

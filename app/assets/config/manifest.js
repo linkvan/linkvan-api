@@ -1,3 +1,4 @@
 //= link_tree ../images
-//= link_tree ../builds
-//= link linkvan_horizontal.png
+//= link_directory ../stylesheets .css
+//= link_tree ../../../vendor/javascript .js
+//= link pagy-module.js

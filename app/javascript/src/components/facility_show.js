@@ -1,4 +1,4 @@
-import ModalCardComponent from './modal_card_component';
+import ModalCardComponent from 'src/components/modal_card_component';
 
 export default class FacilityShow {
   static start() {

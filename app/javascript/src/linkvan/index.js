@@ -1,5 +1,5 @@
-import Notifications from "./base/notifications"
-import NavbarBurger from "./base/navbar_burger"
+import Notifications from "src/linkvan/base/notifications"
+import NavbarBurger from "src/linkvan/base/navbar_burger"
 
 export default class Base {
   static start() {

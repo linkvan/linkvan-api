@@ -2,19 +2,19 @@
 // Run that command whenever you add a new controller or create them with
 // ./bin/rails generate stimulus controllerName
 
-import { application } from "./application"
+import { application } from "controllers/application"
 
-import AutoSubmitController from "./auto_submit_controller"
+import AutoSubmitController from "controllers/auto_submit_controller"
 application.register("auto-submit", AutoSubmitController)
 
-import HelloController from "./hello_controller"
+import HelloController from "controllers/hello_controller"
 application.register("hello", HelloController)
 
-import ModalController from "./modal_controller"
+import ModalController from "controllers/modal_controller"
 application.register("modal", ModalController)
 
-import NavigateController from "./navigate_controller"
+import NavigateController from "controllers/navigate_controller"
 application.register("navigate", NavigateController)
 
-import PagyController from "./pagy_controller"
+import PagyController from "controllers/pagy_controller"
 application.register("pagy", PagyController)

@@ -79,6 +79,8 @@ services:
       RAILS_SERVE_STATIC_FILES: "enabled"
       RAILS_LOG_TO_STDOUT: "enabled"
       RAILS_MASTER_KEY: ${RAILS_MASTER_KEY-}
+      # Allow generating fake data in local production testing
+      ALLOW_FAKE_DATA: "true"
       # Disable SSL forcing for local production testing
       FORCE_SSL: "false"
 

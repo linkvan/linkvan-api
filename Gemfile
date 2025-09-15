@@ -29,8 +29,15 @@ gem "view_component"
 # Use SCSS for stylesheets
 #gem "sass-rails", "~> 6.0.0"
 # As of Rails 7.0, sprockets is optional
-gem "sprockets-rails"
-gem "dartsass-sprockets"
+# Removed sprockets-rails - using import maps instead
+# gem "sprockets-rails"
+# gem "dartsass-sprockets"
+
+# Use Propshaft for asset pipeline
+gem "propshaft"
+
+# Use dartsass-rails for standalone Sass processing
+gem "dartsass-rails"
 
 # Authentication
 gem "devise", "~> 4.9.3"
@@ -46,11 +53,15 @@ group :development, :test do
   gem "capybara"
 
   gem "factory_bot_rails", "~> 6.4.3"
-  gem "faker", "~> 3.4.2"
-
+  
   # Call "byebug" anywhere in the code to stop execution and get a debugger console
   gem "byebug", platforms: [:mri, :windows]
 end
+
+# Faker gem - available in development/test, and in production when ALLOW_FAKE_DATA is set
+gem "faker", "~> 3.4.2", groups: [:development, :test].tap { |groups| 
+  groups << :production if ENV['ALLOW_FAKE_DATA'] == 'true' 
+}
 
 group :development do
   # Access an interactive console on exception pages or by calling "console" anywhere in the code.
@@ -113,8 +124,8 @@ gem 'geocoder', '~> 1.8'
 # Adds JSON Web token control
 gem "jwt"
 
-gem "jsbundling-rails", "~> 1.3"
-gem "cssbundling-rails", "~> 1.4"
+# Import maps for ESM-based JavaScript handling
+gem "importmap-rails"
 
 # Aborts requests that are taking too long.
 #   Set the timeout by setting the RACK_TIMEOUT_SERVICE_TIMEOUT env var

@@ -1,5 +1,5 @@
 ---
-# This is a set up for Ruby on Rails 6, running a worker & webpack.
+# This is a set up for Ruby on Rails 7+, with import maps for JavaScript.
 # Gems are cached within a volume, which speeds up development when adding new gems.
 #
 ## Usage:
@@ -46,8 +46,8 @@ services:
     ports:
       - "35432"
       - "127.0.0.1:35432:35432"
-      # Uncomment to access this containers Postgres instance via port 5432
-      # - "127.0.0.1:5432:5432"
+    # Uncomment to access this containers Postgres instance via port 5432
+    # - "127.0.0.1:5432:5432"
     environment:
       PSQL_HISTFILE: /root/log/.psql_history
       POSTGRES_USER: postgres
@@ -71,7 +71,7 @@ services:
   web:
     <<: *app
     entrypoint: ./bin/docker/entrypoints/wait-for-postgres.sh
-    command: bash -c "./bin/docker/prepare-to-start-rails && yarn build:css && yarn build && ./bin/rails server -p 3000 -b '0.0.0.0'"
+    command: bash -c "./bin/docker/prepare-to-start-rails && yarn build:css && ./bin/rails server -p 3000 -b '0.0.0.0'"
     ports:
       - "127.0.0.1:3000:3000"
     restart: on-failure

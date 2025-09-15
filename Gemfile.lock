@@ -118,15 +118,10 @@ GEM
     concurrent-ruby (1.3.5)
     connection_pool (2.5.4)
     crass (1.0.6)
-    cssbundling-rails (1.4.3)
-      railties (>= 6.0.0)
     csv (3.3.5)
-    dartsass-sprockets (3.2.1)
-      railties (>= 4.0.0)
-      sassc-embedded (~> 1.80.1)
-      sprockets (> 3.0)
-      sprockets-rails
-      tilt
+    dartsass-rails (0.5.1)
+      railties (>= 6.0.0)
+      sass-embedded (~> 1.63)
     date (3.4.1)
     debug_inspector (1.2.0)
     devise (4.9.4)
@@ -197,6 +192,10 @@ GEM
       turbo-rails
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
+    importmap-rails (2.2.2)
+      actionpack (>= 6.0.0)
+      activesupport (>= 6.0.0)
+      railties (>= 6.0.0)
     inline_svg (1.10.0)
       activesupport (>= 3.0)
       nokogiri (>= 1.6)
@@ -205,8 +204,6 @@ GEM
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    jsbundling-rails (1.3.1)
-      railties (>= 6.0.0)
     json (2.13.2)
     jwt (3.1.2)
       base64
@@ -272,6 +269,10 @@ GEM
       prettyprint
     prettyprint (0.2.0)
     prism (1.5.1)
+    propshaft (1.2.1)
+      actionpack (>= 7.0.0)
+      activesupport (>= 7.0.0)
+      rack
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -420,32 +421,23 @@ GEM
       google-protobuf (~> 4.31)
     sass-embedded (1.92.1-x86_64-linux-musl)
       google-protobuf (~> 4.31)
-    sassc-embedded (1.80.5)
-      sass-embedded (~> 1.80)
     securerandom (0.4.1)
     shoulda-matchers (6.5.0)
       activesupport (>= 5.2.0)
     slop (3.6.0)
-    sprockets (4.2.2)
-      concurrent-ruby (~> 1.0)
-      logger
-      rack (>= 2.2.4, < 4)
-    sprockets-rails (3.5.2)
-      actionpack (>= 6.1)
-      activesupport (>= 6.1)
-      sprockets (>= 3.0.0)
     stackprof (0.2.27)
     stimulus-rails (1.3.4)
       railties (>= 6.0.0)
     stringio (3.1.7)
     thor (1.4.0)
-    tilt (2.6.1)
     timeout (0.4.3)
     turbo-rails (2.0.16)
       actionpack (>= 7.1.0)
       railties (>= 7.1.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    tzinfo-data (1.2025.2)
+      tzinfo (>= 1.0.0)
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
     unicode-emoji (4.1.0)
@@ -488,8 +480,7 @@ DEPENDENCIES
   byebug
   capybara
   colorize
-  cssbundling-rails (~> 1.4)
-  dartsass-sprockets
+  dartsass-rails
   devise (~> 4.9.3)
   dotenv-rails
   factory_bot_rails (~> 6.4.3)
@@ -499,14 +490,15 @@ DEPENDENCIES
   geocoder (~> 1.8)
   haversine!
   hotwire-rails
+  importmap-rails
   inline_svg
-  jsbundling-rails (~> 1.3)
   jwt
   listen (~> 3.9.0)
   memory_profiler
   ostruct
   pagy (~> 7.0.10)
   pg (~> 1.5.6)
+  propshaft
   pry (~> 0.14.2)
   pry-byebug
   pry-rails
@@ -525,7 +517,6 @@ DEPENDENCIES
   rubocop-rails
   rubocop-rspec
   shoulda-matchers (>= 6.2.0)
-  sprockets-rails
   stackprof
   turbo-rails
   tzinfo-data

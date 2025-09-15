@@ -79,7 +79,7 @@ RUN bundle config set jobs $(nproc)
 # Create app directory in the conventional /usr/src/app
 RUN mkdir -p /usr/src/app \
       && mkdir -p /usr/src/app/node_modules \
-      && mkdir -p /usr/src/app/public/packs \
+      && mkdir -p /usr/src/app/app/assets/builds \
       && mkdir -p /usr/src/app/tmp/cache \
       && mkdir -p $YARN_CACHE_FOLDER \
       && mkdir -p $BOOTSNAP_CACHE_DIR \
@@ -127,8 +127,23 @@ RUN yarn install --frozen-lockfile --check-files
 # Chown files so non are root.
 COPY --chown=appuser:appgroup . /usr/src/app
 
-# Precompile the assets, yarn relay & bootsnap
+# Build CSS first
+RUN yarn build:css
+
+# Download Import Maps JavaScript dependencies
+RUN ./bin/importmap install
+
+# Precompile assets without requiring active record or credentials
 RUN RAILS_SERVE_STATIC_FILES=enabled \
-      SECRET_KEY_BASE=secret-key-base \
-      bundle exec rake assets:precompile \
-      && bundle exec bootsnap precompile --gemfile app/ lib/
+      SECRET_KEY_BASE=dummy-secret-key-for-asset-compilation \
+      DATABASE_URL=postgresql://user:pass@127.0.0.1/dbname \
+      bundle exec rails assets:precompile
+
+# Precompile bootsnap
+RUN bundle exec bootsnap precompile --gemfile app/ lib/
+
+# Define the user running the container
+USER appuser
+
+EXPOSE 3000
+CMD ["./bin/rails", "server", "-b", "0.0.0.0", "-p", "3000"]
