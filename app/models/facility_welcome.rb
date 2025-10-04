@@ -5,7 +5,7 @@ class FacilityWelcome < ApplicationRecord
 
   validates :customer, presence: true, uniqueness: { scope: :facility }
 
-  enum customer: {
+  enum :customer,
     male: "male",
     female: "female",
     transgender: "transgender",
@@ -13,7 +13,6 @@ class FacilityWelcome < ApplicationRecord
     youth: "youth",
     adult: "adult",
     senior: "senior"
-  }
 
   scope :name_search, ->(value) { where(customer: value.to_s.downcase) }
 

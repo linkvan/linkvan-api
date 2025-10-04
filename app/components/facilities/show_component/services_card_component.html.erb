@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        <%= form_with model: facility_service_for(service), url: admin_facility_service_path(facility_id: facility.id, service_id: service.id), method: :put, id: "form_note_#{service.id}" do |form| %>
+        <%= form_with model: facility_service_for(service) || new_facility_service(service), url: admin_facility_service_path(facility_id: facility.id, service_id: service.id), method: :put, id: "form_note_#{service.id}" do |form| %>
             <%= render Shared::ModalCardComponent.new(id: note_modal_id(service)) do |c| %>
                 <div class='field'>
                     <%= form.label :note %>

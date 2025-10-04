@@ -4,7 +4,7 @@ class FacilitySchedule < ApplicationRecord
   belongs_to :facility, touch: true
   has_many :time_slots, class_name: "FacilityTimeSlot", dependent: :destroy
 
-  enum week_day: {
+  enum :week_day, 
     sunday: "sunday",
     monday: "monday",
     tuesday: "tuesday",
@@ -12,7 +12,6 @@ class FacilitySchedule < ApplicationRecord
     thursday: "thursday",
     friday: "friday",
     saturday: "saturday"
-  }
 
   validates :week_day, presence: true, uniqueness: { scope: :facility_id }
   validate :time_slots_presence
