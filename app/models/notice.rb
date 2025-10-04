@@ -3,13 +3,12 @@
 class Notice < ApplicationRecord
   has_rich_text :content
 
-  enum notice_type: {
+  enum :notice_type,
     general: "general",
     covid19: "covid19",
     warming_center: "warming_center",
     cooling_center: "cooling_center",
     water_fountain: "water_fountain"
-  }
 
   validates :title, :content, :slug, presence: true
   validates :slug, uniqueness: true

@@ -127,6 +127,10 @@ class Facilities::ShowComponent < ViewComponent::Base
       facility.facility_services.find_by(service: service)
     end
 
+    def new_facility_service(service)
+      facility.facility_services.new(service: service)
+    end
+
     def all_services
       Service.all
     end
