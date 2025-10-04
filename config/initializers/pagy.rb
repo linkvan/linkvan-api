@@ -48,7 +48,7 @@ require "pagy/extras/bulma"
 # Notice: the other frontend extras add their own framework-styled versions,
 # so require this extra only if you need the unstyled version
 # See https://ddnexus.github.io/pagy/extras/navs
-# require 'pagy/extras/navs'
+# require 'pagy/extras/pagy'
 
 # Semantic extra: Add nav, nav_js and combo_nav_js helpers for Semantic UI pagination
 # See https://ddnexus.github.io/pagy/extras/semantic
@@ -71,7 +71,7 @@ require "pagy/extras/bulma"
 
 # Support extra: Extra support for features like: incremental, infinite, auto-scroll pagination
 # See https://ddnexus.github.io/pagy/extras/support
-# require 'pagy/extras/support'
+# require 'pagy/extras/pagy'
 
 # Items extra: Allow the client to request a custom number of items per page with an optional selector UI
 # See https://ddnexus.github.io/pagy/extras/items
@@ -111,7 +111,6 @@ require "pagy/extras/bulma"
 # Pagy::VARS[:page_param] = :page                           # default
 # Pagy::VARS[:params]     = {}                              # default
 # Pagy::VARS[:anchor]     = '#anchor'                       # example
-# Pagy::VARS[:link_extra] = 'data-remote="true"'            # example
 
 # Rails
 

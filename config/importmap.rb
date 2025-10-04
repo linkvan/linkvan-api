@@ -11,7 +11,7 @@ pin "@hotwired/turbo", to: "@hotwired--turbo.js" # @8.0.13
 pin "@rails/actioncable/src", to: "@rails--actioncable--src.js" # @8.0.201
 
 # Pin Pagy JavaScript module
-pin "pagy-module", to: "pagy-module.js"
+pin "pagy", to: "pagy.min.js"
 
 # Pin controllers individually for better importmap compatibility
 pin "controllers", to: "controllers/index.js"

@@ -145,7 +145,7 @@ GEM
       railties (>= 5.0.0)
     faker (3.4.2)
       i18n (>= 1.8.11, < 2)
-    faraday (2.13.4)
+    faraday (2.14.0)
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
@@ -259,12 +259,18 @@ GEM
       racc (~> 1.4)
     orm_adapter (0.5.0)
     ostruct (0.6.1)
-    pagy (7.0.11)
+    pagy (9.4.0)
     parallel (1.27.0)
     parser (3.3.9.0)
       ast (~> 2.4.1)
       racc
-    pg (1.5.9)
+    pg (1.6.2)
+    pg (1.6.2-aarch64-linux)
+    pg (1.6.2-aarch64-linux-musl)
+    pg (1.6.2-arm64-darwin)
+    pg (1.6.2-x86_64-darwin)
+    pg (1.6.2-x86_64-linux)
+    pg (1.6.2-x86_64-linux-musl)
     pp (0.6.2)
       prettyprint
     prettyprint (0.2.0)
@@ -344,8 +350,8 @@ GEM
     rdoc (6.14.2)
       erb
       psych (>= 4.0.0)
-    redis (5.1.0)
-      redis-client (>= 0.17.0)
+    redis (5.4.1)
+      redis-client (>= 0.22.0)
     redis-client (0.25.3)
       connection_pool
     regexp_parser (2.11.2)
@@ -365,16 +371,16 @@ GEM
     rspec-mocks (3.13.5)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
-    rspec-rails (6.1.5)
-      actionpack (>= 6.1)
-      activesupport (>= 6.1)
-      railties (>= 6.1)
+    rspec-rails (7.1.1)
+      actionpack (>= 7.0)
+      activesupport (>= 7.0)
+      railties (>= 7.0)
       rspec-core (~> 3.13)
       rspec-expectations (~> 3.13)
       rspec-mocks (~> 3.13)
       rspec-support (~> 3.13)
     rspec-support (3.13.5)
-    rubocop (1.80.2)
+    rubocop (1.81.1)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -382,10 +388,10 @@ GEM
       parser (>= 3.3.0.2)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 2.9.3, < 3.0)
-      rubocop-ast (>= 1.46.0, < 2.0)
+      rubocop-ast (>= 1.47.1, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 4.0)
-    rubocop-ast (1.46.0)
+    rubocop-ast (1.47.1)
       parser (>= 3.3.7.2)
       prism (~> 1.4)
     rubocop-packaging (0.6.0)
@@ -485,7 +491,7 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails (~> 6.4.3)
   faker (~> 3.4.2)
-  faraday (~> 2.13.1)
+  faraday (~> 2.14.0)
   geo_coord
   geocoder (~> 1.8)
   haversine!
@@ -496,8 +502,8 @@ DEPENDENCIES
   listen (~> 3.9.0)
   memory_profiler
   ostruct
-  pagy (~> 7.0.10)
-  pg (~> 1.5.6)
+  pagy (~> 9.4.0)
+  pg (~> 1.6.2)
   propshaft
   pry (~> 0.14.2)
   pry-byebug
@@ -508,10 +514,10 @@ DEPENDENCIES
   rack-cors
   rack-mini-profiler (~> 3.3.1)
   rails (~> 7.1.0)
-  redis (~> 5.1.0)
+  redis (~> 5.4.1)
   requestjs-rails
-  rspec-rails (~> 6.1.1)
-  rubocop (>= 1.62.1)
+  rspec-rails (~> 7.1.1)
+  rubocop (>= 1.81.1)
   rubocop-packaging
   rubocop-performance
   rubocop-rails
@@ -527,4 +533,4 @@ RUBY VERSION
    ruby 3.4.5p51
 
 BUNDLED WITH
-   2.6.9
+   2.7.2
