@@ -6,13 +6,13 @@ ruby "3.4.5"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
 gem "rails", "~> 7.1.0"
 # Use postgresql as the database for Active Record
-gem "pg", "~> 1.5.6"
+gem "pg", "~> 1.6.2"
 # Use Puma as the app server
 gem "puma", "~> 6.4.2"
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 #gem "jbuilder", "~> 2.7"
 # Use Redis adapter to run Action Cable in production
-gem "redis", "~> 5.1.0"
+gem "redis", "~> 5.4.1"
 # Use Active Model has_secure_password
 gem "bcrypt", "~> 3.1.16"
 
@@ -48,7 +48,7 @@ gem 'rack-cors'
 group :development, :test do
   gem 'dotenv-rails'
 
-  gem "rspec-rails", "~> 6.1.1"
+  gem "rspec-rails", "~> 7.1.1"
   gem "shoulda-matchers", ">= 6.2.0"
   gem "capybara"
 
@@ -89,7 +89,7 @@ end
 
 # Ruby code analyzer and formatter
 group :rubocop, :development do
-  gem "rubocop", ">= 1.62.1", require: false
+  gem "rubocop", ">= 1.81.1", require: false
   gem "rubocop-rails", require: false
   gem "rubocop-rspec", require: false
   gem "rubocop-performance", require: false
@@ -103,7 +103,7 @@ end
 gem "tzinfo-data", platforms: [:mri, :windows]
 
 # Pagination
-gem "pagy", "~> 7.0.10"
+gem "pagy", "~> 9.4.0"
 
 # Alternative approach to web apps development.
 # https://github.com/hotwired/hotwire-rails
@@ -132,7 +132,7 @@ gem "importmap-rails"
 # gem "rack-timeout"
 
 # Http client for making API requests
-gem "faraday", "~> 2.13.1"
+gem "faraday", "~> 2.14.0"
 
 # OpenStruct for easy data modeling - removed from standard library since ruby 3.5
 gem "ostruct"
