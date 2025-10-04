@@ -52,7 +52,7 @@ group :development, :test do
   gem "shoulda-matchers", ">= 6.2.0"
   gem "capybara"
 
-  gem "factory_bot_rails", "~> 6.4.3"
+  gem "factory_bot_rails", "~> 6.5.1"
   
   # Call "byebug" anywhere in the code to stop execution and get a debugger console
   gem "byebug", platforms: [:mri, :windows]
