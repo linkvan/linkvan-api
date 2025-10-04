@@ -33,10 +33,10 @@ jobs:
         with:
           ruby-version: 3.4.5
 
-      - name: Setup Node 15
+      - name: Setup Node 24
         uses: actions/setup-node@v1
         with:
-          node-version: 15.14.x
+          node-version: 24.9.x
 
       - name: Install dependencies
         run: |
