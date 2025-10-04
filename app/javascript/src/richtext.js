@@ -5,14 +5,14 @@
 // - Ability to customize text colour.
 // - Ability to customize headings (h1 to h6)
 // Note: Removed horizontal rule to avoid using ActionText attachments.
-import Trix from "trix"
+import "trix"
 
 addHeadingAttributes()
 addForegroundColorAttributes()
 addBackgroundColorAttributes()
 
 addEventListener("trix-initialize", function (event) {
-    new RichText(event.target)
+  new RichText(event.target)
 })
 
 class RichText {
