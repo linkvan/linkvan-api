@@ -71,7 +71,7 @@ group :development do
   # gem "spring"
 
   # powerful developer console.
-  gem "pry", "~> 0.14.2"
+  gem "pry", "~> 0.15.2"
   gem "pry-rails"
   gem "pry-stack_explorer", "~> 0.6.1"
   gem "pry-remote"
