@@ -48,7 +48,7 @@ gem 'rack-cors'
 group :development, :test do
   gem 'dotenv-rails'
 
-  gem "rspec-rails", "~> 7.1.1"
+  gem "rspec-rails", "~> 8.0.2"
   gem "shoulda-matchers", ">= 6.2.0"
   gem "capybara"
 
