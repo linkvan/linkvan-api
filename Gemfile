@@ -59,7 +59,7 @@ group :development, :test do
 end
 
 # Faker gem - available in development/test, and in production when ALLOW_FAKE_DATA is set
-gem "faker", "~> 3.4.2", groups: [:development, :test].tap { |groups| 
+gem "faker", "~> 3.5.2", groups: [:development, :test].tap { |groups| 
   groups << :production if ENV['ALLOW_FAKE_DATA'] == 'true' 
 }
 
