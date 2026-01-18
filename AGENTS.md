@@ -98,3 +98,10 @@ This codebase includes specialized agents for Rails development workflows. Invok
 - ViewComponent tests use `type: :component`
 - System specs use Capybara and Puma
 
+## Development Plans
+
+See `docs/plans/README.md` for:
+- Active development plans and their status
+- Implementation tracking and progress metrics
+- Plan documentation patterns and templates
+
