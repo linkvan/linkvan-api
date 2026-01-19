@@ -51,10 +51,13 @@ group :development, :test do
   gem "rspec-rails", "~> 7.1.1"
   gem "shoulda-matchers", ">= 6.2.0"
   gem "capybara"
+  gem "rails-controller-testing"
 
-  gem "factory_bot_rails", "~> 6.4.3"
-  
-  # Call "byebug" anywhere in the code to stop execution and get a debugger console
+   gem "factory_bot_rails", "~> 6.4.3"
+
+   gem 'simplecov', require: false
+
+   # Call "byebug" anywhere in the code to stop execution and get a debugger console
   gem "byebug", platforms: [:mri, :windows]
 end
 

@@ -6,9 +6,9 @@ class Api::ZonesController < Api::BaseController
 
   # GET api/zones
   def index
-    @zones = Zone.all.includes(:facilities, :users)
+    @zones = Zone.includes(:facilities, :users)
 
-    @response = ZonesSerializer.new(@zones)
+    @response = ZonesSerializer.call(@zones)
     render json: @response, status: :ok
   end
 
@@ -16,8 +16,8 @@ class Api::ZonesController < Api::BaseController
   def list_admin
     @zone = Zone.find params[:id]
     @zone_admins = @zone.users
-    @responde = { users: @zone_admins }
-    render json: @responde, status: :ok
+    @response = { users: @zone_admins }
+    render json: @response, status: :ok
   end
 
   # POST api/zones/:id/admin
@@ -25,10 +25,10 @@ class Api::ZonesController < Api::BaseController
     @zone = Zone.find(params[:id])
     @user = User.find(params[:user_id])
 
-    if @user.zones << @zone
-      render json: ZoneSerializer.new(@zone), status: :created
-    else
+    if @user.zones.exists?(@zone.id) || !(@user.zones << @zone)
       head :conflict
+    else
+      render json: ZoneSerializer.call(@zone), status: :created
     end
   end
 
@@ -37,8 +37,8 @@ class Api::ZonesController < Api::BaseController
     @zone = Zone.find(params[:id])
     @user = User.find(params[:user_id])
 
-    if @user.zones.delete @zone
-      render json: ZoneSerializer.new(@zone), status: :ok
+    if @user.zones.exists?(@zone.id) && @user.zones.delete(@zone)
+      render json: ZoneSerializer.call(@zone), status: :ok
     else
       head :conflict
     end

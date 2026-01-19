@@ -24,8 +24,8 @@ class Facility < ApplicationRecord
 
   validates :name, presence: true
 
-  with_options if: :verified? do |verified_facility|
-    verified_facility.validates :lat, :long, presence: true
+  with_options if: :verified? do
+    validates :lat, :long, presence: true
   end
 
   before_validation :clean_data
@@ -42,14 +42,17 @@ class Facility < ApplicationRecord
   scope :external, -> { where.not(external_id: nil) }
   scope :not_external, -> { where(external_id: nil) }
 
-  def managed_by?(user)
-    f_user_id = if user.respond_to? :id
-      user.id
-    else
-      user
-    end
+  def managed_by?(user_or_user_id)
+    return false if user_or_user_id.blank?
+
+    f_user_id = if user_or_user_id.respond_to? :id
+                  user_or_user_id.id
+                else
+                  user_or_user_id
+                end
+
     # Case Facility's User is the same
-    return true if this.user_id == f_user_id
+    return true if user_id == f_user_id
     # Case Zone of the Facility has the user as admin
     return true if User.find(f_user_id).manages.any?
 
@@ -113,19 +116,12 @@ class Facility < ApplicationRecord
     GeoLocation.coord(lat, long)
   end
 
-  def distance(to_coord = nil, to_lat: nil, to_long: nil, to_facility: nil)
-    to_coord = to_facility.coord if to_facility.respond_to?(:coord) && to_coord.blank?
-    to_coord = GeoLocation.coord(to_lat, to_long) if to_coord.blank?
-
-    GeoLocation.distance(coord, to_coord)
+  def distance_in_meters(to_coord: nil, to_lat: nil, to_long: nil, to_facility: nil)
+    distance(to_coord: to_coord, to_lat: to_lat, to_long: to_long, to_facility: to_facility).to_meters
   end
 
-  def distance_in_meters(*params)
-    distance(*params).to_meters
-  end
-
-  def distance_in_kms(*params)
-    distance(*params).to_kilometers
+  def distance_in_kms(to_coord: nil, to_lat: nil, to_long: nil, to_facility: nil)
+    distance(to_coord: to_coord, to_lat: to_lat, to_long: to_long, to_facility: to_facility).to_kilometers
   end
 
   private
@@ -143,5 +139,12 @@ class Facility < ApplicationRecord
 
     # handles discard
     self.discard_reason = :none if undiscarded?
+  end
+
+  def distance(to_coord: nil, to_lat: nil, to_long: nil, to_facility: nil)
+    to_coord = to_facility.coord if to_facility.respond_to?(:coord) && to_coord.blank?
+    to_coord = GeoLocation.coord(to_lat, to_long) if to_coord.blank?
+
+    GeoLocation.distance(coord, to_coord) # .to_kilometers
   end
 end
