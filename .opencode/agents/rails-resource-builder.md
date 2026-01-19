@@ -1,6 +1,7 @@
 ---
 description: Generate complete Rails resources (models, controllers, routes, tests)
 mode: subagent
+model: opencode/grok-code
 permission:
   skill:
     "rails-models": "allow"
@@ -54,4 +55,3 @@ Generate complete Rails resources that include:
 - Follow the existing codebase conventions
 - Ensure generated specs follow the `*_spec.rb` naming pattern
 - Place files in appropriate directories (app/models/, app/controllers/, spec/)
-
