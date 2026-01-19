@@ -74,7 +74,7 @@ services:
     command: bash -c "./bin/docker/prepare-to-start-rails && yarn build:css && ./bin/rails server -p 3000 -b '0.0.0.0'"
     ports:
       - "127.0.0.1:3000:3000"
-    restart: on-failure
+    restart: no
 
 # worker:
 #   <<: *app
