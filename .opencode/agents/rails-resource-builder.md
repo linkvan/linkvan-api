@@ -1,7 +1,7 @@
 ---
 description: Generate complete Rails resources (models, controllers, routes, tests)
 mode: subagent
-model: opencode/big-pickle
+model: github-copilot/grok-code-fast-1
 permission:
   skill:
     "rails-models": "allow"

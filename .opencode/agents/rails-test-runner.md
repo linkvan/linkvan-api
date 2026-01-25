@@ -1,7 +1,7 @@
 ---
 description: Execute tests and report results only
 mode: subagent
-model: opencode/big-pickle
+model: github-copilot/grok-code-fast-1
 permission:
   skill:
     "rspec-testing": "allow"
