@@ -1,7 +1,7 @@
 ---
 description: Generate complete Rails resources (models, controllers, routes, tests)
 mode: subagent
-model: opencode/grok-code
+model: opencode/big-pickle
 permission:
   skill:
     "rails-models": "allow"

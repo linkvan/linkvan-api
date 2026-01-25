@@ -1,7 +1,7 @@
 ---
 description: Review code for quality and Rails conventions (report + suggest on request)
 mode: subagent
-model: opencode/minimax-m2.1-free
+model: opencode/big-pickle
 permission:
   skill:
     "rails-code-quality": "allow"

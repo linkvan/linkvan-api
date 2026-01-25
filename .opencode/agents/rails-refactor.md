@@ -1,7 +1,7 @@
 ---
 description: Refactor code following Rails and project conventions
 mode: subagent
-model: opencode/glm-4.7-free
+model: opencode/big-pickle
 permission:
   skill:
     "rails-code-quality": "allow"
