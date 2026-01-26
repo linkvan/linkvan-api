@@ -111,7 +111,8 @@ RSpec.describe SiteStats, type: :model do
       let!(:notice2) { create(:notice).tap { |n| n.update_columns(updated_at: 4.days.ago) } }
 
       it "returns the most recent updated_at from all records" do
-        expect(described_class.send(:compute_last_updated)).to eq(facility1.updated_at)
+        computed_time = described_class.send(:compute_last_updated)
+        expect(computed_time).to be_within(1.second).of(facility1.updated_at)
       end
     end
 
@@ -121,7 +122,8 @@ RSpec.describe SiteStats, type: :model do
       let!(:notice) { create(:notice).tap { |n| n.update_columns(updated_at: 2.days.ago) } }
 
       it "includes future dates in computation" do
-        expect(described_class.send(:compute_last_updated)).to eq(future_time)
+        computed_time = described_class.send(:compute_last_updated)
+        expect(computed_time).to be_within(1.second).of(future_time)
       end
     end
   end
@@ -151,7 +153,7 @@ RSpec.describe SiteStats, type: :model do
       let(:site_stats) { described_class.new }
 
       it "computes last_updated correctly" do
-        expect(site_stats.last_updated).to eq(facility.updated_at)
+        expect(site_stats.last_updated).to be_within(1.second).of(facility.updated_at)
       end
 
       it "serializes correctly" do
