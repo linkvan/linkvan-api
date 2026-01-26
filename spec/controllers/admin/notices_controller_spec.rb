@@ -13,26 +13,6 @@ RSpec.describe Admin::NoticesController do
     allow(controller).to receive(:user_signed_in?).and_return(true)
   end
 
-  describe "authentication" do
-    context "when user is not authenticated", skip: "Authentication tests require full Devise/Warden integration" do
-      before do
-        allow(controller).to receive(:user_signed_in?).and_return(false)
-        get :index
-      end
-
-      it { expect(response).to redirect_to(new_user_session_path) }
-    end
-
-    context "when user is not an admin", skip: "Authorization tests require proper Devise integration" do
-      before do
-        allow(controller).to receive(:current_user).and_return(non_admin_user)
-        get :index
-      end
-
-      it { expect(response).to redirect_to(root_path) }
-    end
-  end
-
   describe "GET #index" do
     subject(:get_index) { get :index, params: params }
 

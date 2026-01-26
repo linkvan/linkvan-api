@@ -13,27 +13,6 @@ RSpec.describe Admin::FacilitySchedulesController do
     allow(controller).to receive(:user_signed_in?).and_return(true)
   end
 
-  describe "GET #new", skip: "No template exists for this action" do
-    it "assigns facility" do
-      get :new, params: { facility_id: facility.id }
-      expect(assigns(:facility).id).to eq(facility.id)
-    end
-
-    it "builds new schedule" do
-      get :new, params: { facility_id: facility.id }
-      expect(assigns(:schedule)).to be_a_new(FacilitySchedule)
-    end
-  end
-
-  describe "GET #edit", skip: "No template exists for this action" do
-    let(:schedule) { create(:facility_schedule, facility: facility, week_day: :monday) }
-
-    it "assigns schedule" do
-      get :edit, params: { facility_id: facility.id, id: schedule.id }
-      expect(assigns(:schedule).id).to eq(schedule.id)
-    end
-  end
-
   describe "POST #create" do
     it "creates a schedule" do
       expect do
