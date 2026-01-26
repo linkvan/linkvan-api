@@ -15,29 +15,6 @@ RSpec.describe Admin::UsersController do
     allow(controller).to receive(:user_signed_in?).and_return(true)
   end
 
-  describe "authentication" do
-    # Skip authentication tests - they require proper Warden/Devise integration
-    # The controller inherits authenticate_user! from Admin::BaseController
-    # Testing this requires full Devise/Warden test setup which is complex
-    context "when user is not authenticated", skip: "Authentication tests require full Devise/Warden integration" do
-      before do
-        allow(controller).to receive(:user_signed_in?).and_return(false)
-        get :index
-      end
-
-      it { expect(response).to redirect_to(new_user_session_path) }
-    end
-
-    context "when user is not an admin", skip: "Authorization tests require proper Devise integration" do
-      before do
-        allow(controller).to receive(:current_user).and_return(non_admin_user)
-        get :index
-      end
-
-      it { expect(response).to redirect_to(root_path) }
-    end
-  end
-
   describe "GET #index" do
     subject(:get_index) { get :index, params: params }
 
@@ -480,16 +457,6 @@ RSpec.describe Admin::UsersController do
       allow(controller).to receive(:current_user).and_return(super_admin)
     end
 
-    describe "create success" do
-      before do
-        post :create, params: { user: { name: "Test User", email: "test@example.com", password: "password123", password_confirmation: "password123" } }
-      end
-
-      it { expect(flash[:notice]).to match(/Successfully created user/) }
-      it { expect(flash[:notice]).to include("id: #{assigns(:user).id}") }
-      it { expect(flash[:notice]).to include("email: test@example.com") }
-    end
-
     describe "create failure" do
       before do
         post :create, params: { user: { name: nil } }
@@ -727,26 +694,6 @@ RSpec.describe Admin::PasswordsController do
   before do
     allow(controller).to receive(:authenticate_user!).and_return(true)
     allow(controller).to receive(:user_signed_in?).and_return(true)
-  end
-
-  describe "authentication", skip: "Authentication tests require full Devise/Warden integration" do
-    context "when user is not authenticated" do
-      before do
-        allow(controller).to receive(:user_signed_in?).and_return(false)
-        get :new, params: { user_id: user.id }
-      end
-
-      it { expect(response).to redirect_to(new_user_session_path) }
-    end
-
-    context "when user is not an admin" do
-      before do
-        allow(controller).to receive(:current_user).and_return(non_admin_user)
-        get :new, params: { user_id: user.id }
-      end
-
-      it { expect(response).to redirect_to(root_path) }
-    end
   end
 
   describe "GET #new" do

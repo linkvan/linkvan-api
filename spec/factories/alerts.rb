@@ -2,9 +2,7 @@ FactoryBot.define do
   factory :alert do
     sequence(:title) { |n| "Alert Title #{n}" }
 
-    after(:build) do |alert|
-      alert.content = "<p>Content for alert: #{alert.title}</p>"
-    end
+    content { "<p>Content for alert: #{title}</p>" }
 
     trait :active do
       active { true }

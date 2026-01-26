@@ -6,6 +6,8 @@ FactoryBot.define do
     website { "www.facility.test" }
     notes { "small notes about facility" }
     verified { false }
+    lat { 49.2450424 }
+    long { -123.0289468 }
 
     trait :with_verified do
       lat { 49.2450424 }

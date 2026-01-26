@@ -12,7 +12,7 @@ class Facilities::DiscardReasonComponent < ViewComponent::Base
   def initialize(discard_reason)
     super()
 
-    @discard_reason = discard_reason.to_sym
+    @discard_reason = discard_reason&.to_sym
   end
 
   def self.select_options
