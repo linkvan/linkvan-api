@@ -32,23 +32,17 @@ module External::VancouverCity
         # Build facility services
         service_builder = FacilityServiceBuilder.new(facility: facility, fields: record, api_key: api_key)
         service_result = service_builder.call
-        unless service_result.success?
-          service_result.errors.each { |error| add_error(error) }
-        end
+        service_result.errors.each { |error| add_error(error) } unless service_result.success?
 
         # Build facility welcomes
         welcome_builder = FacilityWelcomeBuilder.new(facility: facility, fields: record)
         welcome_result = welcome_builder.call
-        unless welcome_result.success?
-          welcome_result.errors.each { |error| add_error(error) }
-        end
+        welcome_result.errors.each { |error| add_error(error) } unless welcome_result.success?
 
         # Build facility schedules
         schedule_builder = FacilityScheduleBuilder.new(facility: facility, fields: record)
         schedule_result = schedule_builder.call
-        unless schedule_result.success?
-          schedule_result.errors.each { |error| add_error(error) }
-        end
+        schedule_result.errors.each { |error| add_error(error) } unless schedule_result.success?
 
         if facility&.valid?
           Result.new(data: ResultData.new(facility: facility), errors: errors)
@@ -99,7 +93,7 @@ module External::VancouverCity
         lat: coords[:lat],
         long: coords[:long],
         verified: true,
-        external_id: record['mapid'] || "#{api_key}-unknown-id",
+        external_id: record["mapid"] || "#{api_key}-unknown-id"
       }.compact
 
       Facility.new(facility_data)
@@ -109,11 +103,11 @@ module External::VancouverCity
     # @param fields [Hash] API record fields
     # @return [String, nil] Facility name
     def extract_name(fields)
-      name = fields['name']
+      name = fields["name"]
       return nil unless name
-      
+
       # Replace special characters with whitespace and clean up
-      name.gsub(/\\n/, ' ').tr("\n", ' ').gsub(/\s+/, ' ').strip.presence
+      name.gsub("\\n", " ").tr("\n", " ").gsub(/\s+/, " ").strip.presence
     end
 
     # Extract address from fields
@@ -121,24 +115,24 @@ module External::VancouverCity
     # @return [String, nil] Facility address
     def extract_address(fields)
       # For drinking fountains, use the location field and geo_local_area
-      location = fields['location']
-      area = fields['geo_local_area']
-      
-      [location, area].compact.join(', ').presence
+      location = fields["location"]
+      area = fields["geo_local_area"]
+
+      [location, area].compact.join(", ").presence
     end
 
     # Extract phone number from fields
     # @param fields [Hash] API record fields
     # @return [String, nil] Phone number
     def extract_phone(fields)
-      fields['phone'] || fields['phone_number'] || fields['contact_phone']
+      fields["phone"] || fields["phone_number"] || fields["contact_phone"]
     end
 
     # Extract website from fields
     # @param fields [Hash] API record fields
     # @return [String, nil] Website URL
     def extract_website(fields)
-      fields['website'] || fields['url'] || fields['web_site']
+      fields["website"] || fields["url"] || fields["web_site"]
     end
 
     # Extract notes/description from fields
@@ -146,23 +140,23 @@ module External::VancouverCity
     # @return [String, nil] Notes or description
     def extract_notes(fields)
       notes_parts = []
-      
+
       # Include maintainer info
-      notes_parts << "Maintained by: #{fields['maintainer']}" if fields['maintainer'].present?
-      
+      notes_parts << "Maintained by: #{fields['maintainer']}" if fields["maintainer"].present?
+
       # Include operation info
-      notes_parts << "Operation: #{fields['in_operation']}" if fields['in_operation'].present?
-      
+      notes_parts << "Operation: #{fields['in_operation']}" if fields["in_operation"].present?
+
       # Include pet friendly info
-      notes_parts << "Pet friendly: #{fields['pet_friendly']}" if fields['pet_friendly'].present?
-      
-      notes_parts.join('. ').presence
+      notes_parts << "Pet friendly: #{fields['pet_friendly']}" if fields["pet_friendly"].present?
+
+      notes_parts.join(". ").presence
     end
 
     # Extract coordinates from geometry
     # @return [Hash] Hash with :lat and :long keys
     def coordinates
-      coords = record.dig('geom', 'geometry', 'coordinates').presence || []
+      coords = record.dig("geom", "geometry", "coordinates").presence || []
       return {} unless coords.size == 2
 
       # GeoJSON coordinates are [longitude, latitude]
@@ -172,11 +166,11 @@ module External::VancouverCity
     # Extract coordinates from geo_point_2d field
     # @return [Hash] Hash with :lat and :long keys
     def geo_point_2d
-      geo_point = record.dig('geo_point_2d').presence || {}
+      geo_point = record.dig("geo_point_2d").presence || {}
       return {} unless geo_point.is_a?(Hash)
-      return {} unless geo_point.key?('lat') && geo_point.key?('lon')
+      return {} unless geo_point.key?("lat") && geo_point.key?("lon")
 
-      { lat: geo_point['lat'], long: geo_point['lon'] }
+      { lat: geo_point["lat"], long: geo_point["lon"] }
     end
   end
 end

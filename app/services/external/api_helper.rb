@@ -5,13 +5,13 @@ class External::ApiHelper
   # Available Vancouver City Facilities APIs
   # Each API represents a different type of facility data available from Vancouver's Open Data portal
   SUPPORTED_APIS = {
-    'drinking-fountains' => 'Drinking Fountains'
+    "drinking-fountains" => "Drinking Fountains"
   }.freeze
 
   # Mapping of dataset IDs to service keys
   # This mapping is used to associate API keys with specific service types in the system
   DATASET_ID_TO_SERVICE_KEY = {
-    'drinking-fountains' => 'water_fountain'
+    "drinking-fountains" => "water_fountain"
   }.freeze
 
   class << self

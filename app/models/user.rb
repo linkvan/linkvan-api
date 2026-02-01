@@ -4,7 +4,7 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   # devise :database_authenticatable, :registerable,
-         # :recoverable, :rememberable, :validatable
+  #        :recoverable, :rememberable, :validatable
   devise :database_authenticatable, :rememberable, :validatable
   # has_secure_password
 
@@ -19,24 +19,6 @@ class User < ApplicationRecord
   scope :verified, -> { where(verified: true) }
   scope :not_verified, -> { where(verified: false) }
   scope :super_admins, -> { verified.where(admin: true) }
-
-  # def self.authenticate(email, password)
-    # user = User.find_by(email: email)
-    # user&.authenticate(password)
-  # end
-
-  # def self.to_csv
-    # attributes = %w[id name email password_digest created_at updated_at admin activation_email_sent phone_number
-                    # verified]
-# 
-    # CSV.generate(headers: true) do |csv|
-      # csv << attributes
-# 
-      # all.find_each do |user|
-        # csv << attributes.map { |attr| user.send(attr) }
-      # end
-    # end
-  # end
 
   def manages
     return Facility.all if super_admin?
@@ -63,15 +45,15 @@ class User < ApplicationRecord
   end
 
   def super_admin?
-    (admin && verified)
+    admin && verified
   end
 
   def zone_admin?
-    (zones.any? && verified)
+    zones.any? && verified
   end
 
   def facility_admin?
-    (facilities.any? && verified)
+    facilities.any? && verified
   end
 
   def zone_users

@@ -11,18 +11,12 @@ module Analytics
           return {} if token.blank?
 
           JWT.decode(token, jwt_secret_key)
-        rescue JWT::DecodeError => e
+        rescue JWT::DecodeError
           {}
-          # rescue JWT::VerificationError => e
-          #   # token is invalid.
-          #   raise e
-          # rescue JWT::ExpiredSignature => e
-          #   # token has expired
-          #   raise e
         end
 
         def jwt_secret_key
-          ENV.fetch('JWT_KEY')
+          ENV.fetch("JWT_KEY")
         end
       end
     end

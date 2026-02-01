@@ -1,5 +1,5 @@
 require "rails_helper"
-require 'support/shared_examples/api_tokens'
+require "support/shared_examples/api_tokens"
 
 RSpec.describe Api::FacilitiesController do # , type: :request do
   let(:verified_facility) { create(:open_all_day_facility, :with_services, :with_verified) }
@@ -28,7 +28,6 @@ RSpec.describe Api::FacilitiesController do # , type: :request do
         expect(saved_event.facilities).not_to include(nonverified_facility)
         expect(saved_event.facilities).not_to include(another_verified_facility)
       end
-
     end
 
     context "GET #index" do

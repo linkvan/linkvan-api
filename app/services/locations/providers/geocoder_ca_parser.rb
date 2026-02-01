@@ -3,11 +3,11 @@ module Locations::Providers
     private
 
     def address
-      [standard_data['stnumber'], standard_data['staddress']]
+      [standard_data["stnumber"], standard_data["staddress"]]
     end
 
     def standard_data
-      data['standard'] || {}
+      data["standard"] || {}
     end
   end
 end

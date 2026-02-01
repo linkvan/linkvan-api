@@ -52,15 +52,15 @@ class Shared::CardComponent < ViewComponent::Base
     end
 
     def render?
-      @title.present? #&& @path.present?
+      @title.present?
     end
 
     def call
       params = { class: "button" }
       if @method.present? && @method != :get
         params[:data] = @data.to_h.merge(turbo_method: @method)
-      else
-        params[:data] = @data if @data.present?
+      elsif @data.present?
+        params[:data] = @data
       end
 
       return tag.span(button_content, **params) if @path.blank?

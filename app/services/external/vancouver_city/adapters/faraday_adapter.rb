@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'faraday'
+require "faraday"
 
 module External::VancouverCity
   module Adapters
@@ -24,7 +24,7 @@ module External::VancouverCity
       class Builder
         DEFAULT_TIMEOUT = 30
         DEFAULT_OPEN_TIMEOUT = 10
-        DEFAULT_USER_AGENT = 'Linkvan API Client'
+        DEFAULT_USER_AGENT = "Linkvan API Client"
 
         def initialize(base_url)
           @base_url = base_url
@@ -34,6 +34,7 @@ module External::VancouverCity
           @headers = {}
           @adapter = Faraday.default_adapter
         end
+
         # Set request timeout
         # @param timeout [Integer] Request timeout in seconds
         # @return [Builder] self for method chaining
@@ -80,15 +81,15 @@ module External::VancouverCity
         def build
           connection = Faraday.new(url: @base_url) do |config|
             config.adapter @adapter
-            
+
             # Set timeouts
             config.options.timeout = @timeout
             config.options.open_timeout = @open_timeout
-            
+
             # Set default headers
-            config.headers['User-Agent'] = @user_agent
-            config.headers['Accept'] = 'application/json'
-            
+            config.headers["User-Agent"] = @user_agent
+            config.headers["Accept"] = "application/json"
+
             # Add custom headers
             @headers.each do |name, value|
               config.headers[name] = value
@@ -128,19 +129,13 @@ module External::VancouverCity
       end
 
       # Access connection options for testing
-      def options
-        @connection.options
-      end
+      delegate :options, to: :@connection
 
       # Access connection headers for testing
-      def headers
-        @connection.headers
-      end
+      delegate :headers, to: :@connection
 
       # Access connection URL prefix for testing
-      def url_prefix
-        @connection.url_prefix
-      end
+      delegate :url_prefix, to: :@connection
     end
   end
 end

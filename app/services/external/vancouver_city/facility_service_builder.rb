@@ -66,7 +66,7 @@ module External::VancouverCity
 
       service = Service.find_by(key: service_key)
       return if service.blank?
-      
+
       # Build FacilityService association without saving
       facility.facility_services.build(service: service)
     end

@@ -11,5 +11,5 @@ class Service < ApplicationRecord
   scope :exact_search, lambda { |name_or_key|
     where(key: name_or_key)
       .or(where(name: name_or_key))
- }
+  }
 end

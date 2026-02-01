@@ -4,13 +4,11 @@ namespace :fake_data do
   desc "Create Facilities fake data to help development"
   task facilities: :environment do
     # Allow running in production if ALLOW_FAKE_DATA is set (for local testing)
-    unless Rails.env.development? || ENV['ALLOW_FAKE_DATA'].present?
-      abort "This script can only be run on development environment. Set ALLOW_FAKE_DATA=true to override."
-    end
+    abort "This script can only be run on development environment. Set ALLOW_FAKE_DATA=true to override." unless Rails.env.development? || ENV["ALLOW_FAKE_DATA"].present?
 
     # Check if Faker is available
     begin
-      require 'faker'
+      require "faker"
     rescue LoadError
       if Rails.env.production?
         abort "Faker gem is not available in production. To use fake data in production, set ALLOW_FAKE_DATA=true and rebuild the Docker image."
@@ -24,7 +22,7 @@ namespace :fake_data do
     LIMITS = {
       lat: [49.1019545..49.3210142],
       long: [-123.2358425..-122.4716322]
-      
+
     }
     vancouver = Zone.where(name: "Vancouver").to_a
     new_west = Zone.where(name: "New Westminster").to_a

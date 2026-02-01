@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Locations::GoogleMaps::StaticMapService do
   # BASE_URL = "https://maps.googleapis.com/maps/api/staticmap"

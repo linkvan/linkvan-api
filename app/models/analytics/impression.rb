@@ -8,5 +8,5 @@ class Analytics::Impression < ApplicationRecord
 
   validates :impressionable_id, uniqueness: { scope: %i[impressionable_type event_id] }
 
-  scope :facilities, -> { where(impressionable_type: 'Facility') }
+  scope :facilities, -> { where(impressionable_type: "Facility") }
 end

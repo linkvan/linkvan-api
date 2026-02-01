@@ -20,12 +20,10 @@ class AdminNoticeNewPage < BasePage
     click_button "Create Notice"
   end
 
-  public
-
   def fill_trix_editor(label, with:)
     # Find trix editor using multiple approaches for ActionText compatibility
     trix_editor = find_trix_editor(label)
-    
+
     # Use JavaScript to set the Trix editor content
     execute_script("arguments[0].editor.insertHTML(arguments[1])", trix_editor, with)
   end
@@ -52,20 +50,18 @@ class AdminNoticeNewPage < BasePage
       # Look for hidden input with name containing 'content'
       hidden_input = find("input[name*='[content]']")
       field_id = hidden_input[:id]
-      
+
       # Try different ID patterns for trix editor
       possible_ids = [
         "#{field_id}_trix_editor",
-        field_id.gsub('_input', '') + "_trix_editor",
-        field_id.gsub('_input', '')
+        field_id.gsub("_input", "") + "_trix_editor",
+        field_id.gsub("_input", "")
       ]
-      
+
       possible_ids.each do |trix_id|
-        begin
-          return find("##{trix_id}")
-        rescue Capybara::ElementNotFound
-          next
-        end
+        return find("##{trix_id}")
+      rescue Capybara::ElementNotFound
+        next
       end
     rescue Capybara::ElementNotFound
       # Continue to fallback
@@ -73,8 +69,8 @@ class AdminNoticeNewPage < BasePage
 
     # Approach 4: Fallback to any trix-editor
     begin
-      return all("trix-editor").first
-    rescue
+      all("trix-editor").first
+    rescue StandardError
       raise "Could not find trix editor for label '#{label}'"
     end
   end

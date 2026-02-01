@@ -30,7 +30,7 @@ module External::VancouverCity
 
         begin
           response = api_client.get_dataset_records(api_key, limit: PAGE_SIZE, offset: offset)
-          records = response.body.dig('results') || []
+          records = response.body.dig("results") || []
 
           break if records.empty?
 
@@ -68,9 +68,7 @@ module External::VancouverCity
     def validate
       @errors = []
 
-      unless External::ApiHelper.supported_api?(api_key)
-        add_error("Unsupported API: #{api_key}")
-      end
+      add_error("Unsupported API: #{api_key}") unless External::ApiHelper.supported_api?(api_key)
 
       if api_client.nil?
         add_error("API client is required")

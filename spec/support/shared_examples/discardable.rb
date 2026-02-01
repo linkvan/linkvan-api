@@ -25,7 +25,6 @@ RSpec.shared_examples :discardable do
       it { expect { model.discard }.not_to change(model, :undiscarded?).from(false) }
       it { expect { model.discard! }.not_to raise_error }
       it { expect { model.discard! }.not_to change(model, :discarded?).from(true) }
-
     end
 
     context "when discard fails" do

@@ -104,7 +104,7 @@ class Facilities::ShowComponent < ViewComponent::Base
       return if facility_service_for(service).blank?
 
       button_data = { modal_id: note_modal_id(service) }
-      tag.with_button class: "button is-white show_notes_button is-pulled-right", title: 'Show/Edit Notes', data: button_data do
+      tag.with_button class: "button is-white show_notes_button is-pulled-right", title: "Show/Edit Notes", data: button_data do
         tag.span class: "icon" do
           tag.i class: "fas fa-edit"
         end
@@ -211,7 +211,7 @@ class Facilities::ShowComponent < ViewComponent::Base
           # Schedule is closed_all_day. Update it to open_all_day
           schedule_params[:closed_all_day] = false
           schedule_params[:open_all_day] = true
-        options[:title] = "Switch to Open"
+          options[:title] = "Switch to Open"
         else
           # Schedule is open_all_day or set_times. Update it to closed_all_day
           schedule_params[:closed_all_day] = true
@@ -275,10 +275,10 @@ class Facilities::ShowComponent < ViewComponent::Base
 
     def link_to_edit(schedule)
       action = if schedule.new_record?
-        new_admin_facility_schedule_path(facility_id: facility.id)
-      else
-        edit_admin_facility_schedule_path(id: schedule.id, facility_id: facility.id)
-      end
+                 new_admin_facility_schedule_path(facility_id: facility.id)
+               else
+                 edit_admin_facility_schedule_path(id: schedule.id, facility_id: facility.id)
+               end
 
       link_to action, class: "button is-pulled-right is-white" do
         icon_element("fa-edit")

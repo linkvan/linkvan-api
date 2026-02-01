@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe "Facilities index" do
-
   before do
     config_jwt
   end

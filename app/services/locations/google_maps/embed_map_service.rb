@@ -1,8 +1,8 @@
-require 'uri'
+require "uri"
 
 module Locations::GoogleMaps
   class EmbedMapService < ApplicationService
-    GOOGLE_KEY = ENV['GOOGLE_MAPS_API_TOKEN']
+    GOOGLE_KEY = ENV.fetch("GOOGLE_MAPS_API_TOKEN", nil)
     GOOGLE_SIGNATURE = nil
     BASE_URL = "https://maps.googleapis.com/maps/embed/v1/place"
 

@@ -22,13 +22,13 @@ namespace :data do
                   severity.light_red
                 else
                   severity
-      end
+                end
       header += "]"
 
       "#{header} #{msg}\n"
     end
 
-    attention_logger = ActiveSupport::Logger.new("#{Rails.root.join("log", "import.log")}")
+    attention_logger = ActiveSupport::Logger.new("#{Rails.root.join('log', 'import.log')}")
     logger = Rails.logger
     logger.extend(ActiveSupport::Logger.broadcast(stdout_logger))
 
@@ -36,15 +36,15 @@ namespace :data do
 
     # LAMBDA -> Welcomes
     valid_welcomes = FacilityWelcome.customers.keys
-    process_welcomes = ->(facility, facility_hash) do
+    process_welcomes = lambda do |facility, facility_hash|
       welcome_list = facility_hash["welcomes"]
-        .split
-        .map(&:to_s)
-        .map(&:downcase)
-        .map(&:singularize)
-        .map do |welcome_value|
-          welcome_value == "child" ? "children" : welcome_value
-        end
+                     .split
+                     .map(&:to_s)
+                     .map(&:downcase)
+                     .map(&:singularize)
+                     .map do |welcome_value|
+        welcome_value == "child" ? "children" : welcome_value
+      end
 
       welcome_list = valid_welcomes if welcome_list.include?("all")
 
@@ -58,14 +58,14 @@ namespace :data do
     end
 
     # LAMBDA -> Services
-    process_services = ->(facility, facility_hash) do
+    process_services = lambda do |facility, facility_hash|
       services_list = facility_hash["services"]
-        .split
-        .map(&:to_s)
-        .map(&:downcase)
-        .map do |service_value|
-          service_value == "advocacy" ? "legal" : service_value
-        end
+                      .split
+                      .map(&:to_s)
+                      .map(&:downcase)
+                      .map do |service_value|
+        service_value == "advocacy" ? "legal" : service_value
+      end
 
       services = Service.where(key: services_list)
       if (unmatched = services_list - services.pluck(:key)).present?
@@ -80,16 +80,16 @@ namespace :data do
 
     # LAMBDA -> Schedules
     week_days = {
-      sunday: 'sun',
-      monday: 'mon',
-      tuesday: 'tues',
-      wednesday: 'wed',
-      thursday: 'thurs',
-      friday: 'fri',
-      saturday: 'sat'
+      sunday: "sun",
+      monday: "mon",
+      tuesday: "tues",
+      wednesday: "wed",
+      thursday: "thurs",
+      friday: "fri",
+      saturday: "sat"
     }
 
-    process_schedule = ->(facility, facility_hash) do
+    process_schedule = lambda do |facility, facility_hash|
       schedules = {}
       week_days.each_pair do |wday_key, wday|
         open1  = facility_hash["starts#{wday}_at"]
@@ -118,7 +118,7 @@ namespace :data do
         )
         unless schedule.save
           logger.error "[seed_fake] Failed to create #{week_day} schedule for facility (id: #{facility.id}. Errors: #{schedule.errors.full_messages}"
-          failed_schedules  << facility.id
+          failed_schedules << facility.id
 
           next
         end
@@ -137,7 +137,7 @@ namespace :data do
 
           logger.warn "[seed_fake] Can't create #{idx + 1}#{(idx + 1).ordinal} time slot for facility (id: #{facility.id}). Errors: #{time_slot.errors.full_messages}"
           attention_logger.warn "[import] Can't create #{idx + 1}#{(idx + 1).ordinal} time slot for facility '#{facility.name}' (id: #{facility.id}). Errors: #{time_slot.errors.full_messages}"
-          failed_schedules  << facility.id
+          failed_schedules << facility.id
         end
       end
     end
@@ -159,7 +159,7 @@ namespace :data do
     counter = 0
     new_facilities.map do |facility_hash|
       if Facility.find_by(id: facility_hash["id"]).present?
-        logger.error "[seed_fake] Facility id (#{facility_hash["id"]}) already exists. Skipping..."
+        logger.error "[seed_fake] Facility id (#{facility_hash['id']}) already exists. Skipping..."
 
         next
       end
@@ -169,8 +169,8 @@ namespace :data do
 
       ApplicationRecord.transaction do
         unless facility.save
-          logger.error "[seed_fake] Failed to create Facility (id: #{facility_attribs["id"]}). Errors: #{facility.errors.full_messages}"
-          attention_logger.error "[import] Failed to create Facility '#{facility.name}' (id: #{facility_attribs["id"]}). Errors: #{facility.errors.full_messages}"
+          logger.error "[seed_fake] Failed to create Facility (id: #{facility_attribs['id']}). Errors: #{facility.errors.full_messages}"
+          attention_logger.error "[import] Failed to create Facility '#{facility.name}' (id: #{facility_attribs['id']}). Errors: #{facility.errors.full_messages}"
 
           next
         end

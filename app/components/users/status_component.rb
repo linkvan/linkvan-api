@@ -25,32 +25,11 @@ class Users::StatusComponent < Shared::StatusComponent
     @status = user.verified? ? :verified : :not_verified
   end
 
-  # def call
-    # @show_title.present? ? call_title : call_icon
-  # end
-# 
-  # def call_icon
-    # tag.span class: "icon" do
-      # tag.i class: "fas #{size_classes} #{status_classes}"
-    # end
-  # end
-# 
-  # def call_title
-    # tag.span class: "icon-text has-text" do
-      # call_icon + tag.span(title)
-    # end
-  # end
-
   private
-
-  # def size_classes
-    # SIZE_CLASSES[@size]
-  # end
 
   # Overrides superclass
   def title
     @status.to_s.titleize
-    # @status ? "Yes" : "No"
   end
 
   def status_classes

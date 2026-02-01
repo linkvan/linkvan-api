@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require 'faraday'
-require 'json'
-require_relative 'adapters/faraday_adapter'
+require "faraday"
+require "json"
+require_relative "adapters/faraday_adapter"
 
 module External::VancouverCity
   class VancouverApiConfig
-    BASE_URL = 'https://opendata.vancouver.ca/api/explore/v2.1'
+    BASE_URL = "https://opendata.vancouver.ca/api/explore/v2.1"
     DEFAULT_TIMEOUT = 30 # seconds
     DEFAULT_OPEN_TIMEOUT = 10 # seconds
 
@@ -20,23 +20,23 @@ module External::VancouverCity
   end
 
   DEFAULT_ADAPTER = Adapters::FaradayAdapter.builder(VancouverApiConfig::BASE_URL)
-        .timeout(VancouverApiConfig::DEFAULT_TIMEOUT)
-        .open_timeout(VancouverApiConfig::DEFAULT_OPEN_TIMEOUT)
-        .build
+                                            .timeout(VancouverApiConfig::DEFAULT_TIMEOUT)
+                                            .open_timeout(VancouverApiConfig::DEFAULT_OPEN_TIMEOUT)
+                                            .build
 
   # HTTP client for the Vancouver Open Data API (Opendatasoft Explore API v2.1)
-  # 
+  #
   # This client provides access to Vancouver's open data portal at:
   # https://opendata.vancouver.ca/api/explore/v2.1/
   #
   # Example usage:
   #   # Using the default adapter
   #   client = External::VancouverCity::VancouverApiClient.default_client
-  #   
+  #
   #   # Using a custom configuration
   #   config = External::VancouverCity::VancouverApiConfig.new(timeout: 60)
   #   client = External::VancouverCity::VancouverApiClient.with_config(config)
-  #   
+  #
   #   response = client.get_dataset_records('drinking-fountains', limit: 20)
   #   records = response.body
   class VancouverApiClient
@@ -94,7 +94,7 @@ module External::VancouverCity
     #   client.get_dataset_records('drinking-fountains', limit: 20)
     #
     # @example Get fountains with specific filters
-    #   client.get_dataset_records('drinking-fountains', 
+    #   client.get_dataset_records('drinking-fountains',
     #     where: 'location_type = "Park"',
     #     order_by: 'name asc',
     #     limit: 50
@@ -102,10 +102,10 @@ module External::VancouverCity
     def get_dataset_records(dataset_id, **options)
       # Build query parameters, filtering out nil values
       params = build_query_params(options)
-      
+
       # Make the API request
       path = "catalog/datasets/#{dataset_id}/records"
-      
+
       handle_response do
         @adapter.get(path, params)
       end
@@ -123,7 +123,7 @@ module External::VancouverCity
     def get_dataset(dataset_id, **options)
       params = build_query_params(options.slice(:lang, :include_links, :include_app_metas))
       path = "catalog/datasets/#{dataset_id}"
-      
+
       handle_response do
         @adapter.get(path, params)
       end
@@ -145,7 +145,7 @@ module External::VancouverCity
     def get_datasets(**options)
       params = build_query_params(options)
       path = "catalog/datasets"
-      
+
       handle_response do
         @adapter.get(path, params)
       end
@@ -163,7 +163,7 @@ module External::VancouverCity
     def get_dataset_record(dataset_id, record_id, **options)
       params = build_query_params(options.slice(:lang, :timezone))
       path = "catalog/datasets/#{dataset_id}/records/#{record_id}"
-      
+
       handle_response do
         @adapter.get(path, params)
       end
@@ -176,7 +176,7 @@ module External::VancouverCity
     # @return [Hash] Filtered parameters hash
     def build_query_params(options)
       params = {}
-      
+
       # Map all supported parameters
       param_mapping = {
         select: :select,
@@ -192,12 +192,12 @@ module External::VancouverCity
         include_links: :include_links,
         include_app_metas: :include_app_metas
       }
-      
+
       param_mapping.each do |key, param_name|
         value = options[key]
         params[param_name] = value unless value.nil?
       end
-      
+
       params
     end
 
@@ -207,13 +207,13 @@ module External::VancouverCity
     # @raise [VancouverApiError] If the request fails
     def handle_response
       response = yield
-      
+
       # Check for HTTP errors
       unless response.success?
         error_message = "API request failed with status #{response.status}"
-        
+
         # Try to parse error response if it's JSON
-        if response.headers['content-type']&.include?('application/json')
+        if response.headers["content-type"]&.include?("application/json")
           begin
             error_body = JSON.parse(response.body)
             error_message += ": #{error_body['error'] || error_body['message'] || response.body}"
@@ -223,19 +223,19 @@ module External::VancouverCity
         else
           error_message += ": #{response.body[0..200]}#{'...' if response.body.length > 200}"
         end
-        
+
         raise VancouverApiError.new(error_message, response.status, response.body)
       end
-      
+
       # Parse JSON response body for successful responses
-      if response.headers['content-type']&.include?('application/json')
+      if response.headers["content-type"]&.include?("application/json")
         begin
           response.env.body = JSON.parse(response.body)
         rescue JSON::ParserError => e
           raise VancouverApiError.new("Failed to parse JSON response: #{e.message}", response.status, response.body)
         end
       end
-      
+
       response
     rescue Faraday::TimeoutError => e
       raise VancouverApiError.new("Request timeout: #{e.message}", nil, nil)

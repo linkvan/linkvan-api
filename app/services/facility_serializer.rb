@@ -14,10 +14,10 @@ class FacilitySerializer < ApplicationService
 
   def call
     data = if @complete.present?
-      hashify(@facility, facility_attributes)
-    else
-      hashify(@facility, NON_COMPLETE_ATTRIBUTES)
-    end
+             hashify(@facility, facility_attributes)
+           else
+             hashify(@facility, NON_COMPLETE_ATTRIBUTES)
+           end
 
     data[:website] = @facility.website_url
     data[:welcomes] = hashify_welcomes
