@@ -17,8 +17,6 @@ class Facilities::WelcomesIconComponent < ViewComponent::Base
   def initialize(welcomes, variant: :full)
     super()
 
-    Rails.logger.debug { "ICON: #{welcomes} => #{icon_location}" }
-
     @variant = variant
     @welcomes = welcomes.to_s.underscore.to_sym
   end
