@@ -83,7 +83,7 @@ RSpec.describe FacilityWelcome, type: :model do
 
   describe "scopes" do
     describe ".name_search" do
-      subject { described_class.name_search(value) }
+      subject(:searched_facility_welcomes) { described_class.name_search(value) }
 
       let(:facility) { create(:facility) }
       let(:male_welcome) { create(:facility_welcome, facility: facility, customer: :male) }

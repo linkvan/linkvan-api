@@ -347,7 +347,7 @@ RSpec.describe Admin::AlertsController do
     end
 
     describe "active/inactive state update" do
-      context "activating an inactive alert" do
+      context "when activating an inactive alert" do
         let(:alert) { create(:alert, active: false) }
 
         before { patch_update }
@@ -357,7 +357,7 @@ RSpec.describe Admin::AlertsController do
         end
       end
 
-      context "deactivating an active alert" do
+      context "when deactivating an active alert" do
         let(:alert) { create(:alert, active: true) }
         let(:alert_attributes) do
           {
@@ -448,7 +448,7 @@ RSpec.describe Admin::AlertsController do
       before do
         # Force destroy to return false without actually calling it
         # Also allow persisted? to return true so the record is found
-        allow(alert).to receive_messages(destroy: false, persisted?: true, errors: double(full_messages: ["Some error"]))
+        allow(alert).to receive_messages(destroy: false, persisted?: true, errors: instance_double(ActiveModel::Errors, full_messages: ["Some error"]))
         # Ensure the alert is found via the before_action
         allow(Alert).to receive(:find).with(alert.id.to_s).and_return(alert)
         delete :destroy, params: { id: alert.id }
@@ -598,7 +598,7 @@ RSpec.describe Admin::AlertsController do
 
       before do
         # Force destroy to return false without actually calling it
-        allow(alert).to receive_messages(destroy: false, persisted?: true, errors: double(full_messages: ["Some error"]))
+        allow(alert).to receive_messages(destroy: false, persisted?: true, errors: instance_double(ActiveModel::Errors, full_messages: ["Some error"]))
         allow(Alert).to receive(:find).with(alert.id.to_s).and_return(alert)
         delete :destroy, params: { id: alert.id }
       end

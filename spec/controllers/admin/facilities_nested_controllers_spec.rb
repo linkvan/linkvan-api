@@ -236,7 +236,7 @@ RSpec.describe Admin::FacilityLocationsController do
 
   describe "search integration" do
     it "calls Locations::Searcher with query" do
-      mock_locations = [double("Location")]
+      mock_locations = [instance_double(Location)]
       allow(Locations::Searcher).to receive(:call).with(address: "downtown").and_return(mock_locations)
       get :new, params: { facility_id: facility.id, q: "downtown" }
       expect(assigns(:locations)).to eq(mock_locations)

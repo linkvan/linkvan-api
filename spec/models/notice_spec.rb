@@ -38,7 +38,7 @@ RSpec.describe Notice, type: :model do
 
   describe "scopes" do
     describe ".published" do
-      subject { described_class.published }
+      subject(:published_notices) { described_class.published }
 
       let(:published_notice) { create(:notice, :published) }
       let(:draft_notice) { create(:notice, :draft) }
@@ -48,7 +48,7 @@ RSpec.describe Notice, type: :model do
     end
 
     describe ".draft" do
-      subject { described_class.draft }
+      subject(:draft_notices) { described_class.draft }
 
       let(:published_notice) { create(:notice, :published) }
       let(:draft_notice) { create(:notice, :draft) }

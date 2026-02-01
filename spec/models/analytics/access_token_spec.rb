@@ -46,9 +46,10 @@ RSpec.describe Analytics::AccessToken, type: :model do
     let(:new_session_token) { "a_new_session_token" }
 
     it "keeps uuid and updates session_token" do
-      expect(described_class::JSONWebToken).to receive(:encode).and_return(new_session_token)
+      allow(described_class::JSONWebToken).to receive(:encode).and_return(new_session_token)
       access_token.refresh
 
+      expect(described_class::JSONWebToken).to have_received(:encode)
       expect(access_token.uuid).to eq(uuid)
       expect(access_token.session_token).to eq(new_session_token)
     end

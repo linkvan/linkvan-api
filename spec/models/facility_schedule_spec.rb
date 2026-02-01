@@ -45,7 +45,7 @@ RSpec.describe FacilitySchedule, type: :model do
 
   describe "scopes" do
     describe ".open_all_day" do
-      subject { described_class.open_all_day }
+      subject(:open_all_day_schedules) { described_class.open_all_day }
 
       let(:open_all_day_schedule) { create(:facility_schedule, open_all_day: true, closed_all_day: false) }
       let(:closed_schedule) { create(:facility_schedule, open_all_day: false, closed_all_day: true) }
@@ -55,7 +55,7 @@ RSpec.describe FacilitySchedule, type: :model do
     end
 
     describe ".closed_all_day" do
-      subject { described_class.closed_all_day }
+      subject(:closed_all_day_schedules) { described_class.closed_all_day }
 
       let(:closed_schedule) { create(:facility_schedule, closed_all_day: true, open_all_day: false) }
       let(:open_schedule) { create(:facility_schedule, open_all_day: true, closed_all_day: false) }

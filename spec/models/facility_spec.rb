@@ -72,7 +72,7 @@ RSpec.describe Facility, type: :model do
 
   describe "scopes" do
     describe ".live" do
-      subject { described_class.live }
+      subject(:live_facilities) { described_class.live }
 
       let(:live_facility) { create(:facility, :with_verified) }
       let(:pending_facility) { create(:facility, verified: false) }
@@ -84,7 +84,7 @@ RSpec.describe Facility, type: :model do
     end
 
     describe ".is_verified" do
-      subject { described_class.is_verified }
+      subject(:verified_facilities) { described_class.is_verified }
 
       let(:verified_facility) { create(:facility, :with_verified) }
       let(:unverified_facility) { create(:facility) }
@@ -94,7 +94,7 @@ RSpec.describe Facility, type: :model do
     end
 
     describe ".pending_reviews" do
-      subject { described_class.pending_reviews }
+      subject(:pending_review_facilities) { described_class.pending_reviews }
 
       let(:verified_facility) { create(:facility, :with_verified) }
       let(:pending_facility) { create(:facility, verified: false) }
@@ -106,7 +106,7 @@ RSpec.describe Facility, type: :model do
     end
 
     describe ".with_service" do
-      subject { described_class.with_service(service_key_or_name) }
+      subject(:facilities_with_service) { described_class.with_service(service_key_or_name) }
 
       let(:service) { create(:service, key: "housing", name: "Housing") }
       let(:facility_with_service) { create(:facility).tap { |f| f.services << service } }
@@ -128,7 +128,7 @@ RSpec.describe Facility, type: :model do
     end
 
     describe ".external" do
-      subject { described_class.external }
+      subject(:external_facilities) { described_class.external }
 
       let(:external_facility) { create(:facility, external_id: "ext-123") }
       let(:internal_facility) { create(:facility, external_id: nil) }
@@ -138,7 +138,7 @@ RSpec.describe Facility, type: :model do
     end
 
     describe ".not_external" do
-      subject { described_class.not_external }
+      subject(:internal_facilities) { described_class.not_external }
 
       let(:external_facility) { create(:facility, external_id: "ext-123") }
       let(:internal_facility) { create(:facility, external_id: nil) }
@@ -211,12 +211,12 @@ RSpec.describe Facility, type: :model do
   describe "#update_status" do
     let(:facility) { create(:facility, verified: false, lat: 49.245, long: -123.028) }
 
-    context "to live" do
+    context "when switching to live" do
       it { expect { facility.update_status(:live) }.to change(facility, :verified).to(true) }
       it { expect(facility.update_status(:live)).to be true }
     end
 
-    context "to pending_reviews" do
+    context "when switching to pending_reviews" do
       before { facility.update(verified: true) }
 
       it { expect { facility.update_status(:pending_reviews) }.to change(facility, :verified).to(false) }

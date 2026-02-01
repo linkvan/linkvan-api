@@ -158,7 +158,7 @@ RSpec.describe Analytics::Event, type: :model do
       end
     end
 
-    context "belongs_to visit" do
+    context "when it belongs to visit" do
       it "can access associated visit" do
         visit = create(:analytics_visit)
         event = create(:analytics_event, visit: visit)

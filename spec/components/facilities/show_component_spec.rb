@@ -125,9 +125,10 @@ RSpec.describe Facilities::ShowComponent, type: :component do
       it "calls the Google Maps service with coordinates" do
         allow(Locations::GoogleMaps::EmbedMapService).to receive(:call).and_return("map_url")
         # Since coordinates method is not defined in component, we test the service call
-        expect(Locations::GoogleMaps::EmbedMapService).to receive(:call).with(*facility.coordinates)
         # Simulate the method call
         Locations::GoogleMaps::EmbedMapService.call(*facility.coordinates)
+
+        expect(Locations::GoogleMaps::EmbedMapService).to have_received(:call).with(*facility.coordinates)
       end
     end
 
@@ -276,13 +277,20 @@ RSpec.describe Facilities::ShowComponent, type: :component do
         let(:customer) { facility_welcome.customer }
 
         before do
-          # Mock the route helper and render method
-          expect(welcomes_component).to receive(:admin_facility_welcome_path).with(
+          # Mock the route helpers and render method
+          allow(welcomes_component).to receive(:admin_facility_welcome_path).and_return("#")
+          allow(welcomes_component).to receive(:render).and_return("<mocked-status-component>")
+        end
+
+        it "calls admin_facility_welcome_path with correct parameters" do
+          # This will trigger the expected call
+          button = welcomes_component.send(:switch_button, customer)
+          expect(welcomes_component).to have_received(:admin_facility_welcome_path).with(
             id: facility_welcome,
             customer: customer,
             facility_id: facility.id
-          ).and_return("#")
-          allow(welcomes_component).to receive(:render).and_return("<mocked-status-component>")
+          )
+          expect(button).to be_present
         end
 
         it "calls admin_facility_welcome_path with correct parameters" do
@@ -294,12 +302,19 @@ RSpec.describe Facilities::ShowComponent, type: :component do
 
       context "when facility does not welcome the customer" do
         before do
-          # Mock the route helper and render method
-          expect(welcomes_component).to receive(:admin_facility_welcomes_path).with(
+          # Mock the route helpers and render method
+          allow(welcomes_component).to receive(:admin_facility_welcomes_path).and_return("#")
+          allow(welcomes_component).to receive(:render).and_return("<mocked-status-component>")
+        end
+
+        it "calls admin_facility_welcomes_path with correct parameters" do
+          # This will trigger the expected call
+          button = welcomes_component.send(:switch_button, customer)
+          expect(welcomes_component).to have_received(:admin_facility_welcomes_path).with(
             facility_id: facility.id,
             customer: customer
-          ).and_return("#")
-          allow(welcomes_component).to receive(:render).and_return("<mocked-status-component>")
+          )
+          expect(button).to be_present
         end
 
         it "calls admin_facility_welcomes_path with correct parameters" do

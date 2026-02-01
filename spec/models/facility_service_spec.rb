@@ -44,7 +44,7 @@ RSpec.describe FacilityService, type: :model do
 
   describe "scopes" do
     describe ".name_search" do
-      subject { described_class.name_search(value) }
+      subject(:searched_facility_services) { described_class.name_search(value) }
 
       let(:service) { create(:service, key: "housing", name: "Housing") }
       let(:facility_with_housing) { create(:facility) }

@@ -16,7 +16,7 @@ RSpec.describe Alert, type: :model do
 
   describe "scopes" do
     describe ".active" do
-      subject { described_class.active }
+      subject(:active_alerts) { described_class.active }
 
       let(:active_alert) { create(:alert, :active) }
       let(:inactive_alert) { create(:alert, :inactive) }
@@ -26,7 +26,7 @@ RSpec.describe Alert, type: :model do
     end
 
     describe ".inactive" do
-      subject { described_class.inactive }
+      subject(:inactive_alerts) { described_class.inactive }
 
       let(:active_alert) { create(:alert, :active) }
       let(:inactive_alert) { create(:alert, :inactive) }

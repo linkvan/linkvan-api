@@ -74,7 +74,7 @@ RSpec.describe Analytics::Impression, type: :model do
   describe "Validations" do
     it { is_expected.to validate_uniqueness_of(:impressionable_id).scoped_to(%i[impressionable_type event_id]) }
 
-    context "uniqueness validation" do
+    context "when validating uniqueness" do
       let(:event) { create(:analytics_event) }
       let(:facility) { create(:facility) }
 

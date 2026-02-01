@@ -14,7 +14,7 @@ RSpec.describe Api::FacilitiesController do # , type: :request do
   describe "analytics data" do
     let(:load_data) { [verified_facility, nonverified_facility, another_verified_facility] }
 
-    context "GET #show" do
+    context "when showing facility" do
       it "adds analytics data for the request with impression" do
         expect do
           get :show, params: { id: verified_facility.id }
