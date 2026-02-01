@@ -284,7 +284,7 @@ RSpec.describe Locations::Searcher, type: :service do
       end
 
       context "when Locations::Parser.parse raises an error" do
-        let(:geocoder_result) { instance_double("Geocoder::Result::Base") }
+        let(:geocoder_result) { instance_double(Geocoder::Result::Base) }
 
         before do
           allow(Geocoder).to receive(:search).with(address).and_return([geocoder_result])
@@ -307,8 +307,8 @@ RSpec.describe Locations::Searcher, type: :service do
       end
 
       context "when Location.build_from raises an error" do
-        let(:geocoder_result) { instance_double("Geocoder::Result::Base") }
-        let(:parsed_location) { instance_double("Locations::GeocoderLocation") }
+        let(:geocoder_result) { instance_double(Geocoder::Result::Base) }
+        let(:parsed_location) { instance_double(Locations::GeocoderLocation) }
 
         before do
           allow(Geocoder).to receive(:search).with(address).and_return([geocoder_result])
@@ -358,7 +358,7 @@ RSpec.describe Locations::Searcher, type: :service do
 
       it "calls Locations::Parser.parse with correct parameters" do
         allow(Locations::Parser).to receive(:parse).and_call_original
-        allow(Locations::Parser).to receive(:provider_class).and_return(class_double("Locations::Providers::TestParser", call: parsed_location))
+        allow(Locations::Parser).to receive(:provider_class).and_return(class_double(Locations::Providers::BaseParser, call: parsed_location))
 
         result = searcher.call
         result.to_a
@@ -444,8 +444,8 @@ RSpec.describe Locations::Searcher, type: :service do
 
       before do
         allow(Geocoder).to receive(:search).with(address).and_return(geocoder_results)
-        allow(Locations::Parser).to receive(:parse).and_return(instance_double("Locations::GeocoderLocation"))
-        allow(Location).to receive(:build_from).and_return(instance_double("Location"))
+        allow(Locations::Parser).to receive(:parse).and_return(instance_double(Locations::GeocoderLocation))
+        allow(Location).to receive(:build_from).and_return(instance_double(Location))
       end
 
       it "does not process all results immediately" do
@@ -475,8 +475,8 @@ RSpec.describe Locations::Searcher, type: :service do
 
       before do
         allow(Geocoder).to receive(:search).with(address).and_return(large_result_set)
-        allow(Locations::Parser).to receive(:parse).and_return(instance_double("Locations::GeocoderLocation"))
-        allow(Location).to receive(:build_from).and_return(instance_double("Location"))
+        allow(Locations::Parser).to receive(:parse).and_return(instance_double(Locations::GeocoderLocation))
+        allow(Location).to receive(:build_from).and_return(instance_double(Location))
       end
 
       it "can handle large result sets without immediate memory overhead" do

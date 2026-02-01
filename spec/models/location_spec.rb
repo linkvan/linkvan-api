@@ -152,7 +152,7 @@ RSpec.describe Location, type: :model do
     end
 
     context "with both geocoder_location and facility" do
-      let(:geocoder_location) { instance_double("Locations::GeocoderLocation") }
+      let(:geocoder_location) { instance_double(Locations::GeocoderLocation) }
       let(:facility) { build(:facility, :with_verified) }
 
       it "raises ArgumentError" do
