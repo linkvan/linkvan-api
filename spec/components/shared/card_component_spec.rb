@@ -12,6 +12,7 @@ RSpec.describe Shared::CardComponent, type: :component do
   describe "action_content" do
     let(:content1) { { title: "CARD ACTION CONTENT 1", path: "action1" } }
     let(:content2) { { title: "CARD ACTION CONTENT 2", path: "action2" } }
+
     before do
       component.with_button(**content1)
       component.with_button(**content2)

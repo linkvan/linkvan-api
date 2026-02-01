@@ -6,6 +6,7 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
   subject(:syncer) { described_class.new(api_key: api_key, api_client: api_client) }
 
   let(:api_key) { "drinking-fountains" }
+  let(:logger) { instance_double(ActiveSupport::Logger) }
   let(:api_client) do
     client = double("VancouverApiClient")
     allow(client).to receive(:is_a?).with(External::VancouverCity::VancouverApiClient).and_return(true)
@@ -17,8 +18,6 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
   before do
     allow(Rails).to receive(:logger).and_return(logger)
   end
-
-  let(:logger) { instance_double(ActiveSupport::Logger) }
 
   describe "#initialize" do
     it "sets api_key and api_client attributes" do

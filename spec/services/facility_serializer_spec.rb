@@ -57,7 +57,7 @@ describe FacilitySerializer do
       let(:expected_keys) { Facility.attribute_names + %w[schedule zone services welcomes] }
 
       it { expect(returned_keys.count).to eq(expected_keys.count) }
-      it { is_expected.to contain_exactly(*expected_keys) }
+      it { is_expected.to match_array(expected_keys) }
     end
 
     context "when facility is always closed" do

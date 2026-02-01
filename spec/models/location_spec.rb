@@ -192,9 +192,9 @@ RSpec.describe Location, type: :model do
 
   describe "#persisted?" do
     context "when facility has id" do
-      let(:facility) { build(:facility, :with_verified).tap { |f| f.id = 1 } }
-
       subject(:location) { described_class.new(address:, lat:, long:, facility:) }
+
+      let(:facility) { build(:facility, :with_verified).tap { |f| f.id = 1 } }
 
       it "returns true" do
         expect(location).to be_persisted
@@ -210,9 +210,9 @@ RSpec.describe Location, type: :model do
     end
 
     context "when facility has no id" do
-      let(:facility) { build(:facility, :with_verified, id: nil) }
-
       subject(:location) { described_class.new(address:, lat:, long:, facility:) }
+
+      let(:facility) { build(:facility, :with_verified, id: nil) }
 
       it "returns false" do
         expect(location).not_to be_persisted
@@ -273,10 +273,10 @@ RSpec.describe Location, type: :model do
     end
 
     describe "coordinates with float precision" do
+      subject(:location) { described_class.new(address:, lat:, long:) }
+
       let(:lat) { 49.243463123456 }
       let(:long) { -123.106431987654 }
-
-      subject(:location) { described_class.new(address:, lat:, long:) }
 
       it "preserves float precision" do
         expect(location.lat).to eq(lat)

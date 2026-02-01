@@ -1,6 +1,6 @@
 # @note: Perform a request before calling this shared example
 # @example: before { get <a_path> }
-RSpec.shared_examples :api_tokens do
+RSpec.shared_examples "api tokens" do
   describe "tokens" do
     describe "cookies" do
       let(:response_cookies) { JSON.parse(response.cookies["_linkvanapi_tokens"], symbolize_names: true) }

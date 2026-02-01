@@ -29,11 +29,11 @@ RSpec.describe External::VancouverCity::Adapters::FaradayAdapter, type: :service
 
       it "creates an adapter with custom configuration" do
         adapter = builder
-                  .timeout(60)
-                  .open_timeout(20)
-                  .user_agent("Custom Agent")
-                  .header("Custom-Header", "custom-value")
-                  .build
+          .timeout(60)
+          .open_timeout(20)
+          .user_agent("Custom Agent")
+          .header("Custom-Header", "custom-value")
+          .build
 
         expect(adapter.options.timeout).to eq(60)
         expect(adapter.options.open_timeout).to eq(20)
@@ -45,10 +45,10 @@ RSpec.describe External::VancouverCity::Adapters::FaradayAdapter, type: :service
     describe "fluent interface" do
       it "allows method chaining" do
         result = builder
-                 .timeout(45)
-                 .open_timeout(15)
-                 .user_agent("Test Agent")
-                 .header("X-Test", "value")
+          .timeout(45)
+          .open_timeout(15)
+          .user_agent("Test Agent")
+          .header("X-Test", "value")
 
         expect(result).to be(builder)
       end

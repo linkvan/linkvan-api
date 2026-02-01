@@ -3,12 +3,12 @@
 require "rails_helper"
 
 RSpec.describe Locations::EmbedMapComponent, type: :component do
+  subject(:component) { described_class.new(lat, long, **options) }
+
   let(:lat) { 49.2827 }
   let(:long) { -123.1207 }
   let(:options) { {} }
   let(:mock_url) { "https://maps.googleapis.com/maps/embed/v1/place?center=49.2827,-123.1207&zoom=14&maptype=roadmap&q=49.2827,-123.1207&key=test_key" }
-
-  subject(:component) { described_class.new(lat, long, **options) }
 
   before do
     allow(Locations::GoogleMaps::EmbedMapService).to receive(:call).and_return(mock_url)
