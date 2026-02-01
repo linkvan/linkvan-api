@@ -90,6 +90,26 @@ This codebase includes specialized agents for Rails development workflows. Invok
 - Hotwire/Turbo (frontend)
 - Devise (authentication), Pagy (pagination)
 
+## Git Policy
+
+**CRITICAL: Agents must never modify git history.** The following git operations are explicitly prohibited:
+
+- `git add` or `git stage` - Agents must NOT stage changes
+- `git reset HEAD` - Agents must NOT unstage changes
+- `git commit` - Agents must NOT create commits
+- `git commit --amend` - Agents must NOT amend commits
+- `git rebase` - Agents must NOT perform rebases
+- `git push` - Agents must NOT push to remote repositories
+- Any other git history modification operations
+
+**If agents require git operations:**
+1. Complete all code changes using standard file tools (Read, Write, Edit)
+2. Run tests and quality checks to verify the changes are correct
+3. Ask the user to perform git staging, committing, or other git operations
+4. Provide clear instructions on what commands to run and what changes to commit
+
+**Rationale:** Git history modifications are destructive operations that should always be performed intentionally by the user. This policy prevents accidental data loss and ensures the user maintains full control over version control operations.
+
 ## Important Notes
 
 - Active development on `develop` branch
