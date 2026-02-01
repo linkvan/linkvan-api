@@ -262,7 +262,7 @@ RSpec.describe Admin::AlertsController do
     context "with invalid attributes (missing title)" do
       let(:alert_attributes) { { title: nil, content: nil } }
 
-      it { is_expected.to have_http_status(:unprocessable_entity) }
+      it { is_expected.to have_http_status(:unprocessable_content) }
 
       it "does not create an alert" do
         expect { post_create }.not_to change(Alert, :count)
@@ -283,7 +283,7 @@ RSpec.describe Admin::AlertsController do
     context "with missing content" do
       let(:alert_attributes) { { title: "Alert Without Content", content: nil } }
 
-      it { is_expected.to have_http_status(:unprocessable_entity) }
+      it { is_expected.to have_http_status(:unprocessable_content) }
 
       it "does not create an alert" do
         expect { post_create }.not_to change(Alert, :count)
@@ -300,7 +300,7 @@ RSpec.describe Admin::AlertsController do
 
       before { post_create }
 
-      it { is_expected.to have_http_status(:unprocessable_entity) }
+      it { is_expected.to have_http_status(:unprocessable_content) }
 
       it "does not create an alert" do
         expect { post_create }.not_to change(Alert, :count)
@@ -380,7 +380,7 @@ RSpec.describe Admin::AlertsController do
     context "with invalid attributes" do
       let(:alert_attributes) { { title: nil } }
 
-      it { is_expected.to have_http_status(:unprocessable_entity) }
+      it { is_expected.to have_http_status(:unprocessable_content) }
 
       it "does not update the alert" do
         original_title = alert.title
@@ -404,7 +404,7 @@ RSpec.describe Admin::AlertsController do
     context "with empty content" do
       let(:alert_attributes) { { title: "Updated Title", content: "" } }
 
-      it { is_expected.to have_http_status(:unprocessable_entity) }
+      it { is_expected.to have_http_status(:unprocessable_content) }
 
       it "does not update the alert" do
         patch_update
@@ -470,7 +470,7 @@ RSpec.describe Admin::AlertsController do
       end
 
       it "renders show template with unprocessable entity status" do
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response).to render_template(:show)
       end
     end

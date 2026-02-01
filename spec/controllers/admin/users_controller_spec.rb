@@ -251,7 +251,7 @@ RSpec.describe Admin::UsersController do
     context "with invalid attributes" do
       let(:user_attributes) { { name: nil, email: nil } }
 
-      it { is_expected.to have_http_status(:unprocessable_entity) }
+      it { is_expected.to have_http_status(:unprocessable_content) }
 
       it "does not create a user" do
         expect { post_create }.not_to change(User, :count)
@@ -303,7 +303,7 @@ RSpec.describe Admin::UsersController do
     context "with invalid attributes" do
       let(:params) { { id: user.id, user: { name: nil } } }
 
-      it { is_expected.to have_http_status(:unprocessable_entity) }
+      it { is_expected.to have_http_status(:unprocessable_content) }
 
       it "does not update the user" do
         patch_update
@@ -762,11 +762,11 @@ RSpec.describe Admin::PasswordsController do
         }
       end
 
-      it { is_expected.to have_http_status(:unprocessable_entity) }
+      it { is_expected.to have_http_status(:unprocessable_content) }
 
       it "does not update successfully" do
         post_create
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
 
       it "sets flash.now alert" do
@@ -795,10 +795,10 @@ RSpec.describe Admin::PasswordsController do
 
       before { post_create }
 
-      it { is_expected.to have_http_status(:unprocessable_entity) }
+      it { is_expected.to have_http_status(:unprocessable_content) }
 
       it "does not update successfully" do
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
 

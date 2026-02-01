@@ -25,7 +25,7 @@ def create
   result = FacilityCreateService.call(facility_params)
 
   if result.errors.any?
-    render json: { errors: result.errors }, status: :unprocessable_entity
+    render json: { errors: result.errors }, status: :unprocessable_content
   else
     render json: result.data, status: :created
   end
@@ -62,7 +62,7 @@ end
   - `401 Unauthorized` - Not authenticated
   - `403 Forbidden` - Not authorized
   - `404 Not Found` - Resource not found
-  - `422 Unprocessable Entity` - Validation errors
+  - `422 Unprocessable Content` - Validation errors
   - `500 Internal Server Error` - Server error
 
 ## Response Formats
@@ -75,7 +75,7 @@ render json: @facility
 render json: @facility, status: :ok
 
 # JSON with errors
-render json: { errors: ["Validation failed"] }, status: :unprocessable_entity
+render json: { errors: ["Validation failed"] }, status: :unprocessable_content
 
 # Redirect
 redirect_to @facility, notice: "Success"
@@ -111,7 +111,7 @@ class FacilitiesController < ApplicationController
     result = FacilityCreateService.call(facility_params)
 
     if result.errors.any?
-      render json: { errors: result.errors }, status: :unprocessable_entity
+      render json: { errors: result.errors }, status: :unprocessable_content
     else
       render json: result.data, status: :created
     end

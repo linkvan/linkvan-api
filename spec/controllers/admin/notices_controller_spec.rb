@@ -255,7 +255,7 @@ RSpec.describe Admin::NoticesController do
     context "with invalid attributes" do
       let(:notice_attributes) { { title: nil, content: nil } }
 
-      it { is_expected.to have_http_status(:unprocessable_entity) }
+      it { is_expected.to have_http_status(:unprocessable_content) }
 
       it "does not create a notice" do
         expect { post_create }.not_to change(Notice, :count)
@@ -278,7 +278,7 @@ RSpec.describe Admin::NoticesController do
 
       before { post_create }
 
-      it { is_expected.to have_http_status(:unprocessable_entity) }
+      it { is_expected.to have_http_status(:unprocessable_content) }
 
       it "does not create a notice" do
         expect { post_create }.not_to change(Notice, :count)
@@ -392,7 +392,7 @@ RSpec.describe Admin::NoticesController do
     context "with invalid attributes" do
       let(:notice_attributes) { { title: nil } }
 
-      it { is_expected.to have_http_status(:unprocessable_entity) }
+      it { is_expected.to have_http_status(:unprocessable_content) }
 
       it "does not update the notice" do
         original_title = notice.title
@@ -416,7 +416,7 @@ RSpec.describe Admin::NoticesController do
     context "with empty content" do
       let(:notice_attributes) { { title: "Updated Title", content: "" } }
 
-      it { is_expected.to have_http_status(:unprocessable_entity) }
+      it { is_expected.to have_http_status(:unprocessable_content) }
 
       it "does not update the notice" do
         patch_update
