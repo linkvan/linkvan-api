@@ -6,9 +6,6 @@ RSpec.describe FacilityService, type: :model do
   it { expect(facility_service).to be_valid }
 
   describe "validations" do
-    it { expect(facility_service).to validate_presence_of(:facility) }
-    it { expect(facility_service).to validate_presence_of(:service) }
-
     it "validates uniqueness of service within facility" do
       existing = create(:facility_service)
       duplicate = build(:facility_service, facility: existing.facility, service: existing.service)

@@ -18,11 +18,11 @@ class FacilityTimeSlot < ApplicationRecord
   delegate :week_day, to: :facility_schedule, allow_nil: true
 
   def start_time
-    hour_min_to_time_string(from_hour, from_min).to_time
+    hour_min_to_time_string(from_hour, from_min).in_time_zone
   end
 
   def end_time
-    hour_min_to_time_string(to_hour, to_min).to_time
+    hour_min_to_time_string(to_hour, to_min).in_time_zone
   end
 
   def as_range

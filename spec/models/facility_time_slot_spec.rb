@@ -46,10 +46,10 @@ RSpec.describe FacilityTimeSlot, type: :model do
     let(:time_params) { { from_hour: from_hour, from_min: from_min, to_hour: to_hour, to_min: to_min } }
 
     let(:overlaps) do
-      start_time1 = "9:30".to_time
-      end_time1 = "11:30".to_time
-      start_time2 = "#{from_hour}:#{from_min}".to_time
-      end_time2 = "#{to_hour}:#{to_min}".to_time
+      start_time1 = Time.zone.parse("9:30")
+      end_time1 = Time.zone.parse("11:30")
+      start_time2 = Time.zone.parse("#{from_hour}:#{from_min}")
+      end_time2 = Time.zone.parse("#{to_hour}:#{to_min}")
 
       overlaps?(start_time1, end_time1, start_time2, end_time2)
     end

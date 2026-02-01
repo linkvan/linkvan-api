@@ -7,6 +7,8 @@ plugins:
 require:
   - rubocop-ast
 
+
+
 AllCops:
   TargetRubyVersion: 3.1
   NewCops: enable
@@ -326,6 +328,13 @@ Performance/DeletePrefix:
 
 Performance/DeleteSuffix:
   Enabled: true
+
+# Disable RSpec/MultipleExpectations cop to reduce noise (443 instances)
+# Note: Despite correct syntax, this configuration appears to not be properly
+# respected by rubocop-rspec 3.7.0. Use --except RSpec/MultipleExpectations
+# command-line flag to disable when needed.
+RSpec/MultipleExpectations:
+  Enabled: false
 
 ##########
 # Metrics
