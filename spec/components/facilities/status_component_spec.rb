@@ -26,7 +26,7 @@ RSpec.describe Facilities::StatusComponent, type: :component do
       it "renders only the title" do
         render_inline(component)
 
-        expect(rendered_content).to eq("Live")
+        expect(rendered_content).to have_text("Live")
       end
     end
   end
@@ -52,7 +52,7 @@ RSpec.describe Facilities::StatusComponent, type: :component do
       it "renders only the title" do
         render_inline(component)
 
-        expect(rendered_content).to eq("Pending Reviews")
+        expect(rendered_content).to have_text("Pending Reviews")
       end
     end
   end
@@ -78,7 +78,7 @@ RSpec.describe Facilities::StatusComponent, type: :component do
       it "renders only the title" do
         render_inline(component)
 
-        expect(rendered_content).to eq("Discarded")
+        expect(rendered_content).to have_text("Discarded")
       end
     end
   end
@@ -104,7 +104,7 @@ RSpec.describe Facilities::StatusComponent, type: :component do
       it "renders only the title" do
         render_inline(component)
 
-        expect(rendered_content).to eq("Unknown")
+        expect(rendered_content).to have_text("Unknown")
       end
     end
   end

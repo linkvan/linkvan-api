@@ -20,6 +20,7 @@ class Facilities::DiscardReasonComponent < ViewComponent::Base
   end
 
   def call
-    VALID_REASONS[discard_reason] || "Unsupported value '#{discard_reason}'"
+    text = VALID_REASONS[discard_reason] || "Unsupported value '#{discard_reason}'"
+    tag.span(text)
   end
 end
