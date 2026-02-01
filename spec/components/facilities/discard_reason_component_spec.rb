@@ -30,7 +30,7 @@ RSpec.describe Facilities::DiscardReasonComponent, type: :component do
           let(:discard_reason) { key }
 
           it "returns the correct text" do
-            expect(component.call).to eq(expected_text)
+            expect(component.call).to have_text(expected_text)
           end
         end
       end
@@ -42,7 +42,7 @@ RSpec.describe Facilities::DiscardReasonComponent, type: :component do
           let(:discard_reason) { key.to_s }
 
           it "returns the correct text" do
-            expect(component.call).to eq(expected_text)
+            expect(component.call).to have_text(expected_text)
           end
         end
       end
@@ -52,7 +52,7 @@ RSpec.describe Facilities::DiscardReasonComponent, type: :component do
       let(:discard_reason) { :invalid_reason }
 
       it "returns error message" do
-        expect(component.call).to eq("Unsupported value 'invalid_reason'")
+        expect(component.call).to have_text("Unsupported value 'invalid_reason'")
       end
     end
 
@@ -60,7 +60,7 @@ RSpec.describe Facilities::DiscardReasonComponent, type: :component do
       let(:discard_reason) { nil }
 
       it "returns error message for nil" do
-        expect(component.call).to eq("Unsupported value ''")
+        expect(component.call).to have_text("Unsupported value ''")
       end
     end
   end

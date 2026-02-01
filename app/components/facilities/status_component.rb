@@ -34,7 +34,7 @@ class Facilities::StatusComponent < ViewComponent::Base
   end
 
   def call_title_only
-    title
+    tag.span(title)
   end
 
   private
