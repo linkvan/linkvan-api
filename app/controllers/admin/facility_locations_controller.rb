@@ -5,11 +5,9 @@ class Admin::FacilityLocationsController < Admin::BaseController
   before_action :load_location
   before_action :search_and_load_locations
 
-  def index
-  end
+  def index; end
 
-  def new
-  end
+  def new; end
 
   def create
     @facility.assign_attributes(location_params)
@@ -29,7 +27,7 @@ class Admin::FacilityLocationsController < Admin::BaseController
         end
       else
         flash.now[:error] = location_params.inspect
-        render :new, status: :unprocessable_entity
+        render :new, status: :unprocessable_content
       end
     end
   end

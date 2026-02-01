@@ -285,7 +285,7 @@ RSpec.describe Admin::FacilitiesController do
     context "with invalid attributes" do
       let(:facility_attributes) { { name: nil } }
 
-      it { is_expected.to have_http_status(:unprocessable_entity) }
+      it { is_expected.to have_http_status(:unprocessable_content) }
 
       it "does not create a facility" do
         expect { post_create }.not_to change(Facility, :count)
@@ -337,7 +337,7 @@ RSpec.describe Admin::FacilitiesController do
     context "with invalid attributes" do
       let(:params) { { id: facility.id, facility: { name: nil } } }
 
-      it { is_expected.to have_http_status(:unprocessable_entity) }
+      it { is_expected.to have_http_status(:unprocessable_content) }
 
       it "does not update the facility" do
         patch_update
@@ -431,7 +431,7 @@ RSpec.describe Admin::FacilitiesController do
         delete_destroy
       end
 
-      it { is_expected.to have_http_status(:unprocessable_entity) }
+      it { is_expected.to have_http_status(:unprocessable_content) }
 
       it "does not discard the facility" do
         expect(facility.reload).not_to be_discarded
