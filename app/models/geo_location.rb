@@ -17,7 +17,7 @@ class GeoLocation
       # from_coord.distance(to_coord)
     end
 
-    def find_by_address(address, params: { countrycodes: "ca" })
+    def for_address(address, params: { countrycodes: "ca" })
       coord(*Geocoder.coordinates(address, params))
     end
 

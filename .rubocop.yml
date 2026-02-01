@@ -64,6 +64,11 @@ Rails/FilePath:
   Enabled: true
   EnforcedStyle: arguments
 
+Rails/I18nLocaleTexts:
+  Enabled: false
+
+
+
 # Prefer &&/|| over and/or.
 Style/AndOr:
   Enabled: true
@@ -130,10 +135,10 @@ Layout/IndentationConsistency:
   Enabled: true
   EnforcedStyle: normal #indented_internal_methods
 
-#Layout/MultilineMethodCallIndentation:
-#  Enabled: false
-#  Include:
-#    - '**/spec/**/*'
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+  Include:
+    - '**/spec/**/*'
 
 # Two spaces, no tabs (for indentation).
 Layout/IndentationWidth:
@@ -334,6 +339,15 @@ Performance/DeleteSuffix:
 # respected by rubocop-rspec 3.7.0. Use --except RSpec/MultipleExpectations
 # command-line flag to disable when needed.
 RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+RSpec/NestedGroups:
   Enabled: false
 
 ##########

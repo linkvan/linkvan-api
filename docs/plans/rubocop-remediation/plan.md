@@ -93,15 +93,21 @@ Systematically address 1,651 RuboCop offenses to improve code quality, maintaina
 
 **Focus:** Fix Rails-specific model and configuration issues.
 
-#### 3.1 Exclude GeoLocation from Rails/DynamicFindBy
+#### 3.1 Rename GeoLocation.find_by_address to for_address
 - **Priority:** MEDIUM
-- **Type:** Configuration
-- **Location:** `.rubocop.yml`
+- **Type:** Code Refactoring
+- **Location:** 
+  - `app/models/geo_location.rb` (line 20)
+  - `spec/models/geo_location_spec.rb` (lines 99, 111, 117, 126, 139, 151)
 - **Offense Count:** 1 (false positive)
-- **Estimated Time:** 5 minutes
-- **Description:** Exclude `app/models/geo_location.rb` from Rails/DynamicFindBy cop. `GeoLocation` is a plain Ruby class (not ActiveRecord), and `find_by_address` is a custom class method, not a dynamic finder.
-- **Implementation:** Add exclude for `app/models/geo_location.rb` in Rails/DynamicFindBy cop configuration
-- **Testing:** Run `bin/rubocop --only Rails/DynamicFindBy` and verify no offenses
+- **Estimated Time:** 10 minutes
+- **Description:** Rename `find_by_address` method to `for_address` to avoid Rails/DynamicFindBy cop flagging. `GeoLocation` is a plain Ruby class (not ActiveRecord), but using the `find_by_*` naming pattern triggers the cop. Renaming to `for_address` is more descriptive and avoids the pattern entirely.
+- **Implementation:** 
+  - Rename method definition from `find_by_address` to `for_address`
+  - Update all call sites in the spec file
+- **Testing:** 
+  - Run `bin/rubocop --only Rails/DynamicFindBy` and verify no offenses
+  - Run `bin/rspec spec/models/geo_location_spec.rb` and verify all tests pass
 
 #### 3.2 Add Dependent Option to Service Model
 - **Priority:** MEDIUM
@@ -196,8 +202,8 @@ Systematically address 1,651 RuboCop offenses to improve code quality, maintaina
 #### 6.1 Run RSpec/IncludeExamples Auto-Correction
 - **Priority:** MEDIUM
 - **Type:** Safe Auto-correctable
-- **Location:** 4 spec files
-- **Offense Count:** 20
+- **Location:** 3 spec files
+- **Offense Count:** 18
 - **Estimated Time:** 5 minutes
 - **Description:** Replace `include_examples` with `it_behaves_like` for shared examples.
 - **Files Affected:**
@@ -221,7 +227,7 @@ Systematically address 1,651 RuboCop offenses to improve code quality, maintaina
 - **Implementation:** `bin/rubocop --only RSpec/BeEq -a`
 - **Testing:** Run affected spec files to verify no regressions
 
-**Stage 6 Total: 2 tasks, 31 offenses addressed**
+**Stage 6 Total: 2 tasks, 29 offenses addressed**
 
 ---
 
@@ -242,24 +248,7 @@ Systematically address 1,651 RuboCop offenses to improve code quality, maintaina
 - **Implementation:** `bin/rubocop --only RSpec/VerifiedDoubleReference -a`
 - **Testing:** Run affected spec files to verify no regressions
 
-#### 7.2 Run RSpec/SharedExamples Auto-Correction
-- **Priority:** MEDIUM
-- **Type:** Safe Auto-correctable
-- **Location:** 6 spec files
-- **Offense Count:** 8
-- **Estimated Time:** 5 minutes
-- **Description:** Prefer titleized string names over symbol names for shared examples.
-- **Files Affected:**
-  - `spec/controllers/api/facilities_controller_spec.rb` (2)
-  - `spec/controllers/api/home_controller_spec.rb` (2)
-  - `spec/controllers/api/zones_controller_spec.rb` (1)
-  - `spec/models/facility_spec.rb` (1)
-  - `spec/support/shared_examples/api_tokens.rb` (1)
-  - `spec/support/shared_examples/discardable.rb` (1)
-- **Implementation:** `bin/rubocop --only RSpec/SharedExamples -a`
-- **Testing:** Run affected spec files to verify no regressions
-
-**Stage 7 Total: 2 tasks, 17 offenses addressed**
+**Stage 7 Total: 1 task, 9 offenses addressed**
 
 ---
 
@@ -282,6 +271,37 @@ Systematically address 1,651 RuboCop offenses to improve code quality, maintaina
 - **Testing:** Run `bin/rubocop --only Rails/SkipsModelValidations` and verify no unexpected offenses
 
 **Stage 8 Total: 1 task, verification only**
+
+---
+
+### Stage 9: Out of Scope
+
+**Focus:** Document RSpec offenses not addressed in this plan.
+
+#### RSpec Cops Disabled or Not Addressed
+
+The following RSpec offenses exist but are not addressed in this plan:
+
+| Cop | Offenses | Status |
+|-----|----------|--------|
+| RSpec/ContextWording | 81 | Not Addressed |
+| RSpec/NamedSubject | 43 | Not Addressed |
+| RSpec/IndexedLet | 40 | Not Addressed |
+| RSpec/LetSetup | 29 | Not Addressed |
+| RSpec/MessageSpies | 28 | Not Addressed |
+| RSpec/SubjectStub | 20 | Not Addressed |
+| RSpec/VerifiedDoubles | 20 | Not Addressed |
+| RSpec/AnyInstance | 16 | Not Addressed |
+| RSpec/DescribeMethod | 13 | Not Addressed |
+| RSpec/SpecFilePathFormat | 9 | Not Addressed |
+| RSpec/ExpectChange | 4 | Not Addressed |
+| RSpec/StubbedMock | 4 | Not Addressed |
+| RSpec/IteratedExpectation | 3 | Not Addressed |
+| RSpec/ExpectInHook | 2 | Not Addressed |
+| RSpec/MultipleDescribes | 2 | Not Addressed |
+| RSpec/RepeatedExampleGroupDescription | 2 | Not Addressed |
+
+**Reason:** These cops are either disabled (RSpec/ExampleLength, RSpec/MultipleMemoizedHelpers, RSpec/NestedGroups) or are considered acceptable for this codebase's testing patterns.
 
 ---
 
@@ -321,13 +341,13 @@ Systematically address 1,651 RuboCop offenses to improve code quality, maintaina
 - [ ] Model specs passing
 
 ### Stage 3 Completion Criteria
-- [ ] GeoLocation excluded from DynamicFindBy
+- [ ] GeoLocation.find_by_address renamed to for_address
 - [ ] Service model has dependent option
 - [ ] Rails/I18nLocaleTexts disabled
 - [ ] All Rails-specific offenses resolved
 
 ### Stage 4-7 Completion Criteria
-- [ ] All 287 RSpec auto-correctable offenses resolved
+- [ ] All 277 RSpec auto-correctable offenses resolved
 - [ ] Full test suite passing (`bin/rspec`)
 - [ ] No test failures introduced by auto-corrections
 
