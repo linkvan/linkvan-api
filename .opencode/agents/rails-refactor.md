@@ -1,7 +1,7 @@
 ---
 description: Refactor code following Rails and project conventions
 mode: subagent
-model: opencode/big-pickle
+model: github-copilot/grok-code-fast-1
 permission:
   skill:
     "rails-code-quality": "allow"

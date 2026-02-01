@@ -1,7 +1,7 @@
 ---
 description: Manage Rails migrations - create, run, rollback, and troubleshoot
 mode: subagent
-model: opencode/big-pickle
+model: github-copilot/grok-code-fast-1
 permission:
   skill:
     "rails-migrations": "allow"
