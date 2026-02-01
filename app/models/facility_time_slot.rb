@@ -42,8 +42,8 @@ class FacilityTimeSlot < ApplicationRecord
   def overlapping_time_slots
     return FacilityTimeSlot.none unless [from_hour, from_min, to_hour, to_min].all?(&:present?)
 
-    start_i = (from_hour + (from_min / 60r)).to_f
-    end_i = (to_hour + (to_min / 60r)).to_f
+    start_i = (from_hour + (from_min/60r)).to_f
+    end_i = (to_hour + (to_min/60r)).to_f
 
     sql_start_i = Arel.sql("(from_hour + (from_min / 60.0))")
     sql_end_i = Arel.sql("(to_hour + (to_min / 60.0))")

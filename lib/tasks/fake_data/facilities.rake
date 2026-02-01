@@ -23,7 +23,7 @@ namespace :fake_data do
       lat: [49.1019545..49.3210142],
       long: [-123.2358425..-122.4716322]
 
-    }
+    }.freeze
     vancouver = Zone.where(name: "Vancouver").to_a
     new_west = Zone.where(name: "New Westminster").to_a
     zones = (vancouver * 2) + new_west + [nil]
@@ -64,7 +64,7 @@ namespace :fake_data do
         end
 
         # build schedule
-        FacilitySchedule.week_days.values.each do |wday|
+        FacilitySchedule.week_days.each_value do |wday|
           status = valid_statuses.sample
           schedule_params = {}
           schedule_params[:week_day] = wday

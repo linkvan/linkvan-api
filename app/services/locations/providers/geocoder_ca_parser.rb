@@ -1,13 +1,13 @@
-module Locations::Providers
-  class GeocoderCaParser < BaseParser
-    private
+# frozen_string_literal: true
 
-    def address
-      [standard_data["stnumber"], standard_data["staddress"]]
-    end
+class Locations::Providers::GeocoderCaParser < Locations::Providers::BaseParser
+  private
 
-    def standard_data
-      data["standard"] || {}
-    end
+  def address
+    [standard_data["stnumber"], standard_data["staddress"]]
+  end
+
+  def standard_data
+    data["standard"] || {}
   end
 end

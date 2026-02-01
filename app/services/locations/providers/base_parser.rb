@@ -1,46 +1,46 @@
-module Locations::Providers
-  class BaseParser
-    attr_reader :geocoded_result
+# frozen_string_literal: true
 
-    def initialize(geocoded_result)
-      @geocoded_result = geocoded_result
-    end
+class Locations::Providers::BaseParser
+  attr_reader :geocoded_result
 
-    def self.call(...)
-      new(...).call
-    end
+  def initialize(geocoded_result)
+    @geocoded_result = geocoded_result
+  end
 
-    def call
-      Locations::GeocoderLocation.new(
-        address:,
-        city:,
-        state:,
-        country:,
-        postal_code:,
-        latitude:,
-        longitude:,
-        data:,
-        data_raw:
-      )
-    end
+  def self.call(...)
+    new(...).call
+  end
 
-    private
+  def call
+    Locations::GeocoderLocation.new(
+      address:,
+      city:,
+      state:,
+      country:,
+      postal_code:,
+      latitude:,
+      longitude:,
+      data:,
+      data_raw:
+    )
+  end
 
-    delegate :city,
-             :state,
-             :country,
-             :postal_code,
-             :latitude,
-             :longitude,
-             :data,
-             to: :geocoded_result
+  private
 
-    def address
-      geocoded_result.street_address.to_s.strip
-    end
+  delegate :city,
+           :state,
+           :country,
+           :postal_code,
+           :latitude,
+           :longitude,
+           :data,
+           to: :geocoded_result
 
-    def data_raw
-      data.to_json
-    end
+  def address
+    geocoded_result.street_address.to_s.strip
+  end
+
+  def data_raw
+    data.to_json
   end
 end

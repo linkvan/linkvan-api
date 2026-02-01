@@ -19,7 +19,7 @@ class SiteStats
     private
 
     def compute_last_updated
-      [last_facility&.updated_at, last_notice&.updated_at].reject(&:nil?).max
+      [last_facility&.updated_at, last_notice&.updated_at].compact.max
     end
 
     def last_facility

@@ -19,7 +19,7 @@ namespace :fake_data do
 
     Faker::Config.locale = "en-CA"
 
-    facility_ids = Facility.all.ids
+    facility_ids = Facility.ids
 
     20.times.each do |n|
       created_at = rand(90).days.ago

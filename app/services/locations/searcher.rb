@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Locations::Searcher < ApplicationService
   attr_reader :address
 

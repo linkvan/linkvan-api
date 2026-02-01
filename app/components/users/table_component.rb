@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Users::TableComponent < ViewComponent::Base
   attr_reader :users
 

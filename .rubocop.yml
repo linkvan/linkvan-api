@@ -2,6 +2,7 @@ plugins:
   - rubocop-packaging
   - rubocop-performance
   - rubocop-rails
+  - rubocop-rspec
 
 require:
   - rubocop-ast
@@ -126,6 +127,11 @@ Layout/AccessModifierIndentation:
 Layout/IndentationConsistency:
   Enabled: true
   EnforcedStyle: normal #indented_internal_methods
+
+#Layout/MultilineMethodCallIndentation:
+#  Enabled: false
+#  Include:
+#    - '**/spec/**/*'
 
 # Two spaces, no tabs (for indentation).
 Layout/IndentationWidth:

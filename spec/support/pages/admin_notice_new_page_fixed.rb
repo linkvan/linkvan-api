@@ -55,7 +55,7 @@ class AdminNoticeNewPageFixed < BasePage
         # Try multiple ID patterns
         trix_id_patterns = [
           "#{field_id}_trix_editor",
-          field_id.gsub("_input", "") + "_trix_editor",
+          "#{field_id.gsub('_input', '')}_trix_editor",
           field_id.gsub("_input", "")
         ]
 

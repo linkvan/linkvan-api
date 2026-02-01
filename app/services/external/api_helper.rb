@@ -38,7 +38,7 @@ class External::ApiHelper
     # @param api_key [String] The API key to find the service key for
     # @return [String, nil] The service key or nil if not found
     def service_key_for(api_key)
-      DATASET_ID_TO_SERVICE_KEY.dig(api_key.to_s)
+      DATASET_ID_TO_SERVICE_KEY[api_key.to_s]
     end
 
     # Get the display name for an API

@@ -11,9 +11,9 @@ RSpec.describe "Admin User Management", type: :system do
   let(:users_index_page) { AdminUsersIndexPage.new }
   let(:user_new_page) { AdminUserNewPage.new }
 
-  before do
-    # driven_by :rack_test
-  end
+  # before do
+  #   driven_by :rack_test
+  # end
 
   describe "user management workflow" do
     describe "create/edit/delete users" do

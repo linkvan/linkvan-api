@@ -61,7 +61,10 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def user_params
+    # rubocop:disable Rails/StrongParametersExpect
+    # Using require.permit instead of expect to allow partial updates (e.g., only admin attribute)
     parameters = params.require(:user).permit(:name, :email, :phone_number, :organization, :verified, :password, :password_confirmation)
+    # rubocop:enable Rails/StrongParametersExpect
     parameters[:admin] = params.dig(:user, :admin) if current_user_admin?
 
     parameters

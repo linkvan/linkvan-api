@@ -64,8 +64,7 @@ class Admin::FacilityLocationsController < Admin::BaseController
 
   def location_params
     params
-      .require(:location)
-      .permit(:address, :lat, :long)
+      .expect(location: %i[address lat long])
   end
 
   def search_params

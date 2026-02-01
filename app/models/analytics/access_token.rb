@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Analytics::AccessToken
-  COOKIE_PREFIX = "_linkvanapi_tokens".freeze
+  COOKIE_PREFIX = "_linkvanapi_tokens"
   MAPPING = {
     uuid: "uuid",
     session_token: "session-token"

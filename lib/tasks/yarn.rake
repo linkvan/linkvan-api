@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # every time you execure 'rake assets:precomile'
 # run 'yarn:install'
 # ref.: https://github.com/rails/rails/issues/43906#issuecomment-1099992310
