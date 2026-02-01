@@ -1,8 +1,10 @@
-require:
+plugins:
   - rubocop-packaging
   - rubocop-performance
-  - rubocop-ast
   - rubocop-rails
+
+require:
+  - rubocop-ast
 
 AllCops:
   TargetRubyVersion: 3.1
@@ -29,7 +31,7 @@ Performance:
     - '**/spec/**/*'
 
 Rails:
-  StyleGuideBaseURL: https://rails.rubystyle.guide
+  DocumentationBaseURL: https://rails.rubystyle.guide
 
 Rails/BulkChangeTable:
   Exclude:
@@ -88,10 +90,6 @@ Layout/EndAlignment:
 
 Layout/EmptyLineAfterMagicComment:
   Enabled: true
-
-Layout/EmptyLinesAroundAccessModifier:
-  Enabled: false
-  EnforcedStyle: only_before
 
 Layout/EmptyLinesAroundBlockBody:
   Enabled: true
