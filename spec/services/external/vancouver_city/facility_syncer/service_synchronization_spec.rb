@@ -105,7 +105,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "service synchronization
       before do
         # Mock the built facility to have duplicate services
         # This would happen if FacilityBuilder creates duplicate associations
-        allow_any_instance_of(External::VancouverCity::FacilitySyncer)
+        allow_any_instance_of(described_class)
           .to receive(:add_missing_services).and_call_original
       end
 

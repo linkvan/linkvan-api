@@ -8,9 +8,7 @@ RSpec.describe Admin::AlertsController do
 
   # Stub Devise authentication methods
   before do
-    allow(controller).to receive(:authenticate_user!).and_return(true)
-    allow(controller).to receive(:current_user).and_return(admin_user)
-    allow(controller).to receive(:user_signed_in?).and_return(true)
+    allow(controller).to receive_messages(authenticate_user!: true, current_user: admin_user, user_signed_in?: true)
   end
 
   describe "GET #index" do
@@ -449,10 +447,8 @@ RSpec.describe Admin::AlertsController do
       # the primary behavior tested here.
       before do
         # Force destroy to return false without actually calling it
-        allow(alert).to receive(:destroy).and_return(false)
         # Also allow persisted? to return true so the record is found
-        allow(alert).to receive(:persisted?).and_return(true)
-        allow(alert).to receive(:errors).and_return(double(full_messages: ["Some error"]))
+        allow(alert).to receive_messages(destroy: false, persisted?: true, errors: double(full_messages: ["Some error"]))
         # Ensure the alert is found via the before_action
         allow(Alert).to receive(:find).with(alert.id.to_s).and_return(alert)
         delete :destroy, params: { id: alert.id }
@@ -602,9 +598,7 @@ RSpec.describe Admin::AlertsController do
 
       before do
         # Force destroy to return false without actually calling it
-        allow(alert).to receive(:destroy).and_return(false)
-        allow(alert).to receive(:persisted?).and_return(true)
-        allow(alert).to receive(:errors).and_return(double(full_messages: ["Some error"]))
+        allow(alert).to receive_messages(destroy: false, persisted?: true, errors: double(full_messages: ["Some error"]))
         allow(Alert).to receive(:find).with(alert.id.to_s).and_return(alert)
         delete :destroy, params: { id: alert.id }
       end

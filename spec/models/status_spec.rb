@@ -21,7 +21,7 @@ RSpec.describe Status, type: :model do
     end
 
     it "can be retrieved from database" do
-      found_status = Status.find(status.id)
+      found_status = described_class.find(status.id)
       expect(found_status.fid).to eq(status.fid)
       expect(found_status.changetype).to eq(status.changetype)
     end

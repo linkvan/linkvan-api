@@ -25,7 +25,7 @@ RSpec.describe FacilitySchedule, type: :model do
     end
 
     it "has all expected days" do
-      expect(FacilitySchedule.week_days.values).to eq(%w[sunday monday tuesday wednesday thursday friday saturday])
+      expect(described_class.week_days.values).to eq(%w[sunday monday tuesday wednesday thursday friday saturday])
     end
   end
 
@@ -154,7 +154,7 @@ RSpec.describe FacilitySchedule, type: :model do
 
   describe "week_days" do
     it "returns all week day enum values" do
-      expect(FacilitySchedule.week_days.values).to eq(%w[sunday monday tuesday wednesday thursday friday saturday])
+      expect(described_class.week_days.values).to eq(%w[sunday monday tuesday wednesday thursday friday saturday])
     end
   end
 end

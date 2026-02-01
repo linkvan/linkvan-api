@@ -58,8 +58,7 @@ RSpec.describe SiteStats, type: :model do
       let(:last_notice) { double(updated_at: last_updated_time) }
 
       before do
-        allow(described_class).to receive(:last_facility).and_return(last_facility)
-        allow(described_class).to receive(:last_notice).and_return(last_notice)
+        allow(described_class).to receive_messages(last_facility: last_facility, last_notice: last_notice)
       end
 
       it "returns the most recent updated_at" do
@@ -71,8 +70,7 @@ RSpec.describe SiteStats, type: :model do
       let(:last_facility) { double(updated_at: last_updated_time) }
 
       before do
-        allow(described_class).to receive(:last_facility).and_return(last_facility)
-        allow(described_class).to receive(:last_notice).and_return(nil)
+        allow(described_class).to receive_messages(last_facility: last_facility, last_notice: nil)
       end
 
       it "returns the facility's updated_at" do
@@ -84,8 +82,7 @@ RSpec.describe SiteStats, type: :model do
       let(:last_notice) { double(updated_at: last_updated_time) }
 
       before do
-        allow(described_class).to receive(:last_facility).and_return(nil)
-        allow(described_class).to receive(:last_notice).and_return(last_notice)
+        allow(described_class).to receive_messages(last_facility: nil, last_notice: last_notice)
       end
 
       it "returns the notice's updated_at" do
@@ -95,8 +92,7 @@ RSpec.describe SiteStats, type: :model do
 
     context "when neither facilities nor notices exist" do
       before do
-        allow(described_class).to receive(:last_facility).and_return(nil)
-        allow(described_class).to receive(:last_notice).and_return(nil)
+        allow(described_class).to receive_messages(last_facility: nil, last_notice: nil)
       end
 
       it "returns nil" do

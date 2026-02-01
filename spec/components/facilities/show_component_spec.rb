@@ -156,8 +156,7 @@ RSpec.describe Facilities::ShowComponent, type: :component do
 
         before do
           # Mock the route helpers and render method on the component instance
-          allow(services_component).to receive(:admin_facility_service_path).and_return("#")
-          allow(services_component).to receive(:render).and_return("<mocked-status-component>")
+          allow(services_component).to receive_messages(admin_facility_service_path: "#", render: "<mocked-status-component>")
         end
 
         it "returns a delete link with confirmation" do
@@ -173,8 +172,7 @@ RSpec.describe Facilities::ShowComponent, type: :component do
           let(:facility) { facility_service.facility }
 
           before do
-            allow(services_component).to receive(:admin_facility_service_path).and_return("#")
-            allow(services_component).to receive(:render).and_return("<mocked-status-component>")
+            allow(services_component).to receive_messages(admin_facility_service_path: "#", render: "<mocked-status-component>")
           end
 
           it "includes confirmation message" do
@@ -187,8 +185,7 @@ RSpec.describe Facilities::ShowComponent, type: :component do
       context "when facility does not provide the service" do
         before do
           # Mock the route helpers and render method on the component instance
-          allow(services_component).to receive(:admin_facility_services_path).and_return("#")
-          allow(services_component).to receive(:render).and_return("<mocked-status-component>")
+          allow(services_component).to receive_messages(admin_facility_services_path: "#", render: "<mocked-status-component>")
         end
 
         it "returns a post link to add service" do
@@ -360,9 +357,7 @@ RSpec.describe Facilities::ShowComponent, type: :component do
     describe "#switch_button" do
       before do
         # Mock the route helpers and render method on the component instance
-        allow(schedule_component).to receive(:admin_facility_schedule_path).and_return("#")
-        allow(schedule_component).to receive(:admin_facility_schedules_path).and_return("#")
-        allow(schedule_component).to receive(:render).and_return("<mocked-status-component>")
+        allow(schedule_component).to receive_messages(admin_facility_schedule_path: "#", admin_facility_schedules_path: "#", render: "<mocked-status-component>")
       end
 
       context "when schedule is new record" do
@@ -458,8 +453,7 @@ RSpec.describe Facilities::ShowComponent, type: :component do
 
     describe "#link_to_edit" do
       before do
-        allow(schedule_component).to receive(:edit_admin_facility_schedule_path).and_return("#")
-        allow(schedule_component).to receive(:new_admin_facility_schedule_path).and_return("#")
+        allow(schedule_component).to receive_messages(edit_admin_facility_schedule_path: "#", new_admin_facility_schedule_path: "#")
       end
 
       context "when schedule is new record" do

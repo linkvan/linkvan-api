@@ -226,7 +226,7 @@ RSpec.describe Analytics::Impression, type: :model do
 
       it "is invalid without impressionable_id" do
         event = create(:analytics_event)
-        impression = Analytics::Impression.new(
+        impression = described_class.new(
           event: event,
           impressionable_type: "Facility",
           impressionable_id: nil
@@ -275,7 +275,7 @@ RSpec.describe Analytics::Impression, type: :model do
         service_impression = create(:analytics_impression, event: event, impressionable: service)
         zone_impression = create(:analytics_impression, event: event, impressionable: zone)
 
-        facilities = Analytics::Impression.facilities
+        facilities = described_class.facilities
 
         expect(facilities).to contain_exactly(facility_impression)
         expect(facilities).not_to include(service_impression, zone_impression)
@@ -286,7 +286,7 @@ RSpec.describe Analytics::Impression, type: :model do
         service = create(:service)
         create(:analytics_impression, event: event, impressionable: service)
 
-        expect(Analytics::Impression.facilities).to be_empty
+        expect(described_class.facilities).to be_empty
       end
 
       it "chains with other scopes" do
@@ -298,8 +298,8 @@ RSpec.describe Analytics::Impression, type: :model do
         create(:analytics_impression, event: event1, impressionable: facility1)
         create(:analytics_impression, event: event2, impressionable: facility2)
 
-        facilities_in_event1 = Analytics::Impression.facilities.where(event: event1)
-        expect(facilities_in_event1).to contain_exactly(Analytics::Impression.find_by(event: event1, impressionable: facility1))
+        facilities_in_event1 = described_class.facilities.where(event: event1)
+        expect(facilities_in_event1).to contain_exactly(described_class.find_by(event: event1, impressionable: facility1))
       end
     end
   end
@@ -337,8 +337,8 @@ RSpec.describe Analytics::Impression, type: :model do
       create(:analytics_impression, event: event, impressionable: facility)
       create(:analytics_impression, event: event, impressionable: service)
 
-      facility_impressions = Analytics::Impression.where(impressionable_type: "Facility")
-      service_impressions = Analytics::Impression.where(impressionable_type: "Service")
+      facility_impressions = described_class.where(impressionable_type: "Facility")
+      service_impressions = described_class.where(impressionable_type: "Service")
 
       expect(facility_impressions.count).to eq(1)
       expect(service_impressions.count).to eq(1)
@@ -352,7 +352,7 @@ RSpec.describe Analytics::Impression, type: :model do
 
       impression = create(:analytics_impression, event: event, impressionable: facility)
 
-      found_impression = Analytics::Impression.where(impressionable_id: facility.id).first
+      found_impression = described_class.where(impressionable_id: facility.id).first
       expect(found_impression).to eq(impression)
       expect(found_impression.impressionable).to eq(facility)
     end
@@ -367,7 +367,7 @@ RSpec.describe Analytics::Impression, type: :model do
       create(:analytics_impression, event: event, impressionable: facility2)
       create(:analytics_impression, event: event, impressionable: service)
 
-      specific_facility = Analytics::Impression.where(
+      specific_facility = described_class.where(
         impressionable_type: "Facility",
         impressionable_id: facility1.id
       ).first
@@ -382,7 +382,7 @@ RSpec.describe Analytics::Impression, type: :model do
       facility = create(:facility)
 
       impression = create(:analytics_impression, event: event, impressionable: facility)
-      persisted = Analytics::Impression.find(impression.id)
+      persisted = described_class.find(impression.id)
 
       expect(persisted.event).to eq(event)
       expect(persisted.impressionable).to eq(facility)
@@ -442,14 +442,14 @@ RSpec.describe Analytics::Impression, type: :model do
 
       # The impression should still exist but impressionable should be nil
       # depending on dependent options in the actual models
-      expect(Analytics::Impression.find_by(id: impression.id)).to be_present
+      expect(described_class.find_by(id: impression.id)).to be_present
     end
 
     it "handles deletion of event with dependent impressions" do
       event = create(:analytics_event)
       create(:analytics_impression, event: event)
 
-      expect { event.destroy }.to change(Analytics::Impression, :count).by(-1)
+      expect { event.destroy }.to change(described_class, :count).by(-1)
     end
   end
 
@@ -468,19 +468,19 @@ RSpec.describe Analytics::Impression, type: :model do
     end
 
     it "can find impressions by event" do
-      impressions = Analytics::Impression.where(event: event1)
+      impressions = described_class.where(event: event1)
       expect(impressions.count).to eq(2)
     end
 
     it "can find impressions by visit through event" do
       event_ids = [event1.id, event2.id]
-      impressions = Analytics::Impression.where(event_id: event_ids)
+      impressions = described_class.where(event_id: event_ids)
       expect(impressions.count).to eq(3)
     end
 
     it "can count impressions by type" do
-      facility_count = Analytics::Impression.where(impressionable_type: "Facility").count
-      service_count = Analytics::Impression.where(impressionable_type: "Service").count
+      facility_count = described_class.where(impressionable_type: "Facility").count
+      service_count = described_class.where(impressionable_type: "Service").count
 
       expect(facility_count).to eq(2)
       expect(service_count).to eq(1)
@@ -488,7 +488,7 @@ RSpec.describe Analytics::Impression, type: :model do
 
     it "can query complex conditions" do
       # Find all facility impressions for the first event
-      impressions = Analytics::Impression.where(
+      impressions = described_class.where(
         event: event1,
         impressionable_type: "Facility"
       )

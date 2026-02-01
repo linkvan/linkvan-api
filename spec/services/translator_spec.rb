@@ -7,7 +7,7 @@ RSpec.describe Translator, type: :service do
     describe ".services_dictionary" do
       it "builds dictionary from database services" do
         # Clear any existing cache to ensure we hit the database
-        Translator.instance_variable_set(:@services_dictionary, nil)
+        described_class.instance_variable_set(:@services_dictionary, nil)
 
         # Use a sequence to ensure uniqueness
         service = create(:service)
@@ -15,7 +15,7 @@ RSpec.describe Translator, type: :service do
         # Update the service to have a predictable name for testing
         service.update!(key: "test_service_#{service.id}", name: "Test Service #{service.id}")
 
-        dictionary = Translator.services_dictionary
+        dictionary = described_class.services_dictionary
 
         service_key = "test_service_#{service.id}"
         service_name = "test service #{service.id}"
@@ -26,7 +26,7 @@ RSpec.describe Translator, type: :service do
       end
 
       it "includes static services dictionary mappings" do
-        dictionary = Translator.services_dictionary
+        dictionary = described_class.services_dictionary
 
         # Test shelter → housing mapping
         expect(dictionary["shelter"]).to eq(:shelter)
@@ -62,7 +62,7 @@ RSpec.describe Translator, type: :service do
       end
 
       it "handles singular and plural variations" do
-        dictionary = Translator.services_dictionary
+        dictionary = described_class.services_dictionary
 
         # Test singular/plural forms
         expect(dictionary["tech"]).to eq(:technology)
@@ -74,20 +74,20 @@ RSpec.describe Translator, type: :service do
 
       it "caches the dictionary result" do
         # Clear any existing cache
-        Translator.instance_variable_set(:@services_dictionary, nil)
+        described_class.instance_variable_set(:@services_dictionary, nil)
 
         # First call should build the dictionary
-        dictionary1 = Translator.services_dictionary
+        dictionary1 = described_class.services_dictionary
 
         # Second call should use cached result (no database calls)
         expect(Service).not_to receive(:all)
-        dictionary2 = Translator.services_dictionary
+        dictionary2 = described_class.services_dictionary
 
         expect(dictionary1).to eq(dictionary2)
       end
 
       it "includes empty arrays for services without synonyms" do
-        dictionary = Translator.services_dictionary
+        dictionary = described_class.services_dictionary
 
         # These services have empty synonym arrays
         expect(dictionary["medical"]).to eq(:medical)
@@ -98,7 +98,7 @@ RSpec.describe Translator, type: :service do
 
     describe ".welcomes_dictionary" do
       it "builds dictionary from facility welcome customer types" do
-        dictionary = Translator.welcomes_dictionary
+        dictionary = described_class.welcomes_dictionary
 
         # Test all customer types are included
         FacilityWelcome.all_customers.each do |customer|
@@ -109,7 +109,7 @@ RSpec.describe Translator, type: :service do
       end
 
       it "includes static welcomes dictionary mappings" do
-        dictionary = Translator.welcomes_dictionary
+        dictionary = described_class.welcomes_dictionary
 
         # All customer types should map to themselves
         expect(dictionary["male"]).to eq(:male)
@@ -122,7 +122,7 @@ RSpec.describe Translator, type: :service do
       end
 
       it "handles singular and plural variations" do
-        dictionary = Translator.welcomes_dictionary
+        dictionary = described_class.welcomes_dictionary
 
         # Test singular/plural forms
         expect(dictionary["male"]).to eq(:male)
@@ -133,13 +133,13 @@ RSpec.describe Translator, type: :service do
 
       it "caches the dictionary result" do
         # Clear any existing cache
-        Translator.instance_variable_set(:@welcomes_dictionary, nil)
+        described_class.instance_variable_set(:@welcomes_dictionary, nil)
 
         # First call should build the dictionary
-        dictionary1 = Translator.welcomes_dictionary
+        dictionary1 = described_class.welcomes_dictionary
 
         # Second call should use cached result
-        dictionary2 = Translator.welcomes_dictionary
+        dictionary2 = described_class.welcomes_dictionary
 
         expect(dictionary1).to eq(dictionary2)
       end
@@ -148,28 +148,27 @@ RSpec.describe Translator, type: :service do
     describe ".dictionary" do
       it "merges services and welcomes dictionaries" do
         # Clear any existing cache
-        Translator.instance_variable_set(:@dictionary, nil)
+        described_class.instance_variable_set(:@dictionary, nil)
 
         services_dict = { "test_service" => :test_service }
         welcomes_dict = { "male" => :male }
 
-        allow(Translator).to receive(:services_dictionary).and_return(services_dict)
-        allow(Translator).to receive(:welcomes_dictionary).and_return(welcomes_dict)
+        allow(described_class).to receive_messages(services_dictionary: services_dict, welcomes_dictionary: welcomes_dict)
 
-        dictionary = Translator.dictionary
+        dictionary = described_class.dictionary
 
         expect(dictionary).to eq(services_dict.merge(welcomes_dict))
       end
 
       it "caches the merged dictionary" do
         # Clear any existing cache
-        Translator.instance_variable_set(:@dictionary, nil)
+        described_class.instance_variable_set(:@dictionary, nil)
 
         # First call should build and merge
-        dictionary1 = Translator.dictionary
+        dictionary1 = described_class.dictionary
 
         # Second call should use cached result
-        dictionary2 = Translator.dictionary
+        dictionary2 = described_class.dictionary
 
         expect(dictionary1).to eq(dictionary2)
       end
@@ -179,7 +178,7 @@ RSpec.describe Translator, type: :service do
       it "assigns singular and plural variations to dictionary" do
         dictionary = {}
 
-        Translator.send(:assign, dictionary, key: :test, value: "test")
+        described_class.send(:assign, dictionary, key: :test, value: "test")
 
         expect(dictionary["test"]).to eq(:test)
         expect(dictionary["tests"]).to eq(:test)
@@ -188,7 +187,7 @@ RSpec.describe Translator, type: :service do
       it "handles string values" do
         dictionary = {}
 
-        Translator.send(:assign, dictionary, key: :result, value: "test_value")
+        described_class.send(:assign, dictionary, key: :result, value: "test_value")
 
         expect(dictionary["test_value"]).to eq(:result)
         expect(dictionary["test_values"]).to eq(:result)
@@ -197,7 +196,7 @@ RSpec.describe Translator, type: :service do
       it "handles symbol values" do
         dictionary = {}
 
-        Translator.send(:assign, dictionary, key: :result, value: :test_value)
+        described_class.send(:assign, dictionary, key: :result, value: :test_value)
 
         expect(dictionary["test_value"]).to eq(:result)
         expect(dictionary["test_values"]).to eq(:result)
@@ -206,25 +205,25 @@ RSpec.describe Translator, type: :service do
 
     describe ".variations_for" do
       it "returns singular and plural forms" do
-        variations = Translator.send(:variations_for, "test")
+        variations = described_class.send(:variations_for, "test")
 
         expect(variations).to eq(%w[test tests])
       end
 
       it "handles irregular plurals" do
-        variations = Translator.send(:variations_for, "person")
+        variations = described_class.send(:variations_for, "person")
 
         expect(variations).to eq(%w[person people])
       end
 
       it "handles words that don't change in plural" do
-        variations = Translator.send(:variations_for, "sheep")
+        variations = described_class.send(:variations_for, "sheep")
 
         expect(variations).to eq(%w[sheep sheep])
       end
 
       it "converts to lowercase" do
-        variations = Translator.send(:variations_for, "TEST")
+        variations = described_class.send(:variations_for, "TEST")
 
         expect(variations).to eq(%w[test tests])
       end
@@ -236,14 +235,14 @@ RSpec.describe Translator, type: :service do
 
     before do
       # Clear any cached dictionaries
-      Translator.instance_variable_set(:@services_dictionary, nil)
-      Translator.instance_variable_set(:@welcomes_dictionary, nil)
-      Translator.instance_variable_set(:@dictionary, nil)
+      described_class.instance_variable_set(:@services_dictionary, nil)
+      described_class.instance_variable_set(:@welcomes_dictionary, nil)
+      described_class.instance_variable_set(:@dictionary, nil)
     end
 
     describe "#initialize" do
       it "initializes with search_value" do
-        translator = Translator.new("test")
+        translator = described_class.new("test")
 
         expect(translator.instance_variable_get(:@search_value)).to eq("test")
       end
@@ -252,7 +251,7 @@ RSpec.describe Translator, type: :service do
     describe "#call" do
       context "with valid search value" do
         it "returns successful result with translated value" do
-          translator = Translator.new("shelter")
+          translator = described_class.new("shelter")
           result = translator.call
 
           expect(result.success?).to be true
@@ -261,7 +260,7 @@ RSpec.describe Translator, type: :service do
         end
 
         it "translates housing to shelter" do
-          translator = Translator.new("housing")
+          translator = described_class.new("housing")
           result = translator.call
 
           expect(result.success?).to be true
@@ -269,7 +268,7 @@ RSpec.describe Translator, type: :service do
         end
 
         it "translates clean to hygiene" do
-          translator = Translator.new("clean")
+          translator = described_class.new("clean")
           result = translator.call
 
           expect(result.success?).to be true
@@ -277,7 +276,7 @@ RSpec.describe Translator, type: :service do
         end
 
         it "translates customer types" do
-          translator = Translator.new("male")
+          translator = described_class.new("male")
           result = translator.call
 
           expect(result.success?).to be true
@@ -285,7 +284,7 @@ RSpec.describe Translator, type: :service do
         end
 
         it "translates customer names" do
-          translator = Translator.new("Male")
+          translator = described_class.new("Male")
           result = translator.call
 
           expect(result.success?).to be true
@@ -295,7 +294,7 @@ RSpec.describe Translator, type: :service do
 
       context "with invalid search value" do
         it "returns failed result with error" do
-          translator = Translator.new("invalid_value")
+          translator = described_class.new("invalid_value")
           result = translator.call
 
           expect(result.failed?).to be true
@@ -305,7 +304,7 @@ RSpec.describe Translator, type: :service do
       end
 
       it "handles case insensitive search" do
-        translator = Translator.new("SHELTER")
+        translator = described_class.new("SHELTER")
         result = translator.call
 
         expect(result.success?).to be true
@@ -316,7 +315,7 @@ RSpec.describe Translator, type: :service do
     describe "#validate" do
       context "with valid search value" do
         it "does not add errors" do
-          translator = Translator.new("shelter")
+          translator = described_class.new("shelter")
 
           expect { translator.send(:validate) }.not_to(change { translator.send(:errors) })
         end
@@ -324,7 +323,7 @@ RSpec.describe Translator, type: :service do
 
       context "with invalid search value" do
         it "adds error for missing value" do
-          translator = Translator.new("invalid_value")
+          translator = described_class.new("invalid_value")
 
           expect { translator.send(:validate) }.to change { translator.send(:errors).length }.by(1)
           expect(translator.send(:errors)).to include("Dictionary doesn't have 'invalid_value' value")
@@ -334,13 +333,13 @@ RSpec.describe Translator, type: :service do
 
     describe "#valid?" do
       it "returns true for valid search value" do
-        translator = Translator.new("shelter")
+        translator = described_class.new("shelter")
 
         expect(translator.valid?).to be true
       end
 
       it "returns false for invalid search value" do
-        translator = Translator.new("invalid_value")
+        translator = described_class.new("invalid_value")
 
         expect(translator.valid?).to be false
       end
@@ -348,13 +347,13 @@ RSpec.describe Translator, type: :service do
 
     describe "#invalid?" do
       it "returns false for valid search value" do
-        translator = Translator.new("shelter")
+        translator = described_class.new("shelter")
 
         expect(translator.invalid?).to be false
       end
 
       it "returns true for invalid search value" do
-        translator = Translator.new("invalid_value")
+        translator = described_class.new("invalid_value")
 
         expect(translator.invalid?).to be true
       end
@@ -362,19 +361,19 @@ RSpec.describe Translator, type: :service do
 
     describe "#translated_value" do
       it "looks up value in dictionary" do
-        translator = Translator.new("shelter")
+        translator = described_class.new("shelter")
 
         expect(translator.send(:translated_value)).to eq(:shelter)
       end
 
       it "returns nil for missing value" do
-        translator = Translator.new("invalid_value")
+        translator = described_class.new("invalid_value")
 
         expect(translator.send(:translated_value)).to be_nil
       end
 
       it "converts search value to lowercase" do
-        translator = Translator.new("SHELTER")
+        translator = described_class.new("SHELTER")
 
         expect(translator.send(:translated_value)).to eq(:shelter)
       end
@@ -384,9 +383,9 @@ RSpec.describe Translator, type: :service do
   describe "class method shortcut" do
     it "can be called with .call" do
       # Clear any cache to ensure fresh dictionary
-      Translator.instance_variable_set(:@dictionary, nil)
+      described_class.instance_variable_set(:@dictionary, nil)
 
-      result = Translator.call("shelter")
+      result = described_class.call("shelter")
 
       expect(result.success?).to be true
       expect(result.data).to eq(:shelter)

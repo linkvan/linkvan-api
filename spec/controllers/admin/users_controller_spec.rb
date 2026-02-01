@@ -11,8 +11,7 @@ RSpec.describe Admin::UsersController do
 
   # Stub Devise authentication methods (common pattern from facilities_controller_spec)
   before do
-    allow(controller).to receive(:authenticate_user!).and_return(true)
-    allow(controller).to receive(:user_signed_in?).and_return(true)
+    allow(controller).to receive_messages(authenticate_user!: true, user_signed_in?: true)
   end
 
   describe "GET #index" do
@@ -575,8 +574,7 @@ RSpec.describe Admin::UsersController do
     let(:zone_b) { create(:zone, name: "Zone B") }
 
     before do
-      allow(controller).to receive(:user_signed_in?).and_return(true)
-      allow(controller).to receive(:authenticate_user!).and_return(true)
+      allow(controller).to receive_messages(user_signed_in?: true, authenticate_user!: true)
     end
 
     describe "super_admin permissions" do
@@ -692,8 +690,7 @@ RSpec.describe Admin::PasswordsController do
 
   # Stub Devise authentication methods
   before do
-    allow(controller).to receive(:authenticate_user!).and_return(true)
-    allow(controller).to receive(:user_signed_in?).and_return(true)
+    allow(controller).to receive_messages(authenticate_user!: true, user_signed_in?: true)
   end
 
   describe "GET #new" do

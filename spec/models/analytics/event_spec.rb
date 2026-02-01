@@ -528,7 +528,7 @@ RSpec.describe Analytics::Event, type: :model do
                      request_user_agent: "Test Browser",
                      request_params: params)
 
-      persisted = Analytics::Event.find(event.id)
+      persisted = described_class.find(event.id)
 
       expect(persisted.visit).to eq(visit)
       expect(persisted.controller_name).to eq("facilities")
@@ -545,7 +545,7 @@ RSpec.describe Analytics::Event, type: :model do
 
     it "handles decimal precision for coordinates" do
       event = create(:analytics_event, lat: 49.2827345, long: -123.1207456)
-      persisted = Analytics::Event.find(event.id)
+      persisted = described_class.find(event.id)
 
       expect(persisted.lat).to eq(49.2827345)
       expect(persisted.long).to eq(-123.1207456)
@@ -563,24 +563,24 @@ RSpec.describe Analytics::Event, type: :model do
     end
 
     it "can find events by controller_name" do
-      events = Analytics::Event.where(controller_name: "facilities")
+      events = described_class.where(controller_name: "facilities")
       expect(events.count).to eq(2)
       expect(events.pluck(:action_name)).to contain_exactly("index", "show")
     end
 
     it "can find events by action_name" do
-      events = Analytics::Event.where(action_name: "index")
+      events = described_class.where(action_name: "index")
       expect(events.count).to eq(2)
       expect(events.pluck(:controller_name)).to contain_exactly("facilities", "services")
     end
 
     it "can find events by visit" do
-      events = Analytics::Event.where(visit: visit1)
+      events = described_class.where(visit: visit1)
       expect(events.count).to eq(2)
     end
 
     it "can chain queries" do
-      events = Analytics::Event.where(controller_name: "facilities", action_name: "index")
+      events = described_class.where(controller_name: "facilities", action_name: "index")
       expect(events.count).to eq(1)
       expect(events.first.visit).to eq(visit1)
     end

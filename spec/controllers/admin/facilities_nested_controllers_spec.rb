@@ -8,9 +8,7 @@ RSpec.describe Admin::FacilitySchedulesController do
 
   # Stub Devise authentication methods
   before do
-    allow(controller).to receive(:authenticate_user!).and_return(true)
-    allow(controller).to receive(:current_user).and_return(admin_user)
-    allow(controller).to receive(:user_signed_in?).and_return(true)
+    allow(controller).to receive_messages(authenticate_user!: true, current_user: admin_user, user_signed_in?: true)
   end
 
   describe "POST #create" do
@@ -48,9 +46,7 @@ RSpec.describe Admin::FacilityServicesController do
 
   # Stub Devise authentication methods
   before do
-    allow(controller).to receive(:authenticate_user!).and_return(true)
-    allow(controller).to receive(:current_user).and_return(admin_user)
-    allow(controller).to receive(:user_signed_in?).and_return(true)
+    allow(controller).to receive_messages(authenticate_user!: true, current_user: admin_user, user_signed_in?: true)
   end
 
   describe "POST #create" do
@@ -102,9 +98,7 @@ RSpec.describe Admin::FacilityWelcomesController do
 
   # Stub Devise authentication methods
   before do
-    allow(controller).to receive(:authenticate_user!).and_return(true)
-    allow(controller).to receive(:current_user).and_return(admin_user)
-    allow(controller).to receive(:user_signed_in?).and_return(true)
+    allow(controller).to receive_messages(authenticate_user!: true, current_user: admin_user, user_signed_in?: true)
   end
 
   describe "POST #create" do
@@ -148,9 +142,7 @@ RSpec.describe Admin::FacilityTimeSlotsController do
 
   # Stub Devise authentication methods
   before do
-    allow(controller).to receive(:authenticate_user!).and_return(true)
-    allow(controller).to receive(:current_user).and_return(admin_user)
-    allow(controller).to receive(:user_signed_in?).and_return(true)
+    allow(controller).to receive_messages(authenticate_user!: true, current_user: admin_user, user_signed_in?: true)
   end
 
   describe "GET #new" do
@@ -202,9 +194,7 @@ RSpec.describe Admin::FacilityLocationsController do
 
   # Stub Devise authentication methods
   before do
-    allow(controller).to receive(:authenticate_user!).and_return(true)
-    allow(controller).to receive(:current_user).and_return(admin_user)
-    allow(controller).to receive(:user_signed_in?).and_return(true)
+    allow(controller).to receive_messages(authenticate_user!: true, current_user: admin_user, user_signed_in?: true)
   end
 
   describe "GET #index" do

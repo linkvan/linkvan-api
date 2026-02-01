@@ -36,7 +36,7 @@ RSpec.describe Facility, type: :model do
 
   describe "discard_reason enum" do
     it "defines enum values" do
-      expect(Facility.discard_reasons).to eq({ "none" => nil, "closed" => "closed", "duplicated" => "duplicated" })
+      expect(described_class.discard_reasons).to eq({ "none" => nil, "closed" => "closed", "duplicated" => "duplicated" })
     end
   end
 

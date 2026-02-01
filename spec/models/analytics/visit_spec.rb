@@ -382,7 +382,7 @@ RSpec.describe Analytics::Visit, type: :model do
       let!(:visit2) { create(:analytics_visit, uuid: "test-uuid-2") }
 
       it "can find visits by uuid" do
-        expect(Analytics::Visit.find_by(uuid: "test-uuid-1")).to eq(visit1)
+        expect(described_class.find_by(uuid: "test-uuid-1")).to eq(visit1)
       end
     end
 
@@ -391,7 +391,7 @@ RSpec.describe Analytics::Visit, type: :model do
       let!(:visit2) { create(:analytics_visit, session_id: "session-2") }
 
       it "can find visits by session_id" do
-        expect(Analytics::Visit.find_by(session_id: "session-1")).to eq(visit1)
+        expect(described_class.find_by(session_id: "session-1")).to eq(visit1)
       end
     end
   end

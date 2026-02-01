@@ -31,29 +31,13 @@ RSpec.describe Locations::Searcher, type: :service do
     context "with successful geocoding" do
       let(:geocoder_result_one) do
         double("Geocoder Result 1").tap do |double|
-          allow(double).to receive(:latitude).and_return(49.243463)
-          allow(double).to receive(:longitude).and_return(-123.106431)
-          allow(double).to receive(:address).and_return("123 Main St")
-          allow(double).to receive(:city).and_return("Vancouver")
-          allow(double).to receive(:state).and_return("BC")
-          allow(double).to receive(:postal_code).and_return("V6A 1A1")
-          allow(double).to receive(:country).and_return("Canada")
-          allow(double).to receive(:data).and_return({ "place_id" => "12345" })
-          allow(double).to receive(:street_address).and_return("123 Main St")
+          allow(double).to receive_messages(latitude: 49.243463, longitude: -123.106431, address: "123 Main St", city: "Vancouver", state: "BC", postal_code: "V6A 1A1", country: "Canada", data: { "place_id" => "12345" }, street_address: "123 Main St")
         end
       end
 
       let(:geocoder_result_two) do
         double("Geocoder Result 2").tap do |double|
-          allow(double).to receive(:latitude).and_return(49.243464)
-          allow(double).to receive(:longitude).and_return(-123.106432)
-          allow(double).to receive(:address).and_return("123 Main Street")
-          allow(double).to receive(:city).and_return("Vancouver")
-          allow(double).to receive(:state).and_return("BC")
-          allow(double).to receive(:postal_code).and_return("V6A 1A2")
-          allow(double).to receive(:country).and_return("Canada")
-          allow(double).to receive(:data).and_return({ "place_id" => "67890" })
-          allow(double).to receive(:street_address).and_return("123 Main Street")
+          allow(double).to receive_messages(latitude: 49.243464, longitude: -123.106432, address: "123 Main Street", city: "Vancouver", state: "BC", postal_code: "V6A 1A2", country: "Canada", data: { "place_id" => "67890" }, street_address: "123 Main Street")
         end
       end
 
@@ -172,15 +156,7 @@ RSpec.describe Locations::Searcher, type: :service do
     context "with single result" do
       let(:geocoder_result) do
         double("Geocoder Result").tap do |double|
-          allow(double).to receive(:latitude).and_return(49.243463)
-          allow(double).to receive(:longitude).and_return(-123.106431)
-          allow(double).to receive(:address).and_return("123 Main St")
-          allow(double).to receive(:city).and_return("Vancouver")
-          allow(double).to receive(:state).and_return("BC")
-          allow(double).to receive(:postal_code).and_return("V6A 1A1")
-          allow(double).to receive(:country).and_return("Canada")
-          allow(double).to receive(:data).and_return({})
-          allow(double).to receive(:street_address).and_return("123 Main St")
+          allow(double).to receive_messages(latitude: 49.243463, longitude: -123.106431, address: "123 Main St", city: "Vancouver", state: "BC", postal_code: "V6A 1A1", country: "Canada", data: {}, street_address: "123 Main St")
         end
       end
 
@@ -353,15 +329,7 @@ RSpec.describe Locations::Searcher, type: :service do
     context "integration with Locations::Parser" do
       let(:geocoder_result) do
         double("Geocoder Result").tap do |double|
-          allow(double).to receive(:latitude).and_return(49.243463)
-          allow(double).to receive(:longitude).and_return(-123.106431)
-          allow(double).to receive(:address).and_return("123 Main St")
-          allow(double).to receive(:city).and_return("Vancouver")
-          allow(double).to receive(:state).and_return("BC")
-          allow(double).to receive(:postal_code).and_return("V6A 1A1")
-          allow(double).to receive(:country).and_return("Canada")
-          allow(double).to receive(:data).and_return({ "provider" => "test" })
-          allow(double).to receive(:street_address).and_return("123 Main St")
+          allow(double).to receive_messages(latitude: 49.243463, longitude: -123.106431, address: "123 Main St", city: "Vancouver", state: "BC", postal_code: "V6A 1A1", country: "Canada", data: { "provider" => "test" }, street_address: "123 Main St")
         end
       end
 
@@ -411,15 +379,7 @@ RSpec.describe Locations::Searcher, type: :service do
     context "integration with Location.build_from" do
       let(:geocoder_result) do
         double("Geocoder Result").tap do |double|
-          allow(double).to receive(:latitude).and_return(49.243463)
-          allow(double).to receive(:longitude).and_return(-123.106431)
-          allow(double).to receive(:address).and_return("123 Main St")
-          allow(double).to receive(:city).and_return("Vancouver")
-          allow(double).to receive(:state).and_return("BC")
-          allow(double).to receive(:postal_code).and_return("V6A 1A1")
-          allow(double).to receive(:country).and_return("Canada")
-          allow(double).to receive(:data).and_return({})
-          allow(double).to receive(:street_address).and_return("123 Main St")
+          allow(double).to receive_messages(latitude: 49.243463, longitude: -123.106431, address: "123 Main St", city: "Vancouver", state: "BC", postal_code: "V6A 1A1", country: "Canada", data: {}, street_address: "123 Main St")
         end
       end
 
@@ -477,15 +437,7 @@ RSpec.describe Locations::Searcher, type: :service do
       let(:geocoder_results) do
         Array.new(1000) do |i|
           double("Geocoder Result #{i}").tap do |double|
-            allow(double).to receive(:latitude).and_return(49.243463 + (i * 0.001))
-            allow(double).to receive(:longitude).and_return(-123.106431 + (i * 0.001))
-            allow(double).to receive(:address).and_return("123 Main St #{i}")
-            allow(double).to receive(:city).and_return("Vancouver")
-            allow(double).to receive(:state).and_return("BC")
-            allow(double).to receive(:postal_code).and_return("V6A 1A#{i}")
-            allow(double).to receive(:country).and_return("Canada")
-            allow(double).to receive(:data).and_return({ "index" => i })
-            allow(double).to receive(:street_address).and_return("123 Main St #{i}")
+            allow(double).to receive_messages(latitude: 49.243463 + (i * 0.001), longitude: -123.106431 + (i * 0.001), address: "123 Main St #{i}", city: "Vancouver", state: "BC", postal_code: "V6A 1A#{i}", country: "Canada", data: { "index" => i }, street_address: "123 Main St #{i}")
           end
         end
       end

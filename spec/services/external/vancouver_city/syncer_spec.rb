@@ -105,8 +105,7 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
   describe "#call" do
     context "when validation fails" do
       before do
-        allow(syncer).to receive(:invalid?).and_return(true)
-        allow(syncer).to receive(:errors).and_return(["Validation error"])
+        allow(syncer).to receive_messages(invalid?: true, errors: ["Validation error"])
       end
 
       it "returns failure result with validation errors" do
