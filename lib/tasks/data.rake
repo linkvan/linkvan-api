@@ -39,11 +39,9 @@ namespace :data do
     process_welcomes = lambda do |facility, facility_hash|
       welcome_list = facility_hash["welcomes"]
                      .split
-                     .map(&:to_s)
-                     .map(&:downcase)
-                     .map(&:singularize)
                      .map do |welcome_value|
-        welcome_value == "child" ? "children" : welcome_value
+        processed = welcome_value.to_s.downcase.singularize
+        processed == "child" ? "children" : processed
       end
 
       welcome_list = valid_welcomes if welcome_list.include?("all")
@@ -61,10 +59,9 @@ namespace :data do
     process_services = lambda do |facility, facility_hash|
       services_list = facility_hash["services"]
                       .split
-                      .map(&:to_s)
-                      .map(&:downcase)
                       .map do |service_value|
-        service_value == "advocacy" ? "legal" : service_value
+        processed = service_value.to_s.downcase
+        processed == "advocacy" ? "legal" : processed
       end
 
       services = Service.where(key: services_list)

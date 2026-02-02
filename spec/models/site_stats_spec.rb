@@ -30,9 +30,11 @@ RSpec.describe SiteStats, type: :model do
 
   describe "class methods" do
     describe ".facilities" do
+      # rubocop:disable Rails/SkipsModelValidations -- Skipping validations in test setup for controlled timestamp manipulation
       let!(:first_facility) { create(:facility).tap { |f| f.update_columns(updated_at: 1.day.ago) } }
       let!(:second_facility) { create(:facility).tap { |f| f.update_columns(updated_at: 2.days.ago) } }
       let!(:third_facility) { create(:facility).tap { |f| f.update_columns(updated_at: 3.days.ago) } }
+      # rubocop:enable Rails/SkipsModelValidations
 
       it "returns facilities ordered by updated_at descending" do
         expect(described_class.facilities).to eq([first_facility, second_facility, third_facility])
@@ -40,9 +42,11 @@ RSpec.describe SiteStats, type: :model do
     end
 
     describe ".notices" do
+      # rubocop:disable Rails/SkipsModelValidations -- Skipping validations in test setup for controlled timestamp manipulation
       let!(:first_notice) { create(:notice).tap { |n| n.update_columns(updated_at: 1.day.ago) } }
       let!(:second_notice) { create(:notice).tap { |n| n.update_columns(updated_at: 2.days.ago) } }
       let!(:third_notice) { create(:notice).tap { |n| n.update_columns(updated_at: 3.days.ago) } }
+      # rubocop:enable Rails/SkipsModelValidations
 
       it "returns notices ordered by updated_at descending" do
         expect(described_class.notices).to eq([first_notice, second_notice, third_notice])
@@ -101,7 +105,9 @@ RSpec.describe SiteStats, type: :model do
     end
 
     context "with multiple facilities and notices" do
+      # rubocop:disable Rails/SkipsModelValidations -- Skipping validations in test setup for controlled timestamp manipulation
       let!(:first_facility) { create(:facility).tap { |f| f.update_columns(updated_at: 1.day.ago) } }
+      # rubocop:enable Rails/SkipsModelValidations
 
       it "returns the most recent updated_at from all records" do
         computed_time = described_class.send(:compute_last_updated)
@@ -113,7 +119,9 @@ RSpec.describe SiteStats, type: :model do
       let(:future_time) { 1.day.from_now }
 
       before do
+        # rubocop:disable Rails/SkipsModelValidations -- Skipping validations in test setup for controlled timestamp manipulation
         create(:facility).tap { |f| f.update_columns(updated_at: future_time) }
+        # rubocop:enable Rails/SkipsModelValidations
       end
 
       it "includes future dates in computation" do
@@ -143,7 +151,9 @@ RSpec.describe SiteStats, type: :model do
 
   describe "integration with real data" do
     context "with populated database" do
+      # rubocop:disable Rails/SkipsModelValidations -- Skipping validations in test setup for controlled timestamp manipulation
       let!(:facility) { create(:facility).tap { |f| f.update_columns(updated_at: 1.hour.ago) } }
+      # rubocop:enable Rails/SkipsModelValidations
       let(:site_stats) { described_class.new }
 
       it "computes last_updated correctly" do
