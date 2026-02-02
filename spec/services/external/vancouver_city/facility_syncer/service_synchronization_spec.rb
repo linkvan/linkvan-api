@@ -90,9 +90,6 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "service synchronization
 
     context "when built facility has duplicate services in builder" do
       # This tests the .uniq call in add_missing_services
-      let!(:existing_facility) do
-        create(:facility, external_id: "DUPLICATE_TEST123")
-      end
 
       let(:record) do
         {

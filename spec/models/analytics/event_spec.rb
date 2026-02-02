@@ -193,14 +193,16 @@ RSpec.describe Analytics::Event, type: :model do
       let(:event) { create(:analytics_event) }
       let!(:first_facility) { create(:facility) }
       let!(:second_facility) { create(:facility) }
-      let!(:first_facility_impression) { create(:analytics_impression, event: event, impressionable: first_facility) }
-      let!(:second_facility_impression) { create(:analytics_impression, event: event, impressionable: second_facility) }
 
       it "can access facilities through impressions" do
+        create(:analytics_impression, event: event, impressionable: first_facility)
+        create(:analytics_impression, event: event, impressionable: second_facility)
         expect(event.facilities).to contain_exactly(first_facility, second_facility)
       end
 
       it "correctly filters by source_type Facility" do
+        create(:analytics_impression, event: event, impressionable: first_facility)
+        create(:analytics_impression, event: event, impressionable: second_facility)
         # This tests the source_type specification in the through association
         service = create(:service)
         create(:analytics_impression, event: event, impressionable: service)

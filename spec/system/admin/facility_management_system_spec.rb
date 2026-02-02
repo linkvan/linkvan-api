@@ -36,7 +36,7 @@ RSpec.describe "Admin Facility Management", type: :system do
       end
 
       context "editing a facility" do
-        let!(:facility) { create(:facility, name: "Original Name") }
+        before { create(:facility, name: "Original Name") }
 
         it "allows admin to edit facility details" do
           facilities_index_page.visit_facilities
@@ -58,10 +58,12 @@ RSpec.describe "Admin Facility Management", type: :system do
   end
 
   describe "search and filtering" do
-    let!(:downtown_facility) { create(:facility, name: "Downtown Center", address: "123 Main St") }
-    let!(:uptown_facility) { create(:facility, name: "Uptown Clinic", address: "456 Oak Ave") }
-    let!(:live_facility) { create(:facility, :with_verified, name: "Verified Facility") }
-    let!(:pending_facility) { create(:facility, verified: false, name: "Pending Facility") }
+    before do
+      create(:facility, name: "Downtown Center", address: "123 Main St")
+      create(:facility, name: "Uptown Clinic", address: "456 Oak Ave")
+      create(:facility, :with_verified, name: "Verified Facility")
+      create(:facility, verified: false, name: "Pending Facility")
+    end
 
     it "filters facilities by status" do
       facilities_index_page.visit_facilities

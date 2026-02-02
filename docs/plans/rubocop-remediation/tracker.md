@@ -8,7 +8,7 @@
 
 ## Created: 2026-02-01
 
-## Last Updated: 2026-02-01 (Updated with new prioritized plan)
+## Last Updated: 2026-02-01 (Completed Stage 11.3)
 
  ---
 
@@ -18,9 +18,9 @@
 |----------|-------|-------------|-------------|-----------|---------|
 | CRITICAL | 2     | 0           | 0           | 2         | 0       |
 | HIGH     | 5     | 1           | 0           | 4         | 0       |
-| MEDIUM   | 37    | 14          | 0           | 23        | 0       |
+| MEDIUM   | 37    | 12          | 0           | 25        | 0       |
 | LOW      | 20    | 5           | 0           | 15        | 0       |
-| **TOTAL**| **64**| **20**      | **0**       | **44**    | **0**   |
+| **TOTAL**| **64**| **18**      | **0**       | **46**    | **0**   |
 
 ---
 
@@ -229,13 +229,13 @@
 
 | ID | Priority | Status | Offenses | File | Notes |
 |----|----------|--------|----------|------|-------|
-| 11.2 | MEDIUM | ⬜ Not Started | 29 | Multiple spec files | Remove unused let! statements or convert to let |
+| 11.2 | MEDIUM | ✅ Completed | 29 | Multiple spec files | fixed 29 offenses across 9 spec files by removing unused let! statements or converting to before blocks |
 
 #### 11.3 - Remove Subject Stubs
 
 | ID | Priority | Status | Offenses | File | Notes |
 |----|----------|--------|----------|------|-------|
-| 11.3 | MEDIUM | ⬜ Not Started | 15 | spec/components/facilities/show_component_spec.rb | Refactor to avoid stubbing subject methods |
+| 11.3 | MEDIUM | ✅ Completed | 15 | spec/components/facilities/show_component_spec.rb | refactored to avoid stubbing subject methods by extracting URL generation to separate private methods and testing logic instead of HTML output |
 
 #### 11.4 - Fix Spec File Path Format
 
@@ -523,7 +523,7 @@ Stage 7 (MEDIUM):    ███████████████████�
 Stage 8 (LOW):       ████████████████████ 1/1 items completed (100%)
 Stage 9 (HIGH):      ████████████████████ 1/1 items completed (100%)
 Stage 10 (MEDIUM):   ████████████████████ 4/4 items completed (100%)
-Stage 11 (MEDIUM):   ████░░░░░░░░░░░░░░░░░ 1/5 items completed (20%)
+Stage 11 (MEDIUM):   ████████████░░░░░░░░░░ 3/5 items completed (60%)
 Stage 12 (MEDIUM):   ░░░░░░░░░░░░░░░░░░░ 0/2 items completed (0%)
 Stage 13 (LOW):      ░░░░░░░░░░░░░░░░░░░ 0/3 items completed (0%)
 Stage 14 (LOW):      ░░░░░░░░░░░░░░░░░░░ 0/4 items completed (0%)
@@ -532,7 +532,7 @@ Stage 16 (MEDIUM):   ░░░░░░░░░░░░░░░░░░░ 0
 Stage 17 (MEDIUM):   ░░░░░░░░░░░░░░░░░░░ 0/3 items completed (0%)
 Stage 18 (MEDIUM):   ░░░░░░░░░░░░░░░░░░░ 0/5 items completed (0%)
 Stage 19 (LOW):      ░░░░░░░░░░░░░░░░░░░ 0/5 items completed (0%)
-Overall:             ███████████████░░░░░░░ 44/64 items completed (69%)
+Overall:             █████████████████░░░░░░ 46/64 items completed (71%)
 ```
 
  ### Offense Resolution Progress
@@ -548,7 +548,7 @@ Stage 7:   ████████████████████ 9/9 offe
 Stage 8:   ████████████████████ 15/15 offenses verified (100%)
 Stage 9:   ████████████████████ 75/75 offenses resolved (100%)
 Stage 10:  ████████████████████ 123/123 offenses resolved (100%)
-Total:     ███████████████████░░░░ 946/1,326 offenses resolved (71%)
+Total:     ████████████████████░░░ 990/1,326 offenses resolved (74%)
 Reduction: ███████████████████░░░░ 946/380 remaining (249% from current, 57% from baseline 1,651)
 ```
 
@@ -611,6 +611,8 @@ Reduction: ███████████████████░░░░
 | 2026-02-01 | Completed Stage 9 - Run Full Auto-Correction (75 offenses) | Assistant |
 | 2026-02-01 | Completed Stage 10 - RSpec Core Pattern Changes (123 offenses) | Assistant |
 | 2026-02-01 | Restructured plan with prioritized phases 15-19 based on current RuboCop state (380 offenses) | Assistant |
+| 2026-02-01 | Completed Stage 11.2 - Fix Let Setup (29 offenses) | Assistant |
+| 2026-02-01 | Completed Stage 11.3 - Remove Subject Stubs (15 offenses) | Assistant |
 
 ---
 

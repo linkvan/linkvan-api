@@ -156,12 +156,6 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "external update operati
     end
 
     context "when create! raises ActiveRecord::RecordInvalid during service creation" do
-      let!(:existing_external_facility) do
-        create(:facility,
-               external_id: "EXT_SERVICE_ERROR123",
-               name: "Test Facility")
-      end
-
       let(:update_record) do
         {
           "mapid" => "EXT_SERVICE_ERROR123",
@@ -171,6 +165,9 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "external update operati
       end
 
       before do
+        create(:facility,
+               external_id: "EXT_SERVICE_ERROR123",
+               name: "Test Facility")
         # Simulate a constraint violation when creating facility service
         allow_any_instance_of(ActiveRecord::Associations::CollectionProxy)
           .to receive(:create!).and_raise(

@@ -131,13 +131,6 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "internal update operati
     end
 
     context "when service creation raises ActiveRecord::RecordInvalid" do
-      let!(:existing_internal_facility) do
-        create(:facility,
-               external_id: nil,
-               name: "Service Error Fountain",
-               verified: false)
-      end
-
       let(:update_record) do
         {
           "mapid" => "ERROR_ID123",
@@ -147,6 +140,11 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "internal update operati
       end
 
       before do
+        create(:facility,
+               external_id: nil,
+               name: "Service Error Fountain",
+               verified: false)
+
         # Simulate a constraint violation when creating facility service
         allow_any_instance_of(ActiveRecord::Associations::CollectionProxy)
           .to receive(:create!).and_raise(
@@ -164,13 +162,6 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "internal update operati
     end
 
     context "when update raises other StandardError" do
-      let!(:existing_internal_facility) do
-        create(:facility,
-               external_id: nil,
-               name: "Generic Error Fountain",
-               verified: false)
-      end
-
       let(:update_record) do
         {
           "mapid" => "GENERIC_ERROR123",
@@ -180,6 +171,11 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "internal update operati
       end
 
       before do
+        create(:facility,
+               external_id: nil,
+               name: "Generic Error Fountain",
+               verified: false)
+
         # Simulate a database connection error during service creation
         allow_any_instance_of(ActiveRecord::Associations::CollectionProxy)
           .to receive(:create!).and_raise(

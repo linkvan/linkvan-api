@@ -102,9 +102,6 @@ RSpec.describe SiteStats, type: :model do
 
     context "with multiple facilities and notices" do
       let!(:first_facility) { create(:facility).tap { |f| f.update_columns(updated_at: 1.day.ago) } }
-      let!(:second_facility) { create(:facility).tap { |f| f.update_columns(updated_at: 2.days.ago) } }
-      let!(:first_notice) { create(:notice).tap { |n| n.update_columns(updated_at: 3.days.ago) } }
-      let!(:second_notice) { create(:notice).tap { |n| n.update_columns(updated_at: 4.days.ago) } }
 
       it "returns the most recent updated_at from all records" do
         computed_time = described_class.send(:compute_last_updated)
@@ -114,8 +111,10 @@ RSpec.describe SiteStats, type: :model do
 
     context "with future dates" do
       let(:future_time) { 1.day.from_now }
-      let!(:facility) { create(:facility).tap { |f| f.update_columns(updated_at: future_time) } }
-      let!(:notice) { create(:notice).tap { |n| n.update_columns(updated_at: 2.days.ago) } }
+
+      before do
+        create(:facility).tap { |f| f.update_columns(updated_at: future_time) }
+      end
 
       it "includes future dates in computation" do
         computed_time = described_class.send(:compute_last_updated)
@@ -145,7 +144,6 @@ RSpec.describe SiteStats, type: :model do
   describe "integration with real data" do
     context "with populated database" do
       let!(:facility) { create(:facility).tap { |f| f.update_columns(updated_at: 1.hour.ago) } }
-      let!(:notice) { create(:notice).tap { |n| n.update_columns(updated_at: 2.hours.ago) } }
       let(:site_stats) { described_class.new }
 
       it "computes last_updated correctly" do

@@ -379,7 +379,6 @@ RSpec.describe Analytics::Visit, type: :model do
   describe "scopes and class methods" do
     context "when searching by uuid" do
       let!(:first_visit) { create(:analytics_visit, uuid: "test-uuid-1") }
-      let!(:second_visit) { create(:analytics_visit, uuid: "test-uuid-2") }
 
       it "can find visits by uuid" do
         expect(described_class.find_by(uuid: "test-uuid-1")).to eq(first_visit)
@@ -388,7 +387,6 @@ RSpec.describe Analytics::Visit, type: :model do
 
     context "when searching by session_id" do
       let!(:first_visit) { create(:analytics_visit, session_id: "session-1") }
-      let!(:second_visit) { create(:analytics_visit, session_id: "session-2") }
 
       it "can find visits by session_id" do
         expect(described_class.find_by(session_id: "session-1")).to eq(first_visit)

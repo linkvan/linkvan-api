@@ -155,7 +155,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "result structure", type
     end
 
     context "for external_update operations" do
-      let!(:existing_external_facility) do
+      let(:existing_external_facility) do
         create(:facility,
                external_id: "EXT_OP123",
                name: "Old Name")
@@ -172,6 +172,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "result structure", type
       end
 
       it "consistently reports :external_update operation" do
+        existing_external_facility
         syncer = described_class.new(record: update_record, api_key: api_key)
         result = syncer.call
 
@@ -180,7 +181,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "result structure", type
     end
 
     context "for internal_update operations" do
-      let!(:existing_internal_facility) do
+      let(:existing_internal_facility) do
         create(:facility,
                external_id: nil,
                name: "Internal Facility")
@@ -197,6 +198,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "result structure", type
       end
 
       it "consistently reports :internal_update operation" do
+        existing_internal_facility
         syncer = described_class.new(record: update_record, api_key: api_key)
         result = syncer.call
 
@@ -227,7 +229,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "result structure", type
     end
 
     context "with update operations" do
-      let!(:existing_facility) do
+      let(:existing_facility) do
         create(:facility,
                external_id: "UPDATE_REF123",
                name: "Original Name")
@@ -244,6 +246,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "result structure", type
       end
 
       it "result facility is the same instance as existing facility" do
+        existing_facility
         syncer = described_class.new(record: update_record, api_key: api_key)
         result = syncer.call
 
