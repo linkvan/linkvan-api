@@ -8,7 +8,7 @@
 
 ## Created: 2026-02-01
 
-## Last Updated: 2026-02-01 (Completed Stage 12)
+## Last Updated: 2026-02-01 (Completed Stage 13.1)
 
  ---
 
@@ -19,8 +19,8 @@
 | CRITICAL | 2     | 0           | 0           | 2         | 0       |
 | HIGH     | 5     | 1           | 0           | 4         | 0       |
 | MEDIUM   | 37    | 8           | 0           | 29        | 0       |
-| LOW      | 20    | 5           | 0           | 15        | 0       |
-| **TOTAL**| **64**| **14**      | **0**       | **50**    | **0**   |
+| LOW      | 20    | 4           | 0           | 16        | 0       |
+| **TOTAL**| **64**| **13**      | **0**       | **51**    | **0**   |
 
 ---
 
@@ -281,7 +281,7 @@
 
 | ID | Priority | Status | Offenses | File | Notes |
 |----|----------|--------|----------|------|-------|
-| 13.1 | LOW | ⬜ Not Started | 0 | Multiple spec files | Replaced in Stage 10 with verifying doubles |
+| 13.1 | LOW | ✅ Completed | 16 | Multiple spec files | Refactored any instance usage across multiple spec files |
 
 #### 13.2 - Move Expect from Hooks
 
@@ -525,14 +525,14 @@ Stage 9 (HIGH):      ███████████████████�
 Stage 10 (MEDIUM):   ████████████████████ 4/4 items completed (100%)
 Stage 11 (MEDIUM):   ████████████████████ 5/5 items completed (100%)
 Stage 12 (MEDIUM):   ████████████████████ 2/2 items completed (100%)
-Stage 13 (LOW):      ░░░░░░░░░░░░░░░░░░░ 0/3 items completed (0%)
+Stage 13 (LOW):      ████████░░░░░░░░░░░░░ 1/3 items completed (33%)
 Stage 14 (LOW):      ░░░░░░░░░░░░░░░░░░░ 0/4 items completed (0%)
 Stage 15 (HIGH):     ░░░░░░░░░░░░░░░░░░░ 0/1 items completed (0%)
 Stage 16 (MEDIUM):   ░░░░░░░░░░░░░░░░░░░ 0/4 items completed (0%)
 Stage 17 (MEDIUM):   ░░░░░░░░░░░░░░░░░░░ 0/3 items completed (0%)
 Stage 18 (MEDIUM):   ░░░░░░░░░░░░░░░░░░░ 0/5 items completed (0%)
 Stage 19 (LOW):      ░░░░░░░░░░░░░░░░░░░ 0/5 items completed (0%)
-Overall:             ████████████████░░░░ 50/64 items completed (78%)
+Overall:             ████████████████░░░░░ 51/64 items completed (80%)
 ```
 
  ### Offense Resolution Progress
@@ -550,8 +550,8 @@ Stage 9:   ████████████████████ 75/75 of
 Stage 10:  ████████████████████ 123/123 offenses resolved (100%)
 Stage 11:  ████████████████████ 105/106 offenses resolved (99%)
 Stage 12:  ███████████░░░░░░░░░ 12/17 offenses resolved (71%)
-Total:     ████████████████░░░░ 1024/1326 offenses resolved (77%)
-Reduction: ████████████████░░░░ 1024/302 remaining (77% from current, 62% from baseline 1,651)
+Total:     ████████████████░░░░ 1040/1342 offenses resolved (77%)
+Reduction: ████████████████░░░░ 1040/302 remaining (77% from current, 63% from baseline 1,651)
 ```
 
 ---
@@ -572,14 +572,14 @@ Reduction: ████████████████░░░░ 1024/302
 | 10 | MEDIUM | 4 | 123 | 1 hour |
 | 11 | MEDIUM | 5 | 106 | 1.5 hours |
 | 12 | MEDIUM | 2 | 12 | 30 minutes |
-| 13 | LOW | 3 | 0 | 0 minutes (skipped) |
+| 13 | LOW | 3 | 16 | 0 minutes (skipped) |
 | 14 | LOW | 4 | 14 | 30 minutes |
 | 15 | HIGH | 1 | 31 | 15 minutes |
 | 16 | MEDIUM | 4 | 186 | 2 hours |
 | 17 | MEDIUM | 3 | 24 | 45 minutes |
 | 18 | MEDIUM | 5 | 85 | 1.5 hours |
 | 19 | LOW | 5 | 46 | 1 hour |
-| **TOTAL** | - | **64** | **1,321** | **8.5 hours** |
+| **TOTAL** | - | **64** | **1,337** | **8.5 hours** |
 
 ---
 
@@ -618,6 +618,7 @@ Reduction: ████████████████░░░░ 1024/302
 | 2026-02-01 | Completed Stage 11.4 - Fix Spec File Path (9 offenses) | Assistant |
 | 2026-02-01 | Completed Stage 11.5 - Fix Describe Method (13 offenses) | Assistant |
 | 2026-02-01 | Completed Stage 12 - Rails & Performance (12 offenses) | Assistant |
+| 2026-02-01 | Completed Stage 13.1 - Refactor Any Instance Usage (16 offenses) | Assistant |
 
 ---
 

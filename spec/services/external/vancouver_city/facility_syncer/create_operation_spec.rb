@@ -130,9 +130,17 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
         }
       end
 
+      let(:built_facility) { build(:facility) }
+
       before do
         # Simulate a database connection error or similar
-        allow_any_instance_of(Facility).to receive(:save!).and_raise(StandardError.new("Database connection lost"))
+        allow(External::VancouverCity::FacilityBuilder).to receive(:call).with(record: valid_record, api_key: api_key).and_return(
+          ApplicationService::Result.new(
+            data: { facility: built_facility },
+            errors: []
+          )
+        )
+        allow(built_facility).to receive(:save!).and_raise(StandardError.new("Database connection lost"))
       end
 
       it "catches exception and adds generic error message" do
@@ -174,10 +182,18 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
         }
       end
 
+      let(:built_facility) { build(:facility) }
+
       before do
         # Simulate a validation error during save
-        allow_any_instance_of(Facility).to receive(:save!).and_raise(
-          ActiveRecord::RecordInvalid.new(build(:facility))
+        allow(External::VancouverCity::FacilityBuilder).to receive(:call).with(record: invalid_save_record, api_key: api_key).and_return(
+          ApplicationService::Result.new(
+            data: { facility: built_facility },
+            errors: []
+          )
+        )
+        allow(built_facility).to receive(:save!).and_raise(
+          ActiveRecord::RecordInvalid.new(built_facility)
         )
       end
 
@@ -213,11 +229,19 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
         }
       end
 
+      let(:built_facility) { build(:facility) }
+
       before do
         # For create operations, service associations are built in memory by FacilityBuilder
         # and saved together with the facility. To simulate failure, we need to make
         # the facility save fail due to a constraint on the associations.
-        allow_any_instance_of(Facility).to receive(:save!).and_raise(
+        allow(External::VancouverCity::FacilityBuilder).to receive(:call).with(record: service_fail_record, api_key: api_key).and_return(
+          ApplicationService::Result.new(
+            data: { facility: built_facility },
+            errors: []
+          )
+        )
+        allow(built_facility).to receive(:save!).and_raise(
           ActiveRecord::RecordInvalid.new(build(:facility, name: "Service validation failed"))
         )
       end

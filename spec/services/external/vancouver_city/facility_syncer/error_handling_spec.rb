@@ -29,7 +29,8 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
       before do
         # Stub update! to raise RecordInvalid to simulate validation failure
-        allow_any_instance_of(Facility).to receive(:update!).and_raise(
+        allow(Facility).to receive(:find_by).and_return(existing_facility)
+        allow(existing_facility).to receive(:update!).and_raise(
           ActiveRecord::RecordInvalid.new(existing_facility)
         )
       end
@@ -67,8 +68,8 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
       before do
         # Stub facility_services.create! to raise StandardError
-        allow_any_instance_of(ActiveRecord::Associations::CollectionProxy)
-          .to receive(:create!).and_raise(StandardError.new("Database connection lost"))
+        allow(Facility).to receive(:find_by).and_return(existing_facility)
+        allow(existing_facility.facility_services).to receive(:create!).and_raise(StandardError.new("Database connection lost"))
       end
 
       it "rolls back transaction and reports error" do
@@ -99,7 +100,14 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
     before do
       # Stub save! to raise an error to test logging
-      allow_any_instance_of(Facility).to receive(:save!).and_raise(
+      built_facility = build(:facility, external_id: "LOG_TEST123")
+      allow(External::VancouverCity::FacilityBuilder).to receive(:call).with(record: valid_record, api_key: api_key).and_return(
+        ApplicationService::Result.new(
+          data: { facility: built_facility },
+          errors: []
+        )
+      )
+      allow(built_facility).to receive(:save!).and_raise(
         ActiveRecord::RecordInvalid.new(build(:facility))
       )
     end
@@ -150,11 +158,17 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       before do
-        facility = build(:facility)
-        facility.errors.add(:base, "Custom validation error")
+        built_facility = build(:facility)
+        built_facility.errors.add(:base, "Custom validation error")
 
-        allow_any_instance_of(Facility).to receive(:save!).and_raise(
-          ActiveRecord::RecordInvalid.new(facility)
+        allow(External::VancouverCity::FacilityBuilder).to receive(:call).with(record: valid_record, api_key: api_key).and_return(
+          ApplicationService::Result.new(
+            data: { facility: built_facility },
+            errors: []
+          )
+        )
+        allow(built_facility).to receive(:save!).and_raise(
+          ActiveRecord::RecordInvalid.new(built_facility)
         )
       end
 

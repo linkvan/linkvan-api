@@ -99,15 +99,11 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
         }
       end
 
-      before do
-        # Mock the built facility to have duplicate services
-        # This would happen if FacilityBuilder creates duplicate associations
-        allow_any_instance_of(described_class)
-          .to receive(:add_missing_services).and_call_original
-      end
-
       it "handles duplicate services gracefully" do
         syncer = described_class.new(record: record, api_key: api_key)
+
+        allow(syncer).to receive(:add_missing_services).and_call_original
+
         result = syncer.call
 
         # Should succeed without errors

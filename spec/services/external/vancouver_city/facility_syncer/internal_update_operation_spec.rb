@@ -140,16 +140,18 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       before do
-        create(:facility,
-               external_id: nil,
-               name: "Service Error Fountain",
-               verified: false)
+        existing_facility = create(:facility,
+                                   external_id: nil,
+                                   name: "Service Error Fountain",
+                                   verified: false)
 
-        # Simulate a constraint violation when creating facility service
-        allow_any_instance_of(ActiveRecord::Associations::CollectionProxy)
-          .to receive(:create!).and_raise(
-            ActiveRecord::RecordInvalid.new(FacilityService.new)
-          )
+        allow(Facility).to receive(:where).and_call_original
+        allow(Facility).to receive(:where).with(name: "Service Error Fountain").and_return(
+          double(order: double(first: existing_facility))
+        )
+        allow(existing_facility.facility_services).to receive(:create!).and_raise(
+          ActiveRecord::RecordInvalid.new(FacilityService.new)
+        )
       end
 
       it "catches exception and adds error message" do
@@ -171,16 +173,18 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       before do
-        create(:facility,
-               external_id: nil,
-               name: "Generic Error Fountain",
-               verified: false)
+        existing_facility = create(:facility,
+                                   external_id: nil,
+                                   name: "Generic Error Fountain",
+                                   verified: false)
 
-        # Simulate a database connection error during service creation
-        allow_any_instance_of(ActiveRecord::Associations::CollectionProxy)
-          .to receive(:create!).and_raise(
-            StandardError.new("Database connection failed")
-          )
+        allow(Facility).to receive(:where).and_call_original
+        allow(Facility).to receive(:where).with(name: "Generic Error Fountain").and_return(
+          double(order: double(first: existing_facility))
+        )
+        allow(existing_facility.facility_services).to receive(:create!).and_raise(
+          StandardError.new("Database connection failed")
+        )
       end
 
       it "catches and handles generic errors" do
@@ -335,9 +339,11 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       before do
-        # Force service creation to fail
-        allow_any_instance_of(ActiveRecord::Associations::CollectionProxy)
-          .to receive(:create!).and_raise(StandardError.new("Service creation failed"))
+        allow(Facility).to receive(:where).and_call_original
+        allow(Facility).to receive(:where).with(name: "Rollback Internal Test").and_return(
+          double(order: double(first: rollback_internal_facility))
+        )
+        allow(rollback_internal_facility.facility_services).to receive(:create!).and_raise(StandardError.new("Service creation failed"))
       end
 
       it "does not create any service records when transaction fails" do
@@ -400,11 +406,13 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       before do
-        # Simulate validation error during service creation
-        allow_any_instance_of(ActiveRecord::Associations::CollectionProxy)
-          .to receive(:create!).and_raise(
-            ActiveRecord::RecordInvalid.new(FacilityService.new)
-          )
+        allow(Facility).to receive(:where).and_call_original
+        allow(Facility).to receive(:where).with(name: "Validation Test Facility").and_return(
+          double(order: double(first: validation_internal_facility))
+        )
+        allow(validation_internal_facility.facility_services).to receive(:create!).and_raise(
+          ActiveRecord::RecordInvalid.new(FacilityService.new)
+        )
       end
 
       it "does not modify facility when service validation fails" do

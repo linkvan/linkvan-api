@@ -141,7 +141,8 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
       before do
         # Simulate a validation error during update
-        allow_any_instance_of(Facility).to receive(:update!).and_raise(
+        allow(Facility).to receive(:find_by).and_return(existing_external_facility)
+        allow(existing_external_facility).to receive(:update!).and_raise(
           ActiveRecord::RecordInvalid.new(existing_external_facility)
         )
       end
@@ -165,14 +166,14 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       before do
-        create(:facility,
-               external_id: "EXT_SERVICE_ERROR123",
-               name: "Test Facility")
+        existing_facility = create(:facility,
+                                   external_id: "EXT_SERVICE_ERROR123",
+                                   name: "Test Facility")
         # Simulate a constraint violation when creating facility service
-        allow_any_instance_of(ActiveRecord::Associations::CollectionProxy)
-          .to receive(:create!).and_raise(
-            ActiveRecord::RecordInvalid.new(FacilityService.new)
-          )
+        allow(Facility).to receive(:find_by).and_return(existing_facility)
+        allow(existing_facility.facility_services).to receive(:create!).and_raise(
+          ActiveRecord::RecordInvalid.new(FacilityService.new)
+        )
       end
 
       it "catches exception during service creation" do
@@ -201,8 +202,8 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
       before do
         # Force service creation to fail during add_missing_services
-        allow_any_instance_of(ActiveRecord::Associations::CollectionProxy)
-          .to receive(:create!).and_raise(StandardError.new("Service creation failed"))
+        allow(Facility).to receive(:find_by).and_return(existing_external_facility)
+        allow(existing_external_facility.facility_services).to receive(:create!).and_raise(StandardError.new("Service creation failed"))
       end
 
       it "catches and handles generic errors" do
@@ -339,8 +340,8 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
       before do
         # Force failure after attribute update but before service creation
-        allow_any_instance_of(ActiveRecord::Associations::CollectionProxy)
-          .to receive(:create!).and_raise(StandardError.new("Service creation failed"))
+        allow(Facility).to receive(:find_by).and_return(rollback_facility)
+        allow(rollback_facility.facility_services).to receive(:create!).and_raise(StandardError.new("Service creation failed"))
       end
 
       it "rolls back attribute changes when service creation fails" do
