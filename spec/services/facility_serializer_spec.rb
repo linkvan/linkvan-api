@@ -36,8 +36,8 @@ RSpec.shared_context "has the correct attributes" do
 end
 
 describe FacilitySerializer do
-  let(:fac_service1) { create(:facility_service, facility: facility) }
-  let(:fac_service2) { create(:facility_service, facility: facility) }
+  let(:first_facility_service) { create(:facility_service, facility: facility) }
+  let(:second_facility_service) { create(:facility_service, facility: facility) }
 
   let(:always_closed_facility) { create(:close_all_day_facility, :with_services) }
   let(:all_day_facility) { create(:open_all_day_facility, :with_services) }

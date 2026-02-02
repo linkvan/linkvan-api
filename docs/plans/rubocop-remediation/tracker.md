@@ -8,7 +8,7 @@
 
 ## Created: 2026-02-01
 
-## Last Updated: 2026-02-01
+## Last Updated: 2026-02-01 (Updated with new prioritized plan)
 
  ---
 
@@ -17,10 +17,10 @@
 | Priority | Total | Not Started | In Progress | Completed | Blocked |
 |----------|-------|-------------|-------------|-----------|---------|
 | CRITICAL | 2     | 0           | 0           | 2         | 0       |
-| HIGH     | 3     | 0           | 0           | 3         | 0       |
-| MEDIUM   | 18    | 6           | 0           | 12        | 0       |
-| LOW      | 7     | 6           | 0           | 1         | 0       |
-| **TOTAL**| **30**| **12**      | **0**       | **18**    | **0**   |
+| HIGH     | 5     | 1           | 0           | 4         | 0       |
+| MEDIUM   | 37    | 14          | 0           | 23        | 0       |
+| LOW      | 20    | 5           | 0           | 15        | 0       |
+| **TOTAL**| **64**| **20**      | **0**       | **44**    | **0**   |
 
 ---
 
@@ -223,31 +223,31 @@
 
 | ID | Priority | Status | Offenses | File | Notes |
 |----|----------|--------|----------|------|-------|
-| 11.1 | MEDIUM | ⬜ Not Started | 19 | Multiple spec files | Rename let1, let2 to descriptive names |
+| 11.1 | MEDIUM | ✅ Completed | 40 | Multiple spec files | Renamed all indexed let statements (let1, let2, etc.) to meaningful names (first_x, second_x, third_x) across 9 files |
 
 #### 11.2 - Fix Let Setup
 
 | ID | Priority | Status | Offenses | File | Notes |
 |----|----------|--------|----------|------|-------|
-| 11.2 | MEDIUM | ⬜ Not Started | 18 | Multiple spec files | Remove unused let! statements or convert to let |
+| 11.2 | MEDIUM | ⬜ Not Started | 29 | Multiple spec files | Remove unused let! statements or convert to let |
 
 #### 11.3 - Remove Subject Stubs
 
 | ID | Priority | Status | Offenses | File | Notes |
 |----|----------|--------|----------|------|-------|
-| 11.3 | MEDIUM | ⬜ Not Started | 11 | spec/components/facilities/show_component_spec.rb | Refactor to avoid stubbing subject methods |
+| 11.3 | MEDIUM | ⬜ Not Started | 15 | spec/components/facilities/show_component_spec.rb | Refactor to avoid stubbing subject methods |
 
 #### 11.4 - Fix Spec File Path Format
 
 | ID | Priority | Status | Offenses | File | Notes |
 |----|----------|--------|----------|------|-------|
-| 11.4 | MEDIUM | ⬜ Not Started | 6 | Multiple spec files | Move/rename spec files to match described classes |
+| 11.4 | MEDIUM | ⬜ Not Started | 9 | Multiple spec files | Move/rename spec files to match described classes |
 
 #### 11.5 - Fix Describe Method
 
 | ID | Priority | Status | Offenses | File | Notes |
 |----|----------|--------|----------|------|-------|
-| 11.5 | MEDIUM | ⬜ Not Started | 7 | Multiple spec files | Fix describe block structure to properly describe methods |
+| 11.5 | MEDIUM | ⬜ Not Started | 13 | Multiple spec files | Fix describe block structure to properly describe methods |
 
 ---
 
@@ -261,7 +261,7 @@
 
 | ID | Priority | Status | Offenses | File | Notes |
 |----|----------|--------|----------|------|-------|
-| 12.1 | MEDIUM | ⬜ Not Started | 14 | Multiple | Add rubocop:disable comments with rationale for intentional validation skips |
+| 12.1 | MEDIUM | ⬜ Not Started | 15 | Multiple | Add rubocop:disable comments with rationale for intentional validation skips |
 
 #### 12.2 - Fix Map Method Chain
 
@@ -281,19 +281,19 @@
 
 | ID | Priority | Status | Offenses | File | Notes |
 |----|----------|--------|----------|------|-------|
-| 13.1 | LOW | ⬜ Not Started | 9 | Multiple spec files | Replace allow_any_instance_of with specific test doubles |
+| 13.1 | LOW | ⬜ Not Started | 0 | Multiple spec files | Replaced in Stage 10 with verifying doubles |
 
 #### 13.2 - Move Expect from Hooks
 
 | ID | Priority | Status | Offenses | File | Notes |
 |----|----------|--------|----------|------|-------|
-| 13.2 | LOW | ⬜ Not Started | 2 | spec/components/facilities/show_component_spec.rb | Move expect statements from before hooks to test blocks |
+| 13.2 | LOW | ⬜ Not Started | 0 | spec/components/facilities/show_component_spec.rb | Fixed in Stage 10 |
 
 #### 13.3 - Fix Stubbed Mock
 
 | ID | Priority | Status | Offenses | File | Notes |
 |----|----------|--------|----------|------|-------|
-| 13.3 | LOW | ⬜ Not Started | 3 | Multiple spec files | Use allow instead of expect for response configuration |
+| 13.3 | LOW | ⬜ Not Started | 0 | Multiple spec files | Fixed in Stage 10 |
 
 ---
 
@@ -307,7 +307,7 @@
 
 | ID | Priority | Status | Offenses | File | Notes |
 |----|----------|--------|----------|------|-------|
-| 14.1 | LOW | ⬜ Not Started | 5 | Multiple files | Convert module/class nesting to compact syntax |
+| 14.1 | LOW | ⬜ Not Started | 0 | Multiple files | Fixed in Stage 9 auto-correction |
 
 #### 14.2 - Replace OpenStruct Usage
 
@@ -319,13 +319,161 @@
 
 | ID | Priority | Status | Offenses | File | Notes |
 |----|----------|--------|----------|------|-------|
-| 14.3 | LOW | ⬜ Not Started | 5 | Multiple files | Break complex block chains, extract intermediate variables |
+| 14.3 | LOW | ⬜ Not Started | 7 | spec/services/external/vancouver_api/vancouver_api_client/error_handling_spec.rb | Extract intermediate variables for complex block chains |
 
 #### 14.4 - Fix Remaining Lint Issues
 
 | ID | Priority | Status | Offenses | File | Notes |
 |----|----------|--------|----------|------|-------|
-| 14.4 | LOW | ⬜ Not Started | 2 | Multiple files | Fix Lint/MissingSuper, Lint/EmptyBlock, Lint/UselessConstantScoping, Lint/ConstantDefinitionInBlock |
+| 14.4 | LOW | ⬜ Not Started | 5 | Multiple files | Fix Lint/MissingSuper, Lint/EmptyBlock, Lint/UselessConstantScoping, Lint/ConstantDefinitionInBlock |
+
+---
+
+## Stage 15: HIGH Priority - Auto-Corrections (New Phase)
+
+**Focus:** Run unsafe auto-correction for quick wins.
+
+### Item Tables
+
+#### 15.1 - Run Unsafe Auto-Correction
+
+| ID | Priority | Status | Offenses | File | Notes |
+|----|----------|--------|----------|------|-------|
+| 15.1 | HIGH | ⬜ Not Started | 31 | Multiple | Auto-correct: RSpec/IncludeExamples (20), RSpec/BeEq (11), RSpec/IteratedExpectation (3), Style/ClassAndModuleChildren (3), Lint/Void (1) |
+
+---
+
+## Stage 16: MEDIUM Priority - High-Impact Manual Fixes
+
+**Focus:** Fix the largest RSpec style violations with significant impact.
+
+### Item Tables
+
+#### 16.1 - Fix RSpec/ContextWording
+
+| ID | Priority | Status | Offenses | File | Notes |
+|----|----------|--------|----------|------|-------|
+| 16.1 | MEDIUM | ⬜ Not Started | 74 | 25+ spec files | Rename context descriptions to start with "when", "with", or "without" |
+
+#### 16.2 - Rename Named Subjects
+
+| ID | Priority | Status | Offenses | File | Notes |
+|----|----------|--------|----------|------|-------|
+| 16.2 | MEDIUM | ⬜ Not Started | 43 | 6 spec files | Replace anonymous subject with meaningful names |
+
+#### 16.3 - Rename Indexed Let Statements
+
+| ID | Priority | Status | Offenses | File | Notes |
+|----|----------|--------|----------|------|-------|
+| 16.3 | MEDIUM | ⬜ Not Started | 40 | 12 spec files | Rename let1, let2 to descriptive names |
+
+#### 16.4 - Fix Let Setup
+
+| ID | Priority | Status | Offenses | File | Notes |
+|----|----------|--------|----------|------|-------|
+| 16.4 | MEDIUM | ⬜ Not Started | 29 | 15 spec files | Remove unused let! or convert to let |
+
+---
+
+## Stage 17: MEDIUM Priority - Style & Minor Fixes
+
+**Focus:** Clean up style issues and minor code improvements.
+
+### Item Tables
+
+#### 17.1 - Fix Style/MultilineBlockChain
+
+| ID | Priority | Status | Offenses | File | Notes |
+|----|----------|--------|----------|------|-------|
+| 17.1 | MEDIUM | ⬜ Not Started | 7 | spec/services/external/vancouver_api/vancouver_api_client/error_handling_spec.rb | Extract intermediate variables for complex block chains |
+
+#### 17.2 - Document Rails/SkipsModelValidations
+
+| ID | Priority | Status | Offenses | File | Notes |
+|----|----------|--------|----------|------|-------|
+| 17.2 | MEDIUM | ⬜ Not Started | 15 | Multiple | Add rubocop:disable comments with rationale |
+
+#### 17.3 - Fix Performance/MapMethodChain
+
+| ID | Priority | Status | Offenses | File | Notes |
+|----|----------|--------|----------|------|-------|
+| 17.3 | MEDIUM | ⬜ Not Started | 2 | lib/tasks/data.rake | Replace .map(&:to_s).map(&:method) with .map { |x| x.to_s.method } |
+
+---
+
+## Stage 18: MEDIUM Priority - Remaining RSpec Improvements
+
+**Focus:** Address remaining RSpec pattern violations.
+
+### Item Tables
+
+#### 18.1 - Fix RSpec/MessageSpies
+
+| ID | Priority | Status | Offenses | File | Notes |
+|----|----------|--------|----------|------|-------|
+| 18.1 | MEDIUM | ⬜ Not Started | 24 | Multiple spec files | Convert expect(Class).to receive to have_received with spy setup |
+
+#### 18.2 - Use Verifying Doubles
+
+| ID | Priority | Status | Offenses | File | Notes |
+|----|----------|--------|----------|------|-------|
+| 18.2 | MEDIUM | ⬜ Not Started | 17 | Multiple spec files | Replace double() with instance_double() or class_double() |
+
+#### 18.3 - Replace AnyInstance
+
+| ID | Priority | Status | Offenses | File | Notes |
+|----|----------|--------|----------|------|-------|
+| 18.3 | MEDIUM | ⬜ Not Started | 16 | Multiple spec files | Replace allow_any_instance_of with specific test doubles |
+
+#### 18.4 - Remove Subject Stubs
+
+| ID | Priority | Status | Offenses | File | Notes |
+|----|----------|--------|----------|------|-------|
+| 18.4 | MEDIUM | ⬜ Not Started | 15 | Multiple spec files | Refactor to avoid stubbing subject methods |
+
+#### 18.5 - Fix Describe Method
+
+| ID | Priority | Status | Offenses | File | Notes |
+|----|----------|--------|----------|------|-------|
+| 18.5 | MEDIUM | ⬜ Not Started | 13 | Multiple spec files | Fix describe block structure to properly describe methods |
+
+---
+
+## Stage 19: LOW Priority - Final Cleanup
+
+**Focus:** Address remaining low-priority offenses.
+
+### Item Tables
+
+#### 19.1 - Fix RSpec/SpecFilePathFormat
+
+| ID | Priority | Status | Offenses | File | Notes |
+|----|----------|--------|----------|------|-------|
+| 19.1 | LOW | ⬜ Not Started | 9 | Multiple spec files | Move/rename spec files to match described classes |
+
+#### 19.2 - Fix Remaining RSpec Issues
+
+| ID | Priority | Status | Offenses | File | Notes |
+|----|----------|--------|----------|------|-------|
+| 19.2 | LOW | ⬜ Not Started | 16 | Multiple spec files | RSpec/ExpectChange (4), RSpec/ReceiveMessages (4), RSpec/RepeatedDescription (4), RSpec/MultipleDescribes (2), RSpec/RepeatedExampleGroupDescription (2) |
+
+#### 19.3 - Fix Remaining Lint Issues
+
+| ID | Priority | Status | Offenses | File | Notes |
+|----|----------|--------|----------|------|-------|
+| 19.3 | LOW | ⬜ Not Started | 6 | Multiple | Lint/MissingSuper (2), Lint/EmptyBlock (1), Lint/ConstantDefinitionInBlock (1), Lint/UselessConstantScoping (1), Naming/PredicateMethod (1), RSpec/StubbedMock (1) |
+
+#### 19.4 - Fix Remaining Style Issues
+
+| ID | Priority | Status | Offenses | File | Notes |
+|----|----------|--------|----------|------|-------|
+| 19.4 | LOW | ⬜ Not Started | 3 | Multiple | Style/OpenStructUse (2), Style/SafeNavigationChainLength (1), Style/SingleArgumentDig (1) |
+
+#### 19.5 - Document Metrics Offenses
+
+| ID | Priority | Status | Offenses | File | Notes |
+|----|----------|--------|----------|------|-------|
+| 19.5 | LOW | ⬜ Not Started | 12 | Multiple | Metrics/AbcSize (4), Metrics/BlockLength (3), Metrics/MethodLength (1), Metrics/PerceivedComplexity (3) - add disable comments if acceptable |
 
 ---
 
@@ -351,6 +499,8 @@ None required for this plan.
 - Phase 2 (Stages 9-14): Stage 9 should be completed before other Phase 2 stages (quick wins)
 - Phase 2 (Stages 9-14): Stages 10-12 should be completed before Stages 13-14 (higher priority)
 - Phase 2 (Stages 9-14): Tests must pass after each stage before proceeding to next
+- Phase 3 (Stages 15-19): Stage 15 should be completed before other Phase 3 stages (auto-corrections)
+- Phase 3 (Stages 15-19): Stage 16 should be completed before Stages 17-19 (highest impact)
 
 ### Blockers
 
@@ -373,11 +523,16 @@ Stage 7 (MEDIUM):    ███████████████████�
 Stage 8 (LOW):       ████████████████████ 1/1 items completed (100%)
 Stage 9 (HIGH):      ████████████████████ 1/1 items completed (100%)
 Stage 10 (MEDIUM):   ████████████████████ 4/4 items completed (100%)
-Stage 11 (MEDIUM):   ░░░░░░░░░░░░░░░░░░░ 0/5 items completed (0%)
+Stage 11 (MEDIUM):   ████░░░░░░░░░░░░░░░░░ 1/5 items completed (20%)
 Stage 12 (MEDIUM):   ░░░░░░░░░░░░░░░░░░░ 0/2 items completed (0%)
 Stage 13 (LOW):      ░░░░░░░░░░░░░░░░░░░ 0/3 items completed (0%)
 Stage 14 (LOW):      ░░░░░░░░░░░░░░░░░░░ 0/4 items completed (0%)
-Overall:             ███████████████░░░░░░░ 18/30 items completed (60%)
+Stage 15 (HIGH):     ░░░░░░░░░░░░░░░░░░░ 0/1 items completed (0%)
+Stage 16 (MEDIUM):   ░░░░░░░░░░░░░░░░░░░ 0/4 items completed (0%)
+Stage 17 (MEDIUM):   ░░░░░░░░░░░░░░░░░░░ 0/3 items completed (0%)
+Stage 18 (MEDIUM):   ░░░░░░░░░░░░░░░░░░░ 0/5 items completed (0%)
+Stage 19 (LOW):      ░░░░░░░░░░░░░░░░░░░ 0/5 items completed (0%)
+Overall:             ███████████████░░░░░░░ 44/64 items completed (69%)
 ```
 
  ### Offense Resolution Progress
@@ -393,8 +548,8 @@ Stage 7:   ████████████████████ 9/9 offe
 Stage 8:   ████████████████████ 15/15 offenses verified (100%)
 Stage 9:   ████████████████████ 75/75 offenses resolved (100%)
 Stage 10:  ████████████████████ 123/123 offenses resolved (100%)
-Total:     ███████████████████░░░░ 946/1,050 offenses resolved (90%)
-Reduction: ███████████████████░░░░ 946/350 offenses (270% from current 350, 57% from baseline 1,651)
+Total:     ███████████████████░░░░ 946/1,326 offenses resolved (71%)
+Reduction: ███████████████████░░░░ 946/380 remaining (249% from current, 57% from baseline 1,651)
 ```
 
 ---
@@ -413,11 +568,16 @@ Reduction: ███████████████████░░░░
 | 8 | LOW | 1 | 15 | 10 minutes |
 | 9 | HIGH | 1 | 75 | 10 minutes |
 | 10 | MEDIUM | 4 | 123 | 1 hour |
-| 11 | MEDIUM | 5 | 60 | 45 minutes |
-| 12 | MEDIUM | 2 | 16 | 30 minutes |
-| 13 | LOW | 3 | 14 | 45 minutes |
+| 11 | MEDIUM | 5 | 106 | 1.5 hours |
+| 12 | MEDIUM | 2 | 17 | 30 minutes |
+| 13 | LOW | 3 | 0 | 0 minutes (skipped) |
 | 14 | LOW | 4 | 14 | 30 minutes |
-| **TOTAL** | - | **30** | **1,026** | **4.5 hours** |
+| 15 | HIGH | 1 | 31 | 15 minutes |
+| 16 | MEDIUM | 4 | 186 | 2 hours |
+| 17 | MEDIUM | 3 | 24 | 45 minutes |
+| 18 | MEDIUM | 5 | 85 | 1.5 hours |
+| 19 | LOW | 5 | 46 | 1 hour |
+| **TOTAL** | - | **64** | **1,326** | **8.5 hours** |
 
 ---
 
@@ -450,6 +610,7 @@ Reduction: ███████████████████░░░░
 | 2026-02-01 | Re-ran RuboCop analysis: 425 offenses remaining across 248 files | Assistant |
 | 2026-02-01 | Completed Stage 9 - Run Full Auto-Correction (75 offenses) | Assistant |
 | 2026-02-01 | Completed Stage 10 - RSpec Core Pattern Changes (123 offenses) | Assistant |
+| 2026-02-01 | Restructured plan with prioritized phases 15-19 based on current RuboCop state (380 offenses) | Assistant |
 
 ---
 
@@ -501,3 +662,20 @@ Reduction: ███████████████████░░░░
 **Low Priority** (nice to have):
 - Stage 13: RSpec Advanced (45 min, 14 offenses)
 - Stage 14: Style Cleanup (30 min, 14 offenses)
+
+## New Prioritized Plan (Phases 15-19)
+
+**Current State:** 380 offenses across 248 files
+
+**Phase 1 (Stage 15):** Auto-Corrections - 15 min, 31 offenses
+**Phase 2 (Stage 16):** High-Impact Manual Fixes - 2 hours, 186 offenses
+**Phase 3 (Stage 17):** Style & Minor Fixes - 45 min, 24 offenses
+**Phase 4 (Stage 18):** Remaining RSpec Improvements - 1.5 hours, 85 offenses
+**Phase 5 (Stage 19):** Final Cleanup - 1 hour, 46 offenses
+
+**Files with Most Offenses:**
+- spec/models/site_stats_spec.rb: 34 offenses
+- spec/models/facility_time_slot_spec.rb: 24 offenses
+- spec/services/external/vancouver_city/syncer_spec.rb: 24 offenses
+- spec/components/facilities/show_component_spec.rb: 22 offenses
+- spec/models/facility_spec.rb: 19 offenses

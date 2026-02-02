@@ -145,7 +145,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "integration scenarios",
 
   describe "concurrent operation simulation" do
     context "when the same external_id is processed simultaneously" do
-      let(:concurrent_record1) do
+      let(:first_concurrent_record) do
         {
           "mapid" => "CONCURRENT123",
           "name" => "First Version Fountain",
@@ -155,7 +155,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "integration scenarios",
         }
       end
 
-      let(:concurrent_record2) do
+      let(:second_concurrent_record) do
         {
           "mapid" => "CONCURRENT123",
           "name" => "Second Version Fountain",
@@ -167,14 +167,14 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "integration scenarios",
 
       it "handles duplicate external_id creation gracefully" do
         # First sync
-        syncer1 = described_class.new(record: concurrent_record1, api_key: api_key)
+        syncer1 = described_class.new(record: first_concurrent_record, api_key: api_key)
         result1 = syncer1.call
 
         expect(result1).to be_success
         expect(result1.data.operation).to eq(:create)
 
         # Second sync with same external_id but different data
-        syncer2 = described_class.new(record: concurrent_record2, api_key: api_key)
+        syncer2 = described_class.new(record: second_concurrent_record, api_key: api_key)
         result2 = syncer2.call
 
         expect(result2).to be_success

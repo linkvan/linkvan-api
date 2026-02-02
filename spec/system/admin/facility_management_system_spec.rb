@@ -58,8 +58,8 @@ RSpec.describe "Admin Facility Management", type: :system do
   end
 
   describe "search and filtering" do
-    let!(:facility1) { create(:facility, name: "Downtown Center", address: "123 Main St") }
-    let!(:facility2) { create(:facility, name: "Uptown Clinic", address: "456 Oak Ave") }
+    let!(:downtown_facility) { create(:facility, name: "Downtown Center", address: "123 Main St") }
+    let!(:uptown_facility) { create(:facility, name: "Uptown Clinic", address: "456 Oak Ave") }
     let!(:live_facility) { create(:facility, :with_verified, name: "Verified Facility") }
     let!(:pending_facility) { create(:facility, verified: false, name: "Pending Facility") }
 

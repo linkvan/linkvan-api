@@ -455,25 +455,25 @@ RSpec.describe Analytics::Impression, type: :model do
 
   describe "Querying and Relationships" do
     let(:visit) { create(:analytics_visit) }
-    let(:event1) { create(:analytics_event, visit: visit) }
-    let(:event2) { create(:analytics_event, visit: visit) }
-    let(:facility1) { create(:facility) }
-    let(:facility2) { create(:facility) }
+    let(:first_event) { create(:analytics_event, visit: visit) }
+    let(:second_event) { create(:analytics_event, visit: visit) }
+    let(:first_facility) { create(:facility) }
+    let(:second_facility) { create(:facility) }
     let(:service) { create(:service) }
 
     before do
-      create(:analytics_impression, event: event1, impressionable: facility1)
-      create(:analytics_impression, event: event1, impressionable: service)
-      create(:analytics_impression, event: event2, impressionable: facility2)
+      create(:analytics_impression, event: first_event, impressionable: first_facility)
+      create(:analytics_impression, event: first_event, impressionable: service)
+      create(:analytics_impression, event: second_event, impressionable: second_facility)
     end
 
     it "can find impressions by event" do
-      impressions = described_class.where(event: event1)
+      impressions = described_class.where(event: first_event)
       expect(impressions.count).to eq(2)
     end
 
     it "can find impressions by visit through event" do
-      event_ids = [event1.id, event2.id]
+      event_ids = [first_event.id, second_event.id]
       impressions = described_class.where(event_id: event_ids)
       expect(impressions.count).to eq(3)
     end
@@ -489,11 +489,11 @@ RSpec.describe Analytics::Impression, type: :model do
     it "can query complex conditions" do
       # Find all facility impressions for the first event
       impressions = described_class.where(
-        event: event1,
+        event: first_event,
         impressionable_type: "Facility"
       )
       expect(impressions.count).to eq(1)
-      expect(impressions.first.impressionable).to eq(facility1)
+      expect(impressions.first.impressionable).to eq(first_facility)
     end
   end
 

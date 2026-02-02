@@ -60,11 +60,11 @@ RSpec.describe User, type: :model do
   describe "#manages" do
     context "when super_admin" do
       let(:super_admin) { create(:user, :admin, :verified) }
-      let(:facility1) { create(:facility) }
-      let(:facility2) { create(:facility) }
+      let(:first_facility) { create(:facility) }
+      let(:second_facility) { create(:facility) }
 
-      it { expect(super_admin.manages).to include(facility1) }
-      it { expect(super_admin.manages).to include(facility2) }
+      it { expect(super_admin.manages).to include(first_facility) }
+      it { expect(super_admin.manages).to include(second_facility) }
       it { expect(super_admin.manages.count).to eq(Facility.count) }
     end
 
@@ -95,12 +95,12 @@ RSpec.describe User, type: :model do
   describe "#manageable_users" do
     context "when super_admin" do
       let(:super_admin) { create(:user, :admin, :verified) }
-      let(:user1) { create(:user) }
-      let(:user2) { create(:user) }
+      let(:first_user) { create(:user) }
+      let(:second_user) { create(:user) }
 
       it "returns all users" do
-        expect(super_admin.manageable_users).to include(user1)
-        expect(super_admin.manageable_users).to include(user2)
+        expect(super_admin.manageable_users).to include(first_user)
+        expect(super_admin.manageable_users).to include(second_user)
         expect(super_admin.manageable_users).to include(super_admin)
       end
     end

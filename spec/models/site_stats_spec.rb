@@ -30,22 +30,22 @@ RSpec.describe SiteStats, type: :model do
 
   describe "class methods" do
     describe ".facilities" do
-      let!(:facility1) { create(:facility).tap { |f| f.update_columns(updated_at: 1.day.ago) } }
-      let!(:facility2) { create(:facility).tap { |f| f.update_columns(updated_at: 2.days.ago) } }
-      let!(:facility3) { create(:facility).tap { |f| f.update_columns(updated_at: 3.days.ago) } }
+      let!(:first_facility) { create(:facility).tap { |f| f.update_columns(updated_at: 1.day.ago) } }
+      let!(:second_facility) { create(:facility).tap { |f| f.update_columns(updated_at: 2.days.ago) } }
+      let!(:third_facility) { create(:facility).tap { |f| f.update_columns(updated_at: 3.days.ago) } }
 
       it "returns facilities ordered by updated_at descending" do
-        expect(described_class.facilities).to eq([facility1, facility2, facility3])
+        expect(described_class.facilities).to eq([first_facility, second_facility, third_facility])
       end
     end
 
     describe ".notices" do
-      let!(:notice1) { create(:notice).tap { |n| n.update_columns(updated_at: 1.day.ago) } }
-      let!(:notice2) { create(:notice).tap { |n| n.update_columns(updated_at: 2.days.ago) } }
-      let!(:notice3) { create(:notice).tap { |n| n.update_columns(updated_at: 3.days.ago) } }
+      let!(:first_notice) { create(:notice).tap { |n| n.update_columns(updated_at: 1.day.ago) } }
+      let!(:second_notice) { create(:notice).tap { |n| n.update_columns(updated_at: 2.days.ago) } }
+      let!(:third_notice) { create(:notice).tap { |n| n.update_columns(updated_at: 3.days.ago) } }
 
       it "returns notices ordered by updated_at descending" do
-        expect(described_class.notices).to eq([notice1, notice2, notice3])
+        expect(described_class.notices).to eq([first_notice, second_notice, third_notice])
       end
     end
   end
@@ -101,14 +101,14 @@ RSpec.describe SiteStats, type: :model do
     end
 
     context "with multiple facilities and notices" do
-      let!(:facility1) { create(:facility).tap { |f| f.update_columns(updated_at: 1.day.ago) } }
-      let!(:facility2) { create(:facility).tap { |f| f.update_columns(updated_at: 2.days.ago) } }
-      let!(:notice1) { create(:notice).tap { |n| n.update_columns(updated_at: 3.days.ago) } }
-      let!(:notice2) { create(:notice).tap { |n| n.update_columns(updated_at: 4.days.ago) } }
+      let!(:first_facility) { create(:facility).tap { |f| f.update_columns(updated_at: 1.day.ago) } }
+      let!(:second_facility) { create(:facility).tap { |f| f.update_columns(updated_at: 2.days.ago) } }
+      let!(:first_notice) { create(:notice).tap { |n| n.update_columns(updated_at: 3.days.ago) } }
+      let!(:second_notice) { create(:notice).tap { |n| n.update_columns(updated_at: 4.days.ago) } }
 
       it "returns the most recent updated_at from all records" do
         computed_time = described_class.send(:compute_last_updated)
-        expect(computed_time).to be_within(1.second).of(facility1.updated_at)
+        expect(computed_time).to be_within(1.second).of(first_facility.updated_at)
       end
     end
 
