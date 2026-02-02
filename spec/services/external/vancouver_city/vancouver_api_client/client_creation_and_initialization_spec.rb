@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require_relative "shared_helpers"
+require_relative "../../vancouver_api/vancouver_api_client/shared_helpers"
 
 RSpec.describe External::VancouverCity::VancouverApiClient, "client creation and initialization", type: :service do
   include_context "vancouver api client shared setup"

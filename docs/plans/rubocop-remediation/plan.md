@@ -525,7 +525,7 @@ Systematically address 1,651 RuboCop offenses to improve code quality, maintaina
 #### 14.3 - Simplify Multiline Block Chains
 - **Priority:** LOW
 - **Type:** Code Refactoring
-- **Location:** `spec/services/external/vancouver_api/vancouver_api_client/error_handling_spec.rb`
+- **Location:** `spec/services/external/vancouver_city/vancouver_api_client/error_handling_spec.rb`
 - **Offense Count:** 7
 - **Estimated Time:** 15 minutes
 - **Description:** Extract intermediate variables for complex block chains to improve readability.
@@ -681,7 +681,7 @@ Systematically address 1,651 RuboCop offenses to improve code quality, maintaina
 #### 17.1 - Fix Style/MultilineBlockChain
 - **Priority:** MEDIUM
 - **Type:** Code Refactoring
-- **Location:** `spec/services/external/vancouver_api/vancouver_api_client/error_handling_spec.rb`
+- **Location:** `spec/services/external/vancouver_city/vancouver_api_client/error_handling_spec.rb`
 - **Offense Count:** 7
 - **Estimated Time:** 15 minutes
 - **Description:** Extract intermediate variables for complex block chains to improve readability.

@@ -8,7 +8,7 @@
 
 ## Created: 2026-02-01
 
-## Last Updated: 2026-02-01 (Completed Stage 11.3)
+## Last Updated: 2026-02-01 (Completed Stage 11.4)
 
  ---
 
@@ -18,9 +18,9 @@
 |----------|-------|-------------|-------------|-----------|---------|
 | CRITICAL | 2     | 0           | 0           | 2         | 0       |
 | HIGH     | 5     | 1           | 0           | 4         | 0       |
-| MEDIUM   | 37    | 12          | 0           | 25        | 0       |
+| MEDIUM   | 37    | 11          | 0           | 26        | 0       |
 | LOW      | 20    | 5           | 0           | 15        | 0       |
-| **TOTAL**| **64**| **18**      | **0**       | **46**    | **0**   |
+| **TOTAL**| **64**| **17**      | **0**       | **47**    | **0**   |
 
 ---
 
@@ -241,7 +241,7 @@
 
 | ID | Priority | Status | Offenses | File | Notes |
 |----|----------|--------|----------|------|-------|
-| 11.4 | MEDIUM | ⬜ Not Started | 9 | Multiple spec files | Move/rename spec files to match described classes |
+| 11.4 | MEDIUM | ✅ Completed | 9 | Multiple spec files | Move/rename spec files to match described classes |
 
 #### 11.5 - Fix Describe Method
 
@@ -319,7 +319,7 @@
 
 | ID | Priority | Status | Offenses | File | Notes |
 |----|----------|--------|----------|------|-------|
-| 14.3 | LOW | ⬜ Not Started | 7 | spec/services/external/vancouver_api/vancouver_api_client/error_handling_spec.rb | Extract intermediate variables for complex block chains |
+| 14.3 | LOW | ⬜ Not Started | 7 | spec/services/external/vancouver_city/vancouver_api_client/error_handling_spec.rb | Extract intermediate variables for complex block chains |
 
 #### 14.4 - Fix Remaining Lint Issues
 
@@ -385,7 +385,7 @@
 
 | ID | Priority | Status | Offenses | File | Notes |
 |----|----------|--------|----------|------|-------|
-| 17.1 | MEDIUM | ⬜ Not Started | 7 | spec/services/external/vancouver_api/vancouver_api_client/error_handling_spec.rb | Extract intermediate variables for complex block chains |
+| 17.1 | MEDIUM | ⬜ Not Started | 7 | spec/services/external/vancouver_city/vancouver_api_client/error_handling_spec.rb | Extract intermediate variables for complex block chains |
 
 #### 17.2 - Document Rails/SkipsModelValidations
 
@@ -523,7 +523,7 @@ Stage 7 (MEDIUM):    ███████████████████�
 Stage 8 (LOW):       ████████████████████ 1/1 items completed (100%)
 Stage 9 (HIGH):      ████████████████████ 1/1 items completed (100%)
 Stage 10 (MEDIUM):   ████████████████████ 4/4 items completed (100%)
-Stage 11 (MEDIUM):   ████████████░░░░░░░░░░ 3/5 items completed (60%)
+Stage 11 (MEDIUM):   ████████████████░░░░░░ 4/5 items completed (80%)
 Stage 12 (MEDIUM):   ░░░░░░░░░░░░░░░░░░░ 0/2 items completed (0%)
 Stage 13 (LOW):      ░░░░░░░░░░░░░░░░░░░ 0/3 items completed (0%)
 Stage 14 (LOW):      ░░░░░░░░░░░░░░░░░░░ 0/4 items completed (0%)
@@ -532,7 +532,7 @@ Stage 16 (MEDIUM):   ░░░░░░░░░░░░░░░░░░░ 0
 Stage 17 (MEDIUM):   ░░░░░░░░░░░░░░░░░░░ 0/3 items completed (0%)
 Stage 18 (MEDIUM):   ░░░░░░░░░░░░░░░░░░░ 0/5 items completed (0%)
 Stage 19 (LOW):      ░░░░░░░░░░░░░░░░░░░ 0/5 items completed (0%)
-Overall:             █████████████████░░░░░░ 46/64 items completed (71%)
+Overall:             ███████████████░░░░░ 47/64 items completed (73%)
 ```
 
  ### Offense Resolution Progress
@@ -548,8 +548,9 @@ Stage 7:   ████████████████████ 9/9 offe
 Stage 8:   ████████████████████ 15/15 offenses verified (100%)
 Stage 9:   ████████████████████ 75/75 offenses resolved (100%)
 Stage 10:  ████████████████████ 123/123 offenses resolved (100%)
-Total:     ████████████████████░░░ 990/1,326 offenses resolved (74%)
-Reduction: ███████████████████░░░░ 946/380 remaining (249% from current, 57% from baseline 1,651)
+Stage 11:  ██████████████████░░░ 92/106 offenses resolved (87%)
+Total:     ███████████████░░░░░ 999/1,326 offenses resolved (75%)
+Reduction: ███████████████░░░░░ 999/327 remaining (75% from current, 60% from baseline 1,651)
 ```
 
 ---
@@ -613,6 +614,7 @@ Reduction: ███████████████████░░░░
 | 2026-02-01 | Restructured plan with prioritized phases 15-19 based on current RuboCop state (380 offenses) | Assistant |
 | 2026-02-01 | Completed Stage 11.2 - Fix Let Setup (29 offenses) | Assistant |
 | 2026-02-01 | Completed Stage 11.3 - Remove Subject Stubs (15 offenses) | Assistant |
+| 2026-02-01 | Completed Stage 11.4 - Fix Spec File Path (9 offenses) | Assistant |
 
 ---
 
