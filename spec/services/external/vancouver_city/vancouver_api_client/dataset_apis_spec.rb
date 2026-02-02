@@ -3,7 +3,7 @@
 require "rails_helper"
 require_relative "../../vancouver_api/vancouver_api_client/shared_helpers"
 
-RSpec.describe External::VancouverCity::VancouverApiClient, "dataset APIs", type: :service do
+RSpec.describe External::VancouverCity::VancouverApiClient, "#call", type: :service do
   include_context "vancouver api client shared setup"
 
   describe "#get_dataset" do

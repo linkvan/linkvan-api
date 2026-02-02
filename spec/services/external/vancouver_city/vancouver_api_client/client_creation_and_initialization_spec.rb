@@ -3,7 +3,7 @@
 require "rails_helper"
 require_relative "../../vancouver_api/vancouver_api_client/shared_helpers"
 
-RSpec.describe External::VancouverCity::VancouverApiClient, "client creation and initialization", type: :service do
+RSpec.describe External::VancouverCity::VancouverApiClient, "#call", type: :service do
   include_context "vancouver api client shared setup"
 
   describe ".default_client" do

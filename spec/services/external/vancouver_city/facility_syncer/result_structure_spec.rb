@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe External::VancouverCity::FacilitySyncer, "result structure", type: :service do
+RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service do
   let(:api_key) { "drinking-fountains" }
   let(:service) { create(:water_fountain_service) }
 
