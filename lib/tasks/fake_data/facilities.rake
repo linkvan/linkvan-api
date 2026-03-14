@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+LIMITS = {
+  lat: [49.1019545..49.3210142],
+  long: [-123.2358425..-122.4716322]
+}.freeze
+
 namespace :fake_data do
   desc "Create Facilities fake data to help development"
   task facilities: :environment do
@@ -19,11 +24,6 @@ namespace :fake_data do
 
     Faker::Config.locale = "en-CA"
 
-    LIMITS = {
-      lat: [49.1019545..49.3210142],
-      long: [-123.2358425..-122.4716322]
-
-    }.freeze
     vancouver = Zone.where(name: "Vancouver").to_a
     new_west = Zone.where(name: "New Westminster").to_a
     zones = (vancouver * 2) + new_west + [nil]

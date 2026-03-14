@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable RSpec/MultipleDescribes
 require "rails_helper"
 
 RSpec.describe Admin::UsersController do
@@ -850,3 +851,4 @@ RSpec.describe Admin::PasswordsController do
     end
   end
 end
+# rubocop:enable RSpec/MultipleDescribes

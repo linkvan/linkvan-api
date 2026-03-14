@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rubocop:disable RSpec/SpecFilePathFormat
+
 require "rails_helper"
 require_relative "../../vancouver_api/vancouver_api_client/shared_helpers"
 
@@ -152,3 +154,4 @@ RSpec.describe External::VancouverCity::VancouverApiClient, "#call", type: :serv
     end
   end
 end
+# rubocop:enable RSpec/SpecFilePathFormat

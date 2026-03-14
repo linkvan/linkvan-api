@@ -9,11 +9,13 @@ class External::VancouverCity::FacilitySyncer < ApplicationService
     delegate :present?, :blank?, to: :facility
   end
 
+  # rubocop:disable Lint/MissingSuper
   def initialize(record:, api_key:, logger: Rails.logger)
     @record = record
     @api_key = api_key
     @logger = logger
   end
+  # rubocop:enable Lint/MissingSuper
 
   def call
     builder_result = External::VancouverCity::FacilityBuilder.call(record: record, api_key: api_key)

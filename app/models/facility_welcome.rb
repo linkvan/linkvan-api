@@ -21,7 +21,7 @@ class FacilityWelcome < ApplicationRecord
   end
 
   def self.all_customers
-    customers.values.map { |c| OpenStruct.new(name: c.to_s.titleize, value: c) }
+    customers.values.map { |c| Struct.new(:name, :value).new(c.to_s.titleize, c) }
   end
 
   def self.names

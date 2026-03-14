@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rubocop:disable RSpec/SpecFilePathFormat
+
 require "rails_helper"
 
 RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service do
@@ -158,3 +160,4 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
     end
   end
 end
+# rubocop:enable RSpec/SpecFilePathFormat

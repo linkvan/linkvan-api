@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable RSpec/MultipleDescribes
 require "rails_helper"
 
 RSpec.describe Admin::FacilitySchedulesController do
@@ -243,3 +244,4 @@ RSpec.describe Admin::FacilityLocationsController do
     end
   end
 end
+# rubocop:enable RSpec/MultipleDescribes

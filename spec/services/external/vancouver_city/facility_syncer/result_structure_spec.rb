@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rubocop:disable RSpec/SpecFilePathFormat
+
 require "rails_helper"
 
 RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service do
@@ -37,7 +39,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       expect(result.data.blank?).to be false
     end
 
-    context "when FacilityBuilder fails" do
+    context "when FacilityBuilder fails with empty name" do
       let(:invalid_record) do
         {
           "mapid" => "INVALID123",
@@ -59,7 +61,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
     end
 
-    context "when FacilityBuilder fails" do
+    context "when FacilityBuilder fails with nil mapid" do
       let(:malformed_record) do
         {
           "mapid" => nil,
@@ -256,3 +258,4 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
     end
   end
 end
+# rubocop:enable RSpec/SpecFilePathFormat

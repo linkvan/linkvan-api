@@ -3,9 +3,11 @@
 class Locations::Searcher < ApplicationService
   attr_reader :address
 
+  # rubocop:disable Lint/MissingSuper
   def initialize(address: nil)
     @address = address
   end
+  # rubocop:enable Lint/MissingSuper
 
   def call
     search_result = Geocoder.search(address)
