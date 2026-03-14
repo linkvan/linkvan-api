@@ -8,7 +8,7 @@
 
 ## Created: 2026-02-01
 
-## Last Updated: 2026-03-14 (Completed Stage 16)
+## Last Updated: 2026-03-14 (Completed Stage 17)
 
  ---
 
@@ -385,19 +385,19 @@
 
 | ID | Priority | Status | Offenses | File | Notes |
 |----|----------|--------|----------|------|-------|
-| 17.1 | MEDIUM | ⬜ Not Started | 7 | spec/services/external/vancouver_city/vancouver_api_client/error_handling_spec.rb | Extract intermediate variables for complex block chains |
+| 17.1 | MEDIUM | ✅ Completed | 7 | spec/services/external/vancouver_city/vancouver_api_client/error_handling_spec.rb | Extract intermediate variables for complex block chains |
 
 #### 17.2 - Document Rails/SkipsModelValidations
 
 | ID | Priority | Status | Offenses | File | Notes |
 |----|----------|--------|----------|------|-------|
-| 17.2 | MEDIUM | ⬜ Not Started | 15 | Multiple | Add rubocop:disable comments with rationale |
+| 17.2 | MEDIUM | ✅ Completed | 15 | Multiple | Add rubocop:disable comments with rationale |
 
 #### 17.3 - Fix Performance/MapMethodChain
 
 | ID | Priority | Status | Offenses | File | Notes |
 |----|----------|--------|----------|------|-------|
-| 17.3 | MEDIUM | ⬜ Not Started | 2 | lib/tasks/data.rake | Replace .map(&:to_s).map(&:method) with .map { |x| x.to_s.method } |
+| 17.3 | MEDIUM | ✅ Completed | 2 | lib/tasks/data.rake | Replace .map(&:to_s).map(&:method) with .map { |x| x.to_s.method } |
 
 ---
 
@@ -529,10 +529,10 @@ Stage 13 (LOW):      ████████░░░░░░░░░░░�
 Stage 14 (LOW):      ░░░░░░░░░░░░░░░░░░░░ 0/4 items completed (0%)
 Stage 15 (HIGH):     ████████████████████ 1/1 items completed (100%)
 Stage 16 (MEDIUM):   ████████████████████ 4/4 items completed (100%)
-Stage 17 (MEDIUM):   ░░░░░░░░░░░░░░░░░░░░ 0/3 items completed (0%)
+Stage 17 (MEDIUM):   ████████████████████ 3/3 items completed (100%)
 Stage 18 (MEDIUM):   ░░░░░░░░░░░░░░░░░░░░ 0/5 items completed (0%)
 Stage 19 (LOW):      ░░░░░░░░░░░░░░░░░░░░ 0/5 items completed (0%)
-Overall:             ████████████████░░░░ 56/64 items completed (88%)
+Overall:             ████████████████░░░░ 59/64 items completed (92%)
 ```
 
 ### Offense Resolution Progress
@@ -622,6 +622,7 @@ Reduction: ████████████████░░░░ 1040/302
 | 2026-03-14 | Stage 15 attempted - unsafe auto-correction broke tests, fixed namespace issues in faraday_adapter.rb and syncer.rb, tests now passing (1912 examples, 0 failures) | Assistant |
 | 2026-03-14 | Completed Stage 15 - fixed RSpec/IteratedExpectation and Lint/Void offenses (4 total), tests passing | Assistant |
 | 2026-03-14 | Completed Stage 16 - fixed RSpec/ContextWording (74) and RSpec/NamedSubject (43) offenses | Assistant |
+| 2026-03-14 | Completed Stage 17 - fixed Style/MultilineBlockChain (7), Rails/SkipsModelValidations documented | Assistant |
 
 ---
 

@@ -25,9 +25,7 @@ RSpec.describe External::VancouverCity::VancouverApiClient, "#call", type: :serv
       end
 
       it "raises VancouverApiError with appropriate message" do
-        expect do
-          test_client.get_dataset_records("invalid-dataset")
-        end.to raise_error(External::VancouverCity::VancouverApiError) do |error|
+        expect { test_client.get_dataset_records("invalid-dataset") }.to raise_error(External::VancouverCity::VancouverApiError) do |error|
           expect(error.message).to include("API request failed with status 404")
           expect(error.status_code).to eq(404)
           expect(error.response_body).to include("Page not found")
@@ -49,9 +47,7 @@ RSpec.describe External::VancouverCity::VancouverApiClient, "#call", type: :serv
       end
 
       it "raises VancouverApiError with JSON error message" do
-        expect do
-          test_client.get_dataset_records(dataset_id)
-        end.to raise_error(External::VancouverCity::VancouverApiError) do |error|
+        expect { test_client.get_dataset_records(dataset_id) }.to raise_error(External::VancouverCity::VancouverApiError) do |error|
           expect(error.message).to include("Internal Server Error")
           expect(error.status_code).to eq(500)
         end
@@ -73,9 +69,7 @@ RSpec.describe External::VancouverCity::VancouverApiClient, "#call", type: :serv
       end
 
       it "truncates very long error messages" do
-        expect do
-          test_client.get_dataset_records(dataset_id)
-        end.to raise_error(External::VancouverCity::VancouverApiError) do |error|
+        expect { test_client.get_dataset_records(dataset_id) }.to raise_error(External::VancouverCity::VancouverApiError) do |error|
           expect(error.message).to include("...")
           expect(error.message.length).to be < 280 # Adjusted for actual truncation behavior
         end
@@ -90,9 +84,7 @@ RSpec.describe External::VancouverCity::VancouverApiClient, "#call", type: :serv
       end
 
       it "raises VancouverApiError for timeout" do
-        expect do
-          test_client.get_dataset_records(dataset_id)
-        end.to raise_error(External::VancouverCity::VancouverApiError) do |error|
+        expect { test_client.get_dataset_records(dataset_id) }.to raise_error(External::VancouverCity::VancouverApiError) do |error|
           expect(error.message).to include("Request timeout")
           expect(error.status_code).to be_nil
         end
@@ -105,9 +97,7 @@ RSpec.describe External::VancouverCity::VancouverApiClient, "#call", type: :serv
       end
 
       it "raises VancouverApiError for connection failure" do
-        expect do
-          test_client.get_dataset_records(dataset_id)
-        end.to raise_error(External::VancouverCity::VancouverApiError) do |error|
+        expect { test_client.get_dataset_records(dataset_id) }.to raise_error(External::VancouverCity::VancouverApiError) do |error|
           expect(error.message).to include("Connection failed")
         end
       end
@@ -131,9 +121,7 @@ RSpec.describe External::VancouverCity::VancouverApiClient, "#call", type: :serv
       end
 
       it "raises VancouverApiError for JSON parsing error" do
-        expect do
-          test_client.get_dataset_records(dataset_id)
-        end.to raise_error(External::VancouverCity::VancouverApiError) do |error|
+        expect { test_client.get_dataset_records(dataset_id) }.to raise_error(External::VancouverCity::VancouverApiError) do |error|
           expect(error.message).to include("Failed to parse JSON response")
         end
       end
@@ -147,9 +135,7 @@ RSpec.describe External::VancouverCity::VancouverApiClient, "#call", type: :serv
       end
 
       it "raises VancouverApiError for unexpected errors" do
-        expect do
-          test_client.get_dataset_records(dataset_id)
-        end.to raise_error(External::VancouverCity::VancouverApiError) do |error|
+        expect { test_client.get_dataset_records(dataset_id) }.to raise_error(External::VancouverCity::VancouverApiError) do |error|
           expect(error.message).to include("Unexpected error")
           expect(error.status_code).to be_nil
         end
