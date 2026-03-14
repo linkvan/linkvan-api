@@ -158,7 +158,7 @@ RSpec.describe Analytics::Event, type: :model do
       end
     end
 
-    context "belongs_to visit" do
+    context "when it belongs to visit" do
       it "can access associated visit" do
         visit = create(:analytics_visit)
         event = create(:analytics_event, visit: visit)
@@ -173,40 +173,42 @@ RSpec.describe Analytics::Event, type: :model do
       end
     end
 
-    context "has_many impressions" do
+    context "when has_many impressions" do
       let(:event) { create(:analytics_event) }
-      let!(:impression1) { create(:analytics_impression, event: event) }
-      let!(:impression2) { create(:analytics_impression, event: event) }
+      let!(:first_impression) { create(:analytics_impression, event: event) }
+      let!(:second_impression) { create(:analytics_impression, event: event) }
 
       it "can access associated impressions" do
-        expect(event.impressions).to contain_exactly(impression1, impression2)
+        expect(event.impressions).to contain_exactly(first_impression, second_impression)
       end
 
       it "orders impressions correctly" do
         # Test that impressions are returned in the expected order
-        expect(event.impressions.first).to eq(impression1)
-        expect(event.impressions.last).to eq(impression2)
+        expect(event.impressions.first).to eq(first_impression)
+        expect(event.impressions.last).to eq(second_impression)
       end
     end
 
-    context "has_many facilities through impressions" do
+    context "when has_many facilities through impressions" do
       let(:event) { create(:analytics_event) }
-      let!(:facility1) { create(:facility) }
-      let!(:facility2) { create(:facility) }
-      let!(:impression1) { create(:analytics_impression, event: event, impressionable: facility1) }
-      let!(:impression2) { create(:analytics_impression, event: event, impressionable: facility2) }
+      let!(:first_facility) { create(:facility) }
+      let!(:second_facility) { create(:facility) }
 
       it "can access facilities through impressions" do
-        expect(event.facilities).to contain_exactly(facility1, facility2)
+        create(:analytics_impression, event: event, impressionable: first_facility)
+        create(:analytics_impression, event: event, impressionable: second_facility)
+        expect(event.facilities).to contain_exactly(first_facility, second_facility)
       end
 
       it "correctly filters by source_type Facility" do
+        create(:analytics_impression, event: event, impressionable: first_facility)
+        create(:analytics_impression, event: event, impressionable: second_facility)
         # This tests the source_type specification in the through association
         service = create(:service)
         create(:analytics_impression, event: event, impressionable: service)
 
         # Should only return facilities, not services
-        expect(event.facilities).to contain_exactly(facility1, facility2)
+        expect(event.facilities).to contain_exactly(first_facility, second_facility)
         expect(event.facilities).not_to include(service)
 
         # Verify that the association works correctly by checking the source_type
@@ -528,7 +530,7 @@ RSpec.describe Analytics::Event, type: :model do
                      request_user_agent: "Test Browser",
                      request_params: params)
 
-      persisted = Analytics::Event.find(event.id)
+      persisted = described_class.find(event.id)
 
       expect(persisted.visit).to eq(visit)
       expect(persisted.controller_name).to eq("facilities")
@@ -545,7 +547,7 @@ RSpec.describe Analytics::Event, type: :model do
 
     it "handles decimal precision for coordinates" do
       event = create(:analytics_event, lat: 49.2827345, long: -123.1207456)
-      persisted = Analytics::Event.find(event.id)
+      persisted = described_class.find(event.id)
 
       expect(persisted.lat).to eq(49.2827345)
       expect(persisted.long).to eq(-123.1207456)
@@ -553,36 +555,36 @@ RSpec.describe Analytics::Event, type: :model do
   end
 
   describe "Querying and scopes" do
-    let(:visit1) { create(:analytics_visit) }
-    let(:visit2) { create(:analytics_visit) }
+    let(:first_visit) { create(:analytics_visit) }
+    let(:second_visit) { create(:analytics_visit) }
 
     before do
-      create(:analytics_event, visit: visit1, controller_name: "facilities", action_name: "index")
-      create(:analytics_event, visit: visit1, controller_name: "facilities", action_name: "show")
-      create(:analytics_event, visit: visit2, controller_name: "services", action_name: "index")
+      create(:analytics_event, visit: first_visit, controller_name: "facilities", action_name: "index")
+      create(:analytics_event, visit: first_visit, controller_name: "facilities", action_name: "show")
+      create(:analytics_event, visit: second_visit, controller_name: "services", action_name: "index")
     end
 
     it "can find events by controller_name" do
-      events = Analytics::Event.where(controller_name: "facilities")
+      events = described_class.where(controller_name: "facilities")
       expect(events.count).to eq(2)
       expect(events.pluck(:action_name)).to contain_exactly("index", "show")
     end
 
     it "can find events by action_name" do
-      events = Analytics::Event.where(action_name: "index")
+      events = described_class.where(action_name: "index")
       expect(events.count).to eq(2)
       expect(events.pluck(:controller_name)).to contain_exactly("facilities", "services")
     end
 
     it "can find events by visit" do
-      events = Analytics::Event.where(visit: visit1)
+      events = described_class.where(visit: first_visit)
       expect(events.count).to eq(2)
     end
 
     it "can chain queries" do
-      events = Analytics::Event.where(controller_name: "facilities", action_name: "index")
+      events = described_class.where(controller_name: "facilities", action_name: "index")
       expect(events.count).to eq(1)
-      expect(events.first.visit).to eq(visit1)
+      expect(events.first.visit).to eq(first_visit)
     end
   end
 end

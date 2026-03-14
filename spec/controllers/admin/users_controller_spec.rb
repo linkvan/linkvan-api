@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable RSpec/MultipleDescribes
 require "rails_helper"
 
 RSpec.describe Admin::UsersController do
@@ -11,8 +12,7 @@ RSpec.describe Admin::UsersController do
 
   # Stub Devise authentication methods (common pattern from facilities_controller_spec)
   before do
-    allow(controller).to receive(:authenticate_user!).and_return(true)
-    allow(controller).to receive(:user_signed_in?).and_return(true)
+    allow(controller).to receive_messages(authenticate_user!: true, user_signed_in?: true)
   end
 
   describe "GET #index" do
@@ -418,7 +418,7 @@ RSpec.describe Admin::UsersController do
         allow(controller).to receive(:current_user).and_return(super_admin)
       end
 
-      context "for show action" do
+      context "when the show action" do
         let(:user) { create(:user) }
 
         before { get :show, params: { id: user.id } }
@@ -426,7 +426,7 @@ RSpec.describe Admin::UsersController do
         it { expect(assigns(:user)).to eq(user) }
       end
 
-      context "for edit action" do
+      context "when the edit action" do
         let(:user) { create(:user) }
 
         before { get :edit, params: { id: user.id } }
@@ -434,7 +434,7 @@ RSpec.describe Admin::UsersController do
         it { expect(assigns(:user)).to eq(user) }
       end
 
-      context "for update action" do
+      context "when the update action" do
         let(:user) { create(:user) }
 
         before { patch :update, params: { id: user.id, user: { name: "New" } } }
@@ -442,7 +442,7 @@ RSpec.describe Admin::UsersController do
         it { expect(assigns(:user)).to eq(user) }
       end
 
-      context "for destroy action" do
+      context "when the destroy action" do
         let(:user) { create(:user) }
 
         before { delete :destroy, params: { id: user.id } }
@@ -575,8 +575,7 @@ RSpec.describe Admin::UsersController do
     let(:zone_b) { create(:zone, name: "Zone B") }
 
     before do
-      allow(controller).to receive(:user_signed_in?).and_return(true)
-      allow(controller).to receive(:authenticate_user!).and_return(true)
+      allow(controller).to receive_messages(user_signed_in?: true, authenticate_user!: true)
     end
 
     describe "super_admin permissions" do
@@ -692,8 +691,7 @@ RSpec.describe Admin::PasswordsController do
 
   # Stub Devise authentication methods
   before do
-    allow(controller).to receive(:authenticate_user!).and_return(true)
-    allow(controller).to receive(:user_signed_in?).and_return(true)
+    allow(controller).to receive_messages(authenticate_user!: true, user_signed_in?: true)
   end
 
   describe "GET #new" do
@@ -815,13 +813,13 @@ RSpec.describe Admin::PasswordsController do
         allow(controller).to receive(:current_user).and_return(super_admin)
       end
 
-      context "for new action" do
+      context "when the new action" do
         before { get :new, params: { user_id: user.id } }
 
         it { expect(assigns(:user)).to eq(user) }
       end
 
-      context "for create action" do
+      context "when the create action" do
         before { post :create, params: { user_id: user.id, user: { password: "password123", password_confirmation: "password123" } } }
 
         it { expect(assigns(:user)).to eq(user) }
@@ -853,3 +851,4 @@ RSpec.describe Admin::PasswordsController do
     end
   end
 end
+# rubocop:enable RSpec/MultipleDescribes

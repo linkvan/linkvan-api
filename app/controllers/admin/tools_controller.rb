@@ -3,9 +3,7 @@
 class Admin::ToolsController < Admin::BaseController
   before_action :enforce_admin_user
 
-  def index
-    
-  end
+  def index; end
 
   def import_facilities
     api_key = params[:api]
@@ -25,7 +23,7 @@ class Admin::ToolsController < Admin::BaseController
       total_count = result.data[:total_count] || 0
       redirect_to admin_facilities_path(service: "water_fountain"), notice: "#{total_count} Facilities imported successfully from #{External::ApiHelper.api_name(api_key)}."
     else
-      error_messages = result.errors.join(', ')
+      error_messages = result.errors.join(", ")
       redirect_to admin_tools_path, alert: "Failed to import facilities: #{error_messages}"
     end
   end

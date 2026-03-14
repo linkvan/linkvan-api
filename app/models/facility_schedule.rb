@@ -4,14 +4,16 @@ class FacilitySchedule < ApplicationRecord
   belongs_to :facility, touch: true
   has_many :time_slots, class_name: "FacilityTimeSlot", dependent: :destroy
 
-  enum :week_day, 
-    sunday: "sunday",
-    monday: "monday",
-    tuesday: "tuesday",
-    wednesday: "wednesday",
-    thursday: "thursday",
-    friday: "friday",
-    saturday: "saturday"
+  SLOT_TIME_PRESENCE_ERROR = "must not be present if facility availability is %<availability>s all day for %<week_day>s"
+
+  enum :week_day,
+       sunday: "sunday",
+       monday: "monday",
+       tuesday: "tuesday",
+       wednesday: "wednesday",
+       thursday: "thursday",
+       friday: "friday",
+       saturday: "saturday"
 
   validates :week_day, presence: true, uniqueness: { scope: :facility_id }
   validate :time_slots_presence
@@ -41,8 +43,6 @@ class FacilitySchedule < ApplicationRecord
   end
 
   private
-
-  SLOT_TIME_PRESENCE_ERROR = "must not be present if facility availability is %<availability>s all day for %<week_day>s"
 
   def time_slots_presence
     open_error_msg = format(SLOT_TIME_PRESENCE_ERROR, availability: :open, week_day: week_day)

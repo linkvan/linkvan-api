@@ -6,18 +6,18 @@ require_relative "../../support/pages/admin_user_new_page"
 require_relative "../../support/shared_contexts/admin_authentication"
 
 RSpec.describe "Admin User Management", type: :system do
-  include_context "admin authentication"
+  include_context "with admin authentication"
 
   let(:users_index_page) { AdminUsersIndexPage.new }
   let(:user_new_page) { AdminUserNewPage.new }
 
-  before do
-    # driven_by :rack_test
-  end
+  # before do
+  #   driven_by :rack_test
+  # end
 
   describe "user management workflow" do
     describe "create/edit/delete users" do
-      context "creating a new user" do
+      context "when creating a new user" do
         it "allows admin to create a regular user" do
           users_index_page.visit_users
           users_index_page.click_new_user

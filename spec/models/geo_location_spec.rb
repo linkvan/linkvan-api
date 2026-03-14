@@ -96,7 +96,7 @@ RSpec.describe GeoLocation do
     end
   end
 
-  describe ".find_by_address" do
+  describe ".for_address" do
     let(:address) { "123 Main St, Vancouver, BC" }
     let(:params) { { countrycodes: "ca" } }
     let(:lat) { 49.2827 }
@@ -108,13 +108,13 @@ RSpec.describe GeoLocation do
     end
 
     it "calls Geocoder.coordinates with address and params" do
-      described_class.find_by_address(address, params:)
+      described_class.for_address(address, params:)
 
       expect(Geocoder).to have_received(:coordinates).with(address, params)
     end
 
     it "returns a Coord struct with the coordinates" do
-      result = described_class.find_by_address(address, params:)
+      result = described_class.for_address(address, params:)
 
       expect(result).to be_a(described_class::Coord)
       expect(result.lat).to eq(lat)
@@ -123,7 +123,7 @@ RSpec.describe GeoLocation do
 
     context "with default params" do
       it "uses default countrycodes 'ca'" do
-        described_class.find_by_address(address)
+        described_class.for_address(address)
 
         expect(Geocoder).to have_received(:coordinates).with(address, { countrycodes: "ca" })
       end
@@ -136,7 +136,7 @@ RSpec.describe GeoLocation do
 
       it "raises ArgumentError due to coord expecting 2 arguments" do
         expect do
-          described_class.find_by_address(address)
+          described_class.for_address(address)
         end.to raise_error(ArgumentError)
       end
     end
@@ -148,7 +148,7 @@ RSpec.describe GeoLocation do
 
       it "propagates the error" do
         expect do
-          described_class.find_by_address(address)
+          described_class.for_address(address)
         end.to raise_error(StandardError, "Geocoding error")
       end
     end
@@ -156,7 +156,7 @@ RSpec.describe GeoLocation do
 
   describe ".search" do
     let(:args) { ["123 Main St, Vancouver, BC"] }
-    let(:geocoder_results) { [double("Geocoder Result")] }
+    let(:geocoder_results) { [instance_double(Geocoder::Result)] }
 
     before do
       allow(Geocoder).to receive(:search).and_return(geocoder_results)

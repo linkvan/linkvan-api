@@ -30,22 +30,26 @@ RSpec.describe SiteStats, type: :model do
 
   describe "class methods" do
     describe ".facilities" do
-      let!(:facility1) { create(:facility).tap { |f| f.update_columns(updated_at: 1.day.ago) } }
-      let!(:facility2) { create(:facility).tap { |f| f.update_columns(updated_at: 2.days.ago) } }
-      let!(:facility3) { create(:facility).tap { |f| f.update_columns(updated_at: 3.days.ago) } }
+      # rubocop:disable Rails/SkipsModelValidations -- Skipping validations in test setup for controlled timestamp manipulation
+      let!(:first_facility) { create(:facility).tap { |f| f.update_columns(updated_at: 1.day.ago) } }
+      let!(:second_facility) { create(:facility).tap { |f| f.update_columns(updated_at: 2.days.ago) } }
+      let!(:third_facility) { create(:facility).tap { |f| f.update_columns(updated_at: 3.days.ago) } }
+      # rubocop:enable Rails/SkipsModelValidations
 
       it "returns facilities ordered by updated_at descending" do
-        expect(described_class.facilities).to eq([facility1, facility2, facility3])
+        expect(described_class.facilities).to eq([first_facility, second_facility, third_facility])
       end
     end
 
     describe ".notices" do
-      let!(:notice1) { create(:notice).tap { |n| n.update_columns(updated_at: 1.day.ago) } }
-      let!(:notice2) { create(:notice).tap { |n| n.update_columns(updated_at: 2.days.ago) } }
-      let!(:notice3) { create(:notice).tap { |n| n.update_columns(updated_at: 3.days.ago) } }
+      # rubocop:disable Rails/SkipsModelValidations -- Skipping validations in test setup for controlled timestamp manipulation
+      let!(:first_notice) { create(:notice).tap { |n| n.update_columns(updated_at: 1.day.ago) } }
+      let!(:second_notice) { create(:notice).tap { |n| n.update_columns(updated_at: 2.days.ago) } }
+      let!(:third_notice) { create(:notice).tap { |n| n.update_columns(updated_at: 3.days.ago) } }
+      # rubocop:enable Rails/SkipsModelValidations
 
       it "returns notices ordered by updated_at descending" do
-        expect(described_class.notices).to eq([notice1, notice2, notice3])
+        expect(described_class.notices).to eq([first_notice, second_notice, third_notice])
       end
     end
   end
@@ -54,12 +58,11 @@ RSpec.describe SiteStats, type: :model do
     let(:last_updated_time) { Time.current }
 
     context "when both facilities and notices exist" do
-      let(:last_facility) { double(updated_at: last_updated_time - 1.hour) }
-      let(:last_notice) { double(updated_at: last_updated_time) }
+      let(:last_facility) { instance_double(Facility, updated_at: last_updated_time - 1.hour) }
+      let(:last_notice) { instance_double(Notice, updated_at: last_updated_time) }
 
       before do
-        allow(described_class).to receive(:last_facility).and_return(last_facility)
-        allow(described_class).to receive(:last_notice).and_return(last_notice)
+        allow(described_class).to receive_messages(last_facility: last_facility, last_notice: last_notice)
       end
 
       it "returns the most recent updated_at" do
@@ -68,11 +71,10 @@ RSpec.describe SiteStats, type: :model do
     end
 
     context "when only facilities exist" do
-      let(:last_facility) { double(updated_at: last_updated_time) }
+      let(:last_facility) { instance_double(Facility, updated_at: last_updated_time) }
 
       before do
-        allow(described_class).to receive(:last_facility).and_return(last_facility)
-        allow(described_class).to receive(:last_notice).and_return(nil)
+        allow(described_class).to receive_messages(last_facility: last_facility, last_notice: nil)
       end
 
       it "returns the facility's updated_at" do
@@ -81,11 +83,10 @@ RSpec.describe SiteStats, type: :model do
     end
 
     context "when only notices exist" do
-      let(:last_notice) { double(updated_at: last_updated_time) }
+      let(:last_notice) { instance_double(Notice, updated_at: last_updated_time) }
 
       before do
-        allow(described_class).to receive(:last_facility).and_return(nil)
-        allow(described_class).to receive(:last_notice).and_return(last_notice)
+        allow(described_class).to receive_messages(last_facility: nil, last_notice: last_notice)
       end
 
       it "returns the notice's updated_at" do
@@ -95,8 +96,7 @@ RSpec.describe SiteStats, type: :model do
 
     context "when neither facilities nor notices exist" do
       before do
-        allow(described_class).to receive(:last_facility).and_return(nil)
-        allow(described_class).to receive(:last_notice).and_return(nil)
+        allow(described_class).to receive_messages(last_facility: nil, last_notice: nil)
       end
 
       it "returns nil" do
@@ -105,21 +105,24 @@ RSpec.describe SiteStats, type: :model do
     end
 
     context "with multiple facilities and notices" do
-      let!(:facility1) { create(:facility).tap { |f| f.update_columns(updated_at: 1.day.ago) } }
-      let!(:facility2) { create(:facility).tap { |f| f.update_columns(updated_at: 2.days.ago) } }
-      let!(:notice1) { create(:notice).tap { |n| n.update_columns(updated_at: 3.days.ago) } }
-      let!(:notice2) { create(:notice).tap { |n| n.update_columns(updated_at: 4.days.ago) } }
+      # rubocop:disable Rails/SkipsModelValidations -- Skipping validations in test setup for controlled timestamp manipulation
+      let!(:first_facility) { create(:facility).tap { |f| f.update_columns(updated_at: 1.day.ago) } }
+      # rubocop:enable Rails/SkipsModelValidations
 
       it "returns the most recent updated_at from all records" do
         computed_time = described_class.send(:compute_last_updated)
-        expect(computed_time).to be_within(1.second).of(facility1.updated_at)
+        expect(computed_time).to be_within(1.second).of(first_facility.updated_at)
       end
     end
 
     context "with future dates" do
       let(:future_time) { 1.day.from_now }
-      let!(:facility) { create(:facility).tap { |f| f.update_columns(updated_at: future_time) } }
-      let!(:notice) { create(:notice).tap { |n| n.update_columns(updated_at: 2.days.ago) } }
+
+      before do
+        # rubocop:disable Rails/SkipsModelValidations -- Skipping validations in test setup for controlled timestamp manipulation
+        create(:facility).tap { |f| f.update_columns(updated_at: future_time) }
+        # rubocop:enable Rails/SkipsModelValidations
+      end
 
       it "includes future dates in computation" do
         computed_time = described_class.send(:compute_last_updated)
@@ -148,8 +151,9 @@ RSpec.describe SiteStats, type: :model do
 
   describe "integration with real data" do
     context "with populated database" do
+      # rubocop:disable Rails/SkipsModelValidations -- Skipping validations in test setup for controlled timestamp manipulation
       let!(:facility) { create(:facility).tap { |f| f.update_columns(updated_at: 1.hour.ago) } }
-      let!(:notice) { create(:notice).tap { |n| n.update_columns(updated_at: 2.hours.ago) } }
+      # rubocop:enable Rails/SkipsModelValidations
       let(:site_stats) { described_class.new }
 
       it "computes last_updated correctly" do

@@ -1,59 +1,59 @@
-require 'uri'
+# frozen_string_literal: true
 
-module Locations::GoogleMaps
-  class EmbedMapService < ApplicationService
-    GOOGLE_KEY = ENV['GOOGLE_MAPS_API_TOKEN']
-    GOOGLE_SIGNATURE = nil
-    BASE_URL = "https://maps.googleapis.com/maps/embed/v1/place"
+require "uri"
 
-    MAP_CONFIG = {
-      url: BASE_URL,
-      zoom: 14,
-      # <horizontal>x<vertical>
-      size: "400x400",
-      maptype: "roadmap"
-    }.freeze
+class Locations::GoogleMaps::EmbedMapService < ApplicationService
+  GOOGLE_KEY = ENV.fetch("GOOGLE_MAPS_API_TOKEN", nil)
+  GOOGLE_SIGNATURE = nil
+  BASE_URL = "https://maps.googleapis.com/maps/embed/v1/place"
 
-    attr_reader :uri, :latitude, :longitude
+  MAP_CONFIG = {
+    url: BASE_URL,
+    zoom: 14,
+    # <horizontal>x<vertical>
+    size: "400x400",
+    maptype: "roadmap"
+  }.freeze
 
-    def initialize(latitude, longitude)
-      super()
+  attr_reader :uri, :latitude, :longitude
 
-      @latitude = latitude
-      @longitude = longitude
+  def initialize(latitude, longitude)
+    super()
 
-      @uri = URI.parse(MAP_CONFIG.fetch(:url))
-    end
+    @latitude = latitude
+    @longitude = longitude
 
-    def call
-      uri.query = URI.encode_www_form(query_params)
-      uri
-    end
+    @uri = URI.parse(MAP_CONFIG.fetch(:url))
+  end
 
-    private
+  def call
+    uri.query = URI.encode_www_form(query_params)
+    uri
+  end
 
-    def query_params
-      result = URI.decode_www_form(uri.query || "").to_h.symbolize_keys
-      result[:center] = coordinates.join(",")
-      result[:zoom] = MAP_CONFIG.fetch(:zoom)
-      result[:maptype] = MAP_CONFIG.fetch(:maptype)
-      # result[:size] = MAP_CONFIG.fetch(:size)
-      # result[:markers] = markers.join("|")
-      result[:q] = coordinates.join(",")
+  private
 
-      result[:key] = GOOGLE_KEY
-      result[:signature] = GOOGLE_SIGNATURE if GOOGLE_SIGNATURE.present?
+  def query_params
+    result = URI.decode_www_form(uri.query || "").to_h.symbolize_keys
+    result[:center] = coordinates.join(",")
+    result[:zoom] = MAP_CONFIG.fetch(:zoom)
+    result[:maptype] = MAP_CONFIG.fetch(:maptype)
+    # result[:size] = MAP_CONFIG.fetch(:size)
+    # result[:markers] = markers.join("|")
+    result[:q] = coordinates.join(",")
 
-      result
-    end
+    result[:key] = GOOGLE_KEY
+    result[:signature] = GOOGLE_SIGNATURE if GOOGLE_SIGNATURE.present?
 
-    def markers
-      ["color:red", "label:F", coordinates.join(",")]
-    end
+    result
+  end
 
-    # Google Maps only use 6 decimal places (ignores the rest)
-    def coordinates
-      [latitude.round(6), longitude.round(6)]
-    end
+  def markers
+    ["color:red", "label:F", coordinates.join(",")]
+  end
+
+  # Google Maps only use 6 decimal places (ignores the rest)
+  def coordinates
+    [latitude.round(6), longitude.round(6)]
   end
 end

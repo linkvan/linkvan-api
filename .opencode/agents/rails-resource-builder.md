@@ -1,7 +1,7 @@
 ---
 description: Generate complete Rails resources (models, controllers, routes, tests)
 mode: subagent
-model: github-copilot/grok-code-fast-1
+model: minimax-coding-plan/MiniMax-M2.5
 permission:
   skill:
     "rails-models": "allow"

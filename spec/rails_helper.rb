@@ -26,7 +26,7 @@ require "capybara/rspec" # for system specs
 # require only the support files necessary.
 #
 # TODO: Confirm 'spec/support/devise.rb' is indeed required
-Dir[Rails.root.join("spec", "support", "**", "*.rb")].sort.each { |f| require f }
+Rails.root.glob("spec/support/**/*.rb").each { |f| require f }
 
 Capybara.server = :puma # , { Silent: true } # To clean up your test output
 
@@ -55,7 +55,7 @@ RSpec.configure do |config|
   config.include ActiveSupport::Testing::TimeHelpers
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_paths = ["#{Rails.root.join('spec', 'fixtures', 'fixtures')}"]
+  config.fixture_paths = [Rails.root.join("spec", "fixtures", "fixtures").to_s]
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false

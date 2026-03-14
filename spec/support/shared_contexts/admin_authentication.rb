@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-shared_context "admin authentication" do
+shared_context "with admin authentication" do
   include Devise::Test::IntegrationHelpers
 
   let(:admin_user) { create(:admin_user) }

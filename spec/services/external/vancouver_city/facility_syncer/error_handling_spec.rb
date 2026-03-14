@@ -1,40 +1,43 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+# rubocop:disable RSpec/SpecFilePathFormat
 
-RSpec.describe External::VancouverCity::FacilitySyncer, 'error handling', type: :service do
-  let(:api_key) { 'drinking-fountains' }
+require "rails_helper"
+
+RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service do
+  let(:api_key) { "drinking-fountains" }
   let(:service) { create(:water_fountain_service) }
 
   before { service }
 
-  describe 'transaction rollback scenarios' do
-    context 'when ActiveRecord::RecordInvalid occurs during external_update' do
+  describe "transaction rollback scenarios" do
+    context "when ActiveRecord::RecordInvalid occurs during external_update" do
       let!(:existing_facility) do
         create(:facility,
-               external_id: 'FAIL_UPDATE123',
-               name: 'Test Facility',
-               address: 'Test Address')
+               external_id: "FAIL_UPDATE123",
+               name: "Test Facility",
+               address: "Test Address")
       end
 
       let(:update_record) do
         {
-          'mapid' => 'FAIL_UPDATE123',
-          'name' => 'Updated Name',
-          'location' => 'Updated Location',
-          'geo_local_area' => 'Updated Area',
-          'geo_point_2d' => { 'lat' => 49.2827, 'lon' => -123.1207 }
+          "mapid" => "FAIL_UPDATE123",
+          "name" => "Updated Name",
+          "location" => "Updated Location",
+          "geo_local_area" => "Updated Area",
+          "geo_point_2d" => { "lat" => 49.2827, "lon" => -123.1207 }
         }
       end
 
       before do
         # Stub update! to raise RecordInvalid to simulate validation failure
-        allow_any_instance_of(Facility).to receive(:update!).and_raise(
+        allow(Facility).to receive(:find_by).and_return(existing_facility)
+        allow(existing_facility).to receive(:update!).and_raise(
           ActiveRecord::RecordInvalid.new(existing_facility)
         )
       end
 
-      it 'rolls back transaction and reports error' do
+      it "rolls back transaction and reports error" do
         original_name = existing_facility.name
         syncer = described_class.new(record: update_record, api_key: api_key)
         result = syncer.call
@@ -48,30 +51,30 @@ RSpec.describe External::VancouverCity::FacilitySyncer, 'error handling', type: 
       end
     end
 
-    context 'when StandardError occurs during service synchronization' do
+    context "when StandardError occurs during service synchronization" do
       let!(:existing_facility) do
         create(:facility,
-               external_id: 'SERVICE_ERROR123',
-               name: 'Test Facility')
+               external_id: "SERVICE_ERROR123",
+               name: "Test Facility")
       end
 
       let(:update_record) do
         {
-          'mapid' => 'SERVICE_ERROR123',
-          'name' => 'Updated Name',
-          'location' => 'Updated Location',
-          'geo_local_area' => 'Updated Area',
-          'geo_point_2d' => { 'lat' => 49.2827, 'lon' => -123.1207 }
+          "mapid" => "SERVICE_ERROR123",
+          "name" => "Updated Name",
+          "location" => "Updated Location",
+          "geo_local_area" => "Updated Area",
+          "geo_point_2d" => { "lat" => 49.2827, "lon" => -123.1207 }
         }
       end
 
       before do
         # Stub facility_services.create! to raise StandardError
-        allow_any_instance_of(ActiveRecord::Associations::CollectionProxy)
-          .to receive(:create!).and_raise(StandardError.new('Database connection lost'))
+        allow(Facility).to receive(:find_by).and_return(existing_facility)
+        allow(existing_facility.facility_services).to receive(:create!).and_raise(StandardError.new("Database connection lost"))
       end
 
-      it 'rolls back transaction and reports error' do
+      it "rolls back transaction and reports error" do
         original_service_count = existing_facility.facility_services.count
         syncer = described_class.new(record: update_record, api_key: api_key)
         result = syncer.call
@@ -86,79 +89,93 @@ RSpec.describe External::VancouverCity::FacilitySyncer, 'error handling', type: 
     end
   end
 
-  describe 'logging behavior during errors' do
+  describe "logging behavior during errors" do
     let(:valid_record) do
       {
-        'mapid' => 'LOG_TEST123',
-        'name' => 'Test Fountain',
-        'location' => 'Test Park',
-        'geo_local_area' => 'Downtown',
-        'geo_point_2d' => { 'lat' => 49.2827, 'lon' => -123.1207 }
+        "mapid" => "LOG_TEST123",
+        "name" => "Test Fountain",
+        "location" => "Test Park",
+        "geo_local_area" => "Downtown",
+        "geo_point_2d" => { "lat" => 49.2827, "lon" => -123.1207 }
       }
     end
 
     before do
       # Stub save! to raise an error to test logging
-      allow_any_instance_of(Facility).to receive(:save!).and_raise(
+      built_facility = build(:facility, external_id: "LOG_TEST123")
+      allow(External::VancouverCity::FacilityBuilder).to receive(:call).with(record: valid_record, api_key: api_key).and_return(
+        ApplicationService::Result.new(
+          data: { facility: built_facility },
+          errors: []
+        )
+      )
+      allow(built_facility).to receive(:save!).and_raise(
         ActiveRecord::RecordInvalid.new(build(:facility))
       )
     end
 
-    it 'logs errors appropriately' do
+    it "logs errors appropriately" do
+      allow(Rails.logger).to receive(:info)
+
       syncer = described_class.new(record: valid_record, api_key: api_key)
-      
-      expect(Rails.logger).to receive(:info).with(
+      syncer.call
+
+      expect(Rails.logger).to have_received(:info).with(
         a_string_matching(/Creating new facility with external_id 'LOG_TEST123'/)
       )
-
-      syncer.call
     end
   end
 
-  describe 'error message formatting' do
-    context 'when FacilityBuilder fails due to validation errors' do
+  describe "error message formatting" do
+    context "when FacilityBuilder fails due to validation errors" do
       let(:invalid_facility_record) do
         {
-          'mapid' => 'INVALID123',
-          'name' => '', # Invalid name causes FacilityBuilder to fail
-          'location' => 'Test Location',
-          'geo_local_area' => 'Downtown',
-          'geo_point_2d' => { 'lat' => 49.2827, 'lon' => -123.1207 }
+          "mapid" => "INVALID123",
+          "name" => "", # Invalid name causes FacilityBuilder to fail
+          "location" => "Test Location",
+          "geo_local_area" => "Downtown",
+          "geo_point_2d" => { "lat" => 49.2827, "lon" => -123.1207 }
         }
       end
 
-      it 'includes detailed validation errors from FacilityBuilder' do
+      it "includes detailed validation errors from FacilityBuilder" do
         syncer = described_class.new(record: invalid_facility_record, api_key: api_key)
         result = syncer.call
 
         expect(result).to be_failed
         expect(result.errors.first).to match(/Name can't be blank/)
-        expect(result.data.operation).to be_nil  # No operation determined when FacilityBuilder fails
+        expect(result.data.operation).to be_nil # No operation determined when FacilityBuilder fails
         expect(result.data.facility).to be_nil
       end
     end
 
-    context 'when ActiveRecord::RecordInvalid provides detailed message' do
+    context "when ActiveRecord::RecordInvalid provides detailed message" do
       let(:valid_record) do
         {
-          'mapid' => 'DETAILED_ERROR123',
-          'name' => 'Test Facility',
-          'location' => 'Test Location',
-          'geo_local_area' => 'Downtown',
-          'geo_point_2d' => { 'lat' => 49.2827, 'lon' => -123.1207 }
+          "mapid" => "DETAILED_ERROR123",
+          "name" => "Test Facility",
+          "location" => "Test Location",
+          "geo_local_area" => "Downtown",
+          "geo_point_2d" => { "lat" => 49.2827, "lon" => -123.1207 }
         }
       end
 
       before do
-        facility = build(:facility)
-        facility.errors.add(:base, 'Custom validation error')
-        
-        allow_any_instance_of(Facility).to receive(:save!).and_raise(
-          ActiveRecord::RecordInvalid.new(facility)
+        built_facility = build(:facility)
+        built_facility.errors.add(:base, "Custom validation error")
+
+        allow(External::VancouverCity::FacilityBuilder).to receive(:call).with(record: valid_record, api_key: api_key).and_return(
+          ApplicationService::Result.new(
+            data: { facility: built_facility },
+            errors: []
+          )
+        )
+        allow(built_facility).to receive(:save!).and_raise(
+          ActiveRecord::RecordInvalid.new(built_facility)
         )
       end
 
-      it 'includes the detailed ActiveRecord error message' do
+      it "includes the detailed ActiveRecord error message" do
         syncer = described_class.new(record: valid_record, api_key: api_key)
         result = syncer.call
 
@@ -168,3 +185,4 @@ RSpec.describe External::VancouverCity::FacilitySyncer, 'error handling', type: 
     end
   end
 end
+# rubocop:enable RSpec/SpecFilePathFormat

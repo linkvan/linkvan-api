@@ -126,10 +126,10 @@ class Admin::FacilitiesController < Admin::BaseController
   end
 
   def facility_params
-    params.require(:facility).permit(:verified, :name, :phone, :website, :notes)
+    params.expect(facility: %i[verified name phone website notes])
   end
 
   def discard_facility_params
-    params.require(:facility).permit(:discard_reason)
+    params.expect(facility: [:discard_reason])
   end
 end

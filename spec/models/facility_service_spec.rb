@@ -6,9 +6,6 @@ RSpec.describe FacilityService, type: :model do
   it { expect(facility_service).to be_valid }
 
   describe "validations" do
-    it { expect(facility_service).to validate_presence_of(:facility) }
-    it { expect(facility_service).to validate_presence_of(:service) }
-
     it "validates uniqueness of service within facility" do
       existing = create(:facility_service)
       duplicate = build(:facility_service, facility: existing.facility, service: existing.service)
@@ -47,7 +44,7 @@ RSpec.describe FacilityService, type: :model do
 
   describe "scopes" do
     describe ".name_search" do
-      subject { described_class.name_search(value) }
+      subject(:searched_facility_services) { described_class.name_search(value) }
 
       let(:service) { create(:service, key: "housing", name: "Housing") }
       let(:facility_with_housing) { create(:facility) }
@@ -57,8 +54,8 @@ RSpec.describe FacilityService, type: :model do
       context "with matching service key" do
         let(:value) { "housing" }
 
-        it { expect(subject).to include(facility_service_housing) }
-        it { expect(subject).not_to include(facility_service_other) }
+        it { expect(searched_facility_services).to include(facility_service_housing) }
+        it { expect(searched_facility_services).not_to include(facility_service_other) }
       end
     end
   end

@@ -16,23 +16,23 @@ RSpec.describe Alert, type: :model do
 
   describe "scopes" do
     describe ".active" do
-      subject { described_class.active }
+      subject(:active_alerts) { described_class.active }
 
       let(:active_alert) { create(:alert, :active) }
       let(:inactive_alert) { create(:alert, :inactive) }
 
-      it { expect(subject).to include(active_alert) }
-      it { expect(subject).not_to include(inactive_alert) }
+      it { expect(active_alerts).to include(active_alert) }
+      it { expect(active_alerts).not_to include(inactive_alert) }
     end
 
     describe ".inactive" do
-      subject { described_class.inactive }
+      subject(:inactive_alerts) { described_class.inactive }
 
       let(:active_alert) { create(:alert, :active) }
       let(:inactive_alert) { create(:alert, :inactive) }
 
-      it { expect(subject).not_to include(active_alert) }
-      it { expect(subject).to include(inactive_alert) }
+      it { expect(inactive_alerts).not_to include(active_alert) }
+      it { expect(inactive_alerts).to include(inactive_alert) }
     end
   end
 

@@ -28,7 +28,7 @@ RSpec.describe Api::ZonesController do
       get_index
     end
 
-    include_examples :api_tokens
+    it_behaves_like "api tokens"
 
     it { is_expected.to have_http_status(:success) }
 
@@ -80,9 +80,7 @@ RSpec.describe Api::ZonesController do
     let(:returned_users) { parsed_response[:users] }
 
     before do
-      allow(controller).to receive(:authenticate_user!).and_return(true)
-      allow(controller).to receive(:user_signed_in?).and_return(true)
-      allow(controller).to receive(:current_user).and_return(super_admin)
+      allow(controller).to receive_messages(authenticate_user!: true, user_signed_in?: true, current_user: super_admin)
       get_list_admin
     end
 
@@ -116,9 +114,7 @@ RSpec.describe Api::ZonesController do
 
     context "when user is authenticated admin" do
       before do
-        allow(controller).to receive(:authenticate_user!).and_return(true)
-        allow(controller).to receive(:user_signed_in?).and_return(true)
-        allow(controller).to receive(:current_user).and_return(super_admin)
+        allow(controller).to receive_messages(authenticate_user!: true, user_signed_in?: true, current_user: super_admin)
       end
 
       context "with successful admin addition" do
@@ -153,8 +149,7 @@ RSpec.describe Api::ZonesController do
 
     context "when user is not authenticated" do
       before do
-        allow(controller).to receive(:authenticate_user!).and_return(true)
-        allow(controller).to receive(:user_signed_in?).and_return(false)
+        allow(controller).to receive_messages(authenticate_user!: true, user_signed_in?: false)
       end
 
       it { is_expected.to have_http_status(:unauthorized) }
@@ -162,9 +157,7 @@ RSpec.describe Api::ZonesController do
 
     context "when user is not an admin" do
       before do
-        allow(controller).to receive(:authenticate_user!).and_return(true)
-        allow(controller).to receive(:user_signed_in?).and_return(true)
-        allow(controller).to receive(:current_user).and_return(non_admin_user)
+        allow(controller).to receive_messages(authenticate_user!: true, user_signed_in?: true, current_user: non_admin_user)
       end
 
       it { is_expected.to have_http_status(:unauthorized) }
@@ -172,9 +165,7 @@ RSpec.describe Api::ZonesController do
 
     context "when zone does not exist" do
       before do
-        allow(controller).to receive(:authenticate_user!).and_return(true)
-        allow(controller).to receive(:user_signed_in?).and_return(true)
-        allow(controller).to receive(:current_user).and_return(super_admin)
+        allow(controller).to receive_messages(authenticate_user!: true, user_signed_in?: true, current_user: super_admin)
       end
 
       it "raises ActiveRecord::RecordNotFound" do
@@ -186,9 +177,7 @@ RSpec.describe Api::ZonesController do
 
     context "when user does not exist" do
       before do
-        allow(controller).to receive(:authenticate_user!).and_return(true)
-        allow(controller).to receive(:user_signed_in?).and_return(true)
-        allow(controller).to receive(:current_user).and_return(super_admin)
+        allow(controller).to receive_messages(authenticate_user!: true, user_signed_in?: true, current_user: super_admin)
       end
 
       it "raises ActiveRecord::RecordNotFound" do
@@ -212,9 +201,7 @@ RSpec.describe Api::ZonesController do
 
     context "when user is authenticated admin" do
       before do
-        allow(controller).to receive(:authenticate_user!).and_return(true)
-        allow(controller).to receive(:user_signed_in?).and_return(true)
-        allow(controller).to receive(:current_user).and_return(super_admin)
+        allow(controller).to receive_messages(authenticate_user!: true, user_signed_in?: true, current_user: super_admin)
       end
 
       context "with successful admin removal" do
@@ -248,8 +235,7 @@ RSpec.describe Api::ZonesController do
 
     context "when user is not authenticated" do
       before do
-        allow(controller).to receive(:authenticate_user!).and_return(true)
-        allow(controller).to receive(:user_signed_in?).and_return(false)
+        allow(controller).to receive_messages(authenticate_user!: true, user_signed_in?: false)
       end
 
       it { is_expected.to have_http_status(:unauthorized) }
@@ -257,9 +243,7 @@ RSpec.describe Api::ZonesController do
 
     context "when user is not an admin" do
       before do
-        allow(controller).to receive(:authenticate_user!).and_return(true)
-        allow(controller).to receive(:user_signed_in?).and_return(true)
-        allow(controller).to receive(:current_user).and_return(non_admin_user)
+        allow(controller).to receive_messages(authenticate_user!: true, user_signed_in?: true, current_user: non_admin_user)
       end
 
       it { is_expected.to have_http_status(:unauthorized) }
@@ -267,9 +251,7 @@ RSpec.describe Api::ZonesController do
 
     context "when zone does not exist" do
       before do
-        allow(controller).to receive(:authenticate_user!).and_return(true)
-        allow(controller).to receive(:user_signed_in?).and_return(true)
-        allow(controller).to receive(:current_user).and_return(super_admin)
+        allow(controller).to receive_messages(authenticate_user!: true, user_signed_in?: true, current_user: super_admin)
       end
 
       it "raises ActiveRecord::RecordNotFound" do
@@ -281,9 +263,7 @@ RSpec.describe Api::ZonesController do
 
     context "when user does not exist" do
       before do
-        allow(controller).to receive(:authenticate_user!).and_return(true)
-        allow(controller).to receive(:user_signed_in?).and_return(true)
-        allow(controller).to receive(:current_user).and_return(super_admin)
+        allow(controller).to receive_messages(authenticate_user!: true, user_signed_in?: true, current_user: super_admin)
       end
 
       it "raises ActiveRecord::RecordNotFound" do
@@ -297,11 +277,10 @@ RSpec.describe Api::ZonesController do
   describe "authorization" do
     let(:zone) { create(:zone) }
 
-    context "list_admin action" do
+    context "when accessing list_admin action" do
       context "when user is not authenticated" do
         before do
-          allow(controller).to receive(:authenticate_user!).and_return(true)
-          allow(controller).to receive(:user_signed_in?).and_return(false)
+          allow(controller).to receive_messages(authenticate_user!: true, user_signed_in?: false)
         end
 
         it "returns unauthorized status" do
@@ -312,9 +291,7 @@ RSpec.describe Api::ZonesController do
 
       context "when user is authenticated but not an admin" do
         before do
-          allow(controller).to receive(:authenticate_user!).and_return(true)
-          allow(controller).to receive(:user_signed_in?).and_return(true)
-          allow(controller).to receive(:current_user).and_return(non_admin_user)
+          allow(controller).to receive_messages(authenticate_user!: true, user_signed_in?: true, current_user: non_admin_user)
         end
 
         it "returns unauthorized status" do
@@ -324,11 +301,10 @@ RSpec.describe Api::ZonesController do
       end
     end
 
-    context "add_admin action" do
+    context "when accessing add_admin action" do
       context "when user is not authenticated" do
         before do
-          allow(controller).to receive(:authenticate_user!).and_return(true)
-          allow(controller).to receive(:user_signed_in?).and_return(false)
+          allow(controller).to receive_messages(authenticate_user!: true, user_signed_in?: false)
         end
 
         it "returns unauthorized status" do
@@ -339,9 +315,7 @@ RSpec.describe Api::ZonesController do
 
       context "when user is authenticated but not an admin" do
         before do
-          allow(controller).to receive(:authenticate_user!).and_return(true)
-          allow(controller).to receive(:user_signed_in?).and_return(true)
-          allow(controller).to receive(:current_user).and_return(non_admin_user)
+          allow(controller).to receive_messages(authenticate_user!: true, user_signed_in?: true, current_user: non_admin_user)
         end
 
         it "returns unauthorized status" do
@@ -351,11 +325,10 @@ RSpec.describe Api::ZonesController do
       end
     end
 
-    context "remove_admin action" do
+    context "when accessing remove_admin action" do
       context "when user is not authenticated" do
         before do
-          allow(controller).to receive(:authenticate_user!).and_return(true)
-          allow(controller).to receive(:user_signed_in?).and_return(false)
+          allow(controller).to receive_messages(authenticate_user!: true, user_signed_in?: false)
         end
 
         it "returns unauthorized status" do
@@ -366,9 +339,7 @@ RSpec.describe Api::ZonesController do
 
       context "when user is authenticated but not an admin" do
         before do
-          allow(controller).to receive(:authenticate_user!).and_return(true)
-          allow(controller).to receive(:user_signed_in?).and_return(true)
-          allow(controller).to receive(:current_user).and_return(non_admin_user)
+          allow(controller).to receive_messages(authenticate_user!: true, user_signed_in?: true, current_user: non_admin_user)
         end
 
         it "returns unauthorized status" do

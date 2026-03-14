@@ -61,6 +61,6 @@ class Admin::AlertsController < Admin::BaseController
   end
 
   def alert_params
-    params.require(:alert).permit(:title, :content, :active)
+    params.expect(alert: %i[title content active])
   end
 end

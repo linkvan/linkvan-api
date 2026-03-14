@@ -43,7 +43,7 @@ module Discardable
 
   def discard(validate: true)
     return true if discarded?
-    return update_attribute(:deleted_at, Time.current) unless validate #rubocop:disable Rails/SkipsModelValidations
+    return update_attribute(:deleted_at, Time.current) unless validate # rubocop:disable Rails/SkipsModelValidations
 
     assign_attributes(deleted_at: Time.current)
     save

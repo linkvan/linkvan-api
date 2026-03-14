@@ -25,46 +25,46 @@ RSpec.describe User, type: :model do
 
   describe "scopes" do
     describe ".verified" do
-      subject { described_class.verified }
+      subject(:verified_users) { described_class.verified }
 
       let(:verified_user) { create(:user, :verified) }
       let(:unverified_user) { create(:user, :not_verified) }
 
-      it { expect(subject).to include(verified_user) }
-      it { expect(subject).not_to include(unverified_user) }
+      it { expect(verified_users).to include(verified_user) }
+      it { expect(verified_users).not_to include(unverified_user) }
     end
 
     describe ".not_verified" do
-      subject { described_class.not_verified }
+      subject(:not_verified_users) { described_class.not_verified }
 
       let(:verified_user) { create(:user, :verified) }
       let(:unverified_user) { create(:user, :not_verified) }
 
-      it { expect(subject).not_to include(verified_user) }
-      it { expect(subject).to include(unverified_user) }
+      it { expect(not_verified_users).not_to include(verified_user) }
+      it { expect(not_verified_users).to include(unverified_user) }
     end
 
     describe ".super_admins" do
-      subject { described_class.super_admins }
+      subject(:super_admins) { described_class.super_admins }
 
       let(:super_admin) { create(:user, :admin, :verified) }
       let(:regular_admin) { create(:user, :admin, :not_verified) }
       let(:regular_user) { create(:user, :verified) }
 
-      it { expect(subject).to include(super_admin) }
-      it { expect(subject).not_to include(regular_admin) }
-      it { expect(subject).not_to include(regular_user) }
+      it { expect(super_admins).to include(super_admin) }
+      it { expect(super_admins).not_to include(regular_admin) }
+      it { expect(super_admins).not_to include(regular_user) }
     end
   end
 
   describe "#manages" do
     context "when super_admin" do
       let(:super_admin) { create(:user, :admin, :verified) }
-      let(:facility1) { create(:facility) }
-      let(:facility2) { create(:facility) }
+      let(:first_facility) { create(:facility) }
+      let(:second_facility) { create(:facility) }
 
-      it { expect(super_admin.manages).to include(facility1) }
-      it { expect(super_admin.manages).to include(facility2) }
+      it { expect(super_admin.manages).to include(first_facility) }
+      it { expect(super_admin.manages).to include(second_facility) }
       it { expect(super_admin.manages.count).to eq(Facility.count) }
     end
 
@@ -95,12 +95,12 @@ RSpec.describe User, type: :model do
   describe "#manageable_users" do
     context "when super_admin" do
       let(:super_admin) { create(:user, :admin, :verified) }
-      let(:user1) { create(:user) }
-      let(:user2) { create(:user) }
+      let(:first_user) { create(:user) }
+      let(:second_user) { create(:user) }
 
       it "returns all users" do
-        expect(super_admin.manageable_users).to include(user1)
-        expect(super_admin.manageable_users).to include(user2)
+        expect(super_admin.manageable_users).to include(first_user)
+        expect(super_admin.manageable_users).to include(second_user)
         expect(super_admin.manageable_users).to include(super_admin)
       end
     end

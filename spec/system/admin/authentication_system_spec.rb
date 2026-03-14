@@ -12,10 +12,6 @@ RSpec.describe "Admin Authentication", type: :system do
   let(:login_page) { AdminLoginPage.new }
   let(:dashboard_page) { AdminDashboardPage.new }
 
-  before do
-    # driven_by :rack_test
-  end
-
   describe "login/logout workflows" do
     context "with valid admin credentials" do
       it "allows admin to log in and access dashboard" do
@@ -46,7 +42,7 @@ RSpec.describe "Admin Authentication", type: :system do
       end
     end
 
-    context "logout workflow" do
+    context "when performing logout workflow" do
       it "allows admin to logout successfully" do
         sign_in admin_user
         dashboard_page.visit_dashboard

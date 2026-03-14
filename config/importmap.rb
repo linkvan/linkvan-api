@@ -18,7 +18,7 @@ pin "controllers", to: "controllers/index.js"
 pin "controllers/application"
 pin "controllers/auto_submit_controller"
 pin "controllers/hello_controller"
-pin "controllers/modal_controller" 
+pin "controllers/modal_controller"
 pin "controllers/navigate_controller"
 pin "controllers/pagy_controller"
 

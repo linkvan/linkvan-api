@@ -83,7 +83,7 @@ RSpec.describe FacilityWelcome, type: :model do
 
   describe "scopes" do
     describe ".name_search" do
-      subject { described_class.name_search(value) }
+      subject(:searched_facility_welcomes) { described_class.name_search(value) }
 
       let(:facility) { create(:facility) }
       let(:male_welcome) { create(:facility_welcome, facility: facility, customer: :male) }
@@ -92,14 +92,14 @@ RSpec.describe FacilityWelcome, type: :model do
       context "with exact match" do
         let(:value) { "male" }
 
-        it { expect(subject).to include(male_welcome) }
-        it { expect(subject).not_to include(female_welcome) }
+        it { expect(searched_facility_welcomes).to include(male_welcome) }
+        it { expect(searched_facility_welcomes).not_to include(female_welcome) }
       end
 
       context "with different case" do
         let(:value) { "MALE" }
 
-        it { expect(subject).to include(male_welcome) }
+        it { expect(searched_facility_welcomes).to include(male_welcome) }
       end
     end
   end

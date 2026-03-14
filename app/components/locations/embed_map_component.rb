@@ -29,7 +29,7 @@ class Locations::EmbedMapComponent < ViewComponent::Base
   end
 
   def call
-    tag.iframe(**options.merge(src: embed_map_url))
+    tag.iframe(**options, src: embed_map_url)
   end
 
   private

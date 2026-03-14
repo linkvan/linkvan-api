@@ -6,8 +6,9 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
   subject(:syncer) { described_class.new(api_key: api_key, api_client: api_client) }
 
   let(:api_key) { "drinking-fountains" }
+  let(:logger) { instance_double(ActiveSupport::Logger) }
   let(:api_client) do
-    client = double("VancouverApiClient")
+    client = instance_double(External::VancouverCity::VancouverApiClient)
     allow(client).to receive(:is_a?).with(External::VancouverCity::VancouverApiClient).and_return(true)
     client
   end
@@ -17,8 +18,6 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
   before do
     allow(Rails).to receive(:logger).and_return(logger)
   end
-
-  let(:logger) { instance_double(ActiveSupport::Logger) }
 
   describe "#initialize" do
     it "sets api_key and api_client attributes" do
@@ -38,9 +37,11 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
   describe "#validate" do
     context "with valid parameters" do
       it "returns no errors" do
-        expect(External::ApiHelper).to receive(:supported_api?).with(api_key).and_return(true)
+        allow(External::ApiHelper).to receive(:supported_api?).with(api_key).and_return(true)
 
         errors = syncer.validate
+
+        expect(External::ApiHelper).to have_received(:supported_api?).with(api_key)
         expect(errors).to be_empty
       end
     end
@@ -104,15 +105,12 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
 
   describe "#call" do
     context "when validation fails" do
-      before do
-        allow(syncer).to receive(:invalid?).and_return(true)
-        allow(syncer).to receive(:errors).and_return(["Validation error"])
-      end
+      let(:api_key) { "unsupported-api" }
 
       it "returns failure result with validation errors" do
         result = syncer.call
         expect(result.success?).to be false
-        expect(result.errors).to include("Validation error")
+        expect(result.errors).to include("Unsupported API: unsupported-api")
         expect(result.data).to be_nil
       end
     end
@@ -134,7 +132,7 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
       end
 
       let(:api_client) do
-        client = double("VancouverApiClient")
+        client = instance_double(External::VancouverCity::VancouverApiClient)
         allow(client).to receive(:is_a?).with(External::VancouverCity::VancouverApiClient).and_return(true)
         client
       end
@@ -155,8 +153,8 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
         end
 
         it "logs fetch request and processes no facilities" do
-          expect(logger).to receive(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
-          expect(logger).to receive(:info).with("Successfully processed 0 facilities from #{api_key} API")
+          allow(logger).to receive(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
+          allow(logger).to receive(:info).with("Successfully processed 0 facilities from #{api_key} API")
 
           result = syncer.call
 
@@ -164,6 +162,8 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
           expect(result.data[:facilities]).to be_empty
           expect(result.data[:total_count]).to eq(0)
           expect(result.data[:api_key]).to eq(api_key)
+          expect(logger).to have_received(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
+          expect(logger).to have_received(:info).with("Successfully processed 0 facilities from #{api_key} API")
         end
       end
 
@@ -179,9 +179,9 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
         end
 
         it "processes records and returns success result" do
-          expect(logger).to receive(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
-          expect(External::VancouverCity::FacilitySyncer).to receive(:call).twice
-          expect(logger).to receive(:info).with("Successfully processed 2 facilities from #{api_key} API")
+          allow(logger).to receive(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
+          allow(External::VancouverCity::FacilitySyncer).to receive(:call).twice.and_return(syncer_result)
+          allow(logger).to receive(:info).with("Successfully processed 2 facilities from #{api_key} API")
 
           result = syncer.call
 
@@ -189,6 +189,9 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
           expect(result.data[:facilities]).to contain_exactly(sample_facility, sample_facility)
           expect(result.data[:total_count]).to eq(2)
           expect(result.data[:api_key]).to eq(api_key)
+          expect(logger).to have_received(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
+          expect(External::VancouverCity::FacilitySyncer).to have_received(:call).twice
+          expect(logger).to have_received(:info).with("Successfully processed 2 facilities from #{api_key} API")
         end
       end
 
@@ -214,15 +217,19 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
         end
 
         it "fetches all pages and processes all records" do
-          expect(logger).to receive(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
-          expect(logger).to receive(:info).with("Fetching facilities from #{api_key} API (offset: #{page_size}, limit: #{page_size})")
-          expect(External::VancouverCity::FacilitySyncer).to receive(:call).exactly(page_size).times
-          expect(logger).to receive(:info).with("Successfully processed #{page_size} facilities from #{api_key} API")
+          allow(logger).to receive(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
+          allow(logger).to receive(:info).with("Fetching facilities from #{api_key} API (offset: #{page_size}, limit: #{page_size})")
+          allow(External::VancouverCity::FacilitySyncer).to receive(:call).exactly(page_size).times.and_return(syncer_result)
+          allow(logger).to receive(:info).with("Successfully processed #{page_size} facilities from #{api_key} API")
 
           result = syncer.call
 
           expect(result.success?).to be true
           expect(result.data[:total_count]).to eq(page_size)
+          expect(logger).to have_received(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
+          expect(logger).to have_received(:info).with("Fetching facilities from #{api_key} API (offset: #{page_size}, limit: #{page_size})")
+          expect(External::VancouverCity::FacilitySyncer).to have_received(:call).exactly(page_size).times
+          expect(logger).to have_received(:info).with("Successfully processed #{page_size} facilities from #{api_key} API")
         end
       end
 
@@ -250,10 +257,13 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
         end
 
         it "continues pagination when full page is received" do
-          expect(api_client).to receive(:get_dataset_records)
+          allow(api_client).to receive(:get_dataset_records)
             .with(api_key, limit: page_size, offset: page_size)
 
           syncer.call
+
+          expect(api_client).to have_received(:get_dataset_records)
+            .with(api_key, limit: page_size, offset: page_size)
         end
       end
 
@@ -270,17 +280,20 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
         end
 
         it "stops pagination when partial page is received" do
-          expect(api_client).not_to receive(:get_dataset_records)
+          allow(api_client).to receive(:get_dataset_records)
             .with(api_key, limit: page_size, offset: page_size)
 
           syncer.call
+
+          expect(api_client).not_to have_received(:get_dataset_records)
+            .with(api_key, limit: page_size, offset: page_size)
         end
       end
     end
 
-    context "error handling" do
+    context "when error handling" do
       let(:api_client) do
-        client = double("VancouverApiClient")
+        client = instance_double(External::VancouverCity::VancouverApiClient)
         allow(client).to receive(:is_a?).with(External::VancouverCity::VancouverApiClient).and_return(true)
         client
       end
@@ -379,7 +392,7 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
       end
     end
 
-    context "logging behavior" do
+    context "with logging behavior" do
       let(:sample_records) { [{ "name" => "Test Fountain" }] }
       let(:response) do
         instance_double(Faraday::Response, body: { "results" => sample_records })
@@ -401,21 +414,27 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
       end
 
       it "logs fetch progress with correct offset and limit" do
-        expect(logger).to receive(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
-        expect(logger).to receive(:info).with("Successfully processed 1 facilities from #{api_key} API")
+        allow(logger).to receive(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
+        allow(logger).to receive(:info).with("Successfully processed 1 facilities from #{api_key} API")
 
         syncer.call
+
+        expect(logger).to have_received(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
+        expect(logger).to have_received(:info).with("Successfully processed 1 facilities from #{api_key} API")
       end
 
       it "logs final processing summary" do
-        expect(logger).to receive(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
-        expect(logger).to receive(:info).with(/Successfully processed \d+ facilities from #{api_key} API/)
+        allow(logger).to receive(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
+        allow(logger).to receive(:info).with(/Successfully processed \d+ facilities from #{api_key} API/)
 
         syncer.call
+
+        expect(logger).to have_received(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
+        expect(logger).to have_received(:info).with(/Successfully processed \d+ facilities from #{api_key} API/)
       end
     end
 
-    context "result structure" do
+    context "with result structure" do
       let(:sample_records) { [{ "name" => "Test Fountain" }] }
       let(:response) do
         instance_double(Faraday::Response, body: { "results" => sample_records })

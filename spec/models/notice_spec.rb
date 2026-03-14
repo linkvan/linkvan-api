@@ -38,23 +38,23 @@ RSpec.describe Notice, type: :model do
 
   describe "scopes" do
     describe ".published" do
-      subject { described_class.published }
+      subject(:published_notices) { described_class.published }
 
       let(:published_notice) { create(:notice, :published) }
       let(:draft_notice) { create(:notice, :draft) }
 
-      it { expect(subject).to include(published_notice) }
-      it { expect(subject).not_to include(draft_notice) }
+      it { expect(published_notices).to include(published_notice) }
+      it { expect(published_notices).not_to include(draft_notice) }
     end
 
     describe ".draft" do
-      subject { described_class.draft }
+      subject(:draft_notices) { described_class.draft }
 
       let(:published_notice) { create(:notice, :published) }
       let(:draft_notice) { create(:notice, :draft) }
 
-      it { expect(subject).not_to include(published_notice) }
-      it { expect(subject).to include(draft_notice) }
+      it { expect(draft_notices).not_to include(published_notice) }
+      it { expect(draft_notices).to include(draft_notice) }
     end
   end
 

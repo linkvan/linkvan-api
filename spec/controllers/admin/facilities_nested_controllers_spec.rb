@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable RSpec/MultipleDescribes
 require "rails_helper"
 
 RSpec.describe Admin::FacilitySchedulesController do
@@ -8,9 +9,7 @@ RSpec.describe Admin::FacilitySchedulesController do
 
   # Stub Devise authentication methods
   before do
-    allow(controller).to receive(:authenticate_user!).and_return(true)
-    allow(controller).to receive(:current_user).and_return(admin_user)
-    allow(controller).to receive(:user_signed_in?).and_return(true)
+    allow(controller).to receive_messages(authenticate_user!: true, current_user: admin_user, user_signed_in?: true)
   end
 
   describe "POST #create" do
@@ -48,9 +47,7 @@ RSpec.describe Admin::FacilityServicesController do
 
   # Stub Devise authentication methods
   before do
-    allow(controller).to receive(:authenticate_user!).and_return(true)
-    allow(controller).to receive(:current_user).and_return(admin_user)
-    allow(controller).to receive(:user_signed_in?).and_return(true)
+    allow(controller).to receive_messages(authenticate_user!: true, current_user: admin_user, user_signed_in?: true)
   end
 
   describe "POST #create" do
@@ -102,9 +99,7 @@ RSpec.describe Admin::FacilityWelcomesController do
 
   # Stub Devise authentication methods
   before do
-    allow(controller).to receive(:authenticate_user!).and_return(true)
-    allow(controller).to receive(:current_user).and_return(admin_user)
-    allow(controller).to receive(:user_signed_in?).and_return(true)
+    allow(controller).to receive_messages(authenticate_user!: true, current_user: admin_user, user_signed_in?: true)
   end
 
   describe "POST #create" do
@@ -148,9 +143,7 @@ RSpec.describe Admin::FacilityTimeSlotsController do
 
   # Stub Devise authentication methods
   before do
-    allow(controller).to receive(:authenticate_user!).and_return(true)
-    allow(controller).to receive(:current_user).and_return(admin_user)
-    allow(controller).to receive(:user_signed_in?).and_return(true)
+    allow(controller).to receive_messages(authenticate_user!: true, current_user: admin_user, user_signed_in?: true)
   end
 
   describe "GET #new" do
@@ -202,9 +195,7 @@ RSpec.describe Admin::FacilityLocationsController do
 
   # Stub Devise authentication methods
   before do
-    allow(controller).to receive(:authenticate_user!).and_return(true)
-    allow(controller).to receive(:current_user).and_return(admin_user)
-    allow(controller).to receive(:user_signed_in?).and_return(true)
+    allow(controller).to receive_messages(authenticate_user!: true, current_user: admin_user, user_signed_in?: true)
   end
 
   describe "GET #index" do
@@ -246,10 +237,11 @@ RSpec.describe Admin::FacilityLocationsController do
 
   describe "search integration" do
     it "calls Locations::Searcher with query" do
-      mock_locations = [double("Location")]
+      mock_locations = [instance_double(Location)]
       allow(Locations::Searcher).to receive(:call).with(address: "downtown").and_return(mock_locations)
       get :new, params: { facility_id: facility.id, q: "downtown" }
       expect(assigns(:locations)).to eq(mock_locations)
     end
   end
 end
+# rubocop:enable RSpec/MultipleDescribes

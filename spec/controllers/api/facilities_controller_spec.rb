@@ -1,5 +1,5 @@
 require "rails_helper"
-require 'support/shared_examples/api_tokens'
+require "support/shared_examples/api_tokens"
 
 RSpec.describe Api::FacilitiesController do # , type: :request do
   let(:verified_facility) { create(:open_all_day_facility, :with_services, :with_verified) }
@@ -14,7 +14,7 @@ RSpec.describe Api::FacilitiesController do # , type: :request do
   describe "analytics data" do
     let(:load_data) { [verified_facility, nonverified_facility, another_verified_facility] }
 
-    context "GET #show" do
+    context "when showing facility" do
       it "adds analytics data for the request with impression" do
         expect do
           get :show, params: { id: verified_facility.id }
@@ -28,10 +28,9 @@ RSpec.describe Api::FacilitiesController do # , type: :request do
         expect(saved_event.facilities).not_to include(nonverified_facility)
         expect(saved_event.facilities).not_to include(another_verified_facility)
       end
-
     end
 
-    context "GET #index" do
+    context "when handling GET #index" do
       context "with facilities" do
         it "adds analytics data for the request without any impressions" do
           expect do
@@ -68,7 +67,7 @@ RSpec.describe Api::FacilitiesController do # , type: :request do
       get :show, params: request_params
     end
 
-    include_examples :api_tokens
+    it_behaves_like "api tokens"
 
     it { is_expected.to have_http_status(:success) }
 
@@ -120,7 +119,7 @@ RSpec.describe Api::FacilitiesController do # , type: :request do
       get :index, params: request_params
     end
 
-    include_examples :api_tokens
+    it_behaves_like "api tokens"
 
     it { is_expected.to have_http_status(:success) }
 

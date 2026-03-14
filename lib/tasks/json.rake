@@ -10,9 +10,7 @@ namespace :json do
     facilities_hash = {
       v1: { facilities: Facility.is_verified.as_json }
     }
-    File.open(args[:jsonfile], "w") do |f|
-      f.write JSON.pretty_generate(facilities_hash)
-    end
+    File.write(args[:jsonfile], JSON.pretty_generate(facilities_hash))
   end
 
   # Usage Example:

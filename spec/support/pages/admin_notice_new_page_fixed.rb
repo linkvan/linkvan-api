@@ -25,7 +25,7 @@ class AdminNoticeNewPageFixed < BasePage
   def fill_trix_editor(label, with:)
     # Multiple approaches to find the trix editor
     trix_editor = find_trix_editor_for_label(label)
-    
+
     # Use JavaScript to set the Trix editor content
     execute_script("arguments[0].editor.insertHTML(arguments[1])", trix_editor, with)
   end
@@ -55,19 +55,17 @@ class AdminNoticeNewPageFixed < BasePage
         # Try multiple ID patterns
         trix_id_patterns = [
           "#{field_id}_trix_editor",
-          field_id.gsub('_input', '') + "_trix_editor",
-          field_id.gsub('_input', '')
+          "#{field_id.gsub('_input', '')}_trix_editor",
+          field_id.gsub("_input", "")
         ]
-        
+
         trix_id_patterns.each do |trix_id|
-          begin
-            return find("##{trix_id}")
-          rescue Capybara::ElementNotFound
-            next
-          end
+          return find("##{trix_id}")
+        rescue Capybara::ElementNotFound
+          next
         end
       end
-    rescue => e
+    rescue StandardError => e
       puts "Approach 3 failed: #{e.message}"
     end
 
@@ -75,10 +73,8 @@ class AdminNoticeNewPageFixed < BasePage
     begin
       # Look for any trix-editor elements and use the first one
       trix_editors = all("trix-editor")
-      if trix_editors.any?
-        return trix_editors.first
-      end
-    rescue => e
+      return trix_editors.first if trix_editors.any?
+    rescue StandardError => e
       puts "Approach 4 failed: #{e.message}"
     end
 

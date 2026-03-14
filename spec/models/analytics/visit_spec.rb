@@ -141,14 +141,14 @@ RSpec.describe Analytics::Visit, type: :model do
       end
     end
 
-    context "through associations" do
+    context "with through associations" do
       let(:visit) { create(:analytics_visit) }
       let(:event) { create(:analytics_event, visit: visit) }
-      let!(:impression1) { create(:analytics_impression, event: event) }
-      let!(:impression2) { create(:analytics_impression, event: event) }
+      let!(:first_impression) { create(:analytics_impression, event: event) }
+      let!(:second_impression) { create(:analytics_impression, event: event) }
 
       it "can access impressions through events" do
-        expect(visit.impressions).to contain_exactly(impression1, impression2)
+        expect(visit.impressions).to contain_exactly(first_impression, second_impression)
       end
     end
   end
@@ -270,7 +270,7 @@ RSpec.describe Analytics::Visit, type: :model do
       end
     end
 
-    context "edge cases" do
+    context "with edge cases" do
       let(:visit) { create(:analytics_visit, lat: nil, long: nil) }
 
       it "handles negative coordinates" do
@@ -378,20 +378,18 @@ RSpec.describe Analytics::Visit, type: :model do
 
   describe "scopes and class methods" do
     context "when searching by uuid" do
-      let!(:visit1) { create(:analytics_visit, uuid: "test-uuid-1") }
-      let!(:visit2) { create(:analytics_visit, uuid: "test-uuid-2") }
+      let!(:first_visit) { create(:analytics_visit, uuid: "test-uuid-1") }
 
       it "can find visits by uuid" do
-        expect(Analytics::Visit.find_by(uuid: "test-uuid-1")).to eq(visit1)
+        expect(described_class.find_by(uuid: "test-uuid-1")).to eq(first_visit)
       end
     end
 
     context "when searching by session_id" do
-      let!(:visit1) { create(:analytics_visit, session_id: "session-1") }
-      let!(:visit2) { create(:analytics_visit, session_id: "session-2") }
+      let!(:first_visit) { create(:analytics_visit, session_id: "session-1") }
 
       it "can find visits by session_id" do
-        expect(Analytics::Visit.find_by(session_id: "session-1")).to eq(visit1)
+        expect(described_class.find_by(session_id: "session-1")).to eq(first_visit)
       end
     end
   end

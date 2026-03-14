@@ -24,10 +24,10 @@ class Api::NoticesController < Api::BaseController
 
   def load_notices
     @notices = if search_params[:type].present?
-      Notice.where(notice_type: search_params[:type])
-    else
-      Notice.all
-    end
+                 Notice.where(notice_type: search_params[:type])
+               else
+                 Notice.all
+               end
   end
 
   def search_params

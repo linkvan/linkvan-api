@@ -60,10 +60,10 @@ class Admin::FacilitySchedulesController < Admin::BaseController
   end
 
   def create_schedule_params
-    params.require(:schedule).permit(:week_day).merge(update_schedule_params)
+    params.expect(schedule: [:week_day]).merge(update_schedule_params)
   end
 
   def update_schedule_params
-    params.require(:schedule).permit(:open_all_day, :closed_all_day)
+    params.expect(schedule: %i[open_all_day closed_all_day])
   end
 end

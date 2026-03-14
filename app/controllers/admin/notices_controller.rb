@@ -61,6 +61,6 @@ class Admin::NoticesController < Admin::BaseController
   end
 
   def notice_params
-    params.require(:notice).permit(:title, :content, :published, :notice_type)
+    params.expect(notice: %i[title content published notice_type])
   end
 end

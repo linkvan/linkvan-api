@@ -1,7 +1,9 @@
-require 'uri'
+# frozen_string_literal: true
+
+require "uri"
 
 module Locations::GoogleMaps
-  GOOGLE_KEY = "AIzaSyDSLM-Bv5YwI1Ecw2OrMDQF8fZxik6FTzse" #"YOUR_API_KEY"
+  GOOGLE_KEY = ENV.fetch("GOOGLE_MAPS_API_TOKEN", nil)
   # GOOGLE_SIGNATURE = "YOUR_SIGNATURE"
   GOOGLE_SIGNATURE = ""
 

@@ -6,10 +6,10 @@ RSpec.describe Status, type: :model do
   it { expect(status).to be_valid }
 
   describe "attributes" do
-    it { should respond_to(:fid) }
-    it { should respond_to(:changetype) }
-    it { should respond_to(:created_at) }
-    it { should respond_to(:updated_at) }
+    it { is_expected.to respond_to(:fid) }
+    it { is_expected.to respond_to(:changetype) }
+    it { is_expected.to respond_to(:created_at) }
+    it { is_expected.to respond_to(:updated_at) }
   end
 
   describe "creation and persistence" do
@@ -21,7 +21,7 @@ RSpec.describe Status, type: :model do
     end
 
     it "can be retrieved from database" do
-      found_status = Status.find(status.id)
+      found_status = described_class.find(status.id)
       expect(found_status.fid).to eq(status.fid)
       expect(found_status.changetype).to eq(status.changetype)
     end

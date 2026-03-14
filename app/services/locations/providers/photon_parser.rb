@@ -1,4 +1,4 @@
-module Locations::Providers
-  class PhotonParser < BaseParser
-  end
+# frozen_string_literal: true
+
+class Locations::Providers::PhotonParser < Locations::Providers::BaseParser
 end

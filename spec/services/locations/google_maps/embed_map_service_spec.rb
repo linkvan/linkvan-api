@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Locations::GoogleMaps::EmbedMapService, type: :service do
-  before(:each) do
+  before do
     stub_const("Locations::GoogleMaps::EmbedMapService::GOOGLE_KEY", "test_google_key")
     stub_const("Locations::GoogleMaps::EmbedMapService::GOOGLE_SIGNATURE", nil)
   end

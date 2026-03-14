@@ -4,7 +4,6 @@ class FacilityService < ApplicationRecord
   belongs_to :facility, touch: true
   belongs_to :service
 
-  validates :facility, :service, presence: true
   validates :service, uniqueness: { scope: :facility }
 
   delegate :key, :name, to: :service

@@ -6,14 +6,14 @@ require_relative "../../support/pages/admin_facility_new_page"
 require_relative "../../support/shared_contexts/admin_authentication"
 
 RSpec.describe "Admin Facility Management", type: :system do
-  include_context "admin authentication"
+  include_context "with admin authentication"
 
   let(:facilities_index_page) { AdminFacilitiesIndexPage.new }
   let(:facility_new_page) { AdminFacilityNewPage.new }
 
   describe "facility management workflow" do
     describe "create/edit/delete facilities" do
-      context "creating a new facility" do
+      context "when creating a new facility" do
         it "allows admin to create a facility successfully" do
           facilities_index_page.visit_facilities
           facilities_index_page.click_new_facility
@@ -35,8 +35,8 @@ RSpec.describe "Admin Facility Management", type: :system do
         end
       end
 
-      context "editing a facility" do
-        let!(:facility) { create(:facility, name: "Original Name") }
+      context "when editing a facility" do
+        before { create(:facility, name: "Original Name") }
 
         it "allows admin to edit facility details" do
           facilities_index_page.visit_facilities
@@ -58,10 +58,12 @@ RSpec.describe "Admin Facility Management", type: :system do
   end
 
   describe "search and filtering" do
-    let!(:facility1) { create(:facility, name: "Downtown Center", address: "123 Main St") }
-    let!(:facility2) { create(:facility, name: "Uptown Clinic", address: "456 Oak Ave") }
-    let!(:live_facility) { create(:facility, :with_verified, name: "Verified Facility") }
-    let!(:pending_facility) { create(:facility, verified: false, name: "Pending Facility") }
+    before do
+      create(:facility, name: "Downtown Center", address: "123 Main St")
+      create(:facility, name: "Uptown Clinic", address: "456 Oak Ave")
+      create(:facility, :with_verified, name: "Verified Facility")
+      create(:facility, verified: false, name: "Pending Facility")
+    end
 
     it "filters facilities by status" do
       facilities_index_page.visit_facilities

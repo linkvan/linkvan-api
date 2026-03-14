@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Notices::TableComponent < ViewComponent::Base
   attr_reader :notices
 

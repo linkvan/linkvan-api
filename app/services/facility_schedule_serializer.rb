@@ -17,11 +17,8 @@ class FacilityScheduleSerializer < ApplicationService
   private
 
   def hashify_time_slots
-    data = []
-    @facility_schedule.time_slots.each do |time_slot|
-      data << time_slot.as_json(only: %i[from_hour from_min to_hour to_min])
+    @facility_schedule.time_slots.map do |time_slot|
+      time_slot.as_json(only: %i[from_hour from_min to_hour to_min])
     end
-
-    data
   end
 end

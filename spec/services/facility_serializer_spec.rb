@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.shared_context "has the correct attributes" do
+RSpec.shared_context "with the correct attributes" do
   facility_attribs = %i[id name phone lat long services schedule zone updated_at]
 
   # All included Facility atributes
@@ -11,7 +11,7 @@ RSpec.shared_context "has the correct attributes" do
   schedule_attribs = %i[schedule_monday schedule_tuesday schedule_wednesday schedule_thursday schedule_friday schedule_saturday schedule_sunday]
 
   schedule_attribs.each do |schedule_attr|
-    it { expect(subject[:schedule]).to have_key(schedule_attr) }
+    it { expect(returned_data[:schedule]).to have_key(schedule_attr) }
   end
 
   describe "website" do
@@ -36,8 +36,8 @@ RSpec.shared_context "has the correct attributes" do
 end
 
 describe FacilitySerializer do
-  let(:fac_service1) { create(:facility_service, facility: facility) }
-  let(:fac_service2) { create(:facility_service, facility: facility) }
+  let(:first_facility_service) { create(:facility_service, facility: facility) }
+  let(:second_facility_service) { create(:facility_service, facility: facility) }
 
   let(:always_closed_facility) { create(:close_all_day_facility, :with_services) }
   let(:all_day_facility) { create(:open_all_day_facility, :with_services) }
@@ -57,13 +57,13 @@ describe FacilitySerializer do
       let(:expected_keys) { Facility.attribute_names + %w[schedule zone services welcomes] }
 
       it { expect(returned_keys.count).to eq(expected_keys.count) }
-      it { is_expected.to contain_exactly(*expected_keys) }
+      it { is_expected.to match_array(expected_keys) }
     end
 
     context "when facility is always closed" do
       let(:facility) { always_closed_facility }
 
-      it_behaves_like "has the correct attributes"
+      it_behaves_like "with the correct attributes"
 
       it { expect(returned_data[:services].count).to eq(facility.services.count) }
     end
@@ -71,7 +71,7 @@ describe FacilitySerializer do
     context "when facility is always open" do
       let(:facility) { all_day_facility }
 
-      it_behaves_like "has the correct attributes"
+      it_behaves_like "with the correct attributes"
 
       it { expect(returned_data[:services].count).to eq(facility.services.count) }
     end
@@ -80,7 +80,7 @@ describe FacilitySerializer do
       context "with 1 time slot" do
         let(:facility) { now_open_facility }
 
-        it_behaves_like "has the correct attributes"
+        it_behaves_like "with the correct attributes"
 
         it { expect(returned_data[:services].count).to eq(facility.services.count) }
       end
@@ -88,7 +88,7 @@ describe FacilitySerializer do
       context "with 2 time slots" do
         let(:facility) { now_open2_facility }
 
-        it_behaves_like "has the correct attributes"
+        it_behaves_like "with the correct attributes"
       end
     end
   end
