@@ -1,7 +1,7 @@
 ---
 description: Review code for quality and Rails conventions (report + suggest on request)
 mode: subagent
-model: github-copilot/grok-code-fast-1
+model: minimax-coding-plan/MiniMax-M2.5
 permission:
   skill:
     "rails-code-quality": "allow"
