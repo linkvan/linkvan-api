@@ -202,6 +202,7 @@ module External::VancouverCity
       params
     end
 
+    # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity
     # Handle API response and error checking
     # @yield Block that makes the HTTP request
     # @return [Faraday::Response] The successful response with parsed JSON body
@@ -248,5 +249,6 @@ module External::VancouverCity
     rescue StandardError => e
       raise VancouverApiError.new("Unexpected error: #{e.message}", nil, nil)
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/PerceivedComplexity
   end
 end

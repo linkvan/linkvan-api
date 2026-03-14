@@ -17,6 +17,7 @@ class External::VancouverCity::FacilitySyncer < ApplicationService
   end
   # rubocop:enable Lint/MissingSuper
 
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def call
     builder_result = External::VancouverCity::FacilityBuilder.call(record: record, api_key: api_key)
     if builder_result.failed?
@@ -78,6 +79,7 @@ class External::VancouverCity::FacilitySyncer < ApplicationService
       errors: errors
     )
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   private
 
