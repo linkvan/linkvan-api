@@ -113,13 +113,14 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
     end
 
     it "logs errors appropriately" do
-      syncer = described_class.new(record: valid_record, api_key: api_key)
+      allow(Rails.logger).to receive(:info)
 
-      expect(Rails.logger).to receive(:info).with(
+      syncer = described_class.new(record: valid_record, api_key: api_key)
+      syncer.call
+
+      expect(Rails.logger).to have_received(:info).with(
         a_string_matching(/Creating new facility with external_id 'LOG_TEST123'/)
       )
-
-      syncer.call
     end
   end
 

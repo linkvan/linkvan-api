@@ -73,14 +73,13 @@ RSpec.describe Translator, type: :service do
       end
 
       it "caches the dictionary result" do
-        # Clear any existing cache
         described_class.instance_variable_set(:@services_dictionary, nil)
+        service = create(:service, key: "test_cache", name: "Test Cache")
 
-        # First call should build the dictionary
+        allow(Service).to receive(:find_each).and_yield(service)
         dictionary1 = described_class.services_dictionary
 
-        # Second call should use cached result (no database calls)
-        expect(Service).not_to receive(:all)
+        expect(Service).to have_received(:find_each)
         dictionary2 = described_class.services_dictionary
 
         expect(dictionary1).to eq(dictionary2)

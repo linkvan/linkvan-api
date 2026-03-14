@@ -58,8 +58,8 @@ RSpec.describe SiteStats, type: :model do
     let(:last_updated_time) { Time.current }
 
     context "when both facilities and notices exist" do
-      let(:last_facility) { double(updated_at: last_updated_time - 1.hour) }
-      let(:last_notice) { double(updated_at: last_updated_time) }
+      let(:last_facility) { instance_double(Facility, updated_at: last_updated_time - 1.hour) }
+      let(:last_notice) { instance_double(Notice, updated_at: last_updated_time) }
 
       before do
         allow(described_class).to receive_messages(last_facility: last_facility, last_notice: last_notice)
@@ -71,7 +71,7 @@ RSpec.describe SiteStats, type: :model do
     end
 
     context "when only facilities exist" do
-      let(:last_facility) { double(updated_at: last_updated_time) }
+      let(:last_facility) { instance_double(Facility, updated_at: last_updated_time) }
 
       before do
         allow(described_class).to receive_messages(last_facility: last_facility, last_notice: nil)
@@ -83,7 +83,7 @@ RSpec.describe SiteStats, type: :model do
     end
 
     context "when only notices exist" do
-      let(:last_notice) { double(updated_at: last_updated_time) }
+      let(:last_notice) { instance_double(Notice, updated_at: last_updated_time) }
 
       before do
         allow(described_class).to receive_messages(last_facility: nil, last_notice: last_notice)

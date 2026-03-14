@@ -71,10 +71,12 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "logs warning message with facility name" do
-        expect(Rails.logger).to receive(:warn).with("Facility with name 'Internal Fountain' already exists internally, adding services")
+        allow(Rails.logger).to receive(:warn)
 
         syncer = described_class.new(record: update_record, api_key: api_key)
         syncer.call
+
+        expect(Rails.logger).to have_received(:warn).with("Facility with name 'Internal Fountain' already exists internally, adding services")
       end
 
       it "returns success result" do
@@ -147,7 +149,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
         allow(Facility).to receive(:where).and_call_original
         allow(Facility).to receive(:where).with(name: "Service Error Fountain").and_return(
-          double(order: double(first: existing_facility))
+          instance_double(ActiveRecord::Relation, order: instance_double(ActiveRecord::Relation, first: existing_facility))
         )
         allow(existing_facility.facility_services).to receive(:create!).and_raise(
           ActiveRecord::RecordInvalid.new(FacilityService.new)
@@ -180,7 +182,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
         allow(Facility).to receive(:where).and_call_original
         allow(Facility).to receive(:where).with(name: "Generic Error Fountain").and_return(
-          double(order: double(first: existing_facility))
+          instance_double(ActiveRecord::Relation, order: instance_double(ActiveRecord::Relation, first: existing_facility))
         )
         allow(existing_facility.facility_services).to receive(:create!).and_raise(
           StandardError.new("Database connection failed")
@@ -341,7 +343,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       before do
         allow(Facility).to receive(:where).and_call_original
         allow(Facility).to receive(:where).with(name: "Rollback Internal Test").and_return(
-          double(order: double(first: rollback_internal_facility))
+          instance_double(ActiveRecord::Relation, order: instance_double(ActiveRecord::Relation, first: rollback_internal_facility))
         )
         allow(rollback_internal_facility.facility_services).to receive(:create!).and_raise(StandardError.new("Service creation failed"))
       end
@@ -408,7 +410,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       before do
         allow(Facility).to receive(:where).and_call_original
         allow(Facility).to receive(:where).with(name: "Validation Test Facility").and_return(
-          double(order: double(first: validation_internal_facility))
+          instance_double(ActiveRecord::Relation, order: instance_double(ActiveRecord::Relation, first: validation_internal_facility))
         )
         allow(validation_internal_facility.facility_services).to receive(:create!).and_raise(
           ActiveRecord::RecordInvalid.new(FacilityService.new)

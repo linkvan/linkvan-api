@@ -112,7 +112,7 @@ RSpec.describe External::VancouverCity::VancouverApiClient, "#call", type: :serv
                         status: 200,
                         body: "invalid json {",
                         headers: { "content-type" => "application/json" },
-                        env: double(body: nil))
+                        env: instance_double(Faraday::Env, body: nil))
       end
 
       before do

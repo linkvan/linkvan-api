@@ -63,10 +63,12 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "does not attempt database operations" do
-        expect(Facility).not_to receive(:where)
+        allow(Facility).to receive(:where)
 
         syncer = described_class.new(record: invalid_record, api_key: api_key)
         syncer.call
+
+        expect(Facility).not_to have_received(:where)
       end
     end
 

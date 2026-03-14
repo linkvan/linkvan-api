@@ -19,7 +19,7 @@ RSpec.shared_context "with vancouver api client shared setup" do
                     status: 200,
                     body: body,
                     headers: { "content-type" => "application/json" },
-                    env: double(body: nil)).tap do |response|
+                    env: instance_double(Faraday::Env, body: nil)).tap do |response|
       allow(response.env).to receive(:body=)
     end
   end

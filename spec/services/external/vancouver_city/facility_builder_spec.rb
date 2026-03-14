@@ -422,10 +422,12 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
         end
 
         it "logs the error and record data" do
-          expect(Rails.logger).to receive(:warn).with(a_string_matching(/Failed to build facility from record:/))
-          expect(Rails.logger).to receive(:warn).with("Record data: #{record_with_invalid_name.inspect}")
+          allow(Rails.logger).to receive(:warn)
 
           builder.call
+
+          expect(Rails.logger).to have_received(:warn).with(a_string_matching(/Failed to build facility from record:/))
+          expect(Rails.logger).to have_received(:warn).with("Record data: #{record_with_invalid_name.inspect}")
         end
       end
 

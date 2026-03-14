@@ -156,7 +156,7 @@ RSpec.describe GeoLocation do
 
   describe ".search" do
     let(:args) { ["123 Main St, Vancouver, BC"] }
-    let(:geocoder_results) { [double("Geocoder Result")] }
+    let(:geocoder_results) { [instance_double(Geocoder::Result)] }
 
     before do
       allow(Geocoder).to receive(:search).and_return(geocoder_results)

@@ -66,10 +66,12 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "logs update message with external_id" do
-        expect(Rails.logger).to receive(:info).with("Facility with external_id 'EXT_UPDATE123' already exists, updating services")
+        allow(Rails.logger).to receive(:info)
 
         syncer = described_class.new(record: update_record, api_key: api_key)
         syncer.call
+
+        expect(Rails.logger).to have_received(:info).with("Facility with external_id 'EXT_UPDATE123' already exists, updating services")
       end
 
       it "returns success result" do

@@ -2,6 +2,8 @@
 
 require "rails_helper"
 
+GeocoderResultMock = Struct.new(:latitude, :longitude, :address, :state, :province, :country, :data, :city, :postal_code, :street_address)
+
 RSpec.describe Locations::Searcher, type: :service do
   describe "initialization" do
     it "initializes with address parameter" do
@@ -30,14 +32,14 @@ RSpec.describe Locations::Searcher, type: :service do
 
     context "with successful geocoding" do
       let(:geocoder_result_one) do
-        double("Geocoder Result 1").tap do |double|
-          allow(double).to receive_messages(latitude: 49.243463, longitude: -123.106431, address: "123 Main St", city: "Vancouver", state: "BC", postal_code: "V6A 1A1", country: "Canada", data: { "place_id" => "12345" }, street_address: "123 Main St")
+        instance_double(Geocoder::Result::Base).tap do |double|
+          allow(double).to receive_messages(latitude: 49.243463, longitude: -123.106431, address: "123 Main St", state: "BC", province: "British Columbia", country: "Canada", data: { "place_id" => "12345" })
         end
       end
 
       let(:geocoder_result_two) do
-        double("Geocoder Result 2").tap do |double|
-          allow(double).to receive_messages(latitude: 49.243464, longitude: -123.106432, address: "123 Main Street", city: "Vancouver", state: "BC", postal_code: "V6A 1A2", country: "Canada", data: { "place_id" => "67890" }, street_address: "123 Main Street")
+        instance_double(Geocoder::Result::Base).tap do |double|
+          allow(double).to receive_messages(latitude: 49.243464, longitude: -123.106432, address: "123 Main Street", state: "BC", province: "British Columbia", country: "Canada", data: { "place_id" => "67890" })
         end
       end
 
@@ -155,8 +157,8 @@ RSpec.describe Locations::Searcher, type: :service do
 
     context "with single result" do
       let(:geocoder_result) do
-        double("Geocoder Result").tap do |double|
-          allow(double).to receive_messages(latitude: 49.243463, longitude: -123.106431, address: "123 Main St", city: "Vancouver", state: "BC", postal_code: "V6A 1A1", country: "Canada", data: {}, street_address: "123 Main St")
+        instance_double(Geocoder::Result::Base).tap do |double|
+          allow(double).to receive_messages(latitude: 49.243463, longitude: -123.106431, address: "123 Main St", state: "BC", province: "British Columbia", country: "Canada", data: {})
         end
       end
 
@@ -328,8 +330,8 @@ RSpec.describe Locations::Searcher, type: :service do
 
     context "with Locations::Parser integration" do
       let(:geocoder_result) do
-        double("Geocoder Result").tap do |double|
-          allow(double).to receive_messages(latitude: 49.243463, longitude: -123.106431, address: "123 Main St", city: "Vancouver", state: "BC", postal_code: "V6A 1A1", country: "Canada", data: { "provider" => "test" }, street_address: "123 Main St")
+        instance_double(Geocoder::Result::Base).tap do |double|
+          allow(double).to receive_messages(latitude: 49.243463, longitude: -123.106431, address: "123 Main St", state: "BC", province: "British Columbia", country: "Canada", data: { "provider" => "test" })
         end
       end
 
@@ -378,8 +380,8 @@ RSpec.describe Locations::Searcher, type: :service do
 
     context "with Location.build_from integration" do
       let(:geocoder_result) do
-        double("Geocoder Result").tap do |double|
-          allow(double).to receive_messages(latitude: 49.243463, longitude: -123.106431, address: "123 Main St", city: "Vancouver", state: "BC", postal_code: "V6A 1A1", country: "Canada", data: {}, street_address: "123 Main St")
+        instance_double(Geocoder::Result::Base).tap do |double|
+          allow(double).to receive_messages(latitude: 49.243463, longitude: -123.106431, address: "123 Main St", state: "BC", province: "British Columbia", country: "Canada", data: {})
         end
       end
 
@@ -436,9 +438,18 @@ RSpec.describe Locations::Searcher, type: :service do
     context "with lazy evaluation performance" do
       let(:geocoder_results) do
         Array.new(1000) do |i|
-          double("Geocoder Result #{i}").tap do |double|
-            allow(double).to receive_messages(latitude: 49.243463 + (i * 0.001), longitude: -123.106431 + (i * 0.001), address: "123 Main St #{i}", city: "Vancouver", state: "BC", postal_code: "V6A 1A#{i}", country: "Canada", data: { "index" => i }, street_address: "123 Main St #{i}")
-          end
+          GeocoderResultMock.new(
+            49.243463 + (i * 0.001),
+            -123.106431 + (i * 0.001),
+            "123 Main St #{i}",
+            "BC",
+            "British Columbia",
+            "Canada",
+            { "index" => i },
+            "Vancouver",
+            "V6A 1A#{i}",
+            "123 Main St #{i}"
+          )
         end
       end
 
@@ -471,7 +482,7 @@ RSpec.describe Locations::Searcher, type: :service do
     end
 
     context "with memory efficiency" do
-      let(:large_result_set) { Array.new(10_000) { double("Geocoder Result") } }
+      let(:large_result_set) { Array.new(10_000) { instance_double(Geocoder::Result::Base) } }
 
       before do
         allow(Geocoder).to receive(:search).with(address).and_return(large_result_set)
