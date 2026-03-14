@@ -179,9 +179,7 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
           result = builder.call
           facility = result.data[:facility]
 
-          facility.schedules.each do |schedule|
-            expect(schedule).to be_valid, "Expected #{schedule.week_day} schedule to be valid: #{schedule.errors.full_messages}"
-          end
+          expect(facility.schedules).to all(be_valid)
         end
 
         it "sets schedule availability to :open for all days" do

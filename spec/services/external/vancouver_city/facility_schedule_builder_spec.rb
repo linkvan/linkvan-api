@@ -102,9 +102,7 @@ RSpec.describe External::VancouverCity::FacilityScheduleBuilder, type: :service 
       it "creates valid schedule objects" do
         builder.call
 
-        facility.schedules.each do |schedule|
-          expect(schedule).to be_valid, "Expected #{schedule.week_day} schedule to be valid: #{schedule.errors.full_messages}"
-        end
+        expect(facility.schedules).to all(be_valid)
       end
     end
 

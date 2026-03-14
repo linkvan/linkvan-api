@@ -339,7 +339,7 @@
 
 | ID | Priority | Status | Offenses | File | Notes |
 |----|----------|--------|----------|------|-------|
-| 15.1 | HIGH | 🔄 In Progress | 31 | Multiple | ATTEMPTED - auto-correction broke tests, fixed namespace issues in faraday_adapter.rb and syncer.rb, tests now passing |
+| 15.1 | HIGH | ✅ Completed | 4 | Multiple | Auto-corrected 4 offenses: RSpec/IteratedExpectation (3), Lint/Void (1), tests passing |
 
 ---
 
@@ -527,12 +527,12 @@ Stage 11 (MEDIUM):   ███████████████████�
 Stage 12 (MEDIUM):   ████████████████████ 2/2 items completed (100%)
 Stage 13 (LOW):      ████████░░░░░░░░░░░░ 1/3 items completed (33%)
 Stage 14 (LOW):      ░░░░░░░░░░░░░░░░░░░░ 0/4 items completed (0%)
-Stage 15 (HIGH):     ██░░░░░░░░░░░░░░░░░░ 1/1 items in progress (attempted)
+Stage 15 (HIGH):     ████████████████████ 1/1 items completed (100%)
 Stage 16 (MEDIUM):   ░░░░░░░░░░░░░░░░░░░░ 0/4 items completed (0%)
 Stage 17 (MEDIUM):   ░░░░░░░░░░░░░░░░░░░░ 0/3 items completed (0%)
 Stage 18 (MEDIUM):   ░░░░░░░░░░░░░░░░░░░░ 0/5 items completed (0%)
 Stage 19 (LOW):      ░░░░░░░░░░░░░░░░░░░░ 0/5 items completed (0%)
-Overall:             ████████████████░░░░ 51/64 items completed (80%, 1 in progress)
+Overall:             ████████████████░░░░ 52/64 items completed (81%)
 ```
 
 ### Offense Resolution Progress
@@ -620,6 +620,7 @@ Reduction: ████████████████░░░░ 1040/302
 | 2026-02-01 | Completed Stage 12 - Rails & Performance (12 offenses) | Assistant |
 | 2026-02-01 | Completed Stage 13.1 - Refactor Any Instance Usage (16 offenses) | Assistant |
 | 2026-03-14 | Stage 15 attempted - unsafe auto-correction broke tests, fixed namespace issues in faraday_adapter.rb and syncer.rb, tests now passing (1912 examples, 0 failures) | Assistant |
+| 2026-03-14 | Completed Stage 15 - fixed RSpec/IteratedExpectation and Lint/Void offenses (4 total), tests passing | Assistant |
 
 ---
 

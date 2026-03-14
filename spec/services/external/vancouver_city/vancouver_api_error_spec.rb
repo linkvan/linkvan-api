@@ -2,9 +2,6 @@
 
 require "rails_helper"
 
-# Trigger autoloading
-External::VancouverCity::VancouverApiClient if defined?(External::VancouverCity)
-
 # Test the custom error class
 RSpec.describe External::VancouverCity::VancouverApiError, type: :service do
   describe "#initialize" do

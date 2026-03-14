@@ -91,9 +91,7 @@ RSpec.describe External::VancouverCity::FacilityWelcomeBuilder, type: :service d
       it "creates valid welcome objects" do
         builder.call
 
-        facility.facility_welcomes.each do |welcome|
-          expect(welcome).to be_valid, "Expected welcome to be valid: #{welcome.errors.full_messages}"
-        end
+        expect(facility.facility_welcomes).to all(be_valid)
       end
     end
 
