@@ -80,8 +80,8 @@ RSpec.describe Api::HomeController do
               created_event
             end
 
-            it { expect(created_event.lat).to eq(nil) }
-            it { expect(created_event.long).to eq(nil) }
+            it { expect(created_event.lat).to be_nil }
+            it { expect(created_event.long).to be_nil }
           end
         end
 
@@ -118,8 +118,8 @@ RSpec.describe Api::HomeController do
               created_event
             end
 
-            it { expect(created_event.lat).to eq(nil) }
-            it { expect(created_event.long).to eq(nil) }
+            it { expect(created_event.lat).to be_nil }
+            it { expect(created_event.long).to be_nil }
           end
         end
 
@@ -137,8 +137,8 @@ RSpec.describe Api::HomeController do
               created_event
             end
 
-            it { expect(created_event.lat).to eq(nil) }
-            it { expect(created_event.long).to eq(nil) }
+            it { expect(created_event.lat).to be_nil }
+            it { expect(created_event.long).to be_nil }
           end
         end
       end

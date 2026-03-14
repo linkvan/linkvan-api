@@ -40,7 +40,7 @@ RSpec.describe Facility, type: :model do
     end
   end
 
-  include_examples "discardable" do
+  it_behaves_like "discardable" do
     subject(:model) { facility }
   end
 

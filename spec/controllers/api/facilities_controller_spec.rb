@@ -67,7 +67,7 @@ RSpec.describe Api::FacilitiesController do # , type: :request do
       get :show, params: request_params
     end
 
-    include_examples "api tokens"
+    it_behaves_like "api tokens"
 
     it { is_expected.to have_http_status(:success) }
 
@@ -119,7 +119,7 @@ RSpec.describe Api::FacilitiesController do # , type: :request do
       get :index, params: request_params
     end
 
-    include_examples "api tokens"
+    it_behaves_like "api tokens"
 
     it { is_expected.to have_http_status(:success) }
 

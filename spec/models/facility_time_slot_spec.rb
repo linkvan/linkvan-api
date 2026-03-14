@@ -4,7 +4,7 @@ RSpec.shared_context "includes another time slot same to_hour" do
   context "with same to_hour" do
     let(:to_hour) { 11 }
 
-    it { expect(overlaps).to eq(true) }
+    it { expect(overlaps).to be(true) }
     it { expect(overlapping_time_slots).to include(another_time_slot) }
     it { expect(overlapping_time_slots.count).to eq(1) }
   end
@@ -14,7 +14,7 @@ RSpec.shared_context "includes another time slot to_hour before" do
   context "with to_hour before" do
     let(:to_hour) { 10 }
 
-    it { expect(overlaps).to eq(true) }
+    it { expect(overlaps).to be(true) }
     it { expect(overlapping_time_slots).to include(another_time_slot) }
     it { expect(overlapping_time_slots.count).to eq(1) }
   end
@@ -24,7 +24,7 @@ RSpec.shared_context "includes another time slot to_hour after" do
   context "with to_hour after" do
     let(:to_hour) { 12 }
 
-    it { expect(overlaps).to eq(true) }
+    it { expect(overlaps).to be(true) }
     it { expect(overlapping_time_slots).to include(another_time_slot) }
     it { expect(overlapping_time_slots.count).to eq(1) }
   end
@@ -68,15 +68,15 @@ RSpec.describe FacilityTimeSlot, type: :model do
         context "with from_hour before" do
           let(:from_hour) { 8 }
 
-          include_examples "includes another time slot same to_hour"
-          include_examples "includes another time slot to_hour before"
+          it_behaves_like "includes another time slot same to_hour"
+          it_behaves_like "includes another time slot to_hour before"
         end
 
         context "with same from_hour" do
           let(:from_hour) { 9 }
 
-          include_examples "includes another time slot same to_hour"
-          include_examples "includes another time slot to_hour before"
+          it_behaves_like "includes another time slot same to_hour"
+          it_behaves_like "includes another time slot to_hour before"
         end
       end
 
@@ -88,15 +88,15 @@ RSpec.describe FacilityTimeSlot, type: :model do
         context "with from_hour before" do
           let(:from_hour) { 8 }
 
-          include_examples "includes another time slot same to_hour"
-          include_examples "includes another time slot to_hour after"
+          it_behaves_like "includes another time slot same to_hour"
+          it_behaves_like "includes another time slot to_hour after"
         end
 
         context "with same from_hour" do
           let(:from_hour) { 9 }
 
-          include_examples "includes another time slot same to_hour"
-          include_examples "includes another time slot to_hour before"
+          it_behaves_like "includes another time slot same to_hour"
+          it_behaves_like "includes another time slot to_hour before"
         end
       end
     end
@@ -114,15 +114,15 @@ RSpec.describe FacilityTimeSlot, type: :model do
         context "with from_hour after" do
           let(:from_hour) { 10 }
 
-          include_examples "includes another time slot same to_hour"
-          include_examples "includes another time slot to_hour before"
+          it_behaves_like "includes another time slot same to_hour"
+          it_behaves_like "includes another time slot to_hour before"
         end
 
         context "with same from_hour" do
           let(:from_hour) { 9 }
 
-          include_examples "includes another time slot same to_hour"
-          include_examples "includes another time slot to_hour before"
+          it_behaves_like "includes another time slot same to_hour"
+          it_behaves_like "includes another time slot to_hour before"
         end
       end
 
@@ -134,15 +134,15 @@ RSpec.describe FacilityTimeSlot, type: :model do
         context "with from_hour after" do
           let(:from_hour) { 10 }
 
-          include_examples "includes another time slot same to_hour"
-          include_examples "includes another time slot to_hour after"
+          it_behaves_like "includes another time slot same to_hour"
+          it_behaves_like "includes another time slot to_hour after"
         end
 
         context "with same from_hour" do
           let(:from_hour) { 9 }
 
-          include_examples "includes another time slot same to_hour"
-          include_examples "includes another time slot to_hour before"
+          it_behaves_like "includes another time slot same to_hour"
+          it_behaves_like "includes another time slot to_hour before"
         end
       end
     end
@@ -155,7 +155,7 @@ RSpec.describe FacilityTimeSlot, type: :model do
       let(:to_hour) { 12 }
       let(:to_min) { 15 }
 
-      it { expect(overlaps).to eq(false) }
+      it { expect(overlaps).to be(false) }
       it { expect(overlapping_time_slots).not_to include(another_time_slot) }
       it { expect(overlapping_time_slots.count).to eq(0) }
     end
@@ -168,7 +168,7 @@ RSpec.describe FacilityTimeSlot, type: :model do
       let(:to_hour) { 13 }
       let(:to_min) { 45 }
 
-      it { expect(overlaps).to eq(false) }
+      it { expect(overlaps).to be(false) }
       it { expect(overlapping_time_slots).not_to include(another_time_slot) }
       it { expect(overlapping_time_slots.count).to eq(0) }
     end

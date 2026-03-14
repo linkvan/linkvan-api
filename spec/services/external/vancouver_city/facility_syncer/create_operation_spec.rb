@@ -290,10 +290,10 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       it "creates facility with all related records atomically" do
         syncer = described_class.new(record: success_record, api_key: api_key)
 
-        expect { syncer.call }.to change { Facility.count }.by(1)
-          .and change { FacilityService.count }.by(1)
-          .and change { FacilitySchedule.count }.by(7) # 7 days of the week
-          .and change { FacilityWelcome.count }.by_at_least(1)
+        expect { syncer.call }.to change(Facility, :count).by(1)
+          .and change(FacilityService, :count).by(1)
+          .and change(FacilitySchedule, :count).by(7) # 7 days of the week
+          .and change(FacilityWelcome, :count).by_at_least(1)
       end
 
       it "creates facility with correct attributes and relationships" do

@@ -28,7 +28,7 @@ RSpec.describe Api::ZonesController do
       get_index
     end
 
-    include_examples "api tokens"
+    it_behaves_like "api tokens"
 
     it { is_expected.to have_http_status(:success) }
 
