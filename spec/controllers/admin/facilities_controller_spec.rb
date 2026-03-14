@@ -461,7 +461,7 @@ RSpec.describe Admin::FacilitiesController do
 
     it { is_expected.to have_http_status(:redirect) }
 
-    context "switching to live" do
+    context "when switching to live" do
       before { patch_switch }
 
       it "verifies the facility" do
@@ -473,7 +473,7 @@ RSpec.describe Admin::FacilitiesController do
       end
     end
 
-    context "switching to pending_reviews" do
+    context "when switching to pending_reviews" do
       let(:status) { "pending_reviews" }
       let(:facility) { create(:facility, verified: true, lat: 49.2827, long: -123.1207) }
 
@@ -507,7 +507,7 @@ RSpec.describe Admin::FacilitiesController do
 
   describe "before_action callbacks" do
     describe "#load_facility" do
-      context "for show action" do
+      context "when the show action" do
         let(:facility) { create(:facility) }
 
         before { get :show, params: { id: facility.id } }
@@ -515,7 +515,7 @@ RSpec.describe Admin::FacilitiesController do
         it { expect(assigns(:facility)).to eq(facility) }
       end
 
-      context "for edit action" do
+      context "when the edit action" do
         let(:facility) { create(:facility) }
 
         before { get :edit, params: { id: facility.id } }
@@ -523,7 +523,7 @@ RSpec.describe Admin::FacilitiesController do
         it { expect(assigns(:facility)).to eq(facility) }
       end
 
-      context "for update action" do
+      context "when the update action" do
         let(:facility) { create(:facility) }
 
         before { patch :update, params: { id: facility.id, facility: { name: "New" } } }
@@ -531,7 +531,7 @@ RSpec.describe Admin::FacilitiesController do
         it { expect(assigns(:facility)).to eq(facility) }
       end
 
-      context "for destroy action" do
+      context "when the destroy action" do
         let(:facility) { create(:facility) }
 
         before { delete :destroy, params: { id: facility.id, facility: { discard_reason: "closed" } } }
@@ -539,7 +539,7 @@ RSpec.describe Admin::FacilitiesController do
         it { expect(assigns(:facility)).to eq(facility) }
       end
 
-      context "for switch_status action" do
+      context "when the switch_status action" do
         let(:facility) { create(:facility) }
 
         before { patch :switch_status, params: { id: facility.id, status: "live" } }

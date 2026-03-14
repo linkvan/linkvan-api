@@ -141,7 +141,7 @@ RSpec.describe Analytics::Visit, type: :model do
       end
     end
 
-    context "through associations" do
+    context "with through associations" do
       let(:visit) { create(:analytics_visit) }
       let(:event) { create(:analytics_event, visit: visit) }
       let!(:first_impression) { create(:analytics_impression, event: event) }
@@ -270,7 +270,7 @@ RSpec.describe Analytics::Visit, type: :model do
       end
     end
 
-    context "edge cases" do
+    context "with edge cases" do
       let(:visit) { create(:analytics_visit, lat: nil, long: nil) }
 
       it "handles negative coordinates" do

@@ -489,7 +489,7 @@ RSpec.describe Admin::AlertsController do
     end
 
     describe "#load_alert" do
-      context "for show action" do
+      context "when the show action" do
         let(:alert) { create(:alert) }
 
         before { get :show, params: { id: alert.id } }
@@ -497,7 +497,7 @@ RSpec.describe Admin::AlertsController do
         it { expect(assigns(:alert)).to eq(alert) }
       end
 
-      context "for edit action" do
+      context "when the edit action" do
         let(:alert) { create(:alert) }
 
         before { get :edit, params: { id: alert.id } }
@@ -505,7 +505,7 @@ RSpec.describe Admin::AlertsController do
         it { expect(assigns(:alert)).to eq(alert) }
       end
 
-      context "for update action" do
+      context "when the update action" do
         let(:alert) { create(:alert) }
 
         before { patch :update, params: { id: alert.id, alert: { title: "Updated" } } }
@@ -513,7 +513,7 @@ RSpec.describe Admin::AlertsController do
         it { expect(assigns(:alert)).to eq(alert) }
       end
 
-      context "for destroy action" do
+      context "when the destroy action" do
         let(:alert) { create(:alert) }
 
         before { delete :destroy, params: { id: alert.id } }
@@ -690,7 +690,7 @@ RSpec.describe Admin::AlertsController do
     describe "switching between active and inactive" do
       let(:alert) { create(:alert, active: false) }
 
-      context "updating from inactive to active" do
+      context "when updating from inactive to active" do
         before do
           patch :update, params: {
             id: alert.id,
@@ -707,7 +707,7 @@ RSpec.describe Admin::AlertsController do
         end
       end
 
-      context "updating from active to inactive" do
+      context "when updating from active to inactive" do
         let(:alert) { create(:alert, active: true) }
 
         before do

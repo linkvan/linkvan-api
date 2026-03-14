@@ -30,7 +30,7 @@ RSpec.describe Api::FacilitiesController do # , type: :request do
       end
     end
 
-    context "GET #index" do
+    context "when handling GET #index" do
       context "with facilities" do
         it "adds analytics data for the request without any impressions" do
           expect do

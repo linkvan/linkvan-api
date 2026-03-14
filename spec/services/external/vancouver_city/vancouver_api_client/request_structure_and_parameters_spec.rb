@@ -4,7 +4,7 @@ require "rails_helper"
 require_relative "../../vancouver_api/vancouver_api_client/shared_helpers"
 
 RSpec.describe External::VancouverCity::VancouverApiClient, "#call", type: :service do
-  include_context "vancouver api client shared setup"
+  include_context "with vancouver api client shared setup"
 
   let(:mock_adapter) { instance_double(External::VancouverCity::Adapters::FaradayAdapter) }
   let(:test_client) { create_test_client_with_mock_adapter(mock_adapter) }

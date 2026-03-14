@@ -206,7 +206,7 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
           end
         end
 
-        context "business requirement verification" do
+        context "with business requirement verification" do
           it "ensures imported facilities are always accessible 24/7" do
             result = builder.call
             facility = result.data[:facility]

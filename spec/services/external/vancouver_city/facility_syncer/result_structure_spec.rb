@@ -135,7 +135,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
   end
 
   describe "operation type consistency" do
-    context "for create operations" do
+    context "when for create operations" do
       let(:create_record) do
         {
           "mapid" => "CREATE_OP123",
@@ -154,7 +154,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
     end
 
-    context "for external_update operations" do
+    context "when for external_update operations" do
       let(:existing_external_facility) do
         create(:facility,
                external_id: "EXT_OP123",
@@ -180,7 +180,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
     end
 
-    context "for internal_update operations" do
+    context "when for internal_update operations" do
       let(:existing_internal_facility) do
         create(:facility,
                external_id: nil,

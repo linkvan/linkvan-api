@@ -235,7 +235,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
     end
 
-    context "database record updates on success" do
+    context "when database record updates on success" do
       let!(:external_facility_with_data) do
         facility = create(:facility,
                           external_id: "DB_UPDATE123",
@@ -320,7 +320,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
     end
 
-    context "transaction rollback on failure" do
+    context "when transaction rollback on failure" do
       let!(:rollback_facility) do
         create(:facility,
                external_id: "ROLLBACK123",

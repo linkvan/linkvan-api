@@ -92,14 +92,14 @@ RSpec.describe FacilityWelcome, type: :model do
       context "with exact match" do
         let(:value) { "male" }
 
-        it { expect(subject).to include(male_welcome) }
-        it { expect(subject).not_to include(female_welcome) }
+        it { expect(searched_facility_welcomes).to include(male_welcome) }
+        it { expect(searched_facility_welcomes).not_to include(female_welcome) }
       end
 
       context "with different case" do
         let(:value) { "MALE" }
 
-        it { expect(subject).to include(male_welcome) }
+        it { expect(searched_facility_welcomes).to include(male_welcome) }
       end
     end
   end

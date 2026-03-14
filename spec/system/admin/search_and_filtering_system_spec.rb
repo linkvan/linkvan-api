@@ -5,7 +5,7 @@ require_relative "../../support/pages/admin_facilities_index_page"
 require_relative "../../support/shared_contexts/admin_authentication"
 
 RSpec.describe "Admin Search and Filtering", type: :system do
-  include_context "admin authentication"
+  include_context "with admin authentication"
   let(:facilities_index_page) { AdminFacilitiesIndexPage.new }
 
   describe "facility filtering by status" do

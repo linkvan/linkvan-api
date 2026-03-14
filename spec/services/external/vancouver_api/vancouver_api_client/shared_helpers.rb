@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.shared_context "vancouver api client shared setup" do
+RSpec.shared_context "with vancouver api client shared setup" do
   let(:default_adapter) { External::VancouverCity::DEFAULT_ADAPTER }
   let(:client) { described_class.new(adapter: default_adapter) }
   let(:base_url) { "https://opendata.vancouver.ca/api/explore/v2.1" }

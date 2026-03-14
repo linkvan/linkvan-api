@@ -157,7 +157,7 @@ RSpec.describe Admin::NoticesController do
     describe "slug generation" do
       before { post_create }
 
-      context "on create" do
+      context "when creating" do
         it "generates slug from title" do
           expect(assigns(:notice).slug).to eq("new-notice")
         end
@@ -360,7 +360,7 @@ RSpec.describe Admin::NoticesController do
     end
 
     describe "draft/published state update" do
-      context "publishing a draft" do
+      context "when publishing a draft" do
         before { patch_update }
 
         it "sets published to true" do
@@ -368,7 +368,7 @@ RSpec.describe Admin::NoticesController do
         end
       end
 
-      context "unpublishing a published notice" do
+      context "when unpublishing a published notice" do
         let(:notice) { create(:notice, :published) }
         let(:notice_attributes) do
           {
@@ -468,7 +468,7 @@ RSpec.describe Admin::NoticesController do
     end
 
     describe "#load_notice" do
-      context "for show action" do
+      context "when the show action" do
         let(:notice) { create(:notice) }
 
         before { get :show, params: { id: notice.id } }
@@ -476,7 +476,7 @@ RSpec.describe Admin::NoticesController do
         it { expect(assigns(:notice)).to eq(notice) }
       end
 
-      context "for edit action" do
+      context "when the edit action" do
         let(:notice) { create(:notice) }
 
         before { get :edit, params: { id: notice.id } }
@@ -484,7 +484,7 @@ RSpec.describe Admin::NoticesController do
         it { expect(assigns(:notice)).to eq(notice) }
       end
 
-      context "for update action" do
+      context "when the update action" do
         let(:notice) { create(:notice) }
 
         before { patch :update, params: { id: notice.id, notice: { title: "Updated" } } }
@@ -492,7 +492,7 @@ RSpec.describe Admin::NoticesController do
         it { expect(assigns(:notice)).to eq(notice) }
       end
 
-      context "for destroy action" do
+      context "when the destroy action" do
         let(:notice) { create(:notice) }
 
         before { delete :destroy, params: { id: notice.id } }
@@ -664,7 +664,7 @@ RSpec.describe Admin::NoticesController do
     describe "switching between draft and published" do
       let(:notice) { create(:notice, published: false) }
 
-      context "updating from draft to published" do
+      context "when updating from draft to published" do
         before do
           patch :update, params: {
             id: notice.id,
@@ -681,7 +681,7 @@ RSpec.describe Admin::NoticesController do
         end
       end
 
-      context "updating from published to draft" do
+      context "when updating from published to draft" do
         let(:notice) { create(:notice, published: true) }
 
         before do

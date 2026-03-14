@@ -276,7 +276,7 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
       end
     end
 
-    context "error handling" do
+    context "when error handling" do
       let(:api_client) do
         client = double("VancouverApiClient")
         allow(client).to receive(:is_a?).with(External::VancouverCity::VancouverApiClient).and_return(true)
@@ -377,7 +377,7 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
       end
     end
 
-    context "logging behavior" do
+    context "with logging behavior" do
       let(:sample_records) { [{ "name" => "Test Fountain" }] }
       let(:response) do
         instance_double(Faraday::Response, body: { "results" => sample_records })
@@ -413,7 +413,7 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
       end
     end
 
-    context "result structure" do
+    context "with result structure" do
       let(:sample_records) { [{ "name" => "Test Fountain" }] }
       let(:response) do
         instance_double(Faraday::Response, body: { "results" => sample_records })

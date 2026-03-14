@@ -32,13 +32,13 @@ RSpec.describe FacilitySchedule, type: :model do
   describe "attributes" do
     describe "closed_all_day" do
       it "defaults to true" do
-        expect(subject.closed_all_day).to be true
+        expect(schedule.closed_all_day).to be true
       end
     end
 
     describe "open_all_day" do
       it "defaults to false" do
-        expect(subject.open_all_day).to be false
+        expect(schedule.open_all_day).to be false
       end
     end
   end
@@ -50,8 +50,8 @@ RSpec.describe FacilitySchedule, type: :model do
       let(:open_all_day_schedule) { create(:facility_schedule, open_all_day: true, closed_all_day: false) }
       let(:closed_schedule) { create(:facility_schedule, open_all_day: false, closed_all_day: true) }
 
-      it { expect(subject).to include(open_all_day_schedule) }
-      it { expect(subject).not_to include(closed_schedule) }
+      it { expect(open_all_day_schedules).to include(open_all_day_schedule) }
+      it { expect(open_all_day_schedules).not_to include(closed_schedule) }
     end
 
     describe ".closed_all_day" do
@@ -60,8 +60,8 @@ RSpec.describe FacilitySchedule, type: :model do
       let(:closed_schedule) { create(:facility_schedule, closed_all_day: true, open_all_day: false) }
       let(:open_schedule) { create(:facility_schedule, open_all_day: true, closed_all_day: false) }
 
-      it { expect(subject).to include(closed_schedule) }
-      it { expect(subject).not_to include(open_schedule) }
+      it { expect(closed_all_day_schedules).to include(closed_schedule) }
+      it { expect(closed_all_day_schedules).not_to include(open_schedule) }
     end
   end
 

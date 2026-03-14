@@ -276,7 +276,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
     end
 
-    context "database record creation on success" do
+    context "when creating database record on success" do
       let(:success_record) do
         {
           "mapid" => "SUCCESS123",

@@ -6,14 +6,14 @@ require_relative "../../support/pages/admin_facility_new_page"
 require_relative "../../support/shared_contexts/admin_authentication"
 
 RSpec.describe "Admin Facility Management", type: :system do
-  include_context "admin authentication"
+  include_context "with admin authentication"
 
   let(:facilities_index_page) { AdminFacilitiesIndexPage.new }
   let(:facility_new_page) { AdminFacilityNewPage.new }
 
   describe "facility management workflow" do
     describe "create/edit/delete facilities" do
-      context "creating a new facility" do
+      context "when creating a new facility" do
         it "allows admin to create a facility successfully" do
           facilities_index_page.visit_facilities
           facilities_index_page.click_new_facility
@@ -35,7 +35,7 @@ RSpec.describe "Admin Facility Management", type: :system do
         end
       end
 
-      context "editing a facility" do
+      context "when editing a facility" do
         before { create(:facility, name: "Original Name") }
 
         it "allows admin to edit facility details" do

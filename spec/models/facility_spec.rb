@@ -78,9 +78,9 @@ RSpec.describe Facility, type: :model do
       let(:pending_facility) { create(:facility, verified: false) }
       let(:discarded_facility) { create(:facility, :with_verified).tap(&:discard) }
 
-      it { expect(subject).to include(live_facility) }
-      it { expect(subject).not_to include(pending_facility) }
-      it { expect(subject).not_to include(discarded_facility) }
+      it { expect(live_facilities).to include(live_facility) }
+      it { expect(live_facilities).not_to include(pending_facility) }
+      it { expect(live_facilities).not_to include(discarded_facility) }
     end
 
     describe ".is_verified" do
@@ -89,8 +89,8 @@ RSpec.describe Facility, type: :model do
       let(:verified_facility) { create(:facility, :with_verified) }
       let(:unverified_facility) { create(:facility) }
 
-      it { expect(subject).to include(verified_facility) }
-      it { expect(subject).not_to include(unverified_facility) }
+      it { expect(verified_facilities).to include(verified_facility) }
+      it { expect(verified_facilities).not_to include(unverified_facility) }
     end
 
     describe ".pending_reviews" do
@@ -100,9 +100,9 @@ RSpec.describe Facility, type: :model do
       let(:pending_facility) { create(:facility, verified: false) }
       let(:discarded_facility) { create(:facility).tap(&:discard) }
 
-      it { expect(subject).not_to include(verified_facility) }
-      it { expect(subject).to include(pending_facility) }
-      it { expect(subject).not_to include(discarded_facility) }
+      it { expect(pending_review_facilities).not_to include(verified_facility) }
+      it { expect(pending_review_facilities).to include(pending_facility) }
+      it { expect(pending_review_facilities).not_to include(discarded_facility) }
     end
 
     describe ".with_service" do
@@ -115,15 +115,15 @@ RSpec.describe Facility, type: :model do
       context "with service key" do
         let(:service_key_or_name) { "housing" }
 
-        it { expect(subject).to include(facility_with_service) }
-        it { expect(subject).not_to include(facility_without_service) }
+        it { expect(facilities_with_service).to include(facility_with_service) }
+        it { expect(facilities_with_service).not_to include(facility_without_service) }
       end
 
       context "with service name" do
         let(:service_key_or_name) { "Housing" }
 
-        it { expect(subject).to include(facility_with_service) }
-        it { expect(subject).not_to include(facility_without_service) }
+        it { expect(facilities_with_service).to include(facility_with_service) }
+        it { expect(facilities_with_service).not_to include(facility_without_service) }
       end
     end
 
@@ -133,8 +133,8 @@ RSpec.describe Facility, type: :model do
       let(:external_facility) { create(:facility, external_id: "ext-123") }
       let(:internal_facility) { create(:facility, external_id: nil) }
 
-      it { expect(subject).to include(external_facility) }
-      it { expect(subject).not_to include(internal_facility) }
+      it { expect(external_facilities).to include(external_facility) }
+      it { expect(external_facilities).not_to include(internal_facility) }
     end
 
     describe ".not_external" do
@@ -143,8 +143,8 @@ RSpec.describe Facility, type: :model do
       let(:external_facility) { create(:facility, external_id: "ext-123") }
       let(:internal_facility) { create(:facility, external_id: nil) }
 
-      it { expect(subject).not_to include(external_facility) }
-      it { expect(subject).to include(internal_facility) }
+      it { expect(internal_facilities).not_to include(external_facility) }
+      it { expect(internal_facilities).to include(internal_facility) }
     end
   end
 
@@ -291,7 +291,7 @@ RSpec.describe Facility, type: :model do
   end
 
   describe "#clean_data callback" do
-    context "strips whitespace from text fields" do
+    context "when strips whitespace from text fields" do
       let(:facility) do
         build(:facility,
               name: "  Test Facility  ",
@@ -308,7 +308,7 @@ RSpec.describe Facility, type: :model do
       it { expect(facility.address).to eq("123 Main St") }
     end
 
-    context "sets discard_reason to none when undiscarded" do
+    context "when sets discard_reason to none when undiscarded" do
       let(:facility) { create(:facility, discard_reason: :closed) }
 
       before do

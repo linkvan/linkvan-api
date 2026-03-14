@@ -417,7 +417,7 @@ RSpec.describe Admin::UsersController do
         allow(controller).to receive(:current_user).and_return(super_admin)
       end
 
-      context "for show action" do
+      context "when the show action" do
         let(:user) { create(:user) }
 
         before { get :show, params: { id: user.id } }
@@ -425,7 +425,7 @@ RSpec.describe Admin::UsersController do
         it { expect(assigns(:user)).to eq(user) }
       end
 
-      context "for edit action" do
+      context "when the edit action" do
         let(:user) { create(:user) }
 
         before { get :edit, params: { id: user.id } }
@@ -433,7 +433,7 @@ RSpec.describe Admin::UsersController do
         it { expect(assigns(:user)).to eq(user) }
       end
 
-      context "for update action" do
+      context "when the update action" do
         let(:user) { create(:user) }
 
         before { patch :update, params: { id: user.id, user: { name: "New" } } }
@@ -441,7 +441,7 @@ RSpec.describe Admin::UsersController do
         it { expect(assigns(:user)).to eq(user) }
       end
 
-      context "for destroy action" do
+      context "when the destroy action" do
         let(:user) { create(:user) }
 
         before { delete :destroy, params: { id: user.id } }
@@ -812,13 +812,13 @@ RSpec.describe Admin::PasswordsController do
         allow(controller).to receive(:current_user).and_return(super_admin)
       end
 
-      context "for new action" do
+      context "when the new action" do
         before { get :new, params: { user_id: user.id } }
 
         it { expect(assigns(:user)).to eq(user) }
       end
 
-      context "for create action" do
+      context "when the create action" do
         before { post :create, params: { user_id: user.id, user: { password: "password123", password_confirmation: "password123" } } }
 
         it { expect(assigns(:user)).to eq(user) }

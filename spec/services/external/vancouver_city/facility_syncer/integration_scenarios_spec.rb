@@ -13,7 +13,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
   end
 
   describe "complex data integration" do
-    context "facility with comprehensive data" do
+    context "with facility with comprehensive data" do
       let(:comprehensive_record) do
         {
           "mapid" => "COMPREHENSIVE123",
@@ -69,7 +69,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
     end
 
-    context "facility with minimal valid data" do
+    context "with facility with minimal valid data" do
       let(:minimal_record) do
         {
           "mapid" => "MINIMAL123",
@@ -96,7 +96,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
   end
 
   describe "edge case scenarios" do
-    context "facility with special characters in name" do
+    context "with facility with special characters in name" do
       let(:special_chars_record) do
         {
           "mapid" => "SPECIAL123",
@@ -119,7 +119,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
     end
 
-    context "facility at edge coordinates" do
+    context "with facility at edge coordinates" do
       let(:edge_coords_record) do
         {
           "mapid" => "EDGE123",

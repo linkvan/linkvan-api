@@ -277,7 +277,7 @@ RSpec.describe Api::ZonesController do
   describe "authorization" do
     let(:zone) { create(:zone) }
 
-    context "list_admin action" do
+    context "when accessing list_admin action" do
       context "when user is not authenticated" do
         before do
           allow(controller).to receive_messages(authenticate_user!: true, user_signed_in?: false)
@@ -301,7 +301,7 @@ RSpec.describe Api::ZonesController do
       end
     end
 
-    context "add_admin action" do
+    context "when accessing add_admin action" do
       context "when user is not authenticated" do
         before do
           allow(controller).to receive_messages(authenticate_user!: true, user_signed_in?: false)
@@ -325,7 +325,7 @@ RSpec.describe Api::ZonesController do
       end
     end
 
-    context "remove_admin action" do
+    context "when accessing remove_admin action" do
       context "when user is not authenticated" do
         before do
           allow(controller).to receive_messages(authenticate_user!: true, user_signed_in?: false)

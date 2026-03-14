@@ -270,7 +270,7 @@ RSpec.describe Locations::Searcher, type: :service do
       end
     end
 
-    context "error handling" do
+    context "when handling errors" do
       context "when Geocoder.search raises an error" do
         before do
           allow(Geocoder).to receive(:search).with(address).and_raise(StandardError, "Geocoder error")
@@ -326,7 +326,7 @@ RSpec.describe Locations::Searcher, type: :service do
       end
     end
 
-    context "integration with Locations::Parser" do
+    context "with Locations::Parser integration" do
       let(:geocoder_result) do
         double("Geocoder Result").tap do |double|
           allow(double).to receive_messages(latitude: 49.243463, longitude: -123.106431, address: "123 Main St", city: "Vancouver", state: "BC", postal_code: "V6A 1A1", country: "Canada", data: { "provider" => "test" }, street_address: "123 Main St")
@@ -376,7 +376,7 @@ RSpec.describe Locations::Searcher, type: :service do
       end
     end
 
-    context "integration with Location.build_from" do
+    context "with Location.build_from integration" do
       let(:geocoder_result) do
         double("Geocoder Result").tap do |double|
           allow(double).to receive_messages(latitude: 49.243463, longitude: -123.106431, address: "123 Main St", city: "Vancouver", state: "BC", postal_code: "V6A 1A1", country: "Canada", data: {}, street_address: "123 Main St")
@@ -433,7 +433,7 @@ RSpec.describe Locations::Searcher, type: :service do
     let(:address) { "123 Main St, Vancouver, BC" }
     let(:searcher) { described_class.new(address:) }
 
-    context "lazy evaluation performance" do
+    context "with lazy evaluation performance" do
       let(:geocoder_results) do
         Array.new(1000) do |i|
           double("Geocoder Result #{i}").tap do |double|
@@ -470,7 +470,7 @@ RSpec.describe Locations::Searcher, type: :service do
       end
     end
 
-    context "memory efficiency" do
+    context "with memory efficiency" do
       let(:large_result_set) { Array.new(10_000) { double("Geocoder Result") } }
 
       before do

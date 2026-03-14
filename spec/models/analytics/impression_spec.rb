@@ -171,7 +171,7 @@ RSpec.describe Analytics::Impression, type: :model do
     it { is_expected.to belong_to(:impressionable) }
     it { is_expected.to have_one(:visit).through(:event) }
 
-    context "belongs_to event" do
+    context "when belongs_to event" do
       it "can access associated event" do
         event = create(:analytics_event)
         impression = create(:analytics_impression, event: event)
@@ -186,7 +186,7 @@ RSpec.describe Analytics::Impression, type: :model do
       end
     end
 
-    context "belongs_to impressionable (polymorphic)" do
+    context "when belongs_to impressionable (polymorphic)" do
       it "can access facility as impressionable" do
         facility = create(:facility)
         impression = create(:analytics_impression, impressionable: facility)
@@ -243,7 +243,7 @@ RSpec.describe Analytics::Impression, type: :model do
       end
     end
 
-    context "has_one visit through event" do
+    context "when has_one visit through event" do
       it "can access visit through event" do
         visit = create(:analytics_visit)
         event = create(:analytics_event, visit: visit)

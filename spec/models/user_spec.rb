@@ -25,35 +25,35 @@ RSpec.describe User, type: :model do
 
   describe "scopes" do
     describe ".verified" do
-      subject { described_class.verified }
+      subject(:verified_users) { described_class.verified }
 
       let(:verified_user) { create(:user, :verified) }
       let(:unverified_user) { create(:user, :not_verified) }
 
-      it { expect(subject).to include(verified_user) }
-      it { expect(subject).not_to include(unverified_user) }
+      it { expect(verified_users).to include(verified_user) }
+      it { expect(verified_users).not_to include(unverified_user) }
     end
 
     describe ".not_verified" do
-      subject { described_class.not_verified }
+      subject(:not_verified_users) { described_class.not_verified }
 
       let(:verified_user) { create(:user, :verified) }
       let(:unverified_user) { create(:user, :not_verified) }
 
-      it { expect(subject).not_to include(verified_user) }
-      it { expect(subject).to include(unverified_user) }
+      it { expect(not_verified_users).not_to include(verified_user) }
+      it { expect(not_verified_users).to include(unverified_user) }
     end
 
     describe ".super_admins" do
-      subject { described_class.super_admins }
+      subject(:super_admins) { described_class.super_admins }
 
       let(:super_admin) { create(:user, :admin, :verified) }
       let(:regular_admin) { create(:user, :admin, :not_verified) }
       let(:regular_user) { create(:user, :verified) }
 
-      it { expect(subject).to include(super_admin) }
-      it { expect(subject).not_to include(regular_admin) }
-      it { expect(subject).not_to include(regular_user) }
+      it { expect(super_admins).to include(super_admin) }
+      it { expect(super_admins).not_to include(regular_admin) }
+      it { expect(super_admins).not_to include(regular_user) }
     end
   end
 

@@ -54,8 +54,8 @@ RSpec.describe FacilityService, type: :model do
       context "with matching service key" do
         let(:value) { "housing" }
 
-        it { expect(subject).to include(facility_service_housing) }
-        it { expect(subject).not_to include(facility_service_other) }
+        it { expect(searched_facility_services).to include(facility_service_housing) }
+        it { expect(searched_facility_services).not_to include(facility_service_other) }
       end
     end
   end

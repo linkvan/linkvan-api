@@ -43,8 +43,8 @@ RSpec.describe Notice, type: :model do
       let(:published_notice) { create(:notice, :published) }
       let(:draft_notice) { create(:notice, :draft) }
 
-      it { expect(subject).to include(published_notice) }
-      it { expect(subject).not_to include(draft_notice) }
+      it { expect(published_notices).to include(published_notice) }
+      it { expect(published_notices).not_to include(draft_notice) }
     end
 
     describe ".draft" do
@@ -53,8 +53,8 @@ RSpec.describe Notice, type: :model do
       let(:published_notice) { create(:notice, :published) }
       let(:draft_notice) { create(:notice, :draft) }
 
-      it { expect(subject).not_to include(published_notice) }
-      it { expect(subject).to include(draft_notice) }
+      it { expect(draft_notices).not_to include(published_notice) }
+      it { expect(draft_notices).to include(draft_notice) }
     end
   end
 

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.shared_context "includes another time slot same to_hour" do
+RSpec.shared_context "with same to_hour" do
   context "with same to_hour" do
     let(:to_hour) { 11 }
 
@@ -10,7 +10,7 @@ RSpec.shared_context "includes another time slot same to_hour" do
   end
 end
 
-RSpec.shared_context "includes another time slot to_hour before" do
+RSpec.shared_context "with to_hour before" do
   context "with to_hour before" do
     let(:to_hour) { 10 }
 
@@ -20,7 +20,7 @@ RSpec.shared_context "includes another time slot to_hour before" do
   end
 end
 
-RSpec.shared_context "includes another time slot to_hour after" do
+RSpec.shared_context "with to_hour after" do
   context "with to_hour after" do
     let(:to_hour) { 12 }
 
@@ -68,15 +68,15 @@ RSpec.describe FacilityTimeSlot, type: :model do
         context "with from_hour before" do
           let(:from_hour) { 8 }
 
-          it_behaves_like "includes another time slot same to_hour"
-          it_behaves_like "includes another time slot to_hour before"
+          it_behaves_like "with same to_hour"
+          it_behaves_like "with to_hour before"
         end
 
         context "with same from_hour" do
           let(:from_hour) { 9 }
 
-          it_behaves_like "includes another time slot same to_hour"
-          it_behaves_like "includes another time slot to_hour before"
+          it_behaves_like "with same to_hour"
+          it_behaves_like "with to_hour before"
         end
       end
 
@@ -88,15 +88,15 @@ RSpec.describe FacilityTimeSlot, type: :model do
         context "with from_hour before" do
           let(:from_hour) { 8 }
 
-          it_behaves_like "includes another time slot same to_hour"
-          it_behaves_like "includes another time slot to_hour after"
+          it_behaves_like "with same to_hour"
+          it_behaves_like "with to_hour after"
         end
 
         context "with same from_hour" do
           let(:from_hour) { 9 }
 
-          it_behaves_like "includes another time slot same to_hour"
-          it_behaves_like "includes another time slot to_hour before"
+          it_behaves_like "with same to_hour"
+          it_behaves_like "with to_hour before"
         end
       end
     end
@@ -114,15 +114,15 @@ RSpec.describe FacilityTimeSlot, type: :model do
         context "with from_hour after" do
           let(:from_hour) { 10 }
 
-          it_behaves_like "includes another time slot same to_hour"
-          it_behaves_like "includes another time slot to_hour before"
+          it_behaves_like "with same to_hour"
+          it_behaves_like "with to_hour before"
         end
 
         context "with same from_hour" do
           let(:from_hour) { 9 }
 
-          it_behaves_like "includes another time slot same to_hour"
-          it_behaves_like "includes another time slot to_hour before"
+          it_behaves_like "with same to_hour"
+          it_behaves_like "with to_hour before"
         end
       end
 
@@ -134,15 +134,15 @@ RSpec.describe FacilityTimeSlot, type: :model do
         context "with from_hour after" do
           let(:from_hour) { 10 }
 
-          it_behaves_like "includes another time slot same to_hour"
-          it_behaves_like "includes another time slot to_hour after"
+          it_behaves_like "with same to_hour"
+          it_behaves_like "with to_hour after"
         end
 
         context "with same from_hour" do
           let(:from_hour) { 9 }
 
-          it_behaves_like "includes another time slot same to_hour"
-          it_behaves_like "includes another time slot to_hour before"
+          it_behaves_like "with same to_hour"
+          it_behaves_like "with to_hour before"
         end
       end
     end

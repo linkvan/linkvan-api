@@ -173,7 +173,7 @@ RSpec.describe Analytics::Event, type: :model do
       end
     end
 
-    context "has_many impressions" do
+    context "when has_many impressions" do
       let(:event) { create(:analytics_event) }
       let!(:first_impression) { create(:analytics_impression, event: event) }
       let!(:second_impression) { create(:analytics_impression, event: event) }
@@ -189,7 +189,7 @@ RSpec.describe Analytics::Event, type: :model do
       end
     end
 
-    context "has_many facilities through impressions" do
+    context "when has_many facilities through impressions" do
       let(:event) { create(:analytics_event) }
       let!(:first_facility) { create(:facility) }
       let!(:second_facility) { create(:facility) }

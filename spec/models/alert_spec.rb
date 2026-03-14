@@ -21,8 +21,8 @@ RSpec.describe Alert, type: :model do
       let(:active_alert) { create(:alert, :active) }
       let(:inactive_alert) { create(:alert, :inactive) }
 
-      it { expect(subject).to include(active_alert) }
-      it { expect(subject).not_to include(inactive_alert) }
+      it { expect(active_alerts).to include(active_alert) }
+      it { expect(active_alerts).not_to include(inactive_alert) }
     end
 
     describe ".inactive" do
@@ -31,8 +31,8 @@ RSpec.describe Alert, type: :model do
       let(:active_alert) { create(:alert, :active) }
       let(:inactive_alert) { create(:alert, :inactive) }
 
-      it { expect(subject).not_to include(active_alert) }
-      it { expect(subject).to include(inactive_alert) }
+      it { expect(inactive_alerts).not_to include(active_alert) }
+      it { expect(inactive_alerts).to include(inactive_alert) }
     end
   end
 
