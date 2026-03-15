@@ -42,7 +42,7 @@ class Analytics::AccessToken
     @uuid = uuid || SecureRandom.hex
     @session_token = session_token
 
-    decoded_data, _decoded_header = JSONWebToken.decode(session_token)
+    decoded_data, _decoded_header = Analytics::AccessToken::JSONWebToken.decode(session_token)
     @data = decoded_data.to_h.with_indifferent_access
     # If session_id is not present, set it to a new random value
     @data[:session_id] ||= SecureRandom.hex
@@ -50,7 +50,7 @@ class Analytics::AccessToken
 
   def refresh
     # Update session_token with the latest data and expiration
-    @session_token = JSONWebToken.encode(data, 30.minutes.from_now)
+    @session_token = Analytics::AccessToken::JSONWebToken.encode(data, 30.minutes.from_now)
   end
 
   def session_id
@@ -70,3 +70,5 @@ class Analytics::AccessToken
     result.as_json(options)
   end
 end
+
+require_relative "access_token/json_web_token"
