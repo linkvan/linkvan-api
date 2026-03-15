@@ -56,6 +56,7 @@ Each `tracker.md` file should include:
 
 | Plan | Status | Progress | Last Updated |
 |------|--------|----------|--------------|
+| [Rails 8.1 Upgrade](./rails-81-upgrade/plan.md) | Not Started | 0/17 (0%) | 2026-03-15 |
 | [RuboCop Remediation](./rubocop-remediation/plan.md) | Complete | 64/64 (100%) | 2026-03-14 |
 | [Test Coverage Implementation](./test-coverage-implementation/plan.md) | Complete | 24/24 (100%) | 2026-01-26 |
 
