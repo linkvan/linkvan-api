@@ -23,6 +23,7 @@ class Facility < ApplicationRecord
   }, prefix: true, default: :none
 
   validates :name, presence: true
+  validate :validate_website
 
   with_options if: :verified? do
     validates :lat, :long, presence: true
@@ -101,7 +102,7 @@ class Facility < ApplicationRecord
   def website_url
     return nil if website.blank?
 
-    if URI.parse(website).scheme.present?
+    if website_uri&.scheme.present?
       website
     else
       "https://#{website}"
@@ -125,6 +126,20 @@ class Facility < ApplicationRecord
   end
 
   private
+
+  def website_uri
+    URI.parse(website) if website.present?
+  rescue URI::InvalidURIError
+    nil
+  end
+
+  def validate_website
+    return if website.blank?
+
+    if website_uri.nil?
+      errors.add(:website, "is invalid")
+    end
+  end
 
   def clean_data
     # strips whitespaces from beginning and end

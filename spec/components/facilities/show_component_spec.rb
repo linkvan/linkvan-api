@@ -17,13 +17,6 @@ RSpec.describe Facilities::ShowComponent, type: :component do
     end
   end
 
-  # Skip main rendering test due to template issues with URL generation
-  # describe "rendering" do
-  #   it "renders without error" do
-  #     expect { render_inline(component) }.not_to raise_exception
-  #   end
-  # end
-
   describe Facilities::ShowComponent::DetailsCardComponent do
     subject(:details_component) { described_class.new(facility: facility) }
 
@@ -413,6 +406,17 @@ RSpec.describe Facilities::ShowComponent, type: :component do
 
       it "initializes without error" do
         expect { described_class.new(facility: facility) }.not_to raise_exception
+      end
+    end
+
+    # A validation was introduced to facility's website attribute, 
+    #   but there are still facilities with invalid website URLs in the database.
+    #   This test ensures the component can handle those cases without error.
+    context "when facility website is invalid" do
+      it "renders without error" do
+        # Escape the model validation to set an invalid website URL
+        facility.update_columns(website: "www.healthandsafetybc.ca/programs/mig rant-workers/")
+        expect { render_inline(component) }.not_to raise_exception
       end
     end
   end
