@@ -99,13 +99,21 @@ class Facility < ApplicationRecord
     save
   end
 
+  def valid_website?
+    website.blank? || website_uri.present?
+  end
+
+  def invalid_website?
+    !valid_website?
+  end
+
   def website_url
     return nil if website.blank?
 
-    if website_uri&.scheme.present?
-      website
-    else
+    if valid_website? && website_uri.scheme.blank?
       "https://#{website}"
+    else
+      website
     end
   end
 
@@ -134,11 +142,7 @@ class Facility < ApplicationRecord
   end
 
   def validate_website
-    return if website.blank?
-
-    if website_uri.nil?
-      errors.add(:website, "is invalid")
-    end
+    errors.add(:website, "is invalid") if invalid_website?
   end
 
   def clean_data

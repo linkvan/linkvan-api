@@ -56,7 +56,11 @@ class Facilities::ShowComponent < ViewComponent::Base
     end
 
     def link_to_website
-      link_to facility.website_url, facility.website_url, target: "_blank", rel: "noopener" if facility.website_url.present?
+      if facility.invalid_website?
+        tag.span facility.website_url
+      elsif facility.website_url.present?
+        link_to facility.website_url, facility.website_url, target: "_blank", rel: "noopener"
+      end
     end
 
     def status_component
