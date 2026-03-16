@@ -85,8 +85,8 @@ RSpec.describe Facilities::ShowComponent, type: :component do
         end
       end
 
-      # A validation was introduced to facility's website attribute, 
-      #   but there are still facilities with invalid website URLs in the database.
+      # A validation was introduced to facility's website attribute, but
+      #   there are still facilities with invalid website URLs in the database.
       #   This test ensures the component can handle those cases without error.
       context "when facility website is invalid" do
         let(:facility) { create(:facility, website: nil) }
@@ -94,7 +94,7 @@ RSpec.describe Facilities::ShowComponent, type: :component do
 
         before do
           # Escape the model validation to set an invalid website URL
-          facility.update_columns(website: invalid_url)
+          facility.update_columns(website: invalid_url) # rubocop:disable Rails/SkipsModelValidations
         end
 
         it "renders without error" do
@@ -243,13 +243,6 @@ RSpec.describe Facilities::ShowComponent, type: :component do
         expect(services_component.send(:all_services)).to eq(services)
       end
     end
-
-    # Skip rendering test due to template URL issues
-    # describe "rendering" do
-    #   it "renders without error" do
-    #     expect { render_inline(services_component) }.not_to raise_exception
-    #   end
-    # end
   end
 
   describe Facilities::ShowComponent::WelcomesCardComponent do
