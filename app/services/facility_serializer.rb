@@ -14,10 +14,10 @@ class FacilitySerializer < ApplicationService
 
   def call
     data = if @complete.present?
-      hashify(@facility, facility_attributes)
-    else
-      hashify(@facility, NON_COMPLETE_ATTRIBUTES)
-    end
+             hashify(@facility, facility_attributes)
+           else
+             hashify(@facility, NON_COMPLETE_ATTRIBUTES)
+           end
 
     data[:website] = @facility.website_url
     data[:welcomes] = hashify_welcomes
@@ -35,27 +35,22 @@ class FacilitySerializer < ApplicationService
   end
 
   def hashify_services
-    data = []
-    @facility.facility_services.each do |facility_service|
-      data << {
+    @facility.facility_services.map do |facility_service|
+      {
         key: facility_service.key,
         name: facility_service.name,
         note: facility_service.note
       }
     end
-
-    data
   end
 
   def hashify_welcomes
-    data = []
-    @facility.facility_welcomes.each do |facility_welcome|
-      data << {
+    @facility.facility_welcomes.map do |facility_welcome|
+      {
         key: facility_welcome.customer,
         name: facility_welcome.name
       }
     end
-    data
   end
 
   def hashify_zone(zone)
@@ -80,7 +75,7 @@ class FacilitySerializer < ApplicationService
   end
 
   def schedule_key_for(week_day)
-    "schedule_#{week_day}".to_sym
+    :"schedule_#{week_day}"
   end
 
   def build_closed_all_day_schedule_data

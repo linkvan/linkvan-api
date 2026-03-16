@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.4.5"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
-gem "rails", "~> 8.0.3"
+gem "rails", "~> 8.1.0"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.6.2"
 # Use Puma as the app server
@@ -48,13 +48,16 @@ gem 'rack-cors'
 group :development, :test do
   gem 'dotenv-rails'
 
-  gem "rspec-rails", "~> 7.1.1"
+  gem "rspec-rails", "~> 8.0"
   gem "shoulda-matchers", ">= 6.2.0"
   gem "capybara"
+  gem "rails-controller-testing"
 
-  gem "factory_bot_rails", "~> 6.4.3"
-  
-  # Call "byebug" anywhere in the code to stop execution and get a debugger console
+   gem "factory_bot_rails", "~> 6.4.3"
+
+   gem 'simplecov', require: false
+
+   # Call "byebug" anywhere in the code to stop execution and get a debugger console
   gem "byebug", platforms: [:mri, :windows]
 end
 

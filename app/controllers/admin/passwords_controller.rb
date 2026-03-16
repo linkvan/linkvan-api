@@ -13,7 +13,7 @@ class Admin::PasswordsController < Admin::BaseController
     else
       flash.now[:alert] = "Failed to reset password for user #{user_description}. Errors: #{@user.errors.full_messages.join('; ')}"
 
-      render action: :new, status: :unprocessable_entity
+      render action: :new, status: :unprocessable_content
     end
   end
 
@@ -24,6 +24,6 @@ class Admin::PasswordsController < Admin::BaseController
   end
 
   def user_params
-    params.require(:user).permit(:password, :password_confirmation)
+    params.expect(user: %i[password password_confirmation])
   end
 end

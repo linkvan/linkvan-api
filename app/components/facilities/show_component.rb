@@ -42,7 +42,7 @@ class Facilities::ShowComponent < ViewComponent::Base
         title = "Switch to Pending Reviews"
       end
 
-      target_url = switch_status_admin_facility_path(id: facility.id, status: new_status)
+      target_url = switch_status_url(new_status)
 
       link_to target_url, data: { turbo_method: :put } do
         tag.span(class: "icon", title: title) do
@@ -51,8 +51,16 @@ class Facilities::ShowComponent < ViewComponent::Base
       end
     end
 
+    def switch_status_url(new_status)
+      switch_status_admin_facility_path(id: facility.id, status: new_status)
+    end
+
     def link_to_website
-      link_to facility.website_url, facility.website_url, target: "_blank", rel: "noopener" if facility.website_url.present?
+      if facility.invalid_website?
+        tag.span facility.website_url
+      elsif facility.website_url.present?
+        link_to facility.website_url, facility.website_url, target: "_blank", rel: "noopener"
+      end
     end
 
     def status_component
@@ -79,7 +87,7 @@ class Facilities::ShowComponent < ViewComponent::Base
       }
 
       if provides_service?(service)
-        target_url = admin_facility_service_path(facility_id: facility.id, service_id: service.id)
+        target_url = switch_service_url(service, :delete)
         options[:data][:turbo_method] = :delete
         options[:title] = "Switch '#{service.name}' service OFF"
 
@@ -90,7 +98,7 @@ class Facilities::ShowComponent < ViewComponent::Base
           ].join("\n")
         end
       else
-        target_url = admin_facility_services_path(facility_id: facility.id, service_id: service.id)
+        target_url = switch_service_url(service, :post)
         options[:data][:turbo_method] = :post
         options[:title] = "Switch '#{service.name}' service ON"
       end
@@ -100,11 +108,19 @@ class Facilities::ShowComponent < ViewComponent::Base
       end
     end
 
+    def switch_service_url(service, method)
+      if method == :delete
+        admin_facility_service_path(facility_id: facility.id, service_id: service.id)
+      else
+        admin_facility_services_path(facility_id: facility.id, service_id: service.id)
+      end
+    end
+
     def show_notes_button(service)
       return if facility_service_for(service).blank?
 
       button_data = { modal_id: note_modal_id(service) }
-      tag.with_button class: "button is-white show_notes_button is-pulled-right", title: 'Show/Edit Notes', data: button_data do
+      tag.with_button class: "button is-white show_notes_button is-pulled-right", title: "Show/Edit Notes", data: button_data do
         tag.span class: "icon" do
           tag.i class: "fas fa-edit"
         end
@@ -148,21 +164,30 @@ class Facilities::ShowComponent < ViewComponent::Base
       customer_value = customer_value_for(customer)
 
       if welcomes?(customer_value)
-        target_url = admin_facility_welcome_path(id: facility_welcome_for(customer),
-                                                 customer: customer_value,
-                                                 facility_id: facility.id)
+        target_url = switch_welcome_url(customer, :delete)
         options[:data] = { confirm: "Are you sure you want to turn off welcome '#{customer_value}' for this facility?",
                            turbo_method: :delete }
         options[:title] = "Switch OFF"
       else
-        target_url = admin_facility_welcomes_path(facility_id: facility.id,
-                                                  customer: customer_value)
+        target_url = switch_welcome_url(customer, :post)
         options[:data] = { turbo_method: :post }
         options[:title] = "Switch ON"
       end
 
       link_to(target_url, **options) do
         render Shared::StatusComponent.new(welcomes?(customer_value))
+      end
+    end
+
+    def switch_welcome_url(customer, method)
+      customer_value = customer_value_for(customer)
+      if method == :delete
+        admin_facility_welcome_path(id: facility_welcome_for(customer),
+                                    customer: customer_value,
+                                    facility_id: facility.id)
+      else
+        admin_facility_welcomes_path(facility_id: facility.id,
+                                     customer: customer_value)
       end
     end
 
@@ -201,8 +226,7 @@ class Facilities::ShowComponent < ViewComponent::Base
 
       if schedule.new_record?
         # Create a new Schedule
-        target_url = admin_facility_schedules_path(facility_id: facility.id,
-                                                   schedule: schedule_params)
+        target_url = switch_schedule_url(schedule, :create)
 
         options[:data][:turbo_method] = :post
         options[:title] = "Switch to Open"
@@ -211,7 +235,7 @@ class Facilities::ShowComponent < ViewComponent::Base
           # Schedule is closed_all_day. Update it to open_all_day
           schedule_params[:closed_all_day] = false
           schedule_params[:open_all_day] = true
-        options[:title] = "Switch to Open"
+          options[:title] = "Switch to Open"
         else
           # Schedule is open_all_day or set_times. Update it to closed_all_day
           schedule_params[:closed_all_day] = true
@@ -227,14 +251,24 @@ class Facilities::ShowComponent < ViewComponent::Base
           options[:title] = "Switch to Closed"
         end
 
-        target_url = admin_facility_schedule_path(facility_id: facility.id,
-                                                  id: schedule.id,
-                                                  schedule: schedule_params)
+        target_url = switch_schedule_url(schedule, :update, schedule_params)
         options[:data][:turbo_method] = :put
       end
 
       link_to(target_url, **options) do
         render Shared::StatusComponent.new(schedule.availability != :closed)
+      end
+    end
+
+    def switch_schedule_url(schedule, action, schedule_params = nil)
+      case action
+      when :create
+        admin_facility_schedules_path(facility_id: facility.id,
+                                      schedule: { week_day: schedule.week_day, closed_all_day: false, open_all_day: true })
+      when :update
+        admin_facility_schedule_path(facility_id: facility.id,
+                                     id: schedule.id,
+                                     schedule: schedule_params)
       end
     end
 
@@ -266,35 +300,47 @@ class Facilities::ShowComponent < ViewComponent::Base
     end
 
     def link_to_add_time_slot(schedule)
-      action = new_admin_facility_time_slot_path(facility_id: facility.id, schedule_id: schedule.id)
+      action = add_time_slot_url(schedule)
 
       link_to action, class: "button is-pulled-right is-white", title: "Add open time slot" do
         icon_element("fa-plus-square")
       end
     end
 
+    def add_time_slot_url(schedule)
+      new_admin_facility_time_slot_path(facility_id: facility.id, schedule_id: schedule.id)
+    end
+
     def link_to_edit(schedule)
-      action = if schedule.new_record?
-        new_admin_facility_schedule_path(facility_id: facility.id)
-      else
-        edit_admin_facility_schedule_path(id: schedule.id, facility_id: facility.id)
-      end
+      action = edit_schedule_url(schedule)
 
       link_to action, class: "button is-pulled-right is-white" do
         icon_element("fa-edit")
       end
     end
 
+    def edit_schedule_url(schedule)
+      if schedule.new_record?
+        new_admin_facility_schedule_path(facility_id: facility.id)
+      else
+        edit_admin_facility_schedule_path(id: schedule.id, facility_id: facility.id)
+      end
+    end
+
     def link_to_destroy(time_slot)
       schedule_id = time_slot.facility_schedule.id
 
-      action = admin_facility_time_slot_path(facility_id: facility.id,
-                                             schedule_id: schedule_id,
-                                             id: time_slot.id)
+      action = destroy_time_slot_url(time_slot, schedule_id)
 
       link_to action, class: "button is-pulled-right is-white", data: { turbo_method: :delete } do
         icon_element("fa-trash")
       end
+    end
+
+    def destroy_time_slot_url(time_slot, schedule_id)
+      admin_facility_time_slot_path(facility_id: facility.id,
+                                    schedule_id: schedule_id,
+                                    id: time_slot.id)
     end
 
     def icon_for(_schedule)

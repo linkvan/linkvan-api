@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.shared_examples :includes_site_status do
+RSpec.shared_examples "includes site status" do
   subject(:returned_site_status) { parsed_response.fetch(:site_stats) }
 
   let(:site_stats) { SiteStats.new }
@@ -41,7 +41,7 @@ RSpec.describe Api::HomeController do
           perform_request
         end
 
-        it_behaves_like :includes_site_status
+        it_behaves_like "includes site status"
 
         it { expect(perform_request).to have_http_status(:success) }
       end
@@ -80,8 +80,8 @@ RSpec.describe Api::HomeController do
               created_event
             end
 
-            it { expect(created_event.lat).to eq(nil) }
-            it { expect(created_event.long).to eq(nil) }
+            it { expect(created_event.lat).to be_nil }
+            it { expect(created_event.long).to be_nil }
           end
         end
 
@@ -118,8 +118,8 @@ RSpec.describe Api::HomeController do
               created_event
             end
 
-            it { expect(created_event.lat).to eq(nil) }
-            it { expect(created_event.long).to eq(nil) }
+            it { expect(created_event.lat).to be_nil }
+            it { expect(created_event.long).to be_nil }
           end
         end
 
@@ -137,8 +137,8 @@ RSpec.describe Api::HomeController do
               created_event
             end
 
-            it { expect(created_event.lat).to eq(nil) }
-            it { expect(created_event.long).to eq(nil) }
+            it { expect(created_event.lat).to be_nil }
+            it { expect(created_event.long).to be_nil }
           end
         end
       end

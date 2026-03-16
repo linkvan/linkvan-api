@@ -6,11 +6,11 @@ class Admin::NoticesController < Admin::BaseController
 
   def index; end
 
+  def show; end
+
   def new
     @notice = Notice.new(published: false, notice_type: :general)
   end
-
-  def show; end
 
   def edit; end
 
@@ -21,7 +21,7 @@ class Admin::NoticesController < Admin::BaseController
     else
       flash.now[:notice] = "Failed to create notice. Errors: #{@notice.errors.full_messages.join('; ')}"
 
-      render action: :new, status: :unprocessable_entity
+      render action: :new, status: :unprocessable_content
     end
   end
 
@@ -31,7 +31,7 @@ class Admin::NoticesController < Admin::BaseController
     else
       flash.now[:notice] = "Failed to update notice (id: #{@notice.id}). Errors: #{@notice.errors.full_messages.join('; ')}"
 
-      render action: :edit, status: :unprocessable_entity
+      render action: :edit, status: :unprocessable_content
     end
   end
 
@@ -44,7 +44,7 @@ class Admin::NoticesController < Admin::BaseController
       # Error when turning Welcome on.
       flash[:error] = "Failed to delete Notice #{@notice.title} (id: #{@notice.id}). Errors: #{@notice.errors.full_messages.join('; ')}"
 
-      render action: :show, status: :unprocessable_entity
+      render action: :show, status: :unprocessable_content
     end
   end
 
@@ -61,6 +61,6 @@ class Admin::NoticesController < Admin::BaseController
   end
 
   def notice_params
-    params.require(:notice).permit(:title, :content, :published, :notice_type)
+    params.expect(notice: %i[title content published notice_type])
   end
 end

@@ -23,9 +23,10 @@ class Facility < ApplicationRecord
   }, prefix: true, default: :none
 
   validates :name, presence: true
+  validate :validate_website
 
-  with_options if: :verified? do |verified_facility|
-    verified_facility.validates :lat, :long, presence: true
+  with_options if: :verified? do
+    validates :lat, :long, presence: true
   end
 
   before_validation :clean_data
@@ -42,14 +43,17 @@ class Facility < ApplicationRecord
   scope :external, -> { where.not(external_id: nil) }
   scope :not_external, -> { where(external_id: nil) }
 
-  def managed_by?(user)
-    f_user_id = if user.respond_to? :id
-      user.id
-    else
-      user
-    end
+  def managed_by?(user_or_user_id)
+    return false if user_or_user_id.blank?
+
+    f_user_id = if user_or_user_id.respond_to? :id
+                  user_or_user_id.id
+                else
+                  user_or_user_id
+                end
+
     # Case Facility's User is the same
-    return true if this.user_id == f_user_id
+    return true if user_id == f_user_id
     # Case Zone of the Facility has the user as admin
     return true if User.find(f_user_id).manages.any?
 
@@ -95,13 +99,21 @@ class Facility < ApplicationRecord
     save
   end
 
+  def valid_website?
+    website.blank? || website_uri.present?
+  end
+
+  def invalid_website?
+    !valid_website?
+  end
+
   def website_url
     return nil if website.blank?
 
-    if URI.parse(website).scheme.present?
-      website
-    else
+    if valid_website? && website_uri.scheme.blank?
       "https://#{website}"
+    else
+      website
     end
   end
 
@@ -113,22 +125,25 @@ class Facility < ApplicationRecord
     GeoLocation.coord(lat, long)
   end
 
-  def distance(to_coord = nil, to_lat: nil, to_long: nil, to_facility: nil)
-    to_coord = to_facility.coord if to_facility.respond_to?(:coord) && to_coord.blank?
-    to_coord = GeoLocation.coord(to_lat, to_long) if to_coord.blank?
-
-    GeoLocation.distance(coord, to_coord)
+  def distance_in_meters(to_coord: nil, to_lat: nil, to_long: nil, to_facility: nil)
+    distance(to_coord: to_coord, to_lat: to_lat, to_long: to_long, to_facility: to_facility).to_meters
   end
 
-  def distance_in_meters(*params)
-    distance(*params).to_meters
-  end
-
-  def distance_in_kms(*params)
-    distance(*params).to_kilometers
+  def distance_in_kms(to_coord: nil, to_lat: nil, to_long: nil, to_facility: nil)
+    distance(to_coord: to_coord, to_lat: to_lat, to_long: to_long, to_facility: to_facility).to_kilometers
   end
 
   private
+
+  def website_uri
+    URI.parse(website) if website.present?
+  rescue URI::InvalidURIError
+    nil
+  end
+
+  def validate_website
+    errors.add(:website, "is invalid") if invalid_website?
+  end
 
   def clean_data
     # strips whitespaces from beginning and end
@@ -143,5 +158,12 @@ class Facility < ApplicationRecord
 
     # handles discard
     self.discard_reason = :none if undiscarded?
+  end
+
+  def distance(to_coord: nil, to_lat: nil, to_long: nil, to_facility: nil)
+    to_coord = to_facility.coord if to_facility.respond_to?(:coord) && to_coord.blank?
+    to_coord = GeoLocation.coord(to_lat, to_long) if to_coord.blank?
+
+    GeoLocation.distance(coord, to_coord) # .to_kilometers
   end
 end

@@ -1,9 +1,9 @@
-module Locations::Providers
-  class NominatimParser < BaseParser
-    private
+# frozen_string_literal: true
 
-    def address
-      [geocoded_result.house_number, geocoded_result.street].compact.join(" ")
-    end
+class Locations::Providers::NominatimParser < Locations::Providers::BaseParser
+  private
+
+  def address
+    [geocoded_result.house_number, geocoded_result.street].compact.join(" ")
   end
 end

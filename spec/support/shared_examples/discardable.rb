@@ -1,6 +1,6 @@
 # @note: called of this shared example must initialize validate variable
 # @example: subject(:model) { build(:facility) }
-RSpec.shared_examples :discardable do
+RSpec.shared_examples "discardable" do
   describe "#discard" do
     before do
       model.assign_attributes(deleted_at: initial_deleted_at)
@@ -25,7 +25,6 @@ RSpec.shared_examples :discardable do
       it { expect { model.discard }.not_to change(model, :undiscarded?).from(false) }
       it { expect { model.discard! }.not_to raise_error }
       it { expect { model.discard! }.not_to change(model, :discarded?).from(true) }
-
     end
 
     context "when discard fails" do

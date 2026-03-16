@@ -12,7 +12,13 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     resources :facilities, only: %i[index show]
     resources :notices, param: :slug, only: %i[index show]
-    resources :zones, only: [:index]
+    resources :zones, only: [:index] do
+      member do
+        get :list_admin
+        post :add_admin
+        delete :remove_admin
+      end
+    end
     resources :home, only: [:index]
   end
 
@@ -22,7 +28,7 @@ Rails.application.routes.draw do
     resources :dashboard, only: %i[index show]
 
     # resources :users, only: [] do
-      # root to: "dashboard#index"
+    # root to: "dashboard#index"
     # end
 
     resources :tools do

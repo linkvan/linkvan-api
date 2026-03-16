@@ -3,7 +3,7 @@ RSpec.configure do |config|
     driven_by :rack_test
   end
 
-  config.before(:each, type: :system, js: true) do
+  config.before(:each, :js, type: :system) do
     driven_by :selenium_chrome_headless
   end
 
@@ -19,8 +19,8 @@ RSpec.configure do |config|
   end
 
   # Support specs
-  #   For some reason, capybara didn't recognize system specs as feature.
-  config.define_derived_metadata(file_path: Regexp.new("/spec/system/")) do |metadata|
-    metadata[:type] = :feature
-  end
+  # config.define_derived_metadata(file_path: Regexp.new("/spec/system/")) do |metadata|
+  #   # metadata[:type] = :system
+  #   metadata[:type] = :feature
+  # end
 end

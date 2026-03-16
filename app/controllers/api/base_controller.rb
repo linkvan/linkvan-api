@@ -5,7 +5,7 @@ class Api::BaseController < ApplicationController
   before_action :handle_analytics_event
 
   def not_found
-    render json: { error: 'not_found' }
+    render json: { error: "not_found" }
   end
 
   private

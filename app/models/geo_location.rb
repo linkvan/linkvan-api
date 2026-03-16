@@ -3,8 +3,7 @@
 class GeoLocation
   Coord = Struct.new(:lat, :long)
 
-  def initialize(address:, city:, lat:, long:)
-  end
+  def initialize(address:, city:, lat:, long:); end
 
   class << self
     def coord(lat, long)
@@ -18,7 +17,7 @@ class GeoLocation
       # from_coord.distance(to_coord)
     end
 
-    def find_by_address(address, params: { countrycodes: "ca" })
+    def for_address(address, params: { countrycodes: "ca" })
       coord(*Geocoder.coordinates(address, params))
     end
 

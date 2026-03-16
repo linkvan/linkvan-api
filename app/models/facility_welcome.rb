@@ -6,13 +6,13 @@ class FacilityWelcome < ApplicationRecord
   validates :customer, presence: true, uniqueness: { scope: :facility }
 
   enum :customer,
-    male: "male",
-    female: "female",
-    transgender: "transgender",
-    children: "children",
-    youth: "youth",
-    adult: "adult",
-    senior: "senior"
+       male: "male",
+       female: "female",
+       transgender: "transgender",
+       children: "children",
+       youth: "youth",
+       adult: "adult",
+       senior: "senior"
 
   scope :name_search, ->(value) { where(customer: value.to_s.downcase) }
 
@@ -21,7 +21,7 @@ class FacilityWelcome < ApplicationRecord
   end
 
   def self.all_customers
-    customers.values.map { |c| OpenStruct.new(name: c.to_s.titleize, value: c) }
+    customers.values.map { |c| Struct.new(:name, :value).new(c.to_s.titleize, c) }
   end
 
   def self.names

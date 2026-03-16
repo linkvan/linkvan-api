@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class Analytics::AccessToken
-  COOKIE_PREFIX = "_linkvanapi_tokens".freeze
+  COOKIE_PREFIX = "_linkvanapi_tokens"
   MAPPING = {
-    uuid: 'uuid',
-    session_token: 'session-token'
+    uuid: "uuid",
+    session_token: "session-token"
   }.freeze
 
   attr_reader :uuid, :session_token, :data
@@ -40,7 +42,7 @@ class Analytics::AccessToken
     @uuid = uuid || SecureRandom.hex
     @session_token = session_token
 
-    decoded_data, _decoded_header = JSONWebToken.decode(session_token)
+    decoded_data, _decoded_header = Analytics::AccessToken::JSONWebToken.decode(session_token)
     @data = decoded_data.to_h.with_indifferent_access
     # If session_id is not present, set it to a new random value
     @data[:session_id] ||= SecureRandom.hex
@@ -48,7 +50,7 @@ class Analytics::AccessToken
 
   def refresh
     # Update session_token with the latest data and expiration
-    @session_token = JSONWebToken.encode(data, 30.minutes.from_now)
+    @session_token = Analytics::AccessToken::JSONWebToken.encode(data, 30.minutes.from_now)
   end
 
   def session_id
@@ -59,12 +61,14 @@ class Analytics::AccessToken
     cookies[COOKIE_PREFIX] = to_json
   end
 
-  def as_json(options=nil)
+  def as_json(options = nil)
     result = {}
     MAPPING.each_pair do |method_name, external_key|
-      result[external_key] = self.send(method_name)
+      result[external_key] = send(method_name)
     end
 
     result.as_json(options)
   end
 end
+
+require_relative "access_token/json_web_token"

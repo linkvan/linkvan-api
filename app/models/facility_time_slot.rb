@@ -18,11 +18,11 @@ class FacilityTimeSlot < ApplicationRecord
   delegate :week_day, to: :facility_schedule, allow_nil: true
 
   def start_time
-    hour_min_to_time_string(from_hour, from_min).to_time
+    hour_min_to_time_string(from_hour, from_min).in_time_zone
   end
 
   def end_time
-    hour_min_to_time_string(to_hour, to_min).to_time
+    hour_min_to_time_string(to_hour, to_min).in_time_zone
   end
 
   def as_range
@@ -42,8 +42,8 @@ class FacilityTimeSlot < ApplicationRecord
   def overlapping_time_slots
     return FacilityTimeSlot.none unless [from_hour, from_min, to_hour, to_min].all?(&:present?)
 
-    start_i = (from_hour + from_min / 60r).to_f
-    end_i = (to_hour + to_min / 60r).to_f
+    start_i = (from_hour + (from_min/60r)).to_f
+    end_i = (to_hour + (to_min/60r)).to_f
 
     sql_start_i = Arel.sql("(from_hour + (from_min / 60.0))")
     sql_end_i = Arel.sql("(to_hour + (to_min / 60.0))")

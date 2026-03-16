@@ -18,10 +18,10 @@ class Translator < ApplicationService
     hygiene: %w[clean cleaning shower],
     technology: %w[computer tech],
     legal: %w[law],
-    learning: %w[learn education teacing teach teacher],
+    learning: %w[learn education teaching teach teacher],
     phone: %w[],
     overdose: %w[prevention]
-  }
+  }.freeze
 
   class << self
     def services_dictionary
@@ -29,7 +29,7 @@ class Translator < ApplicationService
 
       @services_dictionary = {}
       # Goes through all current services
-      Service.all.each do |service|
+      Service.find_each do |service|
         assign(@services_dictionary, key: service.key, value: service.name)
       end
 

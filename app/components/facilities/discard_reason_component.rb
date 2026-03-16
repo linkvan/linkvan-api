@@ -12,7 +12,7 @@ class Facilities::DiscardReasonComponent < ViewComponent::Base
   def initialize(discard_reason)
     super()
 
-    @discard_reason = discard_reason.to_sym
+    @discard_reason = discard_reason&.to_sym
   end
 
   def self.select_options
@@ -20,6 +20,7 @@ class Facilities::DiscardReasonComponent < ViewComponent::Base
   end
 
   def call
-    VALID_REASONS[discard_reason] || "Unsupported value '#{discard_reason}'"
+    text = VALID_REASONS[discard_reason] || "Unsupported value '#{discard_reason}'"
+    tag.span(text)
   end
 end

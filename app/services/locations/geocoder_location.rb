@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Locations
   GeocoderLocation = Struct.new(
     :address,

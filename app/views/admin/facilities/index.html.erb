@@ -55,6 +55,11 @@
 
 <hr/>
 <div class="container">
+    <% if @facilities.empty? %>
+      <div class="notification is-info">
+        No facilities found
+      </div>
+    <% end %>
     <% @facilities.each do |facility| %>
         <%= render Facilities::CardComponent.new(facility: facility) %>
     <% end %>

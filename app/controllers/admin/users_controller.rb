@@ -6,11 +6,11 @@ class Admin::UsersController < Admin::BaseController
 
   def index; end
 
+  def show; end
+
   def new
     @user = User.new(admin: false, verified: false)
   end
-
-  def show; end
 
   def edit; end
 
@@ -21,7 +21,7 @@ class Admin::UsersController < Admin::BaseController
     else
       flash.now[:alert] = "Failed to create user. Errors: #{@user.errors.full_messages.join('; ')}"
 
-      render action: :new, status: :unprocessable_entity
+      render action: :new, status: :unprocessable_content
     end
   end
 
@@ -31,7 +31,7 @@ class Admin::UsersController < Admin::BaseController
     else
       flash.now[:alert] = "Failed to update user (id: #{@user.id}). Errors: #{@user.errors.full_messages.join('; ')}"
 
-      render action: :edit, status: :unprocessable_entity
+      render action: :edit, status: :unprocessable_content
     end
   end
 
@@ -44,7 +44,7 @@ class Admin::UsersController < Admin::BaseController
       # Error when turning Welcome on.
       flash[:error] = "Failed to delete User #{@user.name} (id: #{@user.id}, email: #{@user.email}). Errors: #{@user.errors.full_messages.join('; ')}"
 
-      render action: :show, status: :unprocessable_entity
+      render action: :show, status: :unprocessable_content
     end
   end
 
@@ -61,7 +61,10 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def user_params
+    # rubocop:disable Rails/StrongParametersExpect
+    # Using require.permit instead of expect to allow partial updates (e.g., only admin attribute)
     parameters = params.require(:user).permit(:name, :email, :phone_number, :organization, :verified, :password, :password_confirmation)
+    # rubocop:enable Rails/StrongParametersExpect
     parameters[:admin] = params.dig(:user, :admin) if current_user_admin?
 
     parameters

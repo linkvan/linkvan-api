@@ -16,7 +16,7 @@ module Serializable
 
     config = columns_hash
     # transforms the array in a hash with repeated key/value
-    config = columns_hash.map { |v| [v, v] }.to_h if columns_hash.is_a?(Array)
+    config = columns_hash.to_h { |v| [v, v] } if columns_hash.is_a?(Array)
 
     config.each_pair do |method_name, key_name|
       result[key_name] = object.blank? ? "" : object.public_send(method_name)

@@ -6,11 +6,11 @@ class Admin::AlertsController < Admin::BaseController
 
   def index; end
 
-  def new
-    @alert = Alert.new(active: false) #(admin: false, verified: false)
-  end
-
   def show; end
+
+  def new
+    @alert = Alert.new(active: false) # (admin: false, verified: false)
+  end
 
   def edit; end
 
@@ -21,7 +21,7 @@ class Admin::AlertsController < Admin::BaseController
     else
       flash.now[:alert] = "Failed to create alert. Errors: #{@alert.errors.full_messages.join('; ')}"
 
-      render action: :new, status: :unprocessable_entity
+      render action: :new, status: :unprocessable_content
     end
   end
 
@@ -31,7 +31,7 @@ class Admin::AlertsController < Admin::BaseController
     else
       flash.now[:alert] = "Failed to update alert (id: #{@alert.id}). Errors: #{@alert.errors.full_messages.join('; ')}"
 
-      render action: :edit, status: :unprocessable_entity
+      render action: :edit, status: :unprocessable_content
     end
   end
 
@@ -44,7 +44,7 @@ class Admin::AlertsController < Admin::BaseController
       # Error when turning Welcome on.
       flash[:error] = "Failed to delete Alert #{@alert.title} (id: #{@alert.id}). Errors: #{@alert.errors.full_messages.join('; ')}"
 
-      render action: :show, status: :unprocessable_entity
+      render action: :show, status: :unprocessable_content
     end
   end
 
@@ -61,6 +61,6 @@ class Admin::AlertsController < Admin::BaseController
   end
 
   def alert_params
-    params.require(:alert).permit(:title, :content, :active)
+    params.expect(alert: %i[title content active])
   end
 end

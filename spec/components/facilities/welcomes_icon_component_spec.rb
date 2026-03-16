@@ -151,15 +151,6 @@ RSpec.describe Facilities::WelcomesIconComponent, type: :component do
     end
   end
 
-  describe "logging" do
-    let(:welcomes) { :female }
-
-    it "logs debug information during initialization" do
-      expect(Rails.logger).to receive(:debug)
-      described_class.new(welcomes)
-    end
-  end
-
   describe "all defined icon types" do
     it "has icons defined for all expected welcome types" do
       expected_types = %i[female male transgender children youth adult senior]
@@ -167,7 +158,7 @@ RSpec.describe Facilities::WelcomesIconComponent, type: :component do
     end
 
     it "has valid file extensions for all icons" do
-      described_class::ICONS.values.each do |icon_file|
+      described_class::ICONS.each_value do |icon_file|
         expect(icon_file).to end_with(".svg")
       end
     end

@@ -10,13 +10,13 @@ class Admin::FacilitiesController < Admin::BaseController
 
   def show; end
 
-  def edit; end
-
   def new
     @facility = Facility.new(
       zone: current_user.zones.first
     )
   end
+
+  def edit; end
 
   def create
     @facility = Facility.new(new_facility_params)
@@ -26,7 +26,7 @@ class Admin::FacilitiesController < Admin::BaseController
     else
       flash.now[:alert] = "Failed to create facility. Errors: #{@facility.errors.full_messages.join('; ')}"
 
-      render action: :new, status: :unprocessable_entity
+      render action: :new, status: :unprocessable_content
     end
   end
 
@@ -42,7 +42,7 @@ class Admin::FacilitiesController < Admin::BaseController
     else
       flash.now[:alert] = "Failed to update facility (id: #{@facility.id}). Errors: #{@facility.errors.full_messages.join('; ')}"
 
-      render action: :edit, status: :unprocessable_entity
+      render action: :edit, status: :unprocessable_content
     end
   end
 
@@ -55,7 +55,7 @@ class Admin::FacilitiesController < Admin::BaseController
     else
       # Error when turning Welcome on.
       flash[:alert] = "Failed to discard Facility #{@facility.name} (id: #{@facility.id}). Errors: #{@facility.errors.full_messages.join('; ')}"
-      render action: :show, status: :unprocessable_entity
+      render action: :show, status: :unprocessable_content
     end
   end
 
@@ -126,10 +126,10 @@ class Admin::FacilitiesController < Admin::BaseController
   end
 
   def facility_params
-    params.require(:facility).permit(:verified, :name, :phone, :website, :notes)
+    params.expect(facility: %i[verified name phone website notes])
   end
 
   def discard_facility_params
-    params.require(:facility).permit(:discard_reason)
+    params.expect(facility: [:discard_reason])
   end
 end

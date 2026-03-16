@@ -1,8 +1,13 @@
-require:
+plugins:
   - rubocop-packaging
   - rubocop-performance
-  - rubocop-ast
   - rubocop-rails
+  - rubocop-rspec
+
+require:
+  - rubocop-ast
+
+
 
 AllCops:
   TargetRubyVersion: 3.1
@@ -29,7 +34,7 @@ Performance:
     - '**/spec/**/*'
 
 Rails:
-  StyleGuideBaseURL: https://rails.rubystyle.guide
+  DocumentationBaseURL: https://rails.rubystyle.guide
 
 Rails/BulkChangeTable:
   Exclude:
@@ -58,6 +63,11 @@ Rails/SkipsModelValidations:
 Rails/FilePath:
   Enabled: true
   EnforcedStyle: arguments
+
+Rails/I18nLocaleTexts:
+  Enabled: false
+
+
 
 # Prefer &&/|| over and/or.
 Style/AndOr:
@@ -88,10 +98,6 @@ Layout/EndAlignment:
 
 Layout/EmptyLineAfterMagicComment:
   Enabled: true
-
-Layout/EmptyLinesAroundAccessModifier:
-  Enabled: false
-  EnforcedStyle: only_before
 
 Layout/EmptyLinesAroundBlockBody:
   Enabled: true
@@ -128,6 +134,11 @@ Layout/AccessModifierIndentation:
 Layout/IndentationConsistency:
   Enabled: true
   EnforcedStyle: normal #indented_internal_methods
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+  Include:
+    - '**/spec/**/*'
 
 # Two spaces, no tabs (for indentation).
 Layout/IndentationWidth:
@@ -322,6 +333,22 @@ Performance/DeletePrefix:
 
 Performance/DeleteSuffix:
   Enabled: true
+
+# Disable RSpec/MultipleExpectations cop to reduce noise (443 instances)
+# Note: Despite correct syntax, this configuration appears to not be properly
+# respected by rubocop-rspec 3.7.0. Use --except RSpec/MultipleExpectations
+# command-line flag to disable when needed.
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Enabled: false
 
 ##########
 # Metrics

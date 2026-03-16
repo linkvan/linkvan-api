@@ -62,6 +62,6 @@ class Admin::FacilityServicesController < Admin::BaseController
   end
 
   def update_facility_service_params
-    params.require(:facility_service).permit(:note)
+    params.expect(facility_service: [:note])
   end
 end

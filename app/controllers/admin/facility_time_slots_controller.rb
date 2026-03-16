@@ -59,9 +59,9 @@ class Admin::FacilityTimeSlotsController < Admin::BaseController
   end
 
   def time_slot_params
-    parameters = params.require(:facility_time_slot).permit(:start_time, :end_time)
-    start_time = parameters[:start_time].to_s.to_time
-    end_time = parameters[:end_time].to_s.to_time
+    parameters = params.expect(facility_time_slot: %i[start_time end_time])
+    start_time = parameters[:start_time].to_s.in_time_zone
+    end_time = parameters[:end_time].to_s.in_time_zone
 
     {
       from_hour: start_time.hour,
