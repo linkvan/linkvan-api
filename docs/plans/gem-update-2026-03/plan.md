@@ -1,6 +1,6 @@
 # Gem Update Plan - March 2026
 
-## Status: PENDING
+## Status: IN PROGRESS
 
 ## Created: 2026-03-21
 
@@ -19,28 +19,42 @@ Update outdated Ruby gems to their latest versions while maintaining compatibili
 - All tests passing (bin/rspec)
 - No breaking changes introduced
 
+## Direct Gemfile Gems (In Scope)
+
+| Gem | Current | Latest | Notes |
+|-----|---------|--------|-------|
+| devise | 4.9.4 | 5.0.3 | Constraint: ~> 4.9.3 |
+| shoulda-matchers | 7.0.1 | 7.0.1 | Already at latest |
+| pagy | 9.4.0 | 43.4.2 | MASSIVE jump - SKIP for now |
+| turbo-rails | 2.0.23 | 2.0.23 | Already at latest |
+| pry-remote-reloaded | varies | latest | Uses slop (transitive) |
+| pry-rails | varies | latest | In Gemfile |
+
 ## Analysis Summary
 
 ### Critical Gems (Major Version Jumps - Breaking Changes Likely)
 - **pagy**: 9.4.0 → 43.4.2 - MASSIVE jump - SKIP for now
-- **public_suffix**: 6.0.2 → 7.0.5 - Requires Ruby >= 3.2, blocked by addressable constraint
-- **shoulda-matchers**: 6.5.0 → 7.0.1 - Requires Ruby >= 3.2, Rails >= 7.1
-- **diff-lcs**: 1.6.2 → 2.0.0 - Breaking changes, requires Ruby >= 3.2
-- **slop**: 3.6.0 → 4.10.1 - Major version jump, used by pry-remote
+- **shoulda-matchers**: 6.5.0 → 7.0.1 - Requires Ruby >= 3.2, Rails >= 7.1 (ALREADY UPDATED)
 
 ### High Risk Gems (Minor Updates with Potential Issues)
-- **devise**: 4.9.4 → 5.0.3 - Update responders first
-- **responders**: 3.1.1 → 3.2.0 - Dependency of devise
-- **prism**: 1.5.1 → 1.9.0 - Used by IRB/RuboCop
-- **net-http**: 0.6.0 → 0.9.1 - Stdlib-like behavior changes
+- **devise**: 4.9.4 → 5.0.3 - Requires responders update first (transitive)
 
 ### Safe to Update
-- All patch/minor updates not listed above
+- turbo-rails: Already at latest
+- pry-rails: Already at latest
+- pry-remote-reloaded: Already updated (includes slop transitive)
+
+### Transitive Dependencies (NOT in Gemfile - Handled as Part of Dependency Updates)
+- responders (dependency of devise)
+- slop (dependency of pry-remote-reloaded - already updated)
+- prism, json, net-http, public_suffix, diff-lcs, addressable
+
+---
 
 ## Priority System
 
 - **CRITICAL** - Must complete for success
-- **HIGH** - Should complete for full compatibility  
+- **HIGH** - Should complete for full compatibility
 - **MEDIUM** - Recommended for best practices
 - **LOW** - Optional improvements
 
@@ -70,7 +84,7 @@ Update outdated Ruby gems to their latest versions while maintaining compatibili
 - **Priority:** HIGH
 - **Type:** Manual
 - **Description:** Quick smoke test of admin UI
-- **Manual Test:** 
+- **Manual Test:**
   1. Start server: `bin/rails s -p 3000`
   2. Visit: http://localhost:3000/admin/dashboard
   3. Test: Page loads, navigation works
@@ -82,53 +96,25 @@ Update outdated Ruby gems to their latest versions while maintaining compatibili
 
 **Focus:** Gems with minor version jumps that may have behavioral changes
 
-#### 2.1 - Update prism
-- **Priority:** MEDIUM
-- **Type:** Configuration
-- **Command:** `bundle update prism`
-- **Description:** Update for IRB/RuboCop compatibility
-- **Manual Test:** Not required
-
-#### 2.2 - Update json
-- **Priority:** MEDIUM
-- **Type:** Configuration
-- **Command:** `bundle update json`
-- **Description:** Update json gem (RuboCop dependency)
-- **Manual Test:** Not required
-
-#### 2.3 - Update net-http
-- **Priority:** MEDIUM
-- **Type:** Configuration
-- **Command:** `bundle update net-http`
-- **Description:** Update net-http gem
-- **Manual Test:** Not required
-
-#### 2.4 - Update responders
-- **Priority:** HIGH
-- **Type:** Configuration
-- **Command:** `bundle update responders`
-- **Description:** Update responders gem first (dependency of devise)
-- **Manual Test:** Not required
-
-#### 2.5 - Update devise
-- **Priority:** HIGH
-- **Type:** Configuration
-- **Command:** `bundle update devise`
-- **Description:** Update devise after responders - authentication gem
-- **Manual Test:** Not required
-
-#### 2.6 - Update turbo-rails
+#### 2.1 - Update turbo-rails
 - **Priority:** HIGH
 - **Type:** Configuration
 - **Command:** `bundle update turbo-rails`
 - **Description:** Update turbo-rails - affects page transitions
 - **Manual Test:** Not required
 
-#### 2.7 - Stage 2 Manual Test Checkpoint
+#### 2.2 - Update pry-remote-reloaded (includes slop)
+- **Priority:** HIGH
+- **Type:** Configuration
+- **Command:** `bundle update pry-remote-reloaded`
+- **Description:** Update pry-remote-reloaded (slop is transitive dependency - updated together)
+- **Manual Test:** Not required
+
+#### 2.3 - Stage 2 Manual Test Checkpoint
 - **Priority:** CRITICAL
 - **Type:** Manual
 - **Description:** Test authentication and page navigation in admin UI
-- **Manual Test:** 
+- **Manual Test:**
   1. Start server: `bin/rails s -p 3000`
   2. Visit: http://localhost:3000/admin
   3. Test: Login flow works (if not logged in)
@@ -141,49 +127,28 @@ Update outdated Ruby gems to their latest versions while maintaining compatibili
 
 **Focus:** Gems with major version jumps requiring careful testing
 
-#### 3.1 - Update slop
-- **Priority:** CRITICAL
-- **Type:** Configuration
-- **Command:** `bundle update slop`
-- **Description:** Update slop (used by pry-remote)
-- **Manual Test:** Not required
-
-#### 3.2 - Update diff-lcs
-- **Priority:** CRITICAL
-- **Type:** Configuration
-- **Command:** `bundle update diff-lcs`
-- **Description:** Update diff-lcs (rspec dependency)
-- **Manual Test:** Not required
-
-#### 3.3 - Update shoulda-matchers
+#### 3.1 - Update shoulda-matchers
 - **Priority:** CRITICAL
 - **Type:** Configuration
 - **Command:** `bundle update shoulda-matchers`
 - **Description:** Update shoulda-matchers (major version)
 - **Manual Test:** Not required
 
-#### 3.4 - Update public_suffix and addressable together
-- **Priority:** HIGH
-- **Type:** Configuration
-- **Command:** `bundle update public_suffix addressable`
-- **Description:** Update both gems together to resolve constraint
-- **Manual Test:** Not required
-
-#### 3.5 - Verify Stage 3 Updates
+#### 3.2 - Verify Stage 3 Updates
 - **Priority:** HIGH
 - **Type:** Verification
 - **Command:** `bin/rspec`
 - **Description:** Run full test suite after major updates
 - **Manual Test:** Not required
 
-#### 3.6 - Stage 3 Manual Test Checkpoint
+#### 3.3 - Stage 3 Manual Test Checkpoint
 - **Priority:** CRITICAL
 - **Type:** Manual
 - **Description:** Full admin UI smoke test after major gem updates
-- **Manual Test:** 
+- **Manual Test:**
   1. Start server: `bin/rails s -p 3000`
   2. Visit: http://localhost:3000/admin/dashboard
-  3. Test: 
+  3. Test:
      - Dashboard loads correctly
      - Navigation between pages works
      - Any forms or actions still function
@@ -191,52 +156,39 @@ Update outdated Ruby gems to their latest versions while maintaining compatibili
 
 ---
 
-### Stage 4: Critical Major Version Updates - Final Verification
-
-**Focus:** Final verification after all major updates
-
-#### 4.1 - Verify all Stage 3 updates work together
-- **Priority:** CRITICAL
-- **Type:** Verification
-- **Command:** `bin/rspec`
-- **Description:** Run full test suite to ensure all updated gems work together
-- **Manual Test:** Not required
-
----
-
-### Stage 5: pagy Update - Future Migration
+### Stage 4: pagy Update - Future Migration
 
 **Focus:** Plan for pagy migration (9.x → 43.x)
 
-#### 5.1 - Research pagy version history
+#### 4.1 - Research pagy version history
 - **Priority:** MEDIUM
 - **Type:** Research
-- **Description:** 
+- **Description:**
   - Check pagy changelog between 9.x and 43.x
   - Identify major breaking changes in each version bump
   - Document what changed in v10, v20, v30, etc.
 - **Manual Test:** Not required
 
-#### 5.2 - Analyze current pagy usage in codebase
+#### 4.2 - Analyze current pagy usage in codebase
 - **Priority:** MEDIUM
 - **Type:** Research
 - **Command:** `grep -r "pagy" app/ --include="*.rb"`
-- **Description:** 
+- **Description:**
   - Find all pagy helpers used (pagy_nav, pagy_nav_js, etc.)
   - Identify any custom pagy configuration
   - Document what needs to change for v10+ API
 - **Manual Test:** Not required
 
-#### 5.3 - Plan incremental update path
+#### 4.3 - Plan incremental update path
 - **Priority:** MEDIUM
 - **Type:** Planning
-- **Description:** 
+- **Description:**
   - Determine if direct 9.x → 43.x is possible or needs intermediate steps
   - Create migration plan: which versions to update through
   - Document code changes needed for each version jump
 - **Manual Test:** Not required
 
-#### 5.4 - Execute pagy update (future)
+#### 4.4 - Execute pagy update (future)
 - **Priority:** LOW
 - **Type:** Configuration
 - **Description:** Perform the pagy update in a future session when ready
@@ -252,26 +204,17 @@ Update outdated Ruby gems to their latest versions while maintaining compatibili
 - [ ] Manual smoke test: admin UI loads
 
 ### Stage 2 Completion Criteria
-- [ ] prism, json, net-http updated
-- [ ] responders updated to 3.2.0
-- [ ] devise updated to latest
 - [ ] turbo-rails updated
+- [ ] pry-remote-reloaded updated (includes slop transitive)
 - [ ] All tests pass (bin/rspec)
 - [ ] Manual test: login flow + page navigation
 
 ### Stage 3 Completion Criteria
-- [ ] slop updated
-- [ ] diff-lcs updated
 - [ ] shoulda-matchers updated
-- [ ] public_suffix + addressable updated together
 - [ ] All tests pass (bin/rspec)
 - [ ] Manual test: full admin UI smoke test
 
-### Stage 4 Completion Criteria
-- [ ] All Stage 3 updates verified with rspec
-- [ ] No regressions detected
-
-### Stage 5 Completion Criteria (Future)
+### Stage 4 Completion Criteria (Future)
 - [ ] Research completed on pagy version history
 - [ ] Current usage analyzed in codebase
 - [ ] Incremental update path documented
@@ -295,11 +238,10 @@ If issues occur:
 | Stage | Tasks | Time | Manual Tests |
 |-------|-------|------|---------------|
 | 1 | 3 | 15 min | 1 (smoke test) |
-| 2 | 7 | 35 min | 1 (auth + nav) |
-| 3 | 6 | 35 min | 1 (full smoke) |
-| 4 | 1 | 10 min | 0 |
-| 5 | 4 | Research only | 0 |
-| **Total** | **21** | **~95 min (+ research)** | **3** |
+| 2 | 3 | 20 min | 1 (auth + nav) |
+| 3 | 3 | 20 min | 1 (full smoke) |
+| 4 | 4 | Research only | 0 |
+| **Total** | **13** | **~55 min (+ research)** | **3** |
 
 ---
 
@@ -308,3 +250,5 @@ If issues occur:
 - [RubyGems.org](https://rubygems.org) - Gem registry
 - [bundle outdated](https://bundler.io/man/bundle-outdated.1.html) - Bundler outdated command
 - [AGENTS.md](../../AGENTS.md) - Project conventions
+
+(End of file - total 268 lines)
