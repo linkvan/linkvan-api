@@ -1,3 +1,8 @@
+// Import custom application styles
+@use "src/actiontext.scss";
+@use "src/linkvan/linkvan.scss";
+@use "src/richtext.scss";
+
 /*
  * This is a manifest file that'll be compiled into application.css, which will include all the files
  * listed below.
@@ -21,11 +26,6 @@
 
 // Import Trix styles for ActionText
 @import url('https://cdn.jsdelivr.net/npm/trix@2.1.4/dist/trix.css');
-
-// Import custom application styles
-@import "./src/actiontext.scss";
-@import "./src/richtext.scss";
-@import "./src/linkvan/linkvan.scss";
 
 /* You can add your custom styles here */
 body {

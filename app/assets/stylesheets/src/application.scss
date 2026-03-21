@@ -1,6 +1,5 @@
-@import 'trix/dist/trix';
-@import "./actiontext.scss";
-@import "./richtext.scss";
+@use 'trix/dist/trix';
+@use "actiontext.scss";
+@use "richtext.scss";
 
-@import "./linkvan/linkvan.scss"
-
+@use "linkvan/linkvan.scss"
