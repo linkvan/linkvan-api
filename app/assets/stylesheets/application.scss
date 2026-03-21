@@ -1,3 +1,8 @@
+// Import custom application styles
+@use "src/actiontext.scss";
+@use "src/linkvan/linkvan.scss";
+@use "src/richtext.scss";
+
 /*
  * This is a manifest file that'll be compiled into application.css, which will include all the files
  * listed below.
@@ -17,15 +22,10 @@
 @import url('https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css');
 
 // Import FontAwesome from CDN
-@import url('https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css');
+@import url('https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css');
 
 // Import Trix styles for ActionText
 @import url('https://cdn.jsdelivr.net/npm/trix@2.1.4/dist/trix.css');
-
-// Import custom application styles
-@import "./src/actiontext.scss";
-@import "./src/richtext.scss";
-@import "./src/linkvan/linkvan.scss";
 
 /* You can add your custom styles here */
 body {

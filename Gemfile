@@ -8,7 +8,7 @@ gem "rails", "~> 8.1.0"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.6.2"
 # Use Puma as the app server
-gem "puma", "~> 6.4.2"
+gem "puma", "~> 7.2"
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 #gem "jbuilder", "~> 2.7"
 # Use Redis adapter to run Action Cable in production
@@ -62,7 +62,7 @@ group :development, :test do
 end
 
 # Faker gem - available in development/test, and in production when ALLOW_FAKE_DATA is set
-gem "faker", "~> 3.4.2", groups: [:development, :test].tap { |groups| 
+gem "faker", "~> 3.6", groups: [:development, :test].tap { |groups| 
   groups << :production if ENV['ALLOW_FAKE_DATA'] == 'true' 
 }
 
@@ -74,15 +74,15 @@ group :development do
   # gem "spring"
 
   # powerful developer console.
-  gem "pry", "~> 0.14.2"
+  gem "pry", "~> 0.16.0"
   gem "pry-rails"
-  gem "pry-stack_explorer", "~> 0.6.1"
+  gem "pry-stack_explorer", "~> 0.6.2"
   gem "pry-remote"
-  gem "pry-byebug"
+  gem "pry-byebug", "~> 3.12.0"
 
   # Display performance information such as SQL time and flame graphs for each request in your browser.
   # Can be configured to work on production as well see: https://github.com/MiniProfiler/rack-mini-profiler/blob/master/README.md
-  gem "rack-mini-profiler", "~> 3.3.1"
+  gem "rack-mini-profiler", "~> 4.0"
   gem "memory_profiler"
   gem "stackprof"
 

@@ -13,3 +13,5 @@
 - Admin interface: `/admin/dashboard`
 - ViewComponent tests: `type: :component`
 - System specs: Capybara + Puma
+- Running tests: `bin/rspec`
+- Running Rails commands: `bin/rails`
