@@ -48,7 +48,7 @@ class FacilityTimeSlot < ApplicationRecord
     sql_start_i = Arel.sql("(from_hour + (from_min / 60.0))")
     sql_end_i = Arel.sql("(to_hour + (to_min / 60.0))")
 
-    query_sql = <<-SQL.squish
+    query_sql = <<~SQL.squish
       (
         SELECT ts.*,
                #{sql_start_i} as start_i,

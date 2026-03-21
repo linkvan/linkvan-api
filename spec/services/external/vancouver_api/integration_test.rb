@@ -1,7 +1,7 @@
 # Final integration test for the Vancouver API Client
 require_relative "vancouver_api_client"
 
-# rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, Naming/PredicateMethod
+# rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, Naming/PredicateMethod, RSpec/Output
 def test_client
   client = External::VancouverCity::VancouverApiClient.new
 
@@ -63,7 +63,6 @@ def test_client
   puts "\n=== All tests passed! The client is working correctly. ==="
   true
 end
-# rubocop:enable Metrics/AbcSize, Metrics/PerceivedComplexity, Naming/PredicateMethod
 
 # Run the test
 if test_client
@@ -72,3 +71,4 @@ else
   puts "\n❌ Some tests failed. Please check the implementation."
   exit 1
 end
+# rubocop:enable Metrics/AbcSize, Metrics/PerceivedComplexity, Naming/PredicateMethod, RSpec/Output

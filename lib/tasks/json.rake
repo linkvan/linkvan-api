@@ -19,9 +19,9 @@ namespace :json do
   task :import, [:jsonfile] => :environment do |_t, args|
     raise "ERROR: This rake task is supposed to be used only by developers." if Rails.env.production?
 
-    file = File.open args[:jsonfile]
-    data = JSON.load file # rubocop:disable Security/JSONLoad
-    file.close
+    data = File.open(args[:jsonfile]) do |file|
+      JSON.load file # rubocop:disable Security/JSONLoad
+    end
 
     # expected structure:
     #   { 'v1': {'facilities': [

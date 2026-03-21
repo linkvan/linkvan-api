@@ -77,7 +77,7 @@ group :development do
   gem "pry", "~> 0.16.0"
   gem "pry-rails"
   gem "pry-stack_explorer", "~> 0.6.2"
-  gem "pry-remote"
+  gem "pry-remote-reloaded"
   gem "pry-byebug", "~> 3.12.0"
 
   # Display performance information such as SQL time and flame graphs for each request in your browser.
@@ -106,7 +106,7 @@ end
 gem "tzinfo-data", platforms: [:mri, :windows]
 
 # Pagination
-gem "pagy", "~> 9.4.0"
+gem "pagy", "~> 43.4"
 
 # Alternative approach to web apps development.
 # https://github.com/hotwired/hotwire-rails

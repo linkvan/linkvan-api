@@ -149,8 +149,8 @@ RSpec.describe Locations::Searcher, type: :service do
           expect(second_enumeration.length).to eq(2)
 
           # Both should contain Location objects
-          expect(first_enumeration.all? { |loc| loc.is_a?(Location) }).to be true
-          expect(second_enumeration.all? { |loc| loc.is_a?(Location) }).to be true
+          expect(first_enumeration.all?(Location)).to be true
+          expect(second_enumeration.all?(Location)).to be true
         end
       end
     end

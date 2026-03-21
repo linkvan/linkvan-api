@@ -2,7 +2,7 @@
 
 ## Plan Reference
 
-[plan.md](./plan.md)
+[plan.md](plan.md)
 
 ---
 

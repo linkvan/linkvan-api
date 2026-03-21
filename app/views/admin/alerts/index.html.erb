@@ -16,5 +16,7 @@
 
 <hr/>
 <div class="container" data-controller='pagy'>
-    <%== pagy_bulma_combo_nav_js(@pagy) %>
+    <div class="is-flex is-justify-content-center">
+        <%== @pagy.input_nav_js(:bulma) %>
+    </div>
 </div>
