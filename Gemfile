@@ -40,7 +40,7 @@ gem "propshaft"
 gem "dartsass-rails"
 
 # Authentication
-gem "devise", "~> 4.9.3"
+gem "devise", "~> 5.0.3"
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
