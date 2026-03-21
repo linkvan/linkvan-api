@@ -34,7 +34,7 @@
 
 # Bulma extra: Add nav, nav_js and combo_nav_js helpers and templates for Bulma pagination
 # See https://ddnexus.github.io/pagy/extras/bulma
-require "pagy/extras/bulma"
+# (Integrated into core in Pagy v43+)
 
 # Foundation extra: Add nav, nav_js and combo_nav_js helpers and templates for Foundation pagination
 # See https://ddnexus.github.io/pagy/extras/foundation
@@ -117,7 +117,7 @@ require "pagy/extras/bulma"
 # Rails: extras assets path required by the helpers that use javascript
 # (pagy*_nav_js, pagy*_combo_nav_js, and pagy_items_selector_js)
 # See https://ddnexus.github.io/pagy/extras#javascript
-Rails.application.config.assets.paths << Pagy.root.join("javascripts")
+# Pagy v43+: JavaScript handled via importmaps, no need to configure asset path
 
 # I18n
 

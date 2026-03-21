@@ -991,7 +991,7 @@ Systematically address 1,651 RuboCop offenses to improve code quality, maintaina
 
 ## Progress Tracking Reference
 
-See [tracker.md](./tracker.md) for detailed status of each item.
+See [tracker.md](tracker.md) for detailed status of each item.
 
 ---
 
