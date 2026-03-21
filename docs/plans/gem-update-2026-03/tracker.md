@@ -7,7 +7,7 @@
 ---
 
 ## Created: 2026-03-21
-## Last Updated: 2026-03-21 (Updated for direct Gemfile gems only)
+## Last Updated: 2026-03-21 (Stage 4 research completed; pagy upgrade path documented)
 
 ---
 
@@ -31,9 +31,9 @@ This tracker only includes gems that are **explicitly listed in the Gemfile**:
 |----------|-------|-------------|-------------|-----------|-----|
 | CRITICAL | 3    | 0           | 0           | 2         | 1   |
 | HIGH     | 3    | 1           | 0           | 1         | 1   |
-| MEDIUM   | 3    | 3           | 0           | 0         | 0   |
+| MEDIUM   | 3    | 0           | 0           | 3         | 0   |
 | LOW      | 1    | 1           | 0           | 0         | 0   |
-| **TOTAL**| **10**| **6**      | **0**       | **2**     | **2** |
+| **TOTAL**| **10**| **2**      | **0**       | **6**     | **2** |
 
 ---
 
@@ -111,31 +111,73 @@ This tracker only includes gems that are **explicitly listed in the Gemfile**:
 
 ## Stage 4: pagy Update - Future Migration (Research Phase)
 
+### Research Findings
+
+#### Version Jump Analysis
+- **Current:** pagy 9.4.0
+- **Latest:** pagy 43.4.2
+- **Major version transitions:** 4 → 5 → 6 → 7 → 8 → 9 → 43 (6 jumps)
+- **Note:** Pagy jumps from 9.x directly to 43.x - no 10.x-42.x versions exist
+
+#### Breaking Changes Summary
+
+**Version 9.0.0** (items → limit rename):
+- `pagy_items_selector_js` → `pagy_limit_selector_js`
+- `:items_param` → `:limit_param`
+
+**Version 43.0.0** (complete redesign - [Upgrade Guide](https://ddnexus.github.io/pagy/guides/upgrade-guide/)):
+- Extras integrated into core - `require 'pagy/extras/*'` removed
+- `Pagy::DEFAULT[...]` → `Pagy::OPTIONS[...]`
+- All helpers are now `@pagy` instance methods
+
+#### Our App's pagy Usage (4 locations)
+- `config/initializers/pagy.rb` - uses `pagy/extras/bulma`
+- `app/controllers/admin/users_controller.rb` - `@pagy, @users = pagy(users)`
+- `app/controllers/admin/notices_controller.rb` - `@pagy, @notices = pagy(notices)`
+- `app/controllers/admin/facilities_controller.rb` - `@pagy, @facilities = pagy(facilities)`
+- `app/controllers/admin/alerts_controller.rb` - `@pagy, @alerts = pagy(alerts)`
+- 4 views use `pagy_bulma_combo_nav_js(@pagy)`
+
+#### Required Changes for 9.x → 43.x
+```ruby
+# Views (all 4)
+pagy_bulma_combo_nav_js(@pagy)  →  @pagy.input_nav_js(:bulma, ...)
+
+# Initializer
+require "pagy/extras/bulma"     →  Removed (integrated into core)
+```
+
+#### Reference URLs
+- [Pagy Upgrade Guide](https://ddnexus.github.io/pagy/guides/upgrade-guide/)
+- [Pagy Changelog](https://ddnexus.github.io/pagy/changelog)
+- [Legacy Changelog (v9 and earlier)](https://ddnexus.github.io/pagy/changelog_legacy)
+- [RubyGems pagy versions](https://rubygems.org/gems/pagy/versions)
+
 ### Item Tables
 
 #### 4.1 - Research pagy version history
 
 | ID | Priority | Status | File | Notes |
 |----|----------|--------|------|-------|
-| 4.1 | MEDIUM | ⬜ Not Started | - | Check changelog, identify breaking changes |
+| 4.1 | MEDIUM | ✅ Completed | - | 6 major versions (4→5→6→7→8→9→43); pagy jumps 9→43 directly |
 
 #### 4.2 - Analyze current pagy usage in codebase
 
 | ID | Priority | Status | File | Notes |
 |----|----------|--------|------|-------|
-| 4.2 | MEDIUM | ⬜ Not Started | app/ | `grep -r "pagy" app/ --include="*.rb"` |
+| 4.2 | MEDIUM | ✅ Completed | app/ | 4 controllers, 4 views, 1 initializer using pagy |
 
 #### 4.3 - Plan incremental update path
 
 | ID | Priority | Status | File | Notes |
 |----|----------|--------|------|-------|
-| 4.3 | MEDIUM | ⬜ Not Started | - | Document version path and code changes |
+| 4.3 | MEDIUM | ✅ Completed | - | Direct 9.x → 43.x upgrade; only 1 major transition needed |
 
 #### 4.4 - Execute pagy update (future)
 
 | ID | Priority | Status | File | Notes |
 |----|----------|--------|------|-------|
-| 4.4 | LOW | ⬜ Not Started | Gemfile | Future session - requires manual test |
+| 4.4 | LOW | ⬜ Not Started | Gemfile | Future session - requires manual test and full rspec run |
 
 ---
 
@@ -163,7 +205,7 @@ These items were in the original plan but have been removed because the gems are
 
 ### Blockers
 
-- **pagy**: Blocked - requires significant API migration from 9.x to 43.x
+- **pagy**: Research complete; awaiting execution in future session
 
 ---
 
@@ -173,8 +215,8 @@ These items were in the original plan but have been removed because the gems are
 Stage 1 (HIGH):      ████████████████████████████ 3/3 items (100%)
 Stage 2 (HIGH):      ████████████████████████████ 3/3 items (100%) [1 completed, 1 skipped, 1 transitive N/A]
 Stage 3 (CRITICAL):  ████████████████████████████  3/3 items (100%) [1 completed, 1 not started]
-Stage 4 (MEDIUM/LOW):░░░░░░░░░░░░░░░░░░░░░░░░░░░░  0/4 items (0%)
-Overall:             ██████████████████░░░░░░░░░░  8/13 items (62%)
+Stage 4 (MEDIUM/LOW):████████████████████░░░░░░░░░  3/4 items (75%)
+Overall:             ███████████████████████░░░░  11/13 items (85%)
 ```
 
 ---
@@ -204,6 +246,7 @@ Overall:             ██████████████████░�
 | 2026-03-21 | Stage 2 completed: turbo-rails/pry-remote-reloaded updated, manual test passed | Assistant |
 | 2026-03-21 | Stage 3 completed: shoulda-matchers already at latest, rspec passed | Assistant |
 | 2026-03-21 | Stage 3.3 completed: Full admin UI smoke test passed | User |
+| 2026-03-21 | Stage 4 research completed: pagy version analysis, usage inventory, upgrade path documented | Assistant |
 
 ---
 
