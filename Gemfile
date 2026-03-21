@@ -106,7 +106,7 @@ end
 gem "tzinfo-data", platforms: [:mri, :windows]
 
 # Pagination
-gem "pagy", "~> 9.4.0"
+gem "pagy", "~> 43.4"
 
 # Alternative approach to web apps development.
 # https://github.com/hotwired/hotwire-rails
