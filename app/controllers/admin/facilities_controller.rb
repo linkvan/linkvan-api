@@ -51,7 +51,7 @@ class Admin::FacilitiesController < Admin::BaseController
 
     if @facility.discard
       flash[:notice] = "Successfully discarded Facility #{@facility.name} (id: #{@facility.id})"
-      redirect_back fallback_location: admin_facility_path(@facility)
+      redirect_back_or_to(admin_facility_path(@facility))
     else
       # Error when turning Welcome on.
       flash[:alert] = "Failed to discard Facility #{@facility.name} (id: #{@facility.id}). Errors: #{@facility.errors.full_messages.join('; ')}"
@@ -68,7 +68,7 @@ class Admin::FacilitiesController < Admin::BaseController
       flash[:alert] = "Failed to discard Facility #{@facility.name} (id: #{@facility.id}). Errors: #{@facility.errors.full_messages.join('; ')}"
     end
 
-    redirect_back fallback_location: admin_facility_path(@facility)
+    redirect_back_or_to(admin_facility_path(@facility))
   end
 
   private
