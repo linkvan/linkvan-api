@@ -18,7 +18,7 @@
   },
   "version": "0.1.0",
   "devDependencies": {
-    "jquery": "^3.6.0"
+    "jquery": "^4.0.0"
   },
   "scripts": {
     "build:css": "sass ./app/assets/stylesheets/application.scss:./app/assets/builds/application.css --no-source-map --load-path=node_modules"
