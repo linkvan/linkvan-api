@@ -31,6 +31,14 @@ class ApplicationService
     !valid?
   end
 
+  def success(data = {})
+    Result.new(data: data, errors: [])
+  end
+
+  def failure(errors)
+    Result.new(data: nil, errors: Array(errors))
+  end
+
   private
 
   def errors

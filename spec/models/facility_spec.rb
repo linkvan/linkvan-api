@@ -34,12 +34,6 @@ RSpec.describe Facility, type: :model do
     it { expect(facility).to have_many(:time_slots).through(:schedules) }
   end
 
-  describe "discard_reason enum" do
-    it "defines enum values" do
-      expect(described_class.discard_reasons).to eq({ "none" => nil, "closed" => "closed", "duplicated" => "duplicated" })
-    end
-  end
-
   it_behaves_like "discardable" do
     subject(:model) { facility }
   end
@@ -52,7 +46,7 @@ RSpec.describe Facility, type: :model do
     end
 
     context "with none" do
-      let(:discard_reason) { :none }
+      let(:discard_reason) { nil }
 
       it { expect(facility).to be_discard_reason_none }
     end
@@ -316,7 +310,7 @@ RSpec.describe Facility, type: :model do
         facility.save!
       end
 
-      it { expect(facility.discard_reason).to eq("none") }
+      it { expect(facility.discard_reason).to be_nil }
     end
   end
 end

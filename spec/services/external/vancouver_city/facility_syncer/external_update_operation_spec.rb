@@ -145,7 +145,9 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
       before do
         # Simulate a validation error during update
-        allow(Facility).to receive(:find_by).and_return(existing_external_facility)
+        relation_stub = instance_double(ActiveRecord::Relation)
+        allow(relation_stub).to receive(:find_by).with(external_id: "EXT_INVALID123").and_return(existing_external_facility)
+        allow(Facility).to receive(:with_discarded).and_return(relation_stub)
         allow(existing_external_facility).to receive(:update!).and_raise(
           ActiveRecord::RecordInvalid.new(existing_external_facility)
         )
@@ -174,7 +176,9 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
                                    external_id: "EXT_SERVICE_ERROR123",
                                    name: "Test Facility")
         # Simulate a constraint violation when creating facility service
-        allow(Facility).to receive(:find_by).and_return(existing_facility)
+        relation_stub = instance_double(ActiveRecord::Relation)
+        allow(relation_stub).to receive(:find_by).with(external_id: "EXT_SERVICE_ERROR123").and_return(existing_facility)
+        allow(Facility).to receive(:with_discarded).and_return(relation_stub)
         allow(existing_facility.facility_services).to receive(:create!).and_raise(
           ActiveRecord::RecordInvalid.new(FacilityService.new)
         )
@@ -206,7 +210,9 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
       before do
         # Force service creation to fail during add_missing_services
-        allow(Facility).to receive(:find_by).and_return(existing_external_facility)
+        relation_stub = instance_double(ActiveRecord::Relation)
+        allow(relation_stub).to receive(:find_by).with(external_id: "EXT_STD_ERROR123").and_return(existing_external_facility)
+        allow(Facility).to receive(:with_discarded).and_return(relation_stub)
         allow(existing_external_facility.facility_services).to receive(:create!).and_raise(StandardError.new("Service creation failed"))
       end
 
@@ -344,7 +350,9 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
       before do
         # Force failure after attribute update but before service creation
-        allow(Facility).to receive(:find_by).and_return(rollback_facility)
+        relation_stub = instance_double(ActiveRecord::Relation)
+        allow(relation_stub).to receive(:find_by).with(external_id: "ROLLBACK123").and_return(rollback_facility)
+        allow(Facility).to receive(:with_discarded).and_return(relation_stub)
         allow(rollback_facility.facility_services).to receive(:create!).and_raise(StandardError.new("Service creation failed"))
       end
 

@@ -29,12 +29,44 @@
                             </div>
                         </div>
 
+                    <div class="field">
+                        <div class="control">
+                            <%= form.submit "Import Facilities", class: "button is-primary", id: "import-button", data: { disable_with: "Importing..." } %>
+                        </div>
+                    </div>
+                </div>
+                <div class="notification is-warning is-light mt-4">
+                    <p><strong>Note:</strong> Import performs a full sync, which removes any facilities that no longer exist in the API.</p>
+                </div>
+            <% end %>
+        </div>
+
+        <div class="column is-6">
+            <%= render Shared::CardComponent.new(title: "Purge Facilities") do |card| %>
+                <div class="content">
+                    <p class="mb-4">Remove all water fountains from the database. This action cannot be undone.</p>
+
+                    <%= form_with url: purge_facilities_admin_tools_path, method: :delete, class: "form", id: "purge-form" do |form| %>
+                        <div class="field">
+                            <%= form.label :api, "API Endpoint", class: "label" %>
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    <%= form.select :api,
+                                        options_for_select(api_options_for_select),
+                                        { include_blank: 'Select an API...' },
+                                        { class: "select", required: true } %>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="field">
                             <div class="control">
-                                <%= form.submit "Import Facilities", class: "button is-primary", id: "import-button", data: { disable_with: "Importing..." } %>
+                                <%= form.submit "Purge All Facilities", class: "button is-danger", id: "purge-button", data: { confirm: "Are you sure you want to remove ALL facilities for the selected API? This action cannot be undone.", disable_with: "Purging..." } %>
                             </div>
                         </div>
                     <% end %>
+                </div>
+            <% end %>
 
                     <!-- Progress indicator -->
                     <div id="import-progress" class="notification is-info is-hidden mt-4">

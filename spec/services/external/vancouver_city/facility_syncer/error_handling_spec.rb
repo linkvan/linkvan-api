@@ -31,7 +31,9 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
       before do
         # Stub update! to raise RecordInvalid to simulate validation failure
-        allow(Facility).to receive(:find_by).and_return(existing_facility)
+        relation_stub = instance_double(ActiveRecord::Relation)
+        allow(relation_stub).to receive(:find_by).with(external_id: "FAIL_UPDATE123").and_return(existing_facility)
+        allow(Facility).to receive(:with_discarded).and_return(relation_stub)
         allow(existing_facility).to receive(:update!).and_raise(
           ActiveRecord::RecordInvalid.new(existing_facility)
         )
@@ -70,7 +72,9 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
       before do
         # Stub facility_services.create! to raise StandardError
-        allow(Facility).to receive(:find_by).and_return(existing_facility)
+        relation_stub = instance_double(ActiveRecord::Relation)
+        allow(relation_stub).to receive(:find_by).with(external_id: "SERVICE_ERROR123").and_return(existing_facility)
+        allow(Facility).to receive(:with_discarded).and_return(relation_stub)
         allow(existing_facility.facility_services).to receive(:create!).and_raise(StandardError.new("Database connection lost"))
       end
 

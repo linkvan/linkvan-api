@@ -149,10 +149,14 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
                                    name: "Service Error Fountain",
                                    verified: false)
 
-        allow(Facility).to receive(:where).and_call_original
-        allow(Facility).to receive(:where).with(name: "Service Error Fountain").and_return(
-          instance_double(ActiveRecord::Relation, order: instance_double(ActiveRecord::Relation, first: existing_facility))
-        )
+        # Stub the with_discarded chain to return the existing facility via where
+        # First, stub find_by to return nil so it falls through to where
+        with_discarded_relation = instance_double(ActiveRecord::Relation)
+        order_relation = instance_double(ActiveRecord::Relation, first: existing_facility)
+        where_relation = instance_double(ActiveRecord::Relation, order: order_relation)
+        allow(with_discarded_relation).to receive(:find_by).and_return(nil)
+        allow(with_discarded_relation).to receive(:where).with(name: "Service Error Fountain").and_return(where_relation)
+        allow(Facility).to receive(:with_discarded).and_return(with_discarded_relation)
         allow(existing_facility.facility_services).to receive(:create!).and_raise(
           ActiveRecord::RecordInvalid.new(FacilityService.new)
         )
@@ -182,10 +186,14 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
                                    name: "Generic Error Fountain",
                                    verified: false)
 
-        allow(Facility).to receive(:where).and_call_original
-        allow(Facility).to receive(:where).with(name: "Generic Error Fountain").and_return(
-          instance_double(ActiveRecord::Relation, order: instance_double(ActiveRecord::Relation, first: existing_facility))
-        )
+        # Stub the with_discarded chain to return the existing facility via where
+        # First, stub find_by to return nil so it falls through to where
+        with_discarded_relation = instance_double(ActiveRecord::Relation)
+        order_relation = instance_double(ActiveRecord::Relation, first: existing_facility)
+        where_relation = instance_double(ActiveRecord::Relation, order: order_relation)
+        allow(with_discarded_relation).to receive(:find_by).and_return(nil)
+        allow(with_discarded_relation).to receive(:where).with(name: "Generic Error Fountain").and_return(where_relation)
+        allow(Facility).to receive(:with_discarded).and_return(with_discarded_relation)
         allow(existing_facility.facility_services).to receive(:create!).and_raise(
           StandardError.new("Database connection failed")
         )
@@ -343,10 +351,14 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       before do
-        allow(Facility).to receive(:where).and_call_original
-        allow(Facility).to receive(:where).with(name: "Rollback Internal Test").and_return(
-          instance_double(ActiveRecord::Relation, order: instance_double(ActiveRecord::Relation, first: rollback_internal_facility))
-        )
+        # Stub the with_discarded chain to return the existing facility via where
+        # First, stub find_by to return nil so it falls through to where
+        with_discarded_relation = instance_double(ActiveRecord::Relation)
+        order_relation = instance_double(ActiveRecord::Relation, first: rollback_internal_facility)
+        where_relation = instance_double(ActiveRecord::Relation, order: order_relation)
+        allow(with_discarded_relation).to receive(:find_by).and_return(nil)
+        allow(with_discarded_relation).to receive(:where).with(name: "Rollback Internal Test").and_return(where_relation)
+        allow(Facility).to receive(:with_discarded).and_return(with_discarded_relation)
         allow(rollback_internal_facility.facility_services).to receive(:create!).and_raise(StandardError.new("Service creation failed"))
       end
 
@@ -410,10 +422,14 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       before do
-        allow(Facility).to receive(:where).and_call_original
-        allow(Facility).to receive(:where).with(name: "Validation Test Facility").and_return(
-          instance_double(ActiveRecord::Relation, order: instance_double(ActiveRecord::Relation, first: validation_internal_facility))
-        )
+        # Stub the with_discarded chain to return the existing facility via where
+        # First, stub find_by to return nil so it falls through to where
+        with_discarded_relation = instance_double(ActiveRecord::Relation)
+        order_relation = instance_double(ActiveRecord::Relation, first: validation_internal_facility)
+        where_relation = instance_double(ActiveRecord::Relation, order: order_relation)
+        allow(with_discarded_relation).to receive(:find_by).and_return(nil)
+        allow(with_discarded_relation).to receive(:where).with(name: "Validation Test Facility").and_return(where_relation)
+        allow(Facility).to receive(:with_discarded).and_return(with_discarded_relation)
         allow(validation_internal_facility.facility_services).to receive(:create!).and_raise(
           ActiveRecord::RecordInvalid.new(FacilityService.new)
         )
