@@ -67,7 +67,7 @@ RSpec.describe Facilities::DiscardReasonComponent, type: :component do
 
   describe ".select_options" do
     it "returns inverted hash as array of arrays" do
-      expected = [["None", :none], ["Closed", :closed], ["Duplicated", :duplicated]]
+      expected = [["None", :none], ["Closed", :closed], ["Duplicated", :duplicated], ["Removed by Sync", :sync_removed]]
       expect(described_class.select_options).to eq(expected)
     end
   end

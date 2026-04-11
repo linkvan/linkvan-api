@@ -17,8 +17,13 @@ RSpec.describe Admin::ToolsController do
     let(:api_key) { "drinking-fountains" }
 
     context "when admin user" do
-      let!(:facility1) { create(:facility, :with_verified, external_id: "FOO123", name: "Fountain 1") }
-      let!(:facility2) { create(:facility, :with_verified, external_id: "BAR456", name: "Fountain 2") }
+      let(:drinking_fountains_key) { "drinking-fountains" }
+      let(:public_washrooms_key) { "public-washrooms" }
+
+      before do
+        create(:facility, :with_verified, external_id: "FOO123", name: "Fountain 1")
+        create(:facility, :with_verified, external_id: "BAR456", name: "Fountain 2")
+      end
 
       context "with valid api_key" do
         it "purges all external facilities" do
@@ -37,8 +42,9 @@ RSpec.describe Admin::ToolsController do
         it "discards facilities with sync_removed reason" do
           purge_facilities
 
-          expect(facility1.reload).to be_discarded
-          expect(facility1.discard_reason).to eq("sync_removed")
+          discarded = Facility.external.with_discarded.find_by(external_id: "FOO123")
+          expect(discarded).to be_discarded
+          expect(discarded.discard_reason).to eq("sync_removed")
         end
       end
 

@@ -23,6 +23,36 @@ class External::VancouverCity::Syncer < ApplicationService
   def call
     return Result.new(data: nil, errors: errors) if invalid?
 
+    facilities, synced_external_ids, created_count, updated_count = sync_facilities_from_api
+
+    discarded_count = discard_missing_facilities(synced_external_ids)
+
+    Rails.logger.info "Successfully processed #{facilities.size} facilities from #{api_key} API"
+
+    build_result(facilities, created_count, updated_count, discarded_count)
+  end
+
+  # Validates the input parameters
+  # @return [Array] Array of error messages
+  def validate
+    @errors = []
+
+    add_error("Unsupported API: #{api_key}") unless External::ApiHelper.supported_api?(api_key)
+
+    if api_client.nil?
+      add_error("API client is required")
+    elsif !api_client.is_a?(External::VancouverCity::VancouverApiClient)
+      add_error("API client must be an instance of VancouverApiClient")
+    end
+
+    errors
+  end
+
+  private
+
+  # Syncs facilities from the API with pagination
+  # @return [Array] Array containing facilities, synced_external_ids, created_count, updated_count
+  def sync_facilities_from_api
     facilities = []
     synced_external_ids = []
     created_count = 0
@@ -64,10 +94,16 @@ class External::VancouverCity::Syncer < ApplicationService
       end
     end
 
-    discarded_count = discard_missing_facilities(synced_external_ids)
+    [facilities, synced_external_ids, created_count, updated_count]
+  end
 
-    Rails.logger.info "Successfully processed #{facilities.size} facilities from #{api_key} API"
-
+  # Builds the result object for the sync operation
+  # @param facilities [Array<Facility>] Array of synced facilities
+  # @param created_count [Integer] Number of created facilities
+  # @param updated_count [Integer] Number of updated facilities
+  # @param discarded_count [Integer] Number of discarded facilities
+  # @return [ApplicationService::Result] Result object with data and errors
+  def build_result(facilities, created_count, updated_count, discarded_count)
     Result.new(
       data: {
         facilities: facilities,
@@ -80,24 +116,6 @@ class External::VancouverCity::Syncer < ApplicationService
       errors: errors
     )
   end
-
-  # Validates the input parameters
-  # @return [Array] Array of error messages
-  def validate
-    @errors = []
-
-    add_error("Unsupported API: #{api_key}") unless External::ApiHelper.supported_api?(api_key)
-
-    if api_client.nil?
-      add_error("API client is required")
-    elsif !api_client.is_a?(External::VancouverCity::VancouverApiClient)
-      add_error("API client must be an instance of VancouverApiClient")
-    end
-
-    errors
-  end
-
-  private
 
   # Process API records and convert them to Facility objects
   # @param records [Array<Hash>] Array of API response records

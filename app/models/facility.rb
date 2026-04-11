@@ -48,21 +48,16 @@ class Facility < ApplicationRecord
   end
 
   def managed_by?(user_or_user_id)
-    return false if user_or_user_id.blank?
+    f_user = if user_or_user_id.respond_to? :id
+               user_or_user_id
+             else
+               User.find_by(id: user_or_user_id)
+             end
 
-    f_user_id = if user_or_user_id.respond_to? :id
-                  user_or_user_id.id
-                else
-                  user_or_user_id
-                end
+    return false if f_user.blank?
 
     # Case Facility's User is the same
-    return true if user_id == f_user_id
-    # Case Zone of the Facility has the user as admin
-    return true if User.find(f_user_id).manages.any?
-
-    # Otherwise return FALSE
-    false
+    user_id == f_user.id || f_user.manages.exists?(id: id)
   end
 
   def self.managed_by(user)

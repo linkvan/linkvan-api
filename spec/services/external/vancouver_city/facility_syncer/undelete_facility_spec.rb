@@ -203,7 +203,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call - undelete scenar
       end
     end
 
-    context "interaction with kept facilities" do
+    context "when interaction with kept facilities" do
       let!(:kept_facility) do
         create(:facility,
                :with_verified,
@@ -238,7 +238,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call - undelete scenar
       end
     end
 
-    context "name match with discarded internal facility" do
+    context "when name match with discarded internal facility" do
       let!(:discarded_internal) do
         create(:facility,
                :discarded,
