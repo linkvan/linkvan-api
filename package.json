@@ -8,7 +8,7 @@
     "@rails/actioncable": "^8.1.0",
     "@rails/actiontext": "^8.1.0",
     "@rails/activestorage": "^8.1.300",
-    "@rails/request.js": "^0.0.12",
+    "@rails/request.js": "^0.0.13",
     "babel-preset-react": "^6.24.1",
     "bulma": "^1.0.2",
     "bulma-tooltip": "^3.0.2",
