@@ -34,6 +34,33 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
     end
   end
 
+  describe "#initialize with full_sync option" do
+    let(:syncer_with_full_sync) { described_class.new(api_key: api_key, api_client: api_client, full_sync: full_sync) }
+
+    context "when full_sync is not specified" do
+      it "defaults to full_sync: true" do
+        syncer = described_class.new(api_key: api_key, api_client: api_client)
+        expect(syncer.full_sync).to be true
+      end
+    end
+
+    context "when full_sync is true" do
+      let(:full_sync) { true }
+
+      it "sets full_sync to true" do
+        expect(syncer_with_full_sync.full_sync).to be true
+      end
+    end
+
+    context "when full_sync is false" do
+      let(:full_sync) { false }
+
+      it "sets full_sync to false" do
+        expect(syncer_with_full_sync.full_sync).to be false
+      end
+    end
+  end
+
   describe "#validate" do
     context "with valid parameters" do
       it "returns no errors" do
@@ -466,6 +493,168 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
         expect(result.data[:facilities]).to be_an(Array)
         expect(result.data[:total_count]).to be_an(Integer)
         expect(result.data[:api_key]).to eq(api_key)
+      end
+    end
+
+    context "with full_sync: true (default)" do
+      let(:sample_records) { [{ "mapid" => "FOO123", "name" => "Test Fountain" }] }
+      let(:sample_facility) { create(:facility, :with_verified, external_id: "FOO123", name: "Test Fountain") }
+      let(:response) do
+        instance_double(Faraday::Response, body: { "results" => sample_records })
+      end
+
+      let(:syncer_result) do
+        ApplicationService::Result.new(
+          data: External::VancouverCity::FacilitySyncer::ResultData.new(
+            operation: :create,
+            facility: sample_facility
+          ),
+          errors: []
+        )
+      end
+
+      let!(:existing_facility) do
+        create(:facility, :with_verified, external_id: "EXISTING456", name: "Existing Fountain")
+      end
+
+      before do
+        allow(External::ApiHelper).to receive(:supported_api?).with(api_key).and_return(true)
+        allow(api_client).to receive(:get_dataset_records)
+          .with(api_key, limit: page_size, offset: 0)
+          .and_return(response)
+        allow(External::VancouverCity::FacilitySyncer).to receive(:call).and_return(syncer_result)
+        allow(logger).to receive(:info)
+        allow(logger).to receive(:warn)
+      end
+
+      it "discards facilities not in the API response" do
+        result = syncer.call
+
+        expect(result.success?).to be true
+        expect(existing_facility.reload).to be_discarded
+        expect(existing_facility.discard_reason).to eq("sync_removed")
+      end
+
+      it "returns deleted_count in result" do
+        result = syncer.call
+
+        expect(result.data[:deleted_count]).to eq(1)
+      end
+
+      it "does not re-discard facilities that were previously sync_removed" do
+        # Create a facility with external_id NOT in the API response (simulating previously removed)
+        # The facility is actually discarded with discard_reason = sync_removed
+        discarded_facility = create(:facility, :with_verified,
+                                    external_id: "DISCARDED789",
+                                    name: "Previously Discarded",
+                                    discard_reason: :sync_removed)
+        # Actually discard it (soft-delete) since that's what sync_removed means
+        discarded_facility.discard!
+
+        # Verify it's actually discarded
+        expect(discarded_facility.reload).to be_discarded
+
+        # Run the syncer - the DISCARDED789 facility should NOT be re-discarded
+        # because it was already removed during a previous sync
+        result = syncer.call
+
+        expect(result.success?).to be true
+        # The facility should remain discarded (not re-discarded)
+        expect(discarded_facility.reload).to be_discarded
+      end
+    end
+
+    context "with full_sync: false" do
+      let(:sample_records) { [{ "mapid" => "FOO123", "name" => "Test Fountain" }] }
+      let(:sample_facility) { create(:facility, :with_verified, external_id: "FOO123", name: "Test Fountain") }
+      let(:response) do
+        instance_double(Faraday::Response, body: { "results" => sample_records })
+      end
+
+      let(:syncer) { described_class.new(api_key: api_key, api_client: api_client, full_sync: false) }
+
+      let(:syncer_result) do
+        ApplicationService::Result.new(
+          data: External::VancouverCity::FacilitySyncer::ResultData.new(
+            operation: :create,
+            facility: sample_facility
+          ),
+          errors: []
+        )
+      end
+
+      let!(:orphan_facility) do
+        create(:facility, :with_verified, external_id: "ORPHAN456", name: "Orphan Fountain")
+      end
+
+      before do
+        allow(External::ApiHelper).to receive(:supported_api?).with(api_key).and_return(true)
+        allow(api_client).to receive(:get_dataset_records)
+          .with(api_key, limit: page_size, offset: 0)
+          .and_return(response)
+        allow(External::VancouverCity::FacilitySyncer).to receive(:call).and_return(syncer_result)
+        allow(logger).to receive(:info)
+      end
+
+      it "does not discard orphan facilities" do
+        result = syncer.call
+
+        expect(result.success?).to be true
+        expect(orphan_facility.reload).not_to be_discarded
+      end
+
+      it "returns deleted_count of 0" do
+        result = syncer.call
+
+        expect(result.data[:deleted_count]).to eq(0)
+      end
+    end
+
+    context "with operation counts in result" do
+      let(:sample_records) { [{ "mapid" => "NEW123", "name" => "New Fountain" }] }
+      let(:response) do
+        instance_double(Faraday::Response, body: { "results" => sample_records })
+      end
+
+      let(:created_facility) { create(:facility, :with_verified, external_id: "NEW123", name: "New Fountain") }
+      let(:updated_facility) { create(:facility, :with_verified, external_id: "OLD123", name: "Old Fountain") }
+
+      let(:create_result) do
+        ApplicationService::Result.new(
+          data: External::VancouverCity::FacilitySyncer::ResultData.new(
+            operation: :create,
+            facility: created_facility
+          ),
+          errors: []
+        )
+      end
+
+      let(:update_result) do
+        ApplicationService::Result.new(
+          data: External::VancouverCity::FacilitySyncer::ResultData.new(
+            operation: :external_update,
+            facility: updated_facility
+          ),
+          errors: []
+        )
+      end
+
+      before do
+        allow(External::ApiHelper).to receive(:supported_api?).with(api_key).and_return(true)
+        allow(api_client).to receive(:get_dataset_records)
+          .with(api_key, limit: page_size, offset: 0)
+          .and_return(response)
+        allow(External::VancouverCity::FacilitySyncer).to receive(:call)
+          .and_return(create_result)
+        allow(logger).to receive(:info)
+      end
+
+      it "returns created_count, updated_count, and deleted_count" do
+        result = syncer.call
+
+        expect(result.data[:created_count]).to be_an(Integer)
+        expect(result.data[:updated_count]).to be_an(Integer)
+        expect(result.data[:deleted_count]).to be_an(Integer)
       end
     end
   end

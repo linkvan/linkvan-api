@@ -17,10 +17,10 @@ class Facility < ApplicationRecord
   has_many :time_slots, through: :schedules
 
   enum :discard_reason, {
-    none: nil,
     closed: "closed",
-    duplicated: "duplicated"
-  }, prefix: true, default: :none
+    duplicated: "duplicated",
+    sync_removed: "sync_removed"
+  }, prefix: true, default: nil
 
   validates :name, presence: true
   validate :validate_website
@@ -42,6 +42,10 @@ class Facility < ApplicationRecord
   scope :without_welcomes, -> { where.not(facility_welcomes: FacilityWelcome.all) }
   scope :external, -> { where.not(external_id: nil) }
   scope :not_external, -> { where(external_id: nil) }
+
+  def discard_reason_none?
+    discard_reason.nil?
+  end
 
   def managed_by?(user_or_user_id)
     return false if user_or_user_id.blank?
@@ -157,7 +161,7 @@ class Facility < ApplicationRecord
     end
 
     # handles discard
-    self.discard_reason = :none if undiscarded?
+    self.discard_reason = nil if undiscarded?
   end
 
   def distance(to_coord: nil, to_lat: nil, to_long: nil, to_facility: nil)

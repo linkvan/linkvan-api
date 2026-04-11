@@ -54,6 +54,13 @@ FactoryBot.define do
     end
   end
 
+  # Creates a facility that is logically discarded (deleted)
+  trait :discarded do
+    after(:build) do |facility|
+      facility.deleted_at = Time.current
+    end
+  end
+
   # Remove these fields
   # "r_pets": false,
   # "r_id": false,

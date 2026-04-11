@@ -29,11 +29,13 @@ class External::VancouverCity::FacilitySyncer < ApplicationService
     end
 
     built_facility = builder_result.data[:facility]
-    existing_facility = Facility.find_by(external_id: built_facility.external_id)
+    existing_facility = Facility.with_discarded
+                                .find_by(external_id: built_facility.external_id)
 
     # If no external_id match, look for name match but prefer internal facilities
     if existing_facility.blank?
-      existing_facility = Facility.where(name: built_facility.name)
+      existing_facility = Facility.with_discarded
+                                  .where(name: built_facility.name)
                                   .order(Arel.sql("external_id IS NULL DESC, external_id"))
                                   .first
     end
@@ -84,12 +86,15 @@ class External::VancouverCity::FacilitySyncer < ApplicationService
   private
 
   def update_internal_facility(internal_facility, built_facility)
+    internal_facility.undiscard if internal_facility.discarded?
+
     add_missing_services(internal_facility, built_facility)
   end
 
   def update_external_facility(external_facility, built_facility)
-    add_missing_services(external_facility, built_facility)
+    external_facility.undiscard if external_facility.discarded?
 
+    add_missing_services(external_facility, built_facility)
     external_facility.update!(built_facility.attributes.slice("name", "address", "lat", "long", "verified"))
   end
 
@@ -97,6 +102,7 @@ class External::VancouverCity::FacilitySyncer < ApplicationService
     built_services = built_facility.facility_services.map(&:service).uniq
     existing_services = existing_facility.facility_services.map(&:service).uniq
     new_services = built_services - existing_services
+
     new_services.each do |service|
       existing_facility.facility_services.create!(service: service)
     end
