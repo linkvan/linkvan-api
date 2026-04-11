@@ -1,7 +1,7 @@
 ---
 description: Execute Ruby gem updates with version checking, breaking change analysis, and testing
 mode: subagent
-model: minimax-coding-plan/MiniMax-M2.5
+model: minimax-coding-plan/MiniMax-M2.7
 permission:
   skill:
     "ruby-gem-update": "allow"
