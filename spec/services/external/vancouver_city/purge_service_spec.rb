@@ -8,9 +8,14 @@ RSpec.describe External::VancouverCity::PurgeService, type: :service do
     let(:api_client) { External::VancouverCity.default_client }
 
     context "with valid api_key" do
-      let!(:facility1) { create(:facility, :with_verified, external_id: "FOO123", name: "Fountain 1") }
-      let!(:facility2) { create(:facility, :with_verified, external_id: "BAR456", name: "Fountain 2") }
-      let!(:internal_facility) { create(:facility, :with_verified, external_id: nil, name: "Internal Fountain") }
+      let(:drinking_fountains_key) { "drinking-fountains" }
+      let(:internal_facility) { create(:facility, :with_verified, external_id: nil, name: "Internal Fountain") }
+      let(:public_washrooms_key) { "public-washrooms" }
+
+      before do
+        create(:facility, :with_verified, external_id: "FOO123", name: "Fountain 1")
+        create(:facility, :with_verified, external_id: "BAR456", name: "Fountain 2")
+      end
 
       it "purges all external facilities for the api_key" do
         result = described_class.call(api_key: api_key)
@@ -23,10 +28,12 @@ RSpec.describe External::VancouverCity::PurgeService, type: :service do
         result = described_class.call(api_key: api_key)
 
         expect(result.success?).to be true
-        expect(facility1.reload).to be_discarded
-        expect(facility1.discard_reason).to eq("sync_removed")
-        expect(facility2.reload).to be_discarded
-        expect(facility2.discard_reason).to eq("sync_removed")
+        foo = Facility.external.with_discarded.find_by(external_id: "FOO123")
+        expect(foo).to be_discarded
+        expect(foo.discard_reason).to eq("sync_removed")
+        bar = Facility.external.with_discarded.find_by(external_id: "BAR456")
+        expect(bar).to be_discarded
+        expect(bar.discard_reason).to eq("sync_removed")
       end
 
       it "does not affect internal facilities" do
@@ -45,7 +52,7 @@ RSpec.describe External::VancouverCity::PurgeService, type: :service do
     end
 
     context "with no external facilities" do
-      let!(:internal_facility) { create(:facility, :with_verified, external_id: nil, name: "Internal Fountain") }
+      before { create(:facility, :with_verified, external_id: nil, name: "Internal Fountain") }
 
       it "returns success with zero discarded count" do
         result = described_class.call(api_key: api_key)
@@ -65,19 +72,23 @@ RSpec.describe External::VancouverCity::PurgeService, type: :service do
     end
 
     context "with facilities already discarded" do
-      let!(:facility1) { create(:facility, :with_verified, external_id: "FOO123", name: "Fountain 1") }
-      let!(:facility2) do
+      let(:drinking_fountains_key) { "drinking-fountains" }
+      let(:facility2) do
         create(:facility, :with_verified, external_id: "BAR456", name: "Fountain 2", discard_reason: :sync_removed)
       end
+      let(:public_washrooms_key) { "public-washrooms" }
 
-      before { facility2.discard! }
+      before do
+        create(:facility, :with_verified, external_id: "FOO123", name: "Fountain 1")
+        facility2.discard!
+      end
 
       it "only discards facilities that are not already discarded" do
         result = described_class.call(api_key: api_key)
 
         expect(result.success?).to be true
         expect(result.data[:discarded_count]).to eq(1)
-        expect(facility1.reload).to be_discarded
+        expect(Facility.external.with_discarded.find_by(external_id: "FOO123")).to be_discarded
         expect(facility2.reload).to be_discarded # Already was discarded
       end
     end

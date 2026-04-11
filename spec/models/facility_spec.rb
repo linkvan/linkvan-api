@@ -62,6 +62,12 @@ RSpec.describe Facility, type: :model do
 
       it { expect(facility).to be_discard_reason_duplicated }
     end
+
+    context "with sync_removed" do
+      let(:discard_reason) { :sync_removed }
+
+      it { expect(facility).to be_discard_reason_sync_removed }
+    end
   end
 
   describe "scopes" do

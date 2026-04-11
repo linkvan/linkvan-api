@@ -6,7 +6,8 @@ class Facilities::DiscardReasonComponent < ViewComponent::Base
   VALID_REASONS = {
     none: "None",
     closed: "Closed",
-    duplicated: "Duplicated"
+    duplicated: "Duplicated",
+    sync_removed: "Removed by Sync"
   }.freeze
 
   def initialize(discard_reason)
