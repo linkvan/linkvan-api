@@ -1,7 +1,7 @@
 ---
 description: Refactor code following Rails and project conventions
 mode: subagent
-model: minimax-coding-plan/MiniMax-M2.5
+model: minimax-coding-plan/MiniMax-M2.7
 permission:
   skill:
     "rails-code-quality": "allow"
