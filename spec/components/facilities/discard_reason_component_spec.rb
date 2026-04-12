@@ -59,8 +59,8 @@ RSpec.describe Facilities::DiscardReasonComponent, type: :component do
     context "with nil discard_reason" do
       let(:discard_reason) { nil }
 
-      it "returns error message for nil" do
-        expect(component.call).to have_text("Unsupported value ''")
+      it "returns 'None' text" do
+        expect(component.call).to have_text("None")
       end
     end
   end

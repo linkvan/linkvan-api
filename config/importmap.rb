@@ -21,6 +21,7 @@ pin "controllers/hello_controller"
 pin "controllers/modal_controller"
 pin "controllers/navigate_controller"
 pin "controllers/pagy_controller"
+pin "controllers/tabs_controller"
 
 # Pin local JavaScript modules individually
 pin "src/richtext"
