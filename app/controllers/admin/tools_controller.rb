@@ -31,7 +31,7 @@ class Admin::ToolsController < Admin::BaseController
     end
   end
 
-  def purge_facilities
+  def discard_facilities
     api_key = params[:api]
 
     unless External::ApiHelper.supported_api?(api_key)
@@ -39,14 +39,14 @@ class Admin::ToolsController < Admin::BaseController
       return
     end
 
-    result = External::VancouverCity::PurgeService.call(api_key: api_key)
+    result = External::VancouverCity::DiscardService.call(api_key: api_key)
 
     if result.success?
       discarded_count = result.data[:discarded_count] || 0
-      redirect_to admin_facilities_path(service: "water_fountain"), notice: "#{discarded_count} facilities purged from #{External::ApiHelper.api_name(api_key)}."
+      redirect_to admin_facilities_path(service: "water_fountain"), notice: "#{discarded_count} facilities discarded from #{External::ApiHelper.api_name(api_key)}."
     else
       error_messages = result.errors.join(", ")
-      redirect_to admin_tools_path, alert: "Failed to purge facilities: #{error_messages}"
+      redirect_to admin_tools_path, alert: "Failed to discard facilities: #{error_messages}"
     end
   end
 

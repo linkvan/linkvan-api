@@ -21,10 +21,10 @@ RSpec.describe "Admin Tools", type: :system do
       expect(page).to have_content("Vancouver City API")
     end
 
-    it "displays Sync and Purge tabs" do
+    it "displays Sync and Discard tabs" do
       tools_page.visit_tools
       expect(tools_page.has_sync_tab?).to be true
-      expect(tools_page.has_purge_tab?).to be true
+      expect(tools_page.has_discard_tab?).to be true
     end
 
     it "shows Sync tab content by default" do
@@ -32,10 +32,10 @@ RSpec.describe "Admin Tools", type: :system do
       expect(tools_page.has_import_form?).to be true
     end
 
-    it "switches to Purge tab when clicked" do
+    it "switches to Discard tab when clicked" do
       tools_page.visit_tools
-      tools_page.click_purge_tab
-      expect(tools_page.has_purge_form?).to be true
+      tools_page.click_discard_tab
+      expect(tools_page.has_discard_form?).to be true
     end
   end
 end

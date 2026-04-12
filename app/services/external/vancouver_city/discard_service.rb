@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class External::VancouverCity::PurgeService < ApplicationService
+class External::VancouverCity::DiscardService < ApplicationService
   attr_reader :api_key
 
   def initialize(api_key:)

@@ -8,7 +8,7 @@
 
 Enhance the Vancouver City API water fountain sync feature with two new capabilities:
 1. **Full Sync**: Remove facilities not present in the API (soft-delete with `sync_removed` reason)
-2. **Purge All**: Add ability to remove all water fountains via admin action
+2. **Discard All**: Add ability to remove all water fountains via admin action
 3. **Undelete Support**: Sync should undelete and update facilities that were previously soft-deleted but now appear in the API
 
 ## Current State
@@ -23,7 +23,7 @@ Enhance the Vancouver City API water fountain sync feature with two new capabili
 
 - **Full Sync**: After fetching all records, any external facility for that API not in the response will be soft-deleted with `discard_reason: "sync_removed"` (enabled by default)
 - **Undelete**: Discarded facilities matching API records will be undeleted and updated
-- **Purge All**: New admin action to soft-delete all water fountains for a given API
+- **Discard All**: New admin action to soft-delete all water fountains for a given API
 - **Enhanced Result**: `Syncer.call` result includes `created_count`, `updated_count`, `deleted_count`
 
 ## Analysis Summary
@@ -32,10 +32,10 @@ Enhance the Vancouver City API water fountain sync feature with two new capabili
 
 1. **FacilitySyncer** - Modify to use `Facility.with_discarded` queries and call `undiscard` before updates
 2. **Syncer** - Add `full_sync:` parameter (default `true`), track synced IDs, discard missing facilities
-3. **PurgeService** - New service to purge all facilities for an API
-4. **Admin Tools Controller** - Add `purge_facilities` action (DELETE method)
-5. **Routes** - Add DELETE route for purge action
-6. **Views** - Add checkbox for full sync and "Purge All" button
+3. **DiscardService** - New service to discard all facilities for an API
+4. **Admin Tools Controller** - Add `discard_facilities` action (DELETE method)
+5. **Routes** - Add DELETE route for discard action
+6. **Views** - Add checkbox for full sync and "Discard All" button
 
 ### Discard Reason
 
@@ -126,47 +126,47 @@ Enhance the Vancouver City API water fountain sync feature with two new capabili
 
 ---
 
-### Stage 2: Purge All Water Fountains
+### Stage 2: Discard All Water Fountains
 
 **Focus:** Add ability to remove all water fountains for an API
 
-#### 2.1 Add Tests for Purge Service
+#### 2.1 Add Tests for Discard Service
 - **Priority:** CRITICAL
 - **Type:** Test
-- **Location:** `spec/services/external/vancouver_city/purge_service_spec.rb`
-- **Description:** Add tests for purge service
+- **Location:** `spec/services/external/vancouver_city/discard_service_spec.rb`
+- **Description:** Add tests for discard service
 - **Tests:**
-  - Purges all external facilities for `api_key`
+  - Discards all external facilities for `api_key`
   - Discards with `discard_reason: "sync_removed"`
   - Returns `discarded_count`
   - Validates `api_key` is supported
 
-#### 2.2 Implement Purge Service
+#### 2.2 Implement Discard Service
 - **Priority:** CRITICAL
 - **Type:** Code Fix
-- **Location:** `app/services/external/vancouver_city/purge_service.rb`
-- **Description:** Create new service to purge all facilities for an API
+- **Location:** `app/services/external/vancouver_city/discard_service.rb`
+- **Description:** Create new service to discard all facilities for an API
 - **Implementation:** Find all external facilities for the service, discard each with `sync_removed` reason
 
-#### 2.3 Add Tests for Purge Controller Action
+#### 2.3 Add Tests for Discard Controller Action
 - **Priority:** CRITICAL
 - **Type:** Test
 - **Location:** `spec/controllers/admin/tools_controller_spec.rb`
-- **Description:** Add tests for purge action
+- **Description:** Add tests for discard action
 - **Tests:**
-  - `DELETE /admin/tools/purge_facilities?api=drinking-fountains`
+  - `DELETE /admin/tools/discard_facilities?api=drinking-fountains`
   - Admin only; non-admins redirect with access denied
   - Success redirects with notice showing count
   - Invalid `api_key` returns alert
 
-#### 2.4 Implement Purge Action + Route
+#### 2.4 Implement Discard Action + Route
 - **Priority:** CRITICAL
 - **Type:** Code Fix
 - **Location:** `app/controllers/admin/tools_controller.rb`, `config/routes.rb`
-- **Description:** Add purge_facilities action and DELETE route
+- **Description:** Add discard_facilities action and DELETE route
 - **Changes:**
-  - Add `purge_facilities` action (DELETE method)
-  - Add route: `delete :purge_facilities, to: 'admin/tools#purge_facilities'`
+  - Add `discard_facilities` action (DELETE method)
+  - Add route: `delete :discard_facilities, to: 'admin/tools#discard_facilities'`
 
 ---
 
@@ -176,10 +176,10 @@ Enhance the Vancouver City API water fountain sync feature with two new capabili
 - **Priority:** HIGH
 - **Type:** Code Fix
 - **Location:** `app/views/admin/tools/index.html.*`
-- **Description:** Add UI for full sync and purge options
+- **Description:** Add UI for full sync and discard options
 - **Changes:**
    - Remove checkbox (full sync is now the default behavior)
-  - Add "Purge All" button with confirmation dialog → `DELETE /admin/tools/purge_facilities?api=drinking-fountains`
+  - Add "Discard All" button with confirmation dialog → `DELETE /admin/tools/discard_facilities?api=drinking-fountains`
 
 ---
 
@@ -194,10 +194,10 @@ Enhance the Vancouver City API water fountain sync feature with two new capabili
 - [ ] Run `bin/rspec spec/services/external/vancouver_city/`
 
 ### Stage 2 Completion Criteria
-- [ ] Purge service tests pass (2.1)
-- [ ] Purge service implemented (2.2)
-- [ ] Purge controller tests pass (2.3)
-- [ ] Purge action and route implemented (2.4)
+- [ ] Discard service tests pass (2.1)
+- [ ] Discard service implemented (2.2)
+- [ ] Discard controller tests pass (2.3)
+- [ ] Discard action and route implemented (2.4)
 - [ ] Run `bin/rspec spec/controllers/admin/tools_controller_spec.rb`
 
 ### Stage 3 Completion Criteria
@@ -207,7 +207,7 @@ Enhance the Vancouver City API water fountain sync feature with two new capabili
 ### Overall Completion Criteria
 - [ ] All tests pass
 - [ ] `bin/rubocop` passes
-- [ ] Manual verification of full sync and purge features
+- [ ] Manual verification of full sync and discard features
 
 ---
 
@@ -216,9 +216,9 @@ Enhance the Vancouver City API water fountain sync feature with two new capabili
 If issues occur:
 1. Revert `app/services/external/vancouver_city/syncer.rb` - removes `full_sync` and deletion logic
 2. Revert `app/services/external/vancouver_city/facility_syncer.rb` - removes `with_discarded` and undelete logic
-3. Revert `app/controllers/admin/tools_controller.rb` - removes `purge_facilities` action
-4. Revert `config/routes.rb` - removes purge route
-5. Delete new files: `purge_service.rb`, `undelete_facility_spec.rb`
+3. Revert `app/controllers/admin/tools_controller.rb` - removes `discard_facilities` action
+4. Revert `config/routes.rb` - removes discard route
+5. Delete new files: `discard_service.rb`, `undelete_facility_spec.rb`
 
 ---
 

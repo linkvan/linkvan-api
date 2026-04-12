@@ -16,8 +16,8 @@ class AdminToolsPage < BasePage
     page.has_css?(".tabs ul li", text: "Sync")
   end
 
-  def has_purge_tab?
-    page.has_css?(".tabs ul li", text: "Purge")
+  def has_discard_tab?
+    page.has_css?(".tabs ul li", text: "Discard")
   end
 
   def click_sync_tab
@@ -25,8 +25,8 @@ class AdminToolsPage < BasePage
     self
   end
 
-  def click_purge_tab
-    click_link "Purge"
+  def click_discard_tab
+    click_link "Discard"
     self
   end
 
@@ -34,7 +34,7 @@ class AdminToolsPage < BasePage
     page.has_css?("#import-form")
   end
 
-  def has_purge_form?
-    page.has_css?("#purge-form")
+  def has_discard_form?
+    page.has_css?("#discard-form")
   end
 end
