@@ -18,3 +18,6 @@ application.register("navigate", NavigateController)
 
 import PagyController from "controllers/pagy_controller"
 application.register("pagy", PagyController)
+
+import TabsController from "controllers/tabs_controller"
+application.register("tabs", TabsController)

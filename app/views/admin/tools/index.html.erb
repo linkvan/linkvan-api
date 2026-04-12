@@ -10,9 +10,28 @@
 
 <hr/>
 <div class="container">
-    <div class="columns">
-        <div class="column is-6">
-            <%= render Shared::CardComponent.new(title: "Vancouver City API") do |card| %>
+    <h2 class="title is-4">Vancouver City API</h2>
+
+    <!-- Tabs -->
+    <div data-controller="tabs" data-tabs-active-tab-value="sync">
+        <div class="tabs is-boxed">
+            <ul>
+                <li class="is-active" data-tabs-target="link" data-tab="sync" data-action="tabs#switchTab">
+                    <a>
+                        Sync
+                    </a>
+                </li>
+                <li data-tabs-target="link" data-tab="purge" data-action="tabs#switchTab">
+                    <a>
+                        Purge
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Tab Contents -->
+        <div id="sync" class="tab-content" data-tabs-target="content">
+            <%= render Shared::CardComponent.new(title: "Import Facilities") do |card| %>
                 <div class="content">
                     <p class="mb-4">Choose which facilities to import from Vancouver City's Open Data API.</p>
 
@@ -29,19 +48,38 @@
                             </div>
                         </div>
 
-                    <div class="field">
-                        <div class="control">
-                            <%= form.submit "Import Facilities", class: "button is-primary", id: "import-button", data: { disable_with: "Importing..." } %>
+                        <div class="field">
+                            <div class="control">
+                                <%= form.submit "Import Facilities",
+                                                class: "button is-primary",
+                                                id: "import-button",
+                                                data: { disable_with: "Importing..." } %>
+                            </div>
+                        </div>
+                        <div class="notification is-warning is-light mt-4">
+                            <p><strong>Note:</strong> Import performs a full sync, which removes any facilities that no longer exist in the API.</p>
+                        </div>
+                    <% end %>
+                </div>
+            <% end %>
+
+            <!-- Progress indicator for import -->
+            <div id="import-progress" class="notification is-info is-hidden mt-4">
+                <div class="level">
+                    <div class="level-left">
+                        <div class="level-item">
+                            <span class="icon">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </span>
+                            <span>Importing facilities from Vancouver City API...</span>
                         </div>
                     </div>
                 </div>
-                <div class="notification is-warning is-light mt-4">
-                    <p><strong>Note:</strong> Import performs a full sync, which removes any facilities that no longer exist in the API.</p>
-                </div>
-            <% end %>
+                <progress class="progress is-primary" max="100">Importing...</progress>
+            </div>
         </div>
 
-        <div class="column is-6">
+        <div id="purge" class="tab-content is-hidden" data-tabs-target="content">
             <%= render Shared::CardComponent.new(title: "Purge Facilities") do |card| %>
                 <div class="content">
                     <p class="mb-4">Remove all water fountains from the database. This action cannot be undone.</p>
@@ -61,27 +99,16 @@
 
                         <div class="field">
                             <div class="control">
-                                <%= form.submit "Purge All Facilities", class: "button is-danger", id: "purge-button", data: { confirm: "Are you sure you want to remove ALL facilities for the selected API? This action cannot be undone.", disable_with: "Purging..." } %>
+                                <%= form.submit "Purge All Facilities",
+                                                class: "button is-danger",
+                                                id: "purge-button",
+                                                data: {
+                                                    confirm: "Are you sure you want to remove ALL facilities for the selected API? This action cannot be undone.",
+                                                    disable_with: "Purging..."
+                                                } %>
                             </div>
                         </div>
                     <% end %>
-                </div>
-            <% end %>
-
-                    <!-- Progress indicator -->
-                    <div id="import-progress" class="notification is-info is-hidden mt-4">
-                        <div class="level">
-                            <div class="level-left">
-                                <div class="level-item">
-                                    <span class="icon">
-                                        <i class="fas fa-spinner fa-spin"></i>
-                                    </span>
-                                    <span>Importing facilities from Vancouver City API...</span>
-                                </div>
-                            </div>
-                        </div>
-                        <progress class="progress is-primary" max="100">Importing...</progress>
-                    </div>
                 </div>
             <% end %>
         </div>
@@ -89,22 +116,25 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', initImportForm);
+document.addEventListener('turbolinks:load', initImportForm);
+
+function initImportForm() {
     const form = document.getElementById('import-form');
     const importButton = document.getElementById('import-button');
     const progressIndicator = document.getElementById('import-progress');
-    
+
     if (form && importButton && progressIndicator) {
         form.addEventListener('submit', function(e) {
             // Show progress indicator
             progressIndicator.classList.remove('is-hidden');
-            
+
             // Add loading class to button
             importButton.classList.add('is-loading');
-            
+
             // Disable the button to prevent multiple submissions
             importButton.disabled = true;
         });
     }
-});
+}
 </script>
