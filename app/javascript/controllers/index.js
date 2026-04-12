@@ -19,5 +19,8 @@ application.register("navigate", NavigateController)
 import PagyController from "controllers/pagy_controller"
 application.register("pagy", PagyController)
 
+import ProgressController from "controllers/progress_controller"
+application.register("progress", ProgressController)
+
 import TabsController from "controllers/tabs_controller"
 application.register("tabs", TabsController)

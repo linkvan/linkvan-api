@@ -57,29 +57,29 @@
 
 ---
 
-## Stage 2: Purge All Water Fountains
+## Stage 2: Discard All Water Fountains
 
 ### Item Tables
 
-#### 2.1 - Add Tests for Purge Service
+#### 2.1 - Add Tests for Discard Service
 
 | ID | Priority | Status | File | Notes |
 |----|----------|--------|------|-------|
-| 2.1 | CRITICAL | ✅ Completed | spec/.../purge_service_spec.rb | 7 tests - all passing |
+| 2.1 | CRITICAL | ✅ Completed | spec/.../discard_service_spec.rb | 7 tests - all passing |
 
-#### 2.2 - Implement Purge Service
+#### 2.2 - Implement Discard Service
 
 | ID | Priority | Status | File | Notes |
 |----|----------|--------|------|-------|
-| 2.2 | CRITICAL | ✅ Completed | app/.../purge_service.rb | New service file |
+| 2.2 | CRITICAL | ✅ Completed | app/.../discard_service.rb | New service file |
 
-#### 2.3 - Add Tests for Purge Controller Action
+#### 2.3 - Add Tests for Discard Controller Action
 
 | ID | Priority | Status | File | Notes |
 |----|----------|--------|------|-------|
 | 2.3 | CRITICAL | ✅ Completed | spec/controllers/admin/tools_controller_spec.rb | 11 tests - all passing |
 
-#### 2.4 - Implement Purge Action + Route
+#### 2.4 - Implement Discard Action + Route
 
 | ID | Priority | Status | File | Notes |
 |----|----------|--------|------|-------|
@@ -95,7 +95,7 @@
 
 | ID | Priority | Status | File | Notes |
 |----|----------|--------|------|-------|
-| 3.1 | HIGH | ✅ Completed | app/views/admin/tools/index.html.erb | Added purge button + note about full sync |
+| 3.1 | HIGH | ✅ Completed | app/views/admin/tools/index.html.erb | Added discard button + note about full sync |
 
 ---
 
@@ -146,6 +146,6 @@ Overall:             ███████████████████�
 
 - Discard reason for removed facilities: `sync_removed`
 - `full_sync: true` (default) - soft-deletes missing facilities; use `full_sync: false` for incremental sync
-- Purge action uses DELETE HTTP method
-- Confirmation dialog required before purge
+- Discard action uses DELETE HTTP method
+- Confirmation dialog required before discard
 - Since discard is used, operation is soft-delete (non-destructive, reversible)

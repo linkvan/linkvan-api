@@ -11,8 +11,8 @@ RSpec.describe Admin::ToolsController do
     allow(controller).to receive_messages(authenticate_user!: true, current_user: admin_user, user_signed_in?: true)
   end
 
-  describe "DELETE #purge_facilities" do
-    subject(:purge_facilities) { delete :purge_facilities, params: { api: api_key } }
+  describe "DELETE #discard_facilities" do
+    subject(:discard_facilities) { delete :discard_facilities, params: { api: api_key } }
 
     let(:api_key) { "drinking-fountains" }
 
@@ -26,21 +26,21 @@ RSpec.describe Admin::ToolsController do
       end
 
       context "with valid api_key" do
-        it "purges all external facilities" do
-          purge_facilities
+        it "discards all external facilities" do
+          discard_facilities
 
           expect(Facility.external.kept.count).to eq(0)
         end
 
         it "redirects with notice showing count" do
-          purge_facilities
+          discard_facilities
 
           expect(response).to redirect_to(admin_facilities_path(service: "water_fountain"))
           expect(flash[:notice]).to include("2")
         end
 
         it "discards facilities with sync_removed reason" do
-          purge_facilities
+          discard_facilities
 
           discarded = Facility.external.with_discarded.find_by(external_id: "FOO123")
           expect(discarded).to be_discarded
@@ -52,20 +52,20 @@ RSpec.describe Admin::ToolsController do
         let(:api_key) { "invalid-api" }
 
         it "redirects with alert" do
-          purge_facilities
+          discard_facilities
 
           expect(response).to redirect_to(admin_tools_path)
           expect(flash[:alert]).to include("Invalid API")
         end
       end
 
-      context "with no facilities to purge" do
+      context "with no facilities to discard" do
         before do
           Facility.external.kept.destroy_all
         end
 
         it "redirects with notice showing zero count" do
-          purge_facilities
+          discard_facilities
 
           expect(response).to redirect_to(admin_facilities_path(service: "water_fountain"))
           expect(flash[:notice]).to include("0")
@@ -79,7 +79,7 @@ RSpec.describe Admin::ToolsController do
       end
 
       it "redirects with access denied" do
-        purge_facilities
+        discard_facilities
 
         expect(response).to redirect_to(root_path)
         expect(flash[:alert]).to include("Access denied")

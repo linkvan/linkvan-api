@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe External::VancouverCity::PurgeService, type: :service do
+RSpec.describe External::VancouverCity::DiscardService, type: :service do
   describe ".call" do
     let(:api_key) { "drinking-fountains" }
     let(:api_client) { External::VancouverCity.default_client }
@@ -17,7 +17,7 @@ RSpec.describe External::VancouverCity::PurgeService, type: :service do
         create(:facility, :with_verified, external_id: "BAR456", name: "Fountain 2")
       end
 
-      it "purges all external facilities for the api_key" do
+      it "discards all external facilities for the api_key" do
         result = described_class.call(api_key: api_key)
 
         expect(result.success?).to be true
