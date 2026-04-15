@@ -12,6 +12,8 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
   describe "create operation (:create)" do
     context "when built facility is valid" do
+      subject(:syncer) { described_class.new(record: valid_record, current: nil, api_key: api_key) }
+
       let(:valid_record) do
         {
           "mapid" => "CREATE123",
@@ -26,13 +28,11 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
       it "saves the facility successfully" do
         expect do
-          syncer = described_class.new(record: valid_record, api_key: api_key)
           syncer.call
         end.to change(Facility, :count).by(1)
       end
 
       it "returns success result with operation: :create" do
-        syncer = described_class.new(record: valid_record, api_key: api_key)
         result = syncer.call
 
         expect(result).to be_success
@@ -41,7 +41,6 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "sets result_facility to built_facility" do
-        syncer = described_class.new(record: valid_record, api_key: api_key)
         result = syncer.call
 
         facility = result.data.facility
@@ -52,7 +51,6 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "creates facility with all expected attributes" do
-        syncer = described_class.new(record: valid_record, api_key: api_key)
         result = syncer.call
 
         facility = result.data.facility
@@ -67,7 +65,6 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "creates facility services" do
-        syncer = described_class.new(record: valid_record, api_key: api_key)
         result = syncer.call
 
         facility = result.data.facility
@@ -78,7 +75,6 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       it "logs creation message with external_id" do
         allow(Rails.logger).to receive(:info)
 
-        syncer = described_class.new(record: valid_record, api_key: api_key)
         syncer.call
 
         expect(Rails.logger).to have_received(:info).with("Creating new facility with external_id 'CREATE123'")
@@ -86,6 +82,8 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
     end
 
     context "when FacilityBuilder fails due to invalid data" do
+      subject(:syncer) { described_class.new(record: invalid_record, current: nil, api_key: api_key) }
+
       let(:invalid_record) do
         {
           "mapid" => "INVALID123",
@@ -96,13 +94,11 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
       it "does not save facility" do
         expect do
-          syncer = described_class.new(record: invalid_record, api_key: api_key)
           syncer.call
         end.not_to change(Facility, :count)
       end
 
       it "adds validation errors to errors array" do
-        syncer = described_class.new(record: invalid_record, api_key: api_key)
         result = syncer.call
 
         expect(result).to be_failed
@@ -110,14 +106,12 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "sets result_facility to nil" do
-        syncer = described_class.new(record: invalid_record, api_key: api_key)
         result = syncer.call
 
         expect(result.data.facility).to be_nil
       end
 
       it "returns early with operation: nil when FacilityBuilder fails" do
-        syncer = described_class.new(record: invalid_record, api_key: api_key)
         result = syncer.call
 
         expect(result.data.operation).to be_nil # FacilityBuilder fails before operation is determined
@@ -126,6 +120,8 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
     end
 
     context "when save! raises other StandardError" do
+      subject(:syncer) { described_class.new(record: valid_record, current: nil, api_key: api_key) }
+
       let(:valid_record) do
         {
           "mapid" => "ERROR123",
@@ -148,7 +144,6 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "catches exception and adds generic error message" do
-        syncer = described_class.new(record: valid_record, api_key: api_key)
         result = syncer.call
 
         expect(result).to be_failed
@@ -156,7 +151,6 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "includes original error message" do
-        syncer = described_class.new(record: valid_record, api_key: api_key)
         result = syncer.call
 
         expect(result.errors.first).to include("Database connection lost")
@@ -164,20 +158,20 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
       it "does not save facility on failure" do
         expect do
-          syncer = described_class.new(record: valid_record, api_key: api_key)
           syncer.call
         end.not_to change(Facility, :count)
       end
 
       it "does not create any related records on failure" do
         expect do
-          syncer = described_class.new(record: valid_record, api_key: api_key)
           syncer.call
         end.not_to change(FacilityService, :count)
       end
     end
 
     context "when save! raises ActiveRecord::RecordInvalid" do
+      subject(:syncer) { described_class.new(record: invalid_save_record, current: nil, api_key: api_key) }
+
       let(:invalid_save_record) do
         {
           "mapid" => "INVALID_SAVE123",
@@ -202,7 +196,6 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "catches RecordInvalid and adds error message" do
-        syncer = described_class.new(record: invalid_save_record, api_key: api_key)
         result = syncer.call
 
         expect(result).to be_failed
@@ -211,20 +204,20 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
       it "does not create facility record on validation failure" do
         expect do
-          syncer = described_class.new(record: invalid_save_record, api_key: api_key)
           syncer.call
         end.not_to change(Facility, :count)
       end
 
       it "does not create any related records on validation failure" do
         expect do
-          syncer = described_class.new(record: invalid_save_record, api_key: api_key)
           syncer.call
         end.not_to change(FacilityService, :count)
       end
     end
 
     context "when service creation fails" do
+      subject(:syncer) { described_class.new(record: service_fail_record, current: nil, api_key: api_key) }
+
       let(:service_fail_record) do
         {
           "mapid" => "SERVICE_FAIL123",
@@ -252,27 +245,23 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
       it "rolls back facility creation when facility save fails" do
         expect do
-          syncer = described_class.new(record: service_fail_record, api_key: api_key)
           syncer.call
         end.not_to change(Facility, :count)
       end
 
       it "does not create any service records when transaction fails" do
         expect do
-          syncer = described_class.new(record: service_fail_record, api_key: api_key)
           syncer.call
         end.not_to change(FacilityService, :count)
       end
 
       it "does not create any schedule records when transaction fails" do
         expect do
-          syncer = described_class.new(record: service_fail_record, api_key: api_key)
           syncer.call
         end.not_to change(FacilitySchedule, :count)
       end
 
       it "returns failed result with proper error message" do
-        syncer = described_class.new(record: service_fail_record, api_key: api_key)
         result = syncer.call
 
         expect(result).to be_failed
@@ -281,6 +270,8 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
     end
 
     context "when creating database record on success" do
+      subject(:syncer) { described_class.new(record: success_record, current: nil, api_key: api_key) }
+
       let(:success_record) do
         {
           "mapid" => "SUCCESS123",
@@ -292,8 +283,6 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "creates facility with all related records atomically" do
-        syncer = described_class.new(record: success_record, api_key: api_key)
-
         expect { syncer.call }.to change(Facility, :count).by(1)
           .and change(FacilityService, :count).by(1)
           .and change(FacilitySchedule, :count).by(7) # 7 days of the week
@@ -301,7 +290,6 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "creates facility with correct attributes and relationships" do
-        syncer = described_class.new(record: success_record, api_key: api_key)
         result = syncer.call
 
         facility = result.data.facility
@@ -318,7 +306,6 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "ensures all database records are properly linked" do
-        syncer = described_class.new(record: success_record, api_key: api_key)
         result = syncer.call
 
         facility = result.data.facility

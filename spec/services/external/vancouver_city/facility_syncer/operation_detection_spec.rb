@@ -22,7 +22,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "sets operation to :create" do
-        syncer = described_class.new(record: new_facility_record, api_key: api_key)
+        syncer = described_class.new(record: new_facility_record, api_key: api_key, current: nil)
         result = syncer.call
 
         expect(result.data.operation).to eq(:create)
@@ -30,7 +30,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
       it "creates a new facility" do
         expect do
-          syncer = described_class.new(record: new_facility_record, api_key: api_key)
+          syncer = described_class.new(record: new_facility_record, api_key: api_key, current: nil)
           syncer.call
         end.to change(Facility, :count).by(1)
       end
@@ -54,14 +54,14 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "sets operation to :external_update" do
-        syncer = described_class.new(record: update_record, api_key: api_key)
+        syncer = described_class.new(record: update_record, api_key: api_key, current: existing_external_facility)
         result = syncer.call
 
         expect(result.data.operation).to eq(:external_update)
       end
 
       it "returns the existing facility" do
-        syncer = described_class.new(record: update_record, api_key: api_key)
+        syncer = described_class.new(record: update_record, api_key: api_key, current: existing_external_facility)
         result = syncer.call
 
         expect(result.data.facility.id).to eq(existing_external_facility.id)
@@ -69,7 +69,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
       it "does not create a new facility" do
         expect do
-          syncer = described_class.new(record: update_record, api_key: api_key)
+          syncer = described_class.new(record: update_record, api_key: api_key, current: existing_external_facility)
           syncer.call
         end.not_to change(Facility, :count)
       end
@@ -93,14 +93,14 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "sets operation to :internal_update" do
-        syncer = described_class.new(record: name_match_record, api_key: api_key)
+        syncer = described_class.new(record: name_match_record, api_key: api_key, current: existing_internal_facility)
         result = syncer.call
 
         expect(result.data.operation).to eq(:internal_update)
       end
 
       it "returns the existing facility" do
-        syncer = described_class.new(record: name_match_record, api_key: api_key)
+        syncer = described_class.new(record: name_match_record, api_key: api_key, current: existing_internal_facility)
         result = syncer.call
 
         expect(result.data.facility.id).to eq(existing_internal_facility.id)
@@ -108,7 +108,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
       it "does not create a new facility" do
         expect do
-          syncer = described_class.new(record: name_match_record, api_key: api_key)
+          syncer = described_class.new(record: name_match_record, api_key: api_key, current: existing_internal_facility)
           syncer.call
         end.not_to change(Facility, :count)
       end
@@ -136,7 +136,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
           "geo_point_2d" => { "lat" => 49.2827, "lon" => -123.1207 }
         }
 
-        syncer = described_class.new(record: record, api_key: api_key)
+        syncer = described_class.new(record: record, api_key: api_key, current: facility_with_external_id)
         result = syncer.call
 
         expect(result.data.operation).to eq(:external_update)
@@ -150,7 +150,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
           "geo_point_2d" => { "lat" => 49.2827, "lon" => -123.1207 }
         }
 
-        syncer = described_class.new(record: record, api_key: api_key)
+        syncer = described_class.new(record: record, api_key: api_key, current: facility_with_same_name)
         result = syncer.call
 
         # Should match by name since external_id is different

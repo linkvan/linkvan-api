@@ -117,24 +117,24 @@ class External::VancouverCity::Syncer < ApplicationService
     )
   end
 
-  # Process API records and convert them to Facility objects
-  # @param records [Array<Hash>] Array of API response records
-  # @return [Array<Facility>] Array of built Facility objects
-  def process_records(records)
-    facilities = []
+  # # Process API records and convert them to Facility objects
+  # # @param records [Array<Hash>] Array of API response records
+  # # @return [Array<Facility>] Array of built Facility objects
+  # def process_records(records)
+  #   facilities = []
 
-    records.each do |record|
-      syncer_result = External::VancouverCity::FacilitySyncer.call(record: record, api_key: api_key)
+  #   records.each do |record|
+  #     syncer_result = External::VancouverCity::FacilitySyncer.call(record: record, api_key: api_key)
 
-      if syncer_result.success?
-        facilities << syncer_result.data[:facility]
-      else
-        add_errors(syncer_result.errors)
-      end
-    end
+  #     if syncer_result.success?
+  #       facilities << syncer_result.data[:facility]
+  #     else
+  #       add_errors(syncer_result.errors)
+  #     end
+  #   end
 
-    facilities
-  end
+  #   facilities
+  # end
 
   # Process API records and return ResultData objects with operations
   # @param records [Array<Hash>] Array of API response records
@@ -142,8 +142,22 @@ class External::VancouverCity::Syncer < ApplicationService
   def process_records_with_operations(records)
     results = []
 
+    external_ids = records.pluck("mapid").compact
+    existing_facilities = Facility.with_associations
+                                  .with_discarded
+                                  .where(external_id: external_ids)
+                                  .to_a
+    # existing_facility = Facility.with_discarded
+    #                             .find_by(external_id: built_facility.external_id)
+    # Need to also load facilities that match by name in case external_id is missing or changed, but prefer matches by external_id when available
+    # Facility.with_discarded
+    #         .where(name: built_facility.name)
+    #         .order(Arel.sql("external_id IS NULL DESC, external_id"))
+    #         .first
+
     records.each do |record|
-      syncer_result = External::VancouverCity::FacilitySyncer.call(record: record, api_key: api_key)
+      current_facility = existing_facilities.find { |f| f.external_id == record["mapid"] }
+      syncer_result = External::VancouverCity::FacilitySyncer.call(record: record, current: current_facility, api_key: api_key)
 
       if syncer_result.success?
         data = syncer_result.data
