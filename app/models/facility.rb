@@ -23,6 +23,7 @@ class Facility < ApplicationRecord
   }, prefix: true, default: nil
 
   validates :name, presence: true
+  validates :external_id, uniqueness: { allow_nil: true }
   validate :validate_website
 
   with_options if: :verified? do
