@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_06_30_180209) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_12_182834) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -90,6 +90,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_06_30_180209) do
     t.boolean "verified", default: false
     t.string "website"
     t.integer "zone_id"
+    t.index ["external_id"], name: "index_facilities_on_external_id", unique: true, where: "(external_id IS NOT NULL)"
     t.index ["user_id"], name: "index_facilities_on_user_id"
     t.index ["zone_id"], name: "index_facilities_on_zone_id"
   end
