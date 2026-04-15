@@ -23,7 +23,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "proceeds with sync operations" do
-        syncer = described_class.new(record: valid_record, api_key: api_key)
+        syncer = described_class.new(record: valid_record, api_key: api_key, current: nil)
         result = syncer.call
 
         expect(result).to be_success
@@ -32,7 +32,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "facility is created and persisted" do
-        syncer = described_class.new(record: valid_record, api_key: api_key)
+        syncer = described_class.new(record: valid_record, api_key: api_key, current: nil)
         result = syncer.call
 
         expect(result.data.facility).to be_persisted
@@ -49,7 +49,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "returns early with FacilityBuilder errors" do
-        syncer = described_class.new(record: invalid_record, api_key: api_key)
+        syncer = described_class.new(record: invalid_record, api_key: api_key, current: nil)
         result = syncer.call
 
         expect(result).to be_failed
@@ -57,7 +57,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "returns ResultData with operation: nil, facility: nil" do
-        syncer = described_class.new(record: invalid_record, api_key: api_key)
+        syncer = described_class.new(record: invalid_record, api_key: api_key, current: nil)
         result = syncer.call
 
         expect(result.data.operation).to be_nil
@@ -67,7 +67,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       it "does not attempt database operations" do
         allow(Facility).to receive(:where)
 
-        syncer = described_class.new(record: invalid_record, api_key: api_key)
+        syncer = described_class.new(record: invalid_record, api_key: api_key, current: nil)
         syncer.call
 
         expect(Facility).not_to have_received(:where)
@@ -86,7 +86,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "returns early with validation errors" do
-        syncer = described_class.new(record: record_with_invalid_facility_data, api_key: api_key)
+        syncer = described_class.new(record: record_with_invalid_facility_data, api_key: api_key, current: nil)
         result = syncer.call
 
         expect(result).to be_failed
@@ -95,7 +95,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "includes FacilityBuilder validation errors" do
-        syncer = described_class.new(record: record_with_invalid_facility_data, api_key: api_key)
+        syncer = described_class.new(record: record_with_invalid_facility_data, api_key: api_key, current: nil)
         result = syncer.call
 
         expect(result.errors).to include(a_string_matching(/can't be blank/i))
@@ -103,7 +103,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
       it "does not attempt to save anything" do
         expect do
-          syncer = described_class.new(record: record_with_invalid_facility_data, api_key: api_key)
+          syncer = described_class.new(record: record_with_invalid_facility_data, api_key: api_key, current: nil)
           syncer.call
         end.not_to change(Facility, :count)
       end

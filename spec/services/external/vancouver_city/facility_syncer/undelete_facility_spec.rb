@@ -32,7 +32,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call - undelete scenar
       end
 
       it "undeletes the facility before updating" do
-        syncer = described_class.new(record: update_record, api_key: api_key)
+        syncer = described_class.new(record: update_record, api_key: api_key, current: discarded_facility)
         result = syncer.call
 
         expect(result).to be_success
@@ -43,13 +43,13 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call - undelete scenar
 
       it "restores facility to active state" do
         expect do
-          syncer = described_class.new(record: update_record, api_key: api_key)
+          syncer = described_class.new(record: update_record, api_key: api_key, current: discarded_facility)
           syncer.call
         end.to change { discarded_facility.reload.undiscarded? }.from(false).to(true)
       end
 
       it "updates the facility attributes" do
-        syncer = described_class.new(record: update_record, api_key: api_key)
+        syncer = described_class.new(record: update_record, api_key: api_key, current: discarded_facility)
         result = syncer.call
 
         facility = result.data.facility.reload
@@ -60,7 +60,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call - undelete scenar
       end
 
       it "clears the discard_reason" do
-        syncer = described_class.new(record: update_record, api_key: api_key)
+        syncer = described_class.new(record: update_record, api_key: api_key, current: discarded_facility)
         result = syncer.call
 
         facility = result.data.facility.reload
@@ -89,7 +89,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call - undelete scenar
       end
 
       it "undeletes the facility before adding services" do
-        syncer = described_class.new(record: name_match_record, api_key: api_key)
+        syncer = described_class.new(record: name_match_record, api_key: api_key, current: discarded_internal_facility)
         result = syncer.call
 
         expect(result).to be_success
@@ -101,7 +101,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call - undelete scenar
       it "adds new services to the undeleted facility" do
         original_service_count = discarded_internal_facility.facility_services.count
 
-        syncer = described_class.new(record: name_match_record, api_key: api_key)
+        syncer = described_class.new(record: name_match_record, api_key: api_key, current: discarded_internal_facility)
         result = syncer.call
 
         facility = result.data.facility.reload
@@ -111,7 +111,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call - undelete scenar
 
       it "restores facility to active state" do
         expect do
-          syncer = described_class.new(record: name_match_record, api_key: api_key)
+          syncer = described_class.new(record: name_match_record, api_key: api_key, current: discarded_internal_facility)
           syncer.call
         end.to change { discarded_internal_facility.reload.undiscarded? }.from(false).to(true)
       end
@@ -156,7 +156,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call - undelete scenar
 
       it "undeletes both facilities independently" do
         # First sync
-        syncer1 = described_class.new(record: first_record, api_key: api_key)
+        syncer1 = described_class.new(record: first_record, api_key: api_key, current: first_discarded)
         result1 = syncer1.call
 
         expect(result1).to be_success
@@ -164,7 +164,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call - undelete scenar
         expect(result1.data.facility).not_to be_discarded
 
         # Second sync
-        syncer2 = described_class.new(record: second_record, api_key: api_key)
+        syncer2 = described_class.new(record: second_record, api_key: api_key, current: second_discarded)
         result2 = syncer2.call
 
         expect(result2).to be_success
@@ -193,7 +193,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call - undelete scenar
       end
 
       it "undeletes and updates based on external_id match" do
-        syncer = described_class.new(record: renamed_record, api_key: api_key)
+        syncer = described_class.new(record: renamed_record, api_key: api_key, current: discarded_facility)
         result = syncer.call
 
         expect(result).to be_success
@@ -222,7 +222,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call - undelete scenar
       end
 
       it "updates kept facilities without undelete" do
-        syncer = described_class.new(record: update_record, api_key: api_key)
+        syncer = described_class.new(record: update_record, api_key: api_key, current: kept_facility)
         result = syncer.call
 
         expect(result).to be_success
@@ -232,7 +232,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call - undelete scenar
 
       it "does not change discard state of kept facilities" do
         expect do
-          syncer = described_class.new(record: update_record, api_key: api_key)
+          syncer = described_class.new(record: update_record, api_key: api_key, current: kept_facility)
           syncer.call
         end.not_to(change { kept_facility.reload.discarded? })
       end
@@ -258,7 +258,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call - undelete scenar
       end
 
       it "undeletes and performs internal update" do
-        syncer = described_class.new(record: name_record, api_key: api_key)
+        syncer = described_class.new(record: name_record, api_key: api_key, current: discarded_internal)
         result = syncer.call
 
         expect(result).to be_success

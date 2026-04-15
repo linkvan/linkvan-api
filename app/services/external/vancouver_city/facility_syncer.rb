@@ -3,19 +3,20 @@
 # Service for syncing facility data from Vancouver City Open Data API
 # Inherits from ApplicationService and handles pagination to fetch all facilities
 class External::VancouverCity::FacilitySyncer < ApplicationService
-  attr_reader :record, :api_key, :logger
+  attr_reader :record, :api_key, :current, :logger
 
   ResultData = Struct.new(:operation, :facility, keyword_init: true) do
     delegate :present?, :blank?, to: :facility
   end
 
-  # rubocop:disable Lint/MissingSuper
-  def initialize(record:, api_key:, logger: Rails.logger)
+  def initialize(record:, api_key:, current:, logger: Rails.logger)
     @record = record
+    @current = current
     @api_key = api_key
     @logger = logger
+
+    super()
   end
-  # rubocop:enable Lint/MissingSuper
 
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def call
@@ -29,16 +30,7 @@ class External::VancouverCity::FacilitySyncer < ApplicationService
     end
 
     built_facility = builder_result.data[:facility]
-    existing_facility = Facility.with_discarded
-                                .find_by(external_id: built_facility.external_id)
-
-    # If no external_id match, look for name match but prefer internal facilities
-    if existing_facility.blank?
-      existing_facility = Facility.with_discarded
-                                  .where(name: built_facility.name)
-                                  .order(Arel.sql("external_id IS NULL DESC, external_id"))
-                                  .first
-    end
+    existing_facility = current
     operation = if existing_facility.blank?
                   :create
                 elsif existing_facility.external?
