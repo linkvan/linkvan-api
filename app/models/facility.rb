@@ -42,6 +42,14 @@ class Facility < ApplicationRecord
   scope :without_welcomes, -> { where.not(facility_welcomes: FacilityWelcome.all) }
   scope :external, -> { where.not(external_id: nil) }
   scope :not_external, -> { where(external_id: nil) }
+  scope :with_associations, lambda {
+    includes(
+      :zone,
+      :facility_welcomes,
+      { facility_services: [:service] },
+      { schedules: [:time_slots] }
+    )
+  }
 
   def discard_reason_none?
     discard_reason.nil?

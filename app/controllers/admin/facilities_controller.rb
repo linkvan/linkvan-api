@@ -104,13 +104,13 @@ class Admin::FacilitiesController < Admin::BaseController
       )
     end
 
-    facilities = facilities.order(updated_at: :desc)
+    facilities = facilities.with_associations.order(updated_at: :desc)
 
     @pagy, @facilities = pagy(facilities)
   end
 
   def load_facility
-    @facility = Facility.find(params[:id])
+    @facility = Facility.with_associations.find(params[:id])
   end
 
   def load_services_dropdown

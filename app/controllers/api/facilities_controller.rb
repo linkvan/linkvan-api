@@ -65,12 +65,7 @@ class Api::FacilitiesController < Api::BaseController
     end
 
     # Includes related objects to avoid N+1 queries
-    @facilities = @facilities.includes(
-      :zone,
-      :facility_welcomes,
-      { facility_services: [:service] },
-      { schedules: [:time_slots] }
-    )
+    @facilities = @facilities.with_associations
   end
 
   def register_impressions
