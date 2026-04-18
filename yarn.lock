@@ -114,10 +114,10 @@
     "@parcel/watcher-win32-ia32" "2.5.6"
     "@parcel/watcher-win32-x64" "2.5.6"
 
-"@rails/actioncable@>=7.0", "@rails/actioncable@^8.1.0":
-  version "8.1.200"
-  resolved "https://registry.npmjs.org/@rails/actioncable/-/actioncable-8.1.200.tgz"
-  integrity sha512-on0DSb7AFUkq1ocxivDNQhhGW/RQpY91zvRVyyaEWP4gOOZWy33P/UyxjQk74IENWNrTqs8+zOGHwTjiiFruRw==
+"@rails/actioncable@>=7.0", "@rails/actioncable@^8.1.300":
+  version "8.1.300"
+  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-8.1.300.tgz#bfd50813be0225a0403bddb11e8ba9a00b1fb135"
+  integrity sha512-zOENQsq3NM2jyBY6Z2qtZa3V/R/6OEqA+LGKixQbBMl7kk/J3FXDRcszPe74LsHNgB01jCl/DXu/xA8sHt4I/g==
 
 "@rails/actiontext@^8.1.300":
   version "8.1.300"
