@@ -16,15 +16,37 @@ class Admin::ToolsController < Admin::BaseController
 
     result = External::VancouverCity::Syncer.call(
       api_key: api_key,
-      api_client: External::VancouverCity.default_client
+      api_client: External::VancouverCity.default_client,
+      full_sync: true
     )
 
     if result.success?
-      total_count = result.data[:total_count] || 0
-      redirect_to admin_facilities_path(service: "water_fountain"), notice: "#{total_count} Facilities imported successfully from #{External::ApiHelper.api_name(api_key)}."
+      created = result.data[:created_count] || 0
+      updated = result.data[:updated_count] || 0
+      deleted = result.data[:deleted_count] || 0
+      redirect_to admin_facilities_path(service: "water_fountain"), notice: "Sync complete: #{created} created, #{updated} updated, #{deleted} removed from #{External::ApiHelper.api_name(api_key)}."
     else
       error_messages = result.errors.join(", ")
       redirect_to admin_tools_path, alert: "Failed to import facilities: #{error_messages}"
+    end
+  end
+
+  def discard_facilities
+    api_key = params[:api]
+
+    unless External::ApiHelper.supported_api?(api_key)
+      redirect_to admin_tools_path, alert: "Invalid API selected. Please choose from the supported APIs."
+      return
+    end
+
+    result = External::VancouverCity::DiscardService.call(api_key: api_key)
+
+    if result.success?
+      discarded_count = result.data[:discarded_count] || 0
+      redirect_to admin_facilities_path(service: "water_fountain"), notice: "#{discarded_count} facilities discarded from #{External::ApiHelper.api_name(api_key)}."
+    else
+      error_messages = result.errors.join(", ")
+      redirect_to admin_tools_path, alert: "Failed to discard facilities: #{error_messages}"
     end
   end
 

@@ -39,7 +39,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       it "adds missing services only" do
         expect(existing_internal_facility.services).not_to include(service)
 
-        syncer = described_class.new(record: update_record, api_key: api_key)
+        syncer = described_class.new(record: update_record, api_key: api_key, current: existing_internal_facility)
         result = syncer.call
 
         facility = result.data.facility
@@ -53,7 +53,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
         original_long = existing_internal_facility.long
         original_verified = existing_internal_facility.verified
 
-        syncer = described_class.new(record: update_record, api_key: api_key)
+        syncer = described_class.new(record: update_record, api_key: api_key, current: existing_internal_facility)
         result = syncer.call
 
         facility = result.data.facility
@@ -65,7 +65,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "returns existing facility in result" do
-        syncer = described_class.new(record: update_record, api_key: api_key)
+        syncer = described_class.new(record: update_record, api_key: api_key, current: existing_internal_facility)
         result = syncer.call
 
         expect(result.data.facility.id).to eq(existing_internal_facility.id)
@@ -75,14 +75,14 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       it "logs warning message with facility name" do
         allow(Rails.logger).to receive(:warn)
 
-        syncer = described_class.new(record: update_record, api_key: api_key)
+        syncer = described_class.new(record: update_record, api_key: api_key, current: existing_internal_facility)
         syncer.call
 
         expect(Rails.logger).to have_received(:warn).with("Facility with name 'Internal Fountain' already exists internally, adding services")
       end
 
       it "returns success result" do
-        syncer = described_class.new(record: update_record, api_key: api_key)
+        syncer = described_class.new(record: update_record, api_key: api_key, current: existing_internal_facility)
         result = syncer.call
 
         expect(result).to be_success
@@ -91,7 +91,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
       it "does not create new facility" do
         expect do
-          syncer = described_class.new(record: update_record, api_key: api_key)
+          syncer = described_class.new(record: update_record, api_key: api_key, current: existing_internal_facility)
           syncer.call
         end.not_to change(Facility, :count)
       end
@@ -118,7 +118,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       it "does not duplicate existing services" do
         initial_service_count = existing_internal_facility.facility_services.count
 
-        syncer = described_class.new(record: update_record, api_key: api_key)
+        syncer = described_class.new(record: update_record, api_key: api_key, current: existing_internal_facility)
         result = syncer.call
 
         facility = result.data.facility
@@ -126,7 +126,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "still succeeds even with no new services to add" do
-        syncer = described_class.new(record: update_record, api_key: api_key)
+        syncer = described_class.new(record: update_record, api_key: api_key, current: existing_internal_facility)
         result = syncer.call
 
         expect(result).to be_success
@@ -149,17 +149,21 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
                                    name: "Service Error Fountain",
                                    verified: false)
 
-        allow(Facility).to receive(:where).and_call_original
-        allow(Facility).to receive(:where).with(name: "Service Error Fountain").and_return(
-          instance_double(ActiveRecord::Relation, order: instance_double(ActiveRecord::Relation, first: existing_facility))
-        )
+        # Stub the with_discarded chain to return the existing facility via where
+        # First, stub find_by to return nil so it falls through to where
+        with_discarded_relation = instance_double(ActiveRecord::Relation)
+        order_relation = instance_double(ActiveRecord::Relation, first: existing_facility)
+        where_relation = instance_double(ActiveRecord::Relation, order: order_relation)
+        allow(with_discarded_relation).to receive(:find_by).and_return(nil)
+        allow(with_discarded_relation).to receive(:where).with(name: "Service Error Fountain").and_return(where_relation)
+        allow(Facility).to receive(:with_discarded).and_return(with_discarded_relation)
         allow(existing_facility.facility_services).to receive(:create!).and_raise(
           ActiveRecord::RecordInvalid.new(FacilityService.new)
         )
       end
 
       it "catches exception and adds error message" do
-        syncer = described_class.new(record: update_record, api_key: api_key)
+        syncer = described_class.new(record: update_record, api_key: api_key, current: existing_internal_facility)
         result = syncer.call
 
         expect(result).to be_failed
@@ -182,17 +186,21 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
                                    name: "Generic Error Fountain",
                                    verified: false)
 
-        allow(Facility).to receive(:where).and_call_original
-        allow(Facility).to receive(:where).with(name: "Generic Error Fountain").and_return(
-          instance_double(ActiveRecord::Relation, order: instance_double(ActiveRecord::Relation, first: existing_facility))
-        )
+        # Stub the with_discarded chain to return the existing facility via where
+        # First, stub find_by to return nil so it falls through to where
+        with_discarded_relation = instance_double(ActiveRecord::Relation)
+        order_relation = instance_double(ActiveRecord::Relation, first: existing_facility)
+        where_relation = instance_double(ActiveRecord::Relation, order: order_relation)
+        allow(with_discarded_relation).to receive(:find_by).and_return(nil)
+        allow(with_discarded_relation).to receive(:where).with(name: "Generic Error Fountain").and_return(where_relation)
+        allow(Facility).to receive(:with_discarded).and_return(with_discarded_relation)
         allow(existing_facility.facility_services).to receive(:create!).and_raise(
           StandardError.new("Database connection failed")
         )
       end
 
       it "catches and handles generic errors" do
-        syncer = described_class.new(record: update_record, api_key: api_key)
+        syncer = described_class.new(record: update_record, api_key: api_key, current: existing_internal_facility)
         result = syncer.call
 
         expect(result).to be_failed
@@ -219,7 +227,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "treats as internal update rather than create" do
-        syncer = described_class.new(record: new_record_matching_name, api_key: api_key)
+        syncer = described_class.new(record: new_record_matching_name, api_key: api_key, current: existing_internal_facility)
         result = syncer.call
 
         expect(result.data.operation).to eq(:internal_update)
@@ -227,7 +235,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "does not change facility external_id" do
-        syncer = described_class.new(record: new_record_matching_name, api_key: api_key)
+        syncer = described_class.new(record: new_record_matching_name, api_key: api_key, current: existing_internal_facility)
         result = syncer.call
 
         facility = result.data.facility
@@ -265,7 +273,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
         original_verified = internal_facility_with_services.verified
         original_external_id = internal_facility_with_services.external_id
 
-        syncer = described_class.new(record: internal_service_update_record, api_key: api_key)
+        syncer = described_class.new(record: internal_service_update_record, api_key: api_key, current: existing_internal_facility)
         result = syncer.call
 
         facility = result.data.facility
@@ -282,7 +290,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       it "adds new service while preserving existing ones" do
         initial_service_count = internal_facility_with_services.facility_services.count
 
-        syncer = described_class.new(record: internal_service_update_record, api_key: api_key)
+        syncer = described_class.new(record: internal_service_update_record, api_key: api_key, current: existing_internal_facility)
         result = syncer.call
 
         facility = result.data.facility
@@ -292,7 +300,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "maintains referential integrity when adding services" do
-        syncer = described_class.new(record: internal_service_update_record, api_key: api_key)
+        syncer = described_class.new(record: internal_service_update_record, api_key: api_key, current: existing_internal_facility)
         result = syncer.call
 
         facility = result.data.facility
@@ -308,13 +316,13 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
       it "does not create duplicate services for same API key" do
         # First update
-        syncer1 = described_class.new(record: internal_service_update_record, api_key: api_key)
+        syncer1 = described_class.new(record: internal_service_update_record, api_key: api_key, current: existing_internal_facility)
         syncer1.call
 
         initial_count = internal_facility_with_services.reload.facility_services.count
 
         # Second update with same API key
-        syncer2 = described_class.new(record: internal_service_update_record, api_key: api_key)
+        syncer2 = described_class.new(record: internal_service_update_record, api_key: api_key, current: existing_internal_facility)
         syncer2.call
 
         internal_facility_with_services.reload
@@ -343,10 +351,14 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       before do
-        allow(Facility).to receive(:where).and_call_original
-        allow(Facility).to receive(:where).with(name: "Rollback Internal Test").and_return(
-          instance_double(ActiveRecord::Relation, order: instance_double(ActiveRecord::Relation, first: rollback_internal_facility))
-        )
+        # Stub the with_discarded chain to return the existing facility via where
+        # First, stub find_by to return nil so it falls through to where
+        with_discarded_relation = instance_double(ActiveRecord::Relation)
+        order_relation = instance_double(ActiveRecord::Relation, first: rollback_internal_facility)
+        where_relation = instance_double(ActiveRecord::Relation, order: order_relation)
+        allow(with_discarded_relation).to receive(:find_by).and_return(nil)
+        allow(with_discarded_relation).to receive(:where).with(name: "Rollback Internal Test").and_return(where_relation)
+        allow(Facility).to receive(:with_discarded).and_return(with_discarded_relation)
         allow(rollback_internal_facility.facility_services).to receive(:create!).and_raise(StandardError.new("Service creation failed"))
       end
 
@@ -354,7 +366,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
         original_service_count = rollback_internal_facility.facility_services.count
 
         expect do
-          syncer = described_class.new(record: rollback_internal_record, api_key: api_key)
+          syncer = described_class.new(record: rollback_internal_record, api_key: api_key, current: existing_internal_facility)
           syncer.call
         end.not_to change(FacilityService, :count)
 
@@ -366,7 +378,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
         original_attributes = rollback_internal_facility.attributes
         original_service_ids = rollback_internal_facility.facility_services.pluck(:service_id)
 
-        syncer = described_class.new(record: rollback_internal_record, api_key: api_key)
+        syncer = described_class.new(record: rollback_internal_record, api_key: api_key, current: existing_internal_facility)
         result = syncer.call
 
         rollback_internal_facility.reload
@@ -387,7 +399,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
         other_facility = create(:facility, external_id: nil, name: "Other Facility")
 
         expect do
-          syncer = described_class.new(record: rollback_internal_record, api_key: api_key)
+          syncer = described_class.new(record: rollback_internal_record, api_key: api_key, current: existing_internal_facility)
           syncer.call
         end.not_to(change { other_facility.reload.facility_services.count })
       end
@@ -410,10 +422,14 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       before do
-        allow(Facility).to receive(:where).and_call_original
-        allow(Facility).to receive(:where).with(name: "Validation Test Facility").and_return(
-          instance_double(ActiveRecord::Relation, order: instance_double(ActiveRecord::Relation, first: validation_internal_facility))
-        )
+        # Stub the with_discarded chain to return the existing facility via where
+        # First, stub find_by to return nil so it falls through to where
+        with_discarded_relation = instance_double(ActiveRecord::Relation)
+        order_relation = instance_double(ActiveRecord::Relation, first: validation_internal_facility)
+        where_relation = instance_double(ActiveRecord::Relation, order: order_relation)
+        allow(with_discarded_relation).to receive(:find_by).and_return(nil)
+        allow(with_discarded_relation).to receive(:where).with(name: "Validation Test Facility").and_return(where_relation)
+        allow(Facility).to receive(:with_discarded).and_return(with_discarded_relation)
         allow(validation_internal_facility.facility_services).to receive(:create!).and_raise(
           ActiveRecord::RecordInvalid.new(FacilityService.new)
         )
@@ -423,7 +439,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
         original_service_count = validation_internal_facility.facility_services.count
         original_updated_at = validation_internal_facility.updated_at
 
-        syncer = described_class.new(record: validation_record, api_key: api_key)
+        syncer = described_class.new(record: validation_record, api_key: api_key, current: existing_internal_facility)
         syncer.call
 
         validation_internal_facility.reload
@@ -432,7 +448,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "returns proper error information for validation failures" do
-        syncer = described_class.new(record: validation_record, api_key: api_key)
+        syncer = described_class.new(record: validation_record, api_key: api_key, current: existing_internal_facility)
         result = syncer.call
 
         expect(result).to be_failed

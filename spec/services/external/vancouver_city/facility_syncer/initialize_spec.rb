@@ -8,20 +8,20 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#initialize", type: :se
     let(:api_key) { "test-api-key" }
 
     it "sets record and api_key" do
-      syncer = described_class.new(record: record, api_key: api_key)
+      syncer = described_class.new(record: record, api_key: api_key, current: nil)
 
       expect(syncer.record).to eq(record)
       expect(syncer.api_key).to eq(api_key)
     end
 
     it "inherits from ApplicationService" do
-      syncer = described_class.new(record: record, api_key: api_key)
+      syncer = described_class.new(record: record, api_key: api_key, current: nil)
 
       expect(syncer).to be_a(ApplicationService)
     end
 
     it "responds to call method" do
-      syncer = described_class.new(record: record, api_key: api_key)
+      syncer = described_class.new(record: record, api_key: api_key, current: nil)
 
       expect(syncer).to respond_to(:call)
     end

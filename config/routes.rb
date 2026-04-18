@@ -34,6 +34,7 @@ Rails.application.routes.draw do
     resources :tools do
       collection do
         post :import_facilities
+        delete :discard_facilities
       end
     end
 

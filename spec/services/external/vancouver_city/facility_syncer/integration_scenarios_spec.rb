@@ -32,7 +32,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "creates facility with all available attributes" do
-        syncer = described_class.new(record: comprehensive_record, api_key: api_key)
+        syncer = described_class.new(record: comprehensive_record, api_key: api_key, current: nil)
         result = syncer.call
 
         expect(result).to be_success
@@ -50,7 +50,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "creates associated services, schedules, and welcomes" do
-        syncer = described_class.new(record: comprehensive_record, api_key: api_key)
+        syncer = described_class.new(record: comprehensive_record, api_key: api_key, current: nil)
         result = syncer.call
 
         facility = result.data.facility
@@ -81,7 +81,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "creates facility with defaults for missing optional fields" do
-        syncer = described_class.new(record: minimal_record, api_key: api_key)
+        syncer = described_class.new(record: minimal_record, api_key: api_key, current: nil)
         result = syncer.call
 
         expect(result).to be_success
@@ -110,7 +110,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "handles special characters correctly" do
-        syncer = described_class.new(record: special_chars_record, api_key: api_key)
+        syncer = described_class.new(record: special_chars_record, api_key: api_key, current: nil)
         result = syncer.call
 
         expect(result).to be_success
@@ -133,7 +133,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "handles edge coordinate values" do
-        syncer = described_class.new(record: edge_coords_record, api_key: api_key)
+        syncer = described_class.new(record: edge_coords_record, api_key: api_key, current: nil)
         result = syncer.call
 
         expect(result).to be_success
@@ -169,14 +169,14 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
       it "handles duplicate external_id creation gracefully" do
         # First sync
-        syncer1 = described_class.new(record: first_concurrent_record, api_key: api_key)
+        syncer1 = described_class.new(record: first_concurrent_record, api_key: api_key, current: nil)
         result1 = syncer1.call
 
         expect(result1).to be_success
         expect(result1.data.operation).to eq(:create)
 
         # Second sync with same external_id but different data
-        syncer2 = described_class.new(record: second_concurrent_record, api_key: api_key)
+        syncer2 = described_class.new(record: second_concurrent_record, api_key: api_key, current: result1.data.facility)
         result2 = syncer2.call
 
         expect(result2).to be_success
@@ -202,7 +202,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
     end
 
     it "ensures data integrity across all related models" do
-      syncer = described_class.new(record: consistency_record, api_key: api_key)
+      syncer = described_class.new(record: consistency_record, api_key: api_key, current: nil)
       result = syncer.call
 
       expect(result).to be_success

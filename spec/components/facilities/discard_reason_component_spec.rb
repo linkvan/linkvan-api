@@ -59,15 +59,15 @@ RSpec.describe Facilities::DiscardReasonComponent, type: :component do
     context "with nil discard_reason" do
       let(:discard_reason) { nil }
 
-      it "returns error message for nil" do
-        expect(component.call).to have_text("Unsupported value ''")
+      it "returns 'None' text" do
+        expect(component.call).to have_text("None")
       end
     end
   end
 
   describe ".select_options" do
     it "returns inverted hash as array of arrays" do
-      expected = [["None", :none], ["Closed", :closed], ["Duplicated", :duplicated]]
+      expected = [["None", :none], ["Closed", :closed], ["Duplicated", :duplicated], ["Removed by Sync", :sync_removed]]
       expect(described_class.select_options).to eq(expected)
     end
   end

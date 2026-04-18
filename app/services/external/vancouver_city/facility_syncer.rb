@@ -3,19 +3,20 @@
 # Service for syncing facility data from Vancouver City Open Data API
 # Inherits from ApplicationService and handles pagination to fetch all facilities
 class External::VancouverCity::FacilitySyncer < ApplicationService
-  attr_reader :record, :api_key, :logger
+  attr_reader :record, :api_key, :current, :logger
 
   ResultData = Struct.new(:operation, :facility, keyword_init: true) do
     delegate :present?, :blank?, to: :facility
   end
 
-  # rubocop:disable Lint/MissingSuper
-  def initialize(record:, api_key:, logger: Rails.logger)
+  def initialize(record:, api_key:, current:, logger: Rails.logger)
     @record = record
+    @current = current
     @api_key = api_key
     @logger = logger
+
+    super()
   end
-  # rubocop:enable Lint/MissingSuper
 
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def call
@@ -29,14 +30,7 @@ class External::VancouverCity::FacilitySyncer < ApplicationService
     end
 
     built_facility = builder_result.data[:facility]
-    existing_facility = Facility.find_by(external_id: built_facility.external_id)
-
-    # If no external_id match, look for name match but prefer internal facilities
-    if existing_facility.blank?
-      existing_facility = Facility.where(name: built_facility.name)
-                                  .order(Arel.sql("external_id IS NULL DESC, external_id"))
-                                  .first
-    end
+    existing_facility = current
     operation = if existing_facility.blank?
                   :create
                 elsif existing_facility.external?
@@ -84,12 +78,15 @@ class External::VancouverCity::FacilitySyncer < ApplicationService
   private
 
   def update_internal_facility(internal_facility, built_facility)
+    internal_facility.undiscard if internal_facility.discarded?
+
     add_missing_services(internal_facility, built_facility)
   end
 
   def update_external_facility(external_facility, built_facility)
-    add_missing_services(external_facility, built_facility)
+    external_facility.undiscard if external_facility.discarded?
 
+    add_missing_services(external_facility, built_facility)
     external_facility.update!(built_facility.attributes.slice("name", "address", "lat", "long", "verified"))
   end
 
@@ -97,6 +94,7 @@ class External::VancouverCity::FacilitySyncer < ApplicationService
     built_services = built_facility.facility_services.map(&:service).uniq
     existing_services = existing_facility.facility_services.map(&:service).uniq
     new_services = built_services - existing_services
+
     new_services.each do |service|
       existing_facility.facility_services.create!(service: service)
     end

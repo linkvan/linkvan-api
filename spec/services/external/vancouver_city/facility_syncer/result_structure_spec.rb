@@ -22,7 +22,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
     end
 
     it "returns ResultData with operation and facility" do
-      syncer = described_class.new(record: valid_record, api_key: api_key)
+      syncer = described_class.new(record: valid_record, api_key: api_key, current: nil)
       result = syncer.call
 
       expect(result.data).to be_a(External::VancouverCity::FacilitySyncer::ResultData)
@@ -31,7 +31,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
     end
 
     it "delegates present? and blank? to facility" do
-      syncer = described_class.new(record: valid_record, api_key: api_key)
+      syncer = described_class.new(record: valid_record, api_key: api_key, current: nil)
       result = syncer.call
 
       # When facility is present
@@ -51,7 +51,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "ResultData reflects early failure state" do
-        syncer = described_class.new(record: invalid_record, api_key: api_key)
+        syncer = described_class.new(record: invalid_record, api_key: api_key, current: nil)
         result = syncer.call
 
         expect(result.data.operation).to be_nil # No operation determined when FacilityBuilder fails
@@ -70,7 +70,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "ResultData shows nil operation and facility" do
-        syncer = described_class.new(record: malformed_record, api_key: api_key)
+        syncer = described_class.new(record: malformed_record, api_key: api_key, current: nil)
         result = syncer.call
 
         expect(result.data.operation).to be_nil
@@ -93,7 +93,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
     end
 
     it "returns ApplicationService::Result object" do
-      syncer = described_class.new(record: valid_record, api_key: api_key)
+      syncer = described_class.new(record: valid_record, api_key: api_key, current: nil)
       result = syncer.call
 
       expect(result).to be_a(ApplicationService::Result)
@@ -105,7 +105,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
     context "when operation succeeds" do
       it "has success? true and failed? false" do
-        syncer = described_class.new(record: valid_record, api_key: api_key)
+        syncer = described_class.new(record: valid_record, api_key: api_key, current: nil)
         result = syncer.call
 
         expect(result.success?).to be true
@@ -126,7 +126,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "has success? false and failed? true" do
-        syncer = described_class.new(record: invalid_record, api_key: api_key)
+        syncer = described_class.new(record: invalid_record, api_key: api_key, current: nil)
         result = syncer.call
 
         expect(result.success?).to be false
@@ -149,7 +149,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "consistently reports :create operation" do
-        syncer = described_class.new(record: create_record, api_key: api_key)
+        syncer = described_class.new(record: create_record, api_key: api_key, current: nil)
         result = syncer.call
 
         expect(result.data.operation).to eq(:create)
@@ -174,8 +174,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "consistently reports :external_update operation" do
-        existing_external_facility
-        syncer = described_class.new(record: update_record, api_key: api_key)
+        syncer = described_class.new(record: update_record, api_key: api_key, current: existing_external_facility)
         result = syncer.call
 
         expect(result.data.operation).to eq(:external_update)
@@ -200,8 +199,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "consistently reports :internal_update operation" do
-        existing_internal_facility
-        syncer = described_class.new(record: update_record, api_key: api_key)
+        syncer = described_class.new(record: update_record, api_key: api_key, current: existing_internal_facility)
         result = syncer.call
 
         expect(result.data.operation).to eq(:internal_update)
@@ -221,7 +219,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
     end
 
     it "result facility matches database record" do
-      syncer = described_class.new(record: valid_record, api_key: api_key)
+      syncer = described_class.new(record: valid_record, api_key: api_key, current: nil)
       result = syncer.call
 
       db_facility = Facility.find(result.data.facility.id)
@@ -248,8 +246,7 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "result facility is the same instance as existing facility" do
-        existing_facility
-        syncer = described_class.new(record: update_record, api_key: api_key)
+        syncer = described_class.new(record: update_record, api_key: api_key, current: existing_facility)
         result = syncer.call
 
         expect(result.data.facility.id).to eq(existing_facility.id)

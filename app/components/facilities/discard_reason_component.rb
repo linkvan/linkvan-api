@@ -4,9 +4,11 @@ class Facilities::DiscardReasonComponent < ViewComponent::Base
   attr_reader :discard_reason
 
   VALID_REASONS = {
+    nil => "None",
     none: "None",
     closed: "Closed",
-    duplicated: "Duplicated"
+    duplicated: "Duplicated",
+    sync_removed: "Removed by Sync"
   }.freeze
 
   def initialize(discard_reason)
@@ -20,7 +22,7 @@ class Facilities::DiscardReasonComponent < ViewComponent::Base
   end
 
   def call
-    text = VALID_REASONS[discard_reason] || "Unsupported value '#{discard_reason}'"
+    text = VALID_REASONS[discard_reason.presence] || "Unsupported value '#{discard_reason}'"
     tag.span(text)
   end
 end
