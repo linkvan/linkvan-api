@@ -94,7 +94,7 @@ GEM
     bindex (0.8.1)
     binding_of_caller (2.0.0)
       debug_inspector (>= 1.2.0)
-    bootsnap (1.18.6)
+    bootsnap (1.23.0)
       msgpack (~> 1.2)
     brakeman (8.0.4)
       racc
@@ -503,7 +503,7 @@ PLATFORMS
 DEPENDENCIES
   bcrypt (~> 3.1.16)
   better_errors
-  bootsnap (~> 1.18.3)
+  bootsnap (~> 1.23.0)
   brakeman
   byebug
   capybara
