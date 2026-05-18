@@ -135,7 +135,7 @@ gem "importmap-rails"
 # gem "rack-timeout"
 
 # Http client for making API requests
-gem "faraday", "~> 2.14.0"
+gem "faraday", "~> 2.14.2"
 
 # OpenStruct for easy data modeling - removed from standard library since ruby 3.5
 gem "ostruct"
