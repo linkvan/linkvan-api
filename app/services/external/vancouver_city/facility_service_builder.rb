@@ -66,7 +66,13 @@ class External::VancouverCity::FacilityServiceBuilder < ApplicationService
     service = Service.find_by(key: service_key)
     return if service.blank?
 
+    return if facility.facility_services.any? { |fs| fs.service == service }
+
     # Build FacilityService association without saving
-    facility.facility_services.build(service: service)
+    if facility.new_record?
+      facility.facility_services.build(service: service)
+    else
+      facility.facility_services.create!(service: service)
+    end
   end
 end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class FacilitySchedule < ApplicationRecord
-  belongs_to :facility, touch: true
+  belongs_to :facility, touch: true, inverse_of: :schedules
   has_many :time_slots, class_name: "FacilityTimeSlot", dependent: :destroy
 
   SLOT_TIME_PRESENCE_ERROR = "must not be present if facility availability is %<availability>s all day for %<week_day>s"

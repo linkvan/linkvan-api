@@ -26,7 +26,7 @@ class AdminToolsPage < BasePage
   end
 
   def click_discard_tab
-    click_link "Discard"
+    page.find(".tabs ul li", text: "Discard").click
     self
   end
 
@@ -35,6 +35,7 @@ class AdminToolsPage < BasePage
   end
 
   def has_discard_form?
+    page.body
     page.has_css?("#discard-form")
   end
 end

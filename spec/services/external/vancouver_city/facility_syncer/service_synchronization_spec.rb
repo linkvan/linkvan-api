@@ -5,6 +5,8 @@
 require "rails_helper"
 
 RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service do
+  subject(:syncer) { described_class.new(operation:, record:, api_key:, current:) }
+
   let(:api_key) { "drinking-fountains" }
   let(:service) { create(:water_fountain_service) }
   let(:other_service) { create(:service, key: "public-washrooms") }
@@ -16,13 +18,17 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
   describe "service synchronization logic" do
     context "when built facility has new services" do
+      let(:current) { existing_facility }
+      let(:record) { valid_record }
+      let(:operation) { External::SyncOperations.external_update }
+
       let!(:existing_facility) do
         facility = create(:facility, external_id: "SYNC_TEST123")
         facility.facility_services.create!(service: other_service)
         facility
       end
 
-      let(:record_with_new_service) do
+      let(:valid_record) do
         {
           "mapid" => "SYNC_TEST123",
           "name" => "Service Sync Test",
@@ -35,26 +41,28 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
         expect(existing_facility.services).to include(other_service)
         expect(existing_facility.services).not_to include(service)
 
-        syncer = described_class.new(record: record_with_new_service, api_key: api_key, current: existing_facility)
         result = syncer.call
+        facility = result.data.reload
 
-        facility = result.data.facility
+        expect(result).to be_success
         expect(facility.services).to include(other_service) # Keeps existing
         expect(facility.services).to include(service) # Adds new one
       end
 
       it "increases facility services count" do
         initial_count = existing_facility.facility_services.count
-
-        syncer = described_class.new(record: record_with_new_service, api_key: api_key, current: existing_facility)
         result = syncer.call
 
-        facility = result.data.facility
+        facility = result.data
         expect(facility.facility_services.count).to eq(initial_count + 1)
       end
     end
 
     context "when built facility has existing services" do
+      let(:current) { existing_facility }
+      let(:record) { record_with_existing_services }
+      let(:operation) { External::SyncOperations.external_update }
+
       let!(:existing_facility) do
         facility = create(:facility, external_id: "EXISTING_SERVICES123")
         facility.facility_services.create!(service: service)
@@ -72,31 +80,34 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
 
       it "does not duplicate existing services" do
         initial_count = existing_facility.facility_services.count
-
-        syncer = described_class.new(record: record_with_existing_services, api_key: api_key, current: existing_facility)
         result = syncer.call
 
-        facility = result.data.facility
+        facility = result.data
         expect(facility.facility_services.count).to eq(initial_count)
       end
 
       it "maintains all existing services" do
-        syncer = described_class.new(record: record_with_existing_services, api_key: api_key, current: existing_facility)
         result = syncer.call
 
-        facility = result.data.facility
+        facility = result.data
         expect(facility.services).to include(service)
         expect(facility.services).to include(other_service)
       end
     end
 
     context "when built facility has duplicate services in builder" do
+      let(:current) { existing_facility }
+      let(:record) { valid_record }
+      let(:operation) { External::SyncOperations.external_update }
+
       # This tests the .uniq call in add_missing_services
       let!(:existing_facility) do
-        create(:facility, external_id: "DUPLICATE_TEST123")
+        facility = create(:facility, external_id: "DUPLICATE_TEST123")
+        facility.facility_services.create!(service: service)
+        facility
       end
 
-      let(:record) do
+      let(:valid_record) do
         {
           "mapid" => "DUPLICATE_TEST123",
           "name" => "Duplicate Test",
@@ -105,15 +116,12 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "handles duplicate services gracefully" do
-        syncer = described_class.new(record: record, api_key: api_key, current: existing_facility)
-
-        allow(syncer).to receive(:add_missing_services).and_call_original
-
         result = syncer.call
 
         # Should succeed without errors
         expect(result).to be_success
-        facility = result.data.facility
+        facility = result.data.reload
+        expect(facility.services.count).to eq(1) # Should not duplicate
         expect(facility.services).to include(service)
       end
     end

@@ -11,6 +11,12 @@ RSpec.describe Admin::FacilitiesController do
     allow(controller).to receive_messages(authenticate_user!: true, current_user: admin_user, user_signed_in?: true)
   end
 
+  def stub_facility_find_with(facility)
+    relation = Facility.all
+    allow(Facility).to receive(:with_associations).and_return(relation)
+    allow(relation).to receive(:find).and_return(facility)
+  end
+
   describe "GET #index" do
     subject(:get_index) { get :index, params: params }
 
@@ -354,24 +360,23 @@ RSpec.describe Admin::FacilitiesController do
     end
 
     describe "undiscard action" do
-      let(:facility) { create(:facility).tap(&:discard) }
+      let(:facility) { create(:facility, discard_reason: :closed).tap(&:discard) }
       let(:params) { { id: facility.id, undiscard: true } }
 
       context "when undiscard succeeds" do
-        before do
-          facility.discard_reason = :closed
-          patch_update
-        end
-
         it "undiscards the facility" do
-          expect(facility.reload).not_to be_discarded
+          expect do
+            patch_update
+          end.to change { facility.reload.discarded? }.from(true).to(false)
         end
 
         it "redirects to show" do
+          patch_update
           expect(response).to redirect_to(admin_facility_path(facility))
         end
 
         it "sets flash notice" do
+          patch_update
           expect(flash[:notice]).to match(/Successfully undiscarded facility/)
         end
       end
@@ -379,9 +384,8 @@ RSpec.describe Admin::FacilitiesController do
       context "when undiscard fails" do
         before do
           # Stub Facility.find to return the facility with the undiscard stub
-          allow(Facility).to receive(:find).and_return(facility)
+          stub_facility_find_with(facility)
           allow(facility).to receive(:undiscard).and_return(false)
-          facility.discard_reason = :closed
           patch_update
         end
 
@@ -406,8 +410,9 @@ RSpec.describe Admin::FacilitiesController do
 
     context "with valid discard reason" do
       it "discards the facility" do
-        delete_destroy
-        expect(facility.reload).to be_discarded
+        expect do
+          delete_destroy
+        end.to change { facility.reload.discarded? }.from(false).to(true)
       end
 
       it "sets flash notice" do
@@ -424,7 +429,7 @@ RSpec.describe Admin::FacilitiesController do
     context "when discard fails" do
       before do
         # Stub Facility.find to return the facility with the discard stub
-        allow(Facility).to receive(:find).and_return(facility)
+        stub_facility_find_with(facility)
         allow(facility).to receive(:discard).and_return(false)
         delete_destroy
       end
@@ -494,7 +499,7 @@ RSpec.describe Admin::FacilitiesController do
     context "when status update fails" do
       before do
         # Stub Facility.find to return the facility with the update_status stub
-        allow(Facility).to receive(:find).and_return(facility)
+        stub_facility_find_with(facility)
         allow(facility).to receive(:update_status).and_return(false)
         patch_switch
       end
@@ -534,7 +539,9 @@ RSpec.describe Admin::FacilitiesController do
       context "when the destroy action" do
         let(:facility) { create(:facility) }
 
-        before { delete :destroy, params: { id: facility.id, facility: { discard_reason: "closed" } } }
+        before do
+          delete :destroy, params: { id: facility.id, facility: { discard_reason: "closed" } }
+        end
 
         it { expect(assigns(:facility)).to eq(facility) }
       end
@@ -542,7 +549,9 @@ RSpec.describe Admin::FacilitiesController do
       context "when the switch_status action" do
         let(:facility) { create(:facility) }
 
-        before { patch :switch_status, params: { id: facility.id, status: "live" } }
+        before do
+          patch :switch_status, params: { id: facility.id, status: "live" }
+        end
 
         it { expect(assigns(:facility)).to eq(facility) }
       end
@@ -638,7 +647,7 @@ RSpec.describe Admin::FacilitiesController do
 
       before do
         # Stub Facility.find to return the facility with the discard stub
-        allow(Facility).to receive(:find).and_return(facility)
+        stub_facility_find_with(facility)
         allow(facility).to receive(:discard).and_return(false)
         delete :destroy, params: { id: facility.id, facility: { discard_reason: "closed" } }
       end
@@ -653,7 +662,7 @@ RSpec.describe Admin::FacilitiesController do
 
       before do
         # Stub Facility.find to return the facility with the update_status stub
-        allow(Facility).to receive(:find).and_return(facility)
+        stub_facility_find_with(facility)
         allow(facility).to receive(:update_status).and_return(false)
         patch :switch_status, params: { id: facility.id, status: "live" }
       end

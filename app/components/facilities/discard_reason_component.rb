@@ -5,7 +5,6 @@ class Facilities::DiscardReasonComponent < ViewComponent::Base
 
   VALID_REASONS = {
     nil => "None",
-    none: "None",
     closed: "Closed",
     duplicated: "Duplicated",
     sync_removed: "Removed by Sync"

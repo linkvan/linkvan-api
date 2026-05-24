@@ -5,6 +5,8 @@
 require "rails_helper"
 
 RSpec.describe External::VancouverCity::FacilitySyncer, "#call - undelete scenarios", type: :service do
+  subject(:syncer) { described_class.new(operation:, record:, api_key:, current: current) }
+
   let(:api_key) { "drinking-fountains" }
   let(:service) { create(:water_fountain_service) }
 
@@ -12,7 +14,11 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call - undelete scenar
 
   describe "undelete support" do
     context "when discarded facility has matching external_id" do
-      let!(:discarded_facility) do
+      let(:current) { discarded_facility }
+      let(:record) { update_record }
+      let(:operation) { External::SyncOperations.external_update }
+
+      let(:discarded_facility) do
         create(:facility,
                :with_verified,
                :discarded,
@@ -31,28 +37,28 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call - undelete scenar
         }
       end
 
+      before do
+        discarded_facility
+      end
+
       it "undeletes the facility before updating" do
-        syncer = described_class.new(record: update_record, api_key: api_key, current: discarded_facility)
         result = syncer.call
 
         expect(result).to be_success
-        expect(result.data.facility.id).to eq(discarded_facility.id)
-        expect(result.data.facility).not_to be_discarded
-        expect(result.data.operation).to eq(:external_update)
+        expect(result.data.id).to eq(discarded_facility.id)
+        expect(result.data).not_to be_discarded
       end
 
       it "restores facility to active state" do
         expect do
-          syncer = described_class.new(record: update_record, api_key: api_key, current: discarded_facility)
           syncer.call
         end.to change { discarded_facility.reload.undiscarded? }.from(false).to(true)
       end
 
       it "updates the facility attributes" do
-        syncer = described_class.new(record: update_record, api_key: api_key, current: discarded_facility)
         result = syncer.call
 
-        facility = result.data.facility.reload
+        facility = result.data.reload
         expect(facility.name).to eq("Updated Discarded Fountain")
         expect(facility.address).to eq("Updated Park, Downtown")
         expect(facility.lat).to eq(49.2827)
@@ -60,15 +66,18 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call - undelete scenar
       end
 
       it "clears the discard_reason" do
-        syncer = described_class.new(record: update_record, api_key: api_key, current: discarded_facility)
         result = syncer.call
 
-        facility = result.data.facility.reload
+        facility = result.data.reload
         expect(facility.discard_reason).to be_nil
       end
     end
 
     context "when discarded facility has matching name (internal update)" do
+      let(:current) { discarded_internal_facility }
+      let(:record) { name_match_record }
+      let(:operation) { External::SyncOperations.internal_update }
+
       let!(:discarded_internal_facility) do
         create(:facility,
                :discarded,
@@ -89,35 +98,31 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call - undelete scenar
       end
 
       it "undeletes the facility before adding services" do
-        syncer = described_class.new(record: name_match_record, api_key: api_key, current: discarded_internal_facility)
         result = syncer.call
 
         expect(result).to be_success
-        expect(result.data.facility.id).to eq(discarded_internal_facility.id)
-        expect(result.data.facility).not_to be_discarded
-        expect(result.data.operation).to eq(:internal_update)
+        expect(result.data.id).to eq(discarded_internal_facility.id)
+        expect(result.data).not_to be_discarded
       end
 
       it "adds new services to the undeleted facility" do
         original_service_count = discarded_internal_facility.facility_services.count
-
-        syncer = described_class.new(record: name_match_record, api_key: api_key, current: discarded_internal_facility)
         result = syncer.call
 
-        facility = result.data.facility.reload
+        facility = result.data.reload
         expect(facility.facility_services.count).to eq(original_service_count + 1)
         expect(facility.services).to include(service)
       end
 
       it "restores facility to active state" do
         expect do
-          syncer = described_class.new(record: name_match_record, api_key: api_key, current: discarded_internal_facility)
           syncer.call
         end.to change { discarded_internal_facility.reload.undiscarded? }.from(false).to(true)
       end
     end
 
     context "when multiple discarded facilities exist" do
+      let(:operation) { External::SyncOperations.external_update }
       let!(:first_discarded) do
         create(:facility,
                :with_verified,
@@ -156,24 +161,28 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call - undelete scenar
 
       it "undeletes both facilities independently" do
         # First sync
-        syncer1 = described_class.new(record: first_record, api_key: api_key, current: first_discarded)
+        syncer1 = described_class.new(operation:, record: first_record, api_key: api_key, current: first_discarded)
         result1 = syncer1.call
 
         expect(result1).to be_success
-        expect(result1.data.facility.id).to eq(first_discarded.id)
-        expect(result1.data.facility).not_to be_discarded
+        expect(result1.data.id).to eq(first_discarded.id)
+        expect(result1.data).not_to be_discarded
 
         # Second sync
-        syncer2 = described_class.new(record: second_record, api_key: api_key, current: second_discarded)
+        syncer2 = described_class.new(operation:, record: second_record, api_key: api_key, current: second_discarded)
         result2 = syncer2.call
 
         expect(result2).to be_success
-        expect(result2.data.facility.id).to eq(second_discarded.id)
-        expect(result2.data.facility).not_to be_discarded
+        expect(result2.data.id).to eq(second_discarded.id)
+        expect(result2.data).not_to be_discarded
       end
     end
 
     context "when discarded facility matches by external_id but name differs" do
+      let(:operation) { External::SyncOperations.external_update }
+      let(:current) { discarded_facility }
+      let(:record) { renamed_record }
+
       let!(:discarded_facility) do
         create(:facility,
                :with_verified,
@@ -193,17 +202,18 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call - undelete scenar
       end
 
       it "undeletes and updates based on external_id match" do
-        syncer = described_class.new(record: renamed_record, api_key: api_key, current: discarded_facility)
         result = syncer.call
 
         expect(result).to be_success
-        expect(result.data.facility.id).to eq(discarded_facility.id)
-        expect(result.data.operation).to eq(:external_update)
-        expect(result.data.facility.name).to eq("Completely New Name")
+        expect(result.data.id).to eq(discarded_facility.id)
+        expect(result.data.name).to eq("Completely New Name")
       end
     end
 
     context "when interaction with kept facilities" do
+      let(:operation) { External::SyncOperations.external_update }
+      let(:current) { kept_facility }
+      let(:record) { update_record }
       let!(:kept_facility) do
         create(:facility,
                :with_verified,
@@ -222,23 +232,24 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call - undelete scenar
       end
 
       it "updates kept facilities without undelete" do
-        syncer = described_class.new(record: update_record, api_key: api_key, current: kept_facility)
         result = syncer.call
 
         expect(result).to be_success
-        expect(result.data.facility.id).to eq(kept_facility.id)
-        expect(result.data.operation).to eq(:external_update)
+        expect(result.data.id).to eq(kept_facility.id)
       end
 
       it "does not change discard state of kept facilities" do
         expect do
-          syncer = described_class.new(record: update_record, api_key: api_key, current: kept_facility)
           syncer.call
         end.not_to(change { kept_facility.reload.discarded? })
       end
     end
 
     context "when name match with discarded internal facility" do
+      let(:operation) { External::SyncOperations.internal_update }
+      let(:current) { discarded_internal }
+      let(:record) { name_record }
+
       let!(:discarded_internal) do
         create(:facility,
                :discarded,
@@ -258,13 +269,11 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call - undelete scenar
       end
 
       it "undeletes and performs internal update" do
-        syncer = described_class.new(record: name_record, api_key: api_key, current: discarded_internal)
         result = syncer.call
 
         expect(result).to be_success
-        expect(result.data.facility.id).to eq(discarded_internal.id)
-        expect(result.data.operation).to eq(:internal_update)
-        expect(result.data.facility).not_to be_discarded
+        expect(result.data.id).to eq(discarded_internal.id)
+        expect(result.data).not_to be_discarded
       end
     end
   end

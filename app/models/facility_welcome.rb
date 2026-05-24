@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class FacilityWelcome < ApplicationRecord
-  belongs_to :facility, touch: true
+  belongs_to :facility, touch: true, inverse_of: :facility_welcomes
 
   validates :customer, presence: true, uniqueness: { scope: :facility }
 

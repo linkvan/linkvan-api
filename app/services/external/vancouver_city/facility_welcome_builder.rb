@@ -55,7 +55,17 @@ class External::VancouverCity::FacilityWelcomeBuilder < ApplicationService
     welcomes = FacilityWelcome.all_customers
 
     welcomes.each do |customer_type|
+      add_welcomes(customer_type)
+    end
+  end
+
+  def add_welcomes(customer_type)
+    return if facility.facility_welcomes.any? { |fw| fw.customer == customer_type.value }
+
+    if facility.new_record?
       facility.facility_welcomes.build(customer: customer_type.value)
+    else
+      facility.facility_welcomes.create!(customer: customer_type.value)
     end
   end
 end

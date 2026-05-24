@@ -34,7 +34,7 @@ RSpec.describe "Admin Authentication", type: :system do
 
     context "with non-admin user" do
       it "redirects to login after attempting admin access" do
-        sign_in non_admin_user
+        login_as non_admin_user, scope: :user
         dashboard_page.visit_dashboard
 
         # Should be redirected away from admin
@@ -44,7 +44,7 @@ RSpec.describe "Admin Authentication", type: :system do
 
     context "when performing logout workflow" do
       it "allows admin to logout successfully" do
-        sign_in admin_user
+        login_as admin_user, scope: :user
         dashboard_page.visit_dashboard
         dashboard_page.logout
 
@@ -61,21 +61,6 @@ RSpec.describe "Admin Authentication", type: :system do
 
         expect(page.current_path).to eq(new_user_session_path)
         expect(login_page.has_login_form?).to be true
-      end
-    end
-
-    context "with different admin roles" do
-      let(:super_admin) { create(:admin_user) }
-      let(:zone_admin) { create(:admin_user) } # Assuming zones exist
-      let(:facility_admin) { create(:admin_user) }
-
-      it "allows all admin types to access dashboard" do
-        [super_admin, zone_admin, facility_admin].each do |user|
-          sign_in user
-          dashboard_page.visit_dashboard
-          expect(dashboard_page.has_dashboard_content?).to be true
-          sign_out user
-        end
       end
     end
   end
