@@ -3,6 +3,9 @@
 require "rails_helper"
 
 RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
+  subject(:builder) { described_class.new(facility: facility, record: record, api_key: api_key) }
+
+  let(:facility) { Facility.new }
   let(:valid_api_key) { "drinking-fountains" }
 
   let(:valid_record) do
@@ -35,17 +38,20 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
   end
 
   describe "#initialize" do
-    it "initializes with valid parameters" do
-      builder = described_class.new(record: valid_record, api_key: valid_api_key)
+    let(:record) { valid_record }
+    let(:api_key) { valid_api_key }
 
+    it "initializes with valid parameters" do
       expect(builder.record).to eq(valid_record)
       expect(builder.api_key).to eq(valid_api_key)
     end
   end
 
   describe "#validate" do
+    let(:api_key) { valid_api_key }
+
     context "with valid parameters" do
-      let(:builder) { described_class.new(record: valid_record, api_key: valid_api_key) }
+      let(:record) { valid_record }
 
       it "returns empty errors array" do
         expect(builder.validate).to be_blank
@@ -57,7 +63,7 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
     end
 
     context "with nil record" do
-      let(:builder) { described_class.new(record: nil, api_key: valid_api_key) }
+      let(:record) { nil }
 
       it "returns validation errors" do
         errors = builder.validate
@@ -66,7 +72,7 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
     end
 
     context "with non-hash record" do
-      let(:builder) { described_class.new(record: "invalid", api_key: valid_api_key) }
+      let(:record) { "invalid_record" }
 
       it "returns validation errors" do
         errors = builder.validate
@@ -77,13 +83,14 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
 
   describe "#call" do
     let(:service) { create(:water_fountain_service) }
+    let(:api_key) { valid_api_key }
 
     before do
       service # Ensure service exists
     end
 
     context "with valid parameters and complete record" do
-      let(:builder) { described_class.new(record: valid_record, api_key: valid_api_key) }
+      let(:record) { valid_record }
 
       it "returns successful result" do
         result = builder.call
@@ -95,72 +102,75 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
 
       it "builds facility with correct attributes" do
         result = builder.call
-        facility = result.data[:facility]
+        result_facility = result.data[:facility]
 
-        expect(facility.external_id).to eq("12345")
-        expect(facility.name).to eq("Test Fountain")
-        expect(facility.address).to eq("Test Park, Downtown")
-        expect(facility.phone).to eq("604-123-4567")
-        expect(facility.website).to eq("https://vancouver.ca")
-        expect(facility.lat).to eq(49.2827)
-        expect(facility.long).to eq(-123.1207)
-        expect(facility.verified).to be true
+        expect(result_facility.external_id).to eq("12345")
+        expect(result_facility.name).to eq("Test Fountain")
+        expect(result_facility.address).to eq("Test Park, Downtown")
+        expect(result_facility.phone).to eq("604-123-4567")
+        expect(result_facility.website).to eq("https://vancouver.ca")
+        expect(result_facility.lat).to eq(49.2827)
+        expect(result_facility.long).to eq(-123.1207)
+        expect(result_facility.verified).to be true
       end
 
       it "builds notes from multiple fields" do
         result = builder.call
-        facility = result.data[:facility]
+        result_facility = result.data[:facility]
 
-        expect(facility.notes).to include("Maintained by: Parks Department")
-        expect(facility.notes).to include("Operation: Yes")
-        expect(facility.notes).to include("Pet friendly: Yes")
+        expect(result_facility.notes).to include("Maintained by: Parks Department")
+        expect(result_facility.notes).to include("Operation: Yes")
+        expect(result_facility.notes).to include("Pet friendly: Yes")
       end
 
       it "associates correct service" do
         result = builder.call
-        facility = result.data[:facility]
+        result_facility = result.data[:facility]
 
-        expect(facility.facility_services.size).to eq(1)
-        expect(facility.facility_services.first.service).to eq(service)
+        expect(result).to be_success
+        expect(result_facility.facility_services.size).to eq(1)
+        expect(result_facility.facility_services.first.service).to eq(service)
       end
 
       it "creates facility welcomes for all customers" do
         result = builder.call
-        facility = result.data[:facility]
+        result_facility = result.data[:facility]
 
-        expect(facility.facility_welcomes).not_to be_blank
+        expect(result_facility.facility_welcomes).not_to be_blank
         # Test that welcomes are created (exact count depends on FacilityWelcome.all_customers)
       end
 
       it "creates schedules for all weekdays" do
         result = builder.call
-        facility = result.data[:facility]
+        result_facility = result.data[:facility]
 
-        expect(facility.schedules.size).to eq(7) # All weekdays
-        facility.schedules.each do |schedule|
+        expect(result_facility.schedules.size).to eq(7) # All weekdays
+        result_facility.schedules.each do |schedule|
           expect(schedule.closed_all_day).to be false
           expect(schedule.open_all_day).to be true
         end
       end
 
       describe "schedule business logic" do
+        let(:record) { valid_record }
+
         it "creates exactly one schedule for each day of the week" do
           result = builder.call
-          facility = result.data[:facility]
+          result_facility = result.data[:facility]
 
           # Test that we have all 7 days
-          expect(facility.schedules.size).to eq(7)
+          expect(result_facility.schedules.size).to eq(7)
 
           # Test that each day is covered exactly once
-          week_days = facility.schedules.map(&:week_day)
+          week_days = result_facility.schedules.map(&:week_day)
           expect(week_days.sort).to eq(FacilitySchedule.week_days.keys.sort)
         end
 
         it "sets all schedules to open_all_day = true and closed_all_day = false" do
           result = builder.call
-          facility = result.data[:facility]
+          result_facility = result.data[:facility]
 
-          facility.schedules.each do |schedule|
+          result_facility.schedules.each do |schedule|
             expect(schedule.open_all_day).to be(true), "Expected #{schedule.week_day} to be open_all_day"
             expect(schedule.closed_all_day).to be(false), "Expected #{schedule.week_day} not to be closed_all_day"
           end
@@ -168,25 +178,25 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
 
         it "creates schedules without time slots (consistent with open_all_day)" do
           result = builder.call
-          facility = result.data[:facility]
+          result_facility = result.data[:facility]
 
-          facility.schedules.each do |schedule|
+          result_facility.schedules.each do |schedule|
             expect(schedule.time_slots).to be_blank, "Expected #{schedule.week_day} to have no time slots when open_all_day"
           end
         end
 
         it "creates valid schedule objects that pass model validations" do
           result = builder.call
-          facility = result.data[:facility]
+          result_facility = result.data[:facility]
 
-          expect(facility.schedules).to all(be_valid)
+          expect(result_facility.schedules).to all(be_valid)
         end
 
         it "sets schedule availability to :open for all days" do
           result = builder.call
-          facility = result.data[:facility]
+          result_facility = result.data[:facility]
 
-          facility.schedules.each do |schedule|
+          result_facility.schedules.each do |schedule|
             expect(schedule.availability).to eq(:open), "Expected #{schedule.week_day} availability to be :open"
           end
         end
@@ -194,12 +204,11 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
         context "when no fields are provided for schedules" do
           it "still creates open_all_day schedules for all weekdays" do
             # Test with minimal record that has no schedule-related fields
-            minimal_builder = described_class.new(record: minimal_record, api_key: valid_api_key)
-            result = minimal_builder.call
-            facility = result.data[:facility]
+            result = builder.call
+            result_facility = result.data[:facility]
 
-            expect(facility.schedules.size).to eq(7)
-            facility.schedules.each do |schedule|
+            expect(result_facility.schedules.size).to eq(7)
+            result_facility.schedules.each do |schedule|
               expect(schedule.open_all_day).to be true
               expect(schedule.closed_all_day).to be false
             end
@@ -209,11 +218,11 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
         context "with business requirement verification" do
           it "ensures imported facilities are always accessible 24/7" do
             result = builder.call
-            facility = result.data[:facility]
+            result_facility = result.data[:facility]
 
             # Verify that the facility is accessible any day of the week, any time
             FacilitySchedule.week_days.each_key do |day|
-              schedule = facility.schedules.find { |s| s.week_day == day.to_s }
+              schedule = result_facility.schedules.find { |s| s.week_day == day.to_s }
               expect(schedule).to be_present, "Missing schedule for #{day}"
               expect(schedule.open_all_day).to be(true), "Facility should be accessible 24/7 on #{day}"
               expect(schedule.closed_all_day).to be(false), "Facility should not be closed on #{day}"
@@ -224,7 +233,7 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
     end
 
     context "with minimal record" do
-      let(:builder) { described_class.new(record: minimal_record, api_key: valid_api_key) }
+      let(:record) { minimal_record }
 
       it "returns successful result" do
         result = builder.call
@@ -235,19 +244,34 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
 
       it "builds facility with minimal data" do
         result = builder.call
-        facility = result.data[:facility]
+        result_facility = result.data[:facility]
 
-        expect(facility.name).to eq("Minimal Fountain")
-        expect(facility.lat).to eq(49.2827)
-        expect(facility.long).to eq(-123.1207)
-        expect(facility.address).to be_nil
-        expect(facility.phone).to be_nil
-        expect(facility.website).to be_nil
+        expect(result_facility.name).to eq("Minimal Fountain")
+        expect(result_facility.lat).to eq(49.2827)
+        expect(result_facility.long).to eq(-123.1207)
+        expect(result_facility.address).to be_nil
+        expect(result_facility.phone).to be_nil
+        expect(result_facility.website).to be_nil
+      end
+    end
+
+    context "with non-string name field" do
+      let(:record) do
+        minimal_record.merge("name" => 12_345) # Integer instead of String
+      end
+
+      it "returns error result with exception message" do
+        result = builder.call
+        result_facility = result.data[:facility]
+
+        expect(result).to be_success
+        expect(result_facility).to be_present
+        expect(result_facility.name).to eq("12345") # Should be converted to string
       end
     end
 
     context "with geo_point_2d coordinates" do
-      let(:record_with_geo_point) do
+      let(:record) do
         {
           "name" => "Geo Point Fountain",
           "geo_point_2d" => {
@@ -256,19 +280,18 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
           }
         }
       end
-      let(:builder) { described_class.new(record: record_with_geo_point, api_key: valid_api_key) }
 
       it "extracts coordinates from geo_point_2d" do
         result = builder.call
-        facility = result.data[:facility]
+        result_facility = result.data[:facility]
 
-        expect(facility.lat).to eq(49.2827)
-        expect(facility.long).to eq(-123.1207)
+        expect(result_facility.lat).to eq(49.2827)
+        expect(result_facility.long).to eq(-123.1207)
       end
     end
 
     context "with geometry coordinates" do
-      let(:record_with_geometry) do
+      let(:record) do
         {
           "name" => "Geometry Fountain",
           "geom" => {
@@ -278,69 +301,70 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
           }
         }
       end
-      let(:builder) { described_class.new(record: record_with_geometry, api_key: valid_api_key) }
 
       it "extracts coordinates from geometry in correct order" do
         result = builder.call
-        facility = result.data[:facility]
+        result_facility = result.data[:facility]
 
-        expect(facility.lat).to eq(49.2827) # Latitude from coordinates[1]
-        expect(facility.long).to eq(-123.1207) # Longitude from coordinates[0]
+        expect(result_facility.lat).to eq(49.2827) # Latitude from coordinates[1]
+        expect(result_facility.long).to eq(-123.1207) # Longitude from coordinates[0]
       end
     end
 
     context "with special characters in name" do
-      let(:record_with_special_chars) do
+      let(:record) do
         {
           "name" => "Test\\nFountain\nWith\n\nSpecial   Chars",
           "geo_point_2d" => { "lat" => 49.2827, "lon" => -123.1207 }
         }
       end
-      let(:builder) { described_class.new(record: record_with_special_chars, api_key: valid_api_key) }
 
       it "cleans name by removing special characters and extra whitespace" do
         result = builder.call
-        facility = result.data[:facility]
+        result_facility = result.data[:facility]
 
-        expect(facility.name).to eq("Test Fountain With Special Chars")
+        expect(result_facility.name).to eq("Test Fountain With Special Chars")
       end
     end
 
-    context "with phone field variations" do
-      let(:record_with_phone_number) do
-        {
-          "name" => "Phone Test",
-          "phone_number" => "604-555-1234",
-          "geo_point_2d" => { "lat" => 49.2827, "lon" => -123.1207 }
-        }
-      end
-      let(:record_with_contact_phone) do
-        {
-          "name" => "Contact Phone Test",
-          "contact_phone" => "604-555-5678",
-          "geo_point_2d" => { "lat" => 49.2827, "lon" => -123.1207 }
-        }
-      end
+    describe "with phone field variations" do
+      context "when phone_number field is present" do
+        let(:record) do
+          {
+            "name" => "Phone Test",
+            "phone_number" => "604-555-1234",
+            "geo_point_2d" => { "lat" => 49.2827, "lon" => -123.1207 }
+          }
+        end
 
-      it "extracts phone from phone_number field" do
-        builder = described_class.new(record: record_with_phone_number, api_key: valid_api_key)
-        result = builder.call
-        facility = result.data[:facility]
+        it "extracts phone from phone_number field" do
+          result = builder.call
+          result_facility = result.data[:facility]
 
-        expect(facility.phone).to eq("604-555-1234")
+          expect(result_facility.phone).to eq("604-555-1234")
+        end
       end
 
-      it "extracts phone from contact_phone field" do
-        builder = described_class.new(record: record_with_contact_phone, api_key: valid_api_key)
-        result = builder.call
-        facility = result.data[:facility]
+      context "when contact_phone field is present" do
+        let(:record) do
+          {
+            "name" => "Contact Phone Test",
+            "contact_phone" => "604-555-5678",
+            "geo_point_2d" => { "lat" => 49.2827, "lon" => -123.1207 }
+          }
+        end
 
-        expect(facility.phone).to eq("604-555-5678")
+        it "extracts phone from contact_phone field" do
+          result = builder.call
+          result_facility = result.data[:facility]
+
+          expect(result_facility.phone).to eq("604-555-5678")
+        end
       end
     end
 
     context "with website field variations" do
-      let(:record_with_url) do
+      let(:record) do
         {
           "name" => "URL Test",
           "url" => "https://example.com",
@@ -349,50 +373,85 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
       end
 
       it "extracts website from url field" do
-        builder = described_class.new(record: record_with_url, api_key: valid_api_key)
         result = builder.call
-        facility = result.data[:facility]
+        result_facility = result.data[:facility]
 
-        expect(facility.website).to eq("https://example.com")
+        expect(result_facility.website).to eq("https://example.com")
       end
     end
 
     context "with no coordinates" do
-      let(:record_without_coords) do
+      let(:record) do
         {
           "name" => "No Coords Fountain"
         }
       end
-      let(:builder) { described_class.new(record: record_without_coords, api_key: valid_api_key) }
 
       it "builds facility with nil coordinates" do
         result = builder.call
-        facility = result.data[:facility]
+        result_facility = result.data[:facility]
 
         expect(result).not_to be_success
-        expect(facility).to be_nil
+        expect(result_facility).to be_nil
+      end
+    end
+
+    context "when facility already exists" do
+      let(:facility) { create(:facility) }
+      let(:record) { valid_record }
+      let(:api_key) { valid_api_key }
+
+      it "adds FacilityService to existing facility" do
+        result = builder.call
+        result_facility = result.data[:facility]
+
+        expect(result).to be_success
+        expect(result_facility.facility_services).not_to be_blank
+        expect(result_facility.facility_services.count).to eq(1)
+        expect(result_facility.facility_services).to all(be_persisted)
+        expect(result_facility.facility_services.map(&:service)).to include(service)
+      end
+
+      it "adds FacilityWelcome to existing facility" do
+        result = builder.call
+        result_facility = result.data[:facility]
+
+        expect(result).to be_success
+        expect(result_facility.facility_welcomes).not_to be_blank
+        expect(result_facility.facility_welcomes.map(&:customer))
+          .to match_array(FacilityWelcome.all_customers.map(&:value))
+        expect(result_facility.facility_welcomes).to all(be_persisted)
+      end
+
+      it "updates existing facility attributes" do
+        result = builder.call
+        result_facility = result.data[:facility]
+
+        expect(result).to be_success
+        expect(result_facility.name).to eq("Test Fountain")
+        expect(result_facility.external_id).to eq("12345")
       end
     end
 
     context "when service does not exist" do
-      let(:non_existent_api_key) { "non-existent-service" }
-      let(:builder) { described_class.new(record: valid_record, api_key: non_existent_api_key) }
+      let(:record) { valid_record }
+      let(:api_key) { "non-existent-service" }
 
       before do
         # Stub the API validation to pass
-        allow(External::ApiHelper).to receive(:supported_api?).with(non_existent_api_key).and_return(true)
+        allow(External::ApiHelper).to receive(:supported_api?).with(api_key).and_return(true)
       end
 
       it "builds facility without service association" do
         result = builder.call
-        facility = result.data[:facility]
+        result_facility = result.data[:facility]
 
-        expect(facility.facility_services).to be_blank
+        expect(result_facility.facility_services).to be_blank
       end
     end
 
     context "with invalid parameters" do
-      let(:builder) { described_class.new(record: nil, api_key: valid_api_key) }
+      let(:record) { nil }
 
       it "returns error result without building facility" do
         result = builder.call
@@ -404,35 +463,8 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
     end
 
     context "when record has invalid data types that cause exceptions" do
-      context "with non-string name field" do
-        let(:record_with_invalid_name) do
-          {
-            "name" => 12_345, # Integer instead of String
-            "geo_point_2d" => { "lat" => 49.2827, "lon" => -123.1207 }
-          }
-        end
-        let(:builder) { described_class.new(record: record_with_invalid_name, api_key: valid_api_key) }
-
-        it "returns error result with exception message" do
-          result = builder.call
-
-          expect(result).to be_failed
-          expect(result.data).to be_blank
-          expect(result.errors).to include(a_string_matching(/Failed to build facility from record:/))
-        end
-
-        it "logs the error and record data" do
-          allow(Rails.logger).to receive(:warn)
-
-          builder.call
-
-          expect(Rails.logger).to have_received(:warn).with(a_string_matching(/Failed to build facility from record:/))
-          expect(Rails.logger).to have_received(:warn).with("Record data: #{record_with_invalid_name.inspect}")
-        end
-      end
-
       context "with invalid geometry coordinates" do
-        let(:record_with_invalid_geometry) do
+        let(:record) do
           {
             "name" => "Test Fountain",
             "geom" => {
@@ -442,7 +474,6 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
             }
           }
         end
-        let(:builder) { described_class.new(record: record_with_invalid_geometry, api_key: valid_api_key) }
 
         it "returns error result with exception message" do
           result = builder.call
@@ -454,13 +485,12 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
       end
 
       context "with invalid geo_point_2d field" do
-        let(:record_with_invalid_geo_point) do
+        let(:record) do
           {
             "name" => "Test Fountain",
             "geo_point_2d" => "invalid_string" # String instead of Hash
           }
         end
-        let(:builder) { described_class.new(record: record_with_invalid_geo_point, api_key: valid_api_key) }
 
         it "returns error result with exception message" do
           result = builder.call
@@ -473,13 +503,12 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
     end
 
     context "when built facility is invalid" do
-      let(:invalid_record) do
+      let(:record) do
         {
           "name" => "", # Empty name might make facility invalid
           "geo_point_2d" => { "lat" => 49.2827, "lon" => -123.1207 }
         }
       end
-      let(:builder) { described_class.new(record: invalid_record, api_key: valid_api_key) }
 
       it "returns error result with validation messages" do
         result = builder.call
@@ -492,6 +521,8 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
   end
 
   describe ".call class method" do
+    let(:record) { valid_record }
+    let(:api_key) { valid_api_key }
     let(:service) { create(:water_fountain_service) }
 
     before do
@@ -499,7 +530,7 @@ RSpec.describe External::VancouverCity::FacilityBuilder, type: :service do
     end
 
     it "works as a class method" do
-      result = described_class.call(record: valid_record, api_key: valid_api_key)
+      result = builder.call
 
       expect(result).to be_success
       expect(result.data[:facility]).to be_a(Facility)

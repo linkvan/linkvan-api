@@ -10,10 +10,10 @@ class Facility < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :zone, optional: true
 
-  has_many :facility_welcomes, dependent: :destroy
-  has_many :facility_services, dependent: :destroy
+  has_many :facility_welcomes, dependent: :destroy, autosave: true
+  has_many :facility_services, dependent: :destroy, autosave: true
   has_many :services, through: :facility_services
-  has_many :schedules, class_name: "FacilitySchedule", dependent: :destroy
+  has_many :schedules, class_name: "FacilitySchedule", dependent: :destroy, autosave: true
   has_many :time_slots, through: :schedules
 
   enum :discard_reason, {

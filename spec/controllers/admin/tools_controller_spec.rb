@@ -12,9 +12,7 @@ RSpec.describe Admin::ToolsController do
   end
 
   describe "DELETE #discard_facilities" do
-    subject(:discard_facilities) { delete :discard_facilities, params: { api: api_key } }
-
-    let(:api_key) { "drinking-fountains" }
+    subject(:discard_facilities) { delete :discard_facilities }
 
     context "when admin user" do
       let(:drinking_fountains_key) { "drinking-fountains" }
@@ -25,11 +23,11 @@ RSpec.describe Admin::ToolsController do
         create(:facility, :with_verified, external_id: "BAR456", name: "Fountain 2")
       end
 
-      context "with valid api_key" do
+      context "with facilities to discard" do
         it "discards all external facilities" do
-          discard_facilities
-
-          expect(Facility.external.kept.count).to eq(0)
+          expect do
+            discard_facilities
+          end.to change { Facility.external.kept.count }.from(2).to(0)
         end
 
         it "redirects with notice showing count" do
@@ -45,17 +43,6 @@ RSpec.describe Admin::ToolsController do
           discarded = Facility.external.with_discarded.find_by(external_id: "FOO123")
           expect(discarded).to be_discarded
           expect(discarded.discard_reason).to eq("sync_removed")
-        end
-      end
-
-      context "with invalid api_key" do
-        let(:api_key) { "invalid-api" }
-
-        it "redirects with alert" do
-          discard_facilities
-
-          expect(response).to redirect_to(admin_tools_path)
-          expect(flash[:alert]).to include("Invalid API")
         end
       end
 
@@ -111,10 +98,23 @@ RSpec.describe Admin::ToolsController do
             errors: []
           )
         end
+        let(:api_client) do
+          client = instance_double(External::VancouverCity::VancouverApiClient)
+          allow(client).to receive(:is_a?).with(External::VancouverCity::VancouverApiClient).and_return(true)
+          client
+        end
+        let(:api_response) { instance_double(Faraday::Response, body: { "records" => [record] }) }
+        let(:record) do
+          { "mapid" => "FOO123", "name" => "Fountain 1",
+            "address" => "123 Main St",
+            "geom" => { geometry: { coordinates: [-123.365644, 48.428421] } } }
+        end
 
         before do
-          allow(External::VancouverCity::Syncer).to receive(:call)
-            .and_return(syncer_result)
+          allow(External::VancouverCity).to receive(:default_client).and_return(api_client)
+          allow(api_client).to receive(:get_dataset_records)
+            .with(api_key, limit: anything, offset: 0)
+            .and_return(api_response)
         end
 
         it "imports facilities and redirects" do
