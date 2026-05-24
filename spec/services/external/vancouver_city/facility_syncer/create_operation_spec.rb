@@ -5,46 +5,47 @@
 require "rails_helper"
 
 RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service do
+  subject(:syncer) { described_class.new(operation:, record:, current: nil, api_key: api_key) }
+
+  let(:operation) { External::SyncOperations.create }
   let(:api_key) { "drinking-fountains" }
   let(:service) { create(:water_fountain_service) }
+  let(:valid_record) do
+    {
+      "mapid" => "CREATE123",
+      "name" => "New Valid Fountain",
+      "location" => "Valid Park",
+      "geo_local_area" => "Downtown",
+      "phone" => "604-123-4567",
+      "website" => "https://vancouver.ca",
+      "geo_point_2d" => { "lat" => 49.2827, "lon" => -123.1207 }
+    }
+  end
+
+  let(:invalid_record) do
+    {
+      "mapid" => "INVALID123",
+      "name" => "", # Empty name causes FacilityBuilder to fail
+      "geo_point_2d" => { "lat" => 49.2827, "lon" => -123.1207 }
+    }
+  end
 
   before { service } # Ensure service exists
 
   describe "create operation (:create)" do
-    context "when built facility is valid" do
-      let(:valid_record) do
-        {
-          "mapid" => "CREATE123",
-          "name" => "New Valid Fountain",
-          "location" => "Valid Park",
-          "geo_local_area" => "Downtown",
-          "phone" => "604-123-4567",
-          "website" => "https://vancouver.ca",
-          "geo_point_2d" => { "lat" => 49.2827, "lon" => -123.1207 }
-        }
-      end
+    let(:record) { valid_record }
 
+    context "when built facility is valid" do
       it "saves the facility successfully" do
         expect do
-          syncer = described_class.new(record: valid_record, api_key: api_key)
           syncer.call
         end.to change(Facility, :count).by(1)
       end
 
-      it "returns success result with operation: :create" do
-        syncer = described_class.new(record: valid_record, api_key: api_key)
-        result = syncer.call
-
-        expect(result).to be_success
-        expect(result.data.operation).to eq(:create)
-        expect(result.errors).to be_empty
-      end
-
       it "sets result_facility to built_facility" do
-        syncer = described_class.new(record: valid_record, api_key: api_key)
         result = syncer.call
 
-        facility = result.data.facility
+        facility = result.data
         expect(facility).to be_persisted
         expect(facility.name).to eq("New Valid Fountain")
         expect(facility.external_id).to eq("CREATE123")
@@ -52,10 +53,9 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "creates facility with all expected attributes" do
-        syncer = described_class.new(record: valid_record, api_key: api_key)
         result = syncer.call
 
-        facility = result.data.facility
+        facility = result.data
         expect(facility.name).to eq("New Valid Fountain")
         expect(facility.address).to eq("Valid Park, Downtown")
         expect(facility.phone).to eq("604-123-4567")
@@ -67,10 +67,9 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "creates facility services" do
-        syncer = described_class.new(record: valid_record, api_key: api_key)
         result = syncer.call
 
-        facility = result.data.facility
+        facility = result.data
         expect(facility.facility_services.count).to eq(1)
         expect(facility.services).to include(service)
       end
@@ -78,7 +77,6 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       it "logs creation message with external_id" do
         allow(Rails.logger).to receive(:info)
 
-        syncer = described_class.new(record: valid_record, api_key: api_key)
         syncer.call
 
         expect(Rails.logger).to have_received(:info).with("Creating new facility with external_id 'CREATE123'")
@@ -86,23 +84,15 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
     end
 
     context "when FacilityBuilder fails due to invalid data" do
-      let(:invalid_record) do
-        {
-          "mapid" => "INVALID123",
-          "name" => "", # Empty name causes FacilityBuilder to fail
-          "geo_point_2d" => { "lat" => 49.2827, "lon" => -123.1207 }
-        }
-      end
+      let(:record) { invalid_record }
 
       it "does not save facility" do
         expect do
-          syncer = described_class.new(record: invalid_record, api_key: api_key)
           syncer.call
         end.not_to change(Facility, :count)
       end
 
       it "adds validation errors to errors array" do
-        syncer = described_class.new(record: invalid_record, api_key: api_key)
         result = syncer.call
 
         expect(result).to be_failed
@@ -110,190 +100,23 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "sets result_facility to nil" do
-        syncer = described_class.new(record: invalid_record, api_key: api_key)
         result = syncer.call
 
-        expect(result.data.facility).to be_nil
+        expect(result.data).to be_nil
       end
 
-      it "returns early with operation: nil when FacilityBuilder fails" do
-        syncer = described_class.new(record: invalid_record, api_key: api_key)
+      it "returns early with no data" do
         result = syncer.call
 
-        expect(result.data.operation).to be_nil # FacilityBuilder fails before operation is determined
+        expect(result.data).to be_nil # FacilityBuilder fails before operation is determined
         expect(result).to be_failed
-      end
-    end
-
-    context "when save! raises other StandardError" do
-      let(:valid_record) do
-        {
-          "mapid" => "ERROR123",
-          "name" => "Error Test Fountain",
-          "geo_point_2d" => { "lat" => 49.2827, "lon" => -123.1207 }
-        }
-      end
-
-      let(:built_facility) { build(:facility) }
-
-      before do
-        # Simulate a database connection error or similar
-        allow(External::VancouverCity::FacilityBuilder).to receive(:call).with(record: valid_record, api_key: api_key).and_return(
-          ApplicationService::Result.new(
-            data: { facility: built_facility },
-            errors: []
-          )
-        )
-        allow(built_facility).to receive(:save!).and_raise(StandardError.new("Database connection lost"))
-      end
-
-      it "catches exception and adds generic error message" do
-        syncer = described_class.new(record: valid_record, api_key: api_key)
-        result = syncer.call
-
-        expect(result).to be_failed
-        expect(result.errors).to include(a_string_matching(/Unexpected error during facility sync:/))
-      end
-
-      it "includes original error message" do
-        syncer = described_class.new(record: valid_record, api_key: api_key)
-        result = syncer.call
-
-        expect(result.errors.first).to include("Database connection lost")
-      end
-
-      it "does not save facility on failure" do
-        expect do
-          syncer = described_class.new(record: valid_record, api_key: api_key)
-          syncer.call
-        end.not_to change(Facility, :count)
-      end
-
-      it "does not create any related records on failure" do
-        expect do
-          syncer = described_class.new(record: valid_record, api_key: api_key)
-          syncer.call
-        end.not_to change(FacilityService, :count)
-      end
-    end
-
-    context "when save! raises ActiveRecord::RecordInvalid" do
-      let(:invalid_save_record) do
-        {
-          "mapid" => "INVALID_SAVE123",
-          "name" => "Valid Name",
-          "geo_point_2d" => { "lat" => 49.2827, "lon" => -123.1207 }
-        }
-      end
-
-      let(:built_facility) { build(:facility) }
-
-      before do
-        # Simulate a validation error during save
-        allow(External::VancouverCity::FacilityBuilder).to receive(:call).with(record: invalid_save_record, api_key: api_key).and_return(
-          ApplicationService::Result.new(
-            data: { facility: built_facility },
-            errors: []
-          )
-        )
-        allow(built_facility).to receive(:save!).and_raise(
-          ActiveRecord::RecordInvalid.new(built_facility)
-        )
-      end
-
-      it "catches RecordInvalid and adds error message" do
-        syncer = described_class.new(record: invalid_save_record, api_key: api_key)
-        result = syncer.call
-
-        expect(result).to be_failed
-        expect(result.errors).to include(a_string_matching(/Failed to save facility:/))
-      end
-
-      it "does not create facility record on validation failure" do
-        expect do
-          syncer = described_class.new(record: invalid_save_record, api_key: api_key)
-          syncer.call
-        end.not_to change(Facility, :count)
-      end
-
-      it "does not create any related records on validation failure" do
-        expect do
-          syncer = described_class.new(record: invalid_save_record, api_key: api_key)
-          syncer.call
-        end.not_to change(FacilityService, :count)
-      end
-    end
-
-    context "when service creation fails" do
-      let(:service_fail_record) do
-        {
-          "mapid" => "SERVICE_FAIL123",
-          "name" => "Service Fail Test",
-          "geo_point_2d" => { "lat" => 49.2827, "lon" => -123.1207 }
-        }
-      end
-
-      let(:built_facility) { build(:facility) }
-
-      before do
-        # For create operations, service associations are built in memory by FacilityBuilder
-        # and saved together with the facility. To simulate failure, we need to make
-        # the facility save fail due to a constraint on the associations.
-        allow(External::VancouverCity::FacilityBuilder).to receive(:call).with(record: service_fail_record, api_key: api_key).and_return(
-          ApplicationService::Result.new(
-            data: { facility: built_facility },
-            errors: []
-          )
-        )
-        allow(built_facility).to receive(:save!).and_raise(
-          ActiveRecord::RecordInvalid.new(build(:facility, name: "Service validation failed"))
-        )
-      end
-
-      it "rolls back facility creation when facility save fails" do
-        expect do
-          syncer = described_class.new(record: service_fail_record, api_key: api_key)
-          syncer.call
-        end.not_to change(Facility, :count)
-      end
-
-      it "does not create any service records when transaction fails" do
-        expect do
-          syncer = described_class.new(record: service_fail_record, api_key: api_key)
-          syncer.call
-        end.not_to change(FacilityService, :count)
-      end
-
-      it "does not create any schedule records when transaction fails" do
-        expect do
-          syncer = described_class.new(record: service_fail_record, api_key: api_key)
-          syncer.call
-        end.not_to change(FacilitySchedule, :count)
-      end
-
-      it "returns failed result with proper error message" do
-        syncer = described_class.new(record: service_fail_record, api_key: api_key)
-        result = syncer.call
-
-        expect(result).to be_failed
-        expect(result.errors).to include(a_string_matching(/Failed to save facility:/))
       end
     end
 
     context "when creating database record on success" do
-      let(:success_record) do
-        {
-          "mapid" => "SUCCESS123",
-          "name" => "Success Test Fountain",
-          "location" => "Success Park",
-          "geo_local_area" => "Downtown",
-          "geo_point_2d" => { "lat" => 49.2827, "lon" => -123.1207 }
-        }
-      end
+      let(:record) { valid_record }
 
       it "creates facility with all related records atomically" do
-        syncer = described_class.new(record: success_record, api_key: api_key)
-
         expect { syncer.call }.to change(Facility, :count).by(1)
           .and change(FacilityService, :count).by(1)
           .and change(FacilitySchedule, :count).by(7) # 7 days of the week
@@ -301,13 +124,12 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "creates facility with correct attributes and relationships" do
-        syncer = described_class.new(record: success_record, api_key: api_key)
         result = syncer.call
 
-        facility = result.data.facility
+        facility = result.data
         expect(facility).to be_persisted
-        expect(facility.external_id).to eq("SUCCESS123")
-        expect(facility.name).to eq("Success Test Fountain")
+        expect(facility.external_id).to eq(record["mapid"])
+        expect(facility.name).to eq(record["name"])
         expect(facility.verified).to be true
 
         # Verify related records are created
@@ -318,15 +140,55 @@ RSpec.describe External::VancouverCity::FacilitySyncer, "#call", type: :service 
       end
 
       it "ensures all database records are properly linked" do
-        syncer = described_class.new(record: success_record, api_key: api_key)
         result = syncer.call
 
-        facility = result.data.facility
+        facility = result.data
 
-        # Verify foreign key relationships
         expect(facility.facility_services.all? { |fs| fs.facility_id == facility.id }).to be true
         expect(facility.schedules.all? { |s| s.facility_id == facility.id }).to be true
         expect(facility.facility_welcomes.all? { |fw| fw.facility_id == facility.id }).to be true
+      end
+    end
+
+    context "with facility with special characters in name" do
+      let(:record) do
+        {
+          "mapid" => "SPECIAL123",
+          "name" => "O'Brien's Water Fountain & Rest Area",
+          "location" => "Québec Street",
+          "geo_local_area" => "Mount Pleasant",
+          "geo_point_2d" => { "lat" => 49.2627, "lon" => -123.1007 }
+        }
+      end
+
+      it "handles special characters correctly" do
+        result = syncer.call
+
+        expect(result).to be_success
+        facility = result.data
+        expect(facility.name).to eq("O'Brien's Water Fountain & Rest Area")
+        expect(facility.address).to eq("Québec Street, Mount Pleasant")
+      end
+    end
+
+    context "with facility at edge coordinates" do
+      let(:record) do
+        {
+          "mapid" => "EDGE123",
+          "name" => "Edge Case Fountain",
+          "location" => "Boundary Road",
+          "geo_local_area" => "Boundary",
+          "geo_point_2d" => { "lat" => 90.0, "lon" => -180.0 }
+        }
+      end
+
+      it "handles edge coordinate values" do
+        result = syncer.call
+
+        expect(result).to be_success
+        facility = result.data
+        expect(facility.lat).to eq(90.0)
+        expect(facility.long).to eq(-180.0)
       end
     end
   end

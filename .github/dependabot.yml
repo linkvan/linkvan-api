@@ -11,7 +11,8 @@ updates:
       interval: "weekly"
     target-branch: "develop"
     labels:
-      - "ruby dependencies"
+      - "ruby"
+      - "dependencies"
 
   - package-ecosystem: "npm"
     directory: "/"
@@ -19,7 +20,8 @@ updates:
       interval: "weekly"
     target-branch: "develop"
     labels:
-      - "javascript dependencies"
+      - "javascript"
+      - "dependencies"
 
   - package-ecosystem: "composer"
     directory: "/"

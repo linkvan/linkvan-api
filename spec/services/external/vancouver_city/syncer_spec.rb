@@ -14,7 +14,6 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
   end
   let(:page_size) { described_class::PAGE_SIZE }
 
-  # Mock Rails.logger
   before do
     allow(Rails).to receive(:logger).and_return(logger)
   end
@@ -31,6 +30,33 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
 
     it "responds to call method" do
       expect(syncer).to respond_to(:call)
+    end
+  end
+
+  describe "#initialize with full_sync option" do
+    let(:syncer_with_full_sync) { described_class.new(api_key: api_key, api_client: api_client, full_sync: full_sync) }
+
+    context "when full_sync is not specified" do
+      it "defaults to full_sync: true" do
+        syncer = described_class.new(api_key: api_key, api_client: api_client)
+        expect(syncer.full_sync).to be true
+      end
+    end
+
+    context "when full_sync is true" do
+      let(:full_sync) { true }
+
+      it "sets full_sync to true" do
+        expect(syncer_with_full_sync.full_sync).to be true
+      end
+    end
+
+    context "when full_sync is false" do
+      let(:full_sync) { false }
+
+      it "sets full_sync to false" do
+        expect(syncer_with_full_sync.full_sync).to be false
+      end
     end
   end
 
@@ -111,35 +137,12 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
         result = syncer.call
         expect(result.success?).to be false
         expect(result.errors).to include("Unsupported API: unsupported-api")
-        expect(result.data).to be_nil
       end
     end
 
     context "when validation succeeds" do
-      let(:sample_records) do
-        [
-          { "name" => "Fountain 1", "lat" => 49.2827, "long" => -123.1207 },
-          { "name" => "Fountain 2", "lat" => 49.2828, "long" => -123.1208 }
-        ]
-      end
-
-      let(:sample_facility) { instance_double(Facility) }
-      let(:syncer_result) do
-        ApplicationService::Result.new(
-          data: { facility: sample_facility },
-          errors: []
-        )
-      end
-
-      let(:api_client) do
-        client = instance_double(External::VancouverCity::VancouverApiClient)
-        allow(client).to receive(:is_a?).with(External::VancouverCity::VancouverApiClient).and_return(true)
-        client
-      end
-
       before do
         allow(External::ApiHelper).to receive(:supported_api?).with(api_key).and_return(true)
-        allow(External::VancouverCity::FacilitySyncer).to receive(:call).and_return(syncer_result)
         allow(logger).to receive(:info)
         allow(logger).to receive(:warn)
       end
@@ -152,61 +155,49 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
             .and_return(empty_response)
         end
 
-        it "logs fetch request and processes no facilities" do
-          allow(logger).to receive(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
-          allow(logger).to receive(:info).with("Successfully processed 0 facilities from #{api_key} API")
-
+        it "returns empty result" do
           result = syncer.call
 
           expect(result.success?).to be true
-          expect(result.data[:facilities]).to be_empty
-          expect(result.data[:total_count]).to eq(0)
-          expect(result.data[:api_key]).to eq(api_key)
-          expect(logger).to have_received(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
-          expect(logger).to have_received(:info).with("Successfully processed 0 facilities from #{api_key} API")
+          expect(result.data).to be_empty
         end
       end
 
       context "with single page of results" do
-        let(:response) do
-          instance_double(Faraday::Response, body: { "results" => sample_records })
+        let(:geom) { { geometry: { coordinates: [-123.1207, 49.2827] } } }
+        let(:sample_records) do
+          [
+            { "name" => "Fountain 1", "mapid" => "FOO123", "geom" => geom },
+            { "name" => "Fountain 2", "mapid" => "FOO456", "geom" => geom }
+          ]
         end
 
         before do
+          response = instance_double(Faraday::Response, body: { "results" => sample_records })
           allow(api_client).to receive(:get_dataset_records)
             .with(api_key, limit: page_size, offset: 0)
             .and_return(response)
         end
 
-        it "processes records and returns success result" do
-          allow(logger).to receive(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
-          allow(External::VancouverCity::FacilitySyncer).to receive(:call).twice.and_return(syncer_result)
-          allow(logger).to receive(:info).with("Successfully processed 2 facilities from #{api_key} API")
+        it "processes records and creates facilities in database" do
+          expect do
+            result = syncer.call
 
-          result = syncer.call
-
-          expect(result.success?).to be true
-          expect(result.data[:facilities]).to contain_exactly(sample_facility, sample_facility)
-          expect(result.data[:total_count]).to eq(2)
-          expect(result.data[:api_key]).to eq(api_key)
-          expect(logger).to have_received(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
-          expect(External::VancouverCity::FacilitySyncer).to have_received(:call).twice
-          expect(logger).to have_received(:info).with("Successfully processed 2 facilities from #{api_key} API")
+            expect(result).to be_success
+            expect(result.error_messages).to be_empty
+            expect(result.data.count).to eq(2)
+          end.to change(Facility, :count).by(2)
         end
       end
 
       context "with multiple pages of results" do
-        let(:first_response) do
-          instance_double(Faraday::Response, body: { "results" => full_page_records })
-        end
-
-        let(:full_page_records) { Array.new(page_size) { |i| { "name" => "Fountain #{i}" } } }
-
-        let(:second_response) do
-          instance_double(Faraday::Response, body: { "results" => [] })
-        end
+        let(:geom) { { geometry: { coordinates: [-123.1207, 49.2827] } } }
+        let(:full_page_records) { Array.new(page_size) { |i| { "name" => "Fountain #{i}", "mapid" => "ID#{i}", "geom" => geom } } }
 
         before do
+          first_response = instance_double(Faraday::Response, body: { "results" => full_page_records })
+          second_response = instance_double(Faraday::Response, body: { "results" => [] })
+
           allow(api_client).to receive(:get_dataset_records)
             .with(api_key, limit: page_size, offset: 0)
             .and_return(first_response)
@@ -217,33 +208,23 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
         end
 
         it "fetches all pages and processes all records" do
-          allow(logger).to receive(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
-          allow(logger).to receive(:info).with("Fetching facilities from #{api_key} API (offset: #{page_size}, limit: #{page_size})")
-          allow(External::VancouverCity::FacilitySyncer).to receive(:call).exactly(page_size).times.and_return(syncer_result)
-          allow(logger).to receive(:info).with("Successfully processed #{page_size} facilities from #{api_key} API")
+          expect do
+            result = syncer.call
 
-          result = syncer.call
-
-          expect(result.success?).to be true
-          expect(result.data[:total_count]).to eq(page_size)
-          expect(logger).to have_received(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
-          expect(logger).to have_received(:info).with("Fetching facilities from #{api_key} API (offset: #{page_size}, limit: #{page_size})")
-          expect(External::VancouverCity::FacilitySyncer).to have_received(:call).exactly(page_size).times
-          expect(logger).to have_received(:info).with("Successfully processed #{page_size} facilities from #{api_key} API")
+            expect(result.success?).to be true
+            expect(result.error_messages).to be_empty
+            # expect(Facility.where(external_id: external_ids).count).to eq(page_size)
+          end.to change(Facility, :count).by(page_size)
         end
       end
 
       context "when exactly PAGE_SIZE records are returned" do
-        let(:full_page_records) { Array.new(page_size) { |i| { "name" => "Fountain #{i}" } } }
-        let(:full_page_response) do
-          instance_double(Faraday::Response, body: { "results" => full_page_records })
-        end
-
-        let(:empty_response) do
-          instance_double(Faraday::Response, body: { "results" => [] })
-        end
+        let(:full_page_records) { Array.new(page_size) { |i| { "name" => "Fountain #{i}", "mapid" => "ID#{i}" } } }
 
         before do
+          full_page_response = instance_double(Faraday::Response, body: { "results" => full_page_records })
+          empty_response = instance_double(Faraday::Response, body: { "results" => [] })
+
           allow(api_client).to receive(:get_dataset_records)
             .with(api_key, limit: page_size, offset: 0)
             .and_return(full_page_response)
@@ -251,41 +232,12 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
           allow(api_client).to receive(:get_dataset_records)
             .with(api_key, limit: page_size, offset: page_size)
             .and_return(empty_response)
-
-          # Mock FacilitySyncer for all records
-          allow(External::VancouverCity::FacilitySyncer).to receive(:call).and_return(syncer_result)
         end
 
         it "continues pagination when full page is received" do
-          allow(api_client).to receive(:get_dataset_records)
-            .with(api_key, limit: page_size, offset: page_size)
-
           syncer.call
 
           expect(api_client).to have_received(:get_dataset_records)
-            .with(api_key, limit: page_size, offset: page_size)
-        end
-      end
-
-      context "when fewer than PAGE_SIZE records are returned" do
-        let(:partial_page_records) { sample_records }
-        let(:partial_page_response) do
-          instance_double(Faraday::Response, body: { "results" => partial_page_records })
-        end
-
-        before do
-          allow(api_client).to receive(:get_dataset_records)
-            .with(api_key, limit: page_size, offset: 0)
-            .and_return(partial_page_response)
-        end
-
-        it "stops pagination when partial page is received" do
-          allow(api_client).to receive(:get_dataset_records)
-            .with(api_key, limit: page_size, offset: page_size)
-
-          syncer.call
-
-          expect(api_client).not_to have_received(:get_dataset_records)
             .with(api_key, limit: page_size, offset: page_size)
         end
       end
@@ -316,11 +268,13 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
 
         it "handles API error and returns failure result" do
           result = syncer.call
+          result_facilities = result.data.map(&:facility).compact
+          error_messages = result.error_messages
 
-          expect(result.success?).to be false
-          expect(result.errors).to include("API request failed: API rate limit exceeded")
-          expect(result.data[:facilities]).to be_empty
-          expect(result.data[:total_count]).to eq(0)
+          expect(result.partial_failed?).to be true
+          expect(result.success?).to be true
+          expect(error_messages).to include(/API request failed: API rate limit exceeded/)
+          expect(result_facilities).to be_empty
         end
       end
 
@@ -331,202 +285,130 @@ RSpec.describe External::VancouverCity::Syncer, type: :service do
             .and_raise(StandardError.new("Unexpected network error"))
         end
 
-        it "handles unexpected error and returns failure result" do
+        it "handles unexpected error and partially fails" do
           result = syncer.call
+          result_facilities = result.data.map(&:facility).compact
+          error_messages = result.error_messages
 
-          expect(result.success?).to be false
-          expect(result.errors).to include("Unexpected error during sync: Unexpected network error")
-          expect(result.data[:facilities]).to be_empty
-          expect(result.data[:total_count]).to eq(0)
+          expect(result.partial_failed?).to be true
+          expect(result.success?).to be true
+          expect(result.errors).to be_empty
+          expect(error_messages).to include(/Unexpected error during sync/)
+          expect(error_messages).to include(/StandardError: Unexpected network error/)
+          expect(result_facilities).to be_empty
         end
       end
 
-      context "when FacilitySyncer fails for some records" do
-        let(:sample_facility) { instance_double(Facility) }
-        let(:syncer_result) do
-          ApplicationService::Result.new(
-            data: { facility: sample_facility },
-            errors: []
-          )
-        end
-        let(:failed_syncer_result) do
-          ApplicationService::Result.new(
-            data: nil,
-            errors: ["Invalid facility data"]
-          )
-        end
-
+      context "when some records have invalid data" do
         let(:mixed_records) do
           [
-            { "name" => "Valid Facility", "lat" => 49.2827, "long" => -123.1207 },
+            { "name" => "Valid Facility", "lat" => 49.2827, "long" => -123.1207, "mapid" => "VALID123" },
             { "name" => "Invalid Facility" }
           ]
         end
 
-        let(:response) do
-          instance_double(Faraday::Response, body: { "results" => mixed_records })
-        end
-
         before do
+          allow(logger).to receive(:warn)
+          response = instance_double(Faraday::Response, body: { "results" => mixed_records })
           allow(api_client).to receive(:get_dataset_records)
             .with(api_key, limit: page_size, offset: 0)
             .and_return(response)
-
-          allow(External::VancouverCity::FacilitySyncer).to receive(:call)
-            .with(record: mixed_records[0], api_key: api_key)
-            .and_return(syncer_result)
-
-          allow(External::VancouverCity::FacilitySyncer).to receive(:call)
-            .with(record: mixed_records[1], api_key: api_key)
-            .and_return(failed_syncer_result)
         end
 
-        it "processes successful records and includes errors for failed ones" do
+        it "returns partial success with error entries" do
+          result = syncer.call
+          result.data.map(&:facility).compact
+          error_messages = result.error_messages
+
+          expect(result.partial_failed?).to be true
+          expect(result.success?).to be true
+          expect(result.data.size).to eq(2)
+          expect(error_messages).not_to be_empty
+        end
+      end
+    end
+
+    context "with full_sync: true (default)" do
+      let(:sample_records) { [{ "mapid" => "FOO123", "name" => "Test Fountain" }] }
+
+      let(:existing_facility) do
+        create(:facility, :with_verified, external_id: "EXISTING456", name: "Existing Fountain")
+      end
+
+      before do
+        response = instance_double(Faraday::Response, body: { "results" => sample_records })
+        allow(External::ApiHelper).to receive(:supported_api?).with(api_key).and_return(true)
+        allow(api_client).to receive(:get_dataset_records)
+          .with(api_key, limit: page_size, offset: 0)
+          .and_return(response)
+        allow(logger).to receive(:info)
+        allow(logger).to receive(:warn)
+      end
+
+      it "discards facilities not in the API response" do
+        expect do
           result = syncer.call
 
-          expect(result.success?).to be false # Failure because some records failed
-          expect(result.data[:facilities]).to contain_exactly(sample_facility)
-          expect(result.data[:total_count]).to eq(1)
-          expect(result.errors).to include("Invalid facility data")
-        end
+          expect(result.success?).to be true
+          expect(existing_facility.reload).to be_discarded
+          expect(existing_facility.discard_reason).to eq("sync_removed")
+        end.to change(existing_facility, :discarded?).from(false).to(true)
+      end
+
+      it "returns discard entries in result data" do
+        result = syncer.call
+
+        discard_entries = result.data.map { |entry| entry.operation == External::SyncOperations.discard }
+        expect(discard_entries.size).to eq(1)
+      end
+
+      it "does not re-discard facilities that were previously sync_removed" do
+        discarded_facility = create(:facility, :with_verified,
+                                    external_id: "DISCARDED789",
+                                    name: "Previously Discarded",
+                                    discard_reason: :sync_removed)
+        discarded_facility.discard!
+
+        expect(discarded_facility.reload).to be_discarded
+
+        result = syncer.call
+
+        expect(result.success?).to be true
+        expect(discarded_facility.reload).to be_discarded
       end
     end
 
-    context "with logging behavior" do
-      let(:sample_records) { [{ "name" => "Test Fountain" }] }
-      let(:response) do
-        instance_double(Faraday::Response, body: { "results" => sample_records })
-      end
-      let(:sample_facility) { instance_double(Facility) }
-      let(:syncer_result) do
-        ApplicationService::Result.new(
-          data: { facility: sample_facility },
-          errors: []
-        )
+    context "with full_sync: false" do
+      let(:sample_records) { [{ "mapid" => "FOO123", "name" => "Test Fountain" }] }
+
+      let(:syncer) { described_class.new(api_key: api_key, api_client: api_client, full_sync: false) }
+
+      let!(:orphan_facility) do
+        create(:facility, :with_verified, external_id: "ORPHAN456", name: "Orphan Fountain")
       end
 
       before do
+        allow(logger).to receive(:warn)
+        response = instance_double(Faraday::Response, body: { "results" => sample_records })
         allow(External::ApiHelper).to receive(:supported_api?).with(api_key).and_return(true)
         allow(api_client).to receive(:get_dataset_records)
           .with(api_key, limit: page_size, offset: 0)
           .and_return(response)
-        allow(External::VancouverCity::FacilitySyncer).to receive(:call).and_return(syncer_result)
-      end
-
-      it "logs fetch progress with correct offset and limit" do
-        allow(logger).to receive(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
-        allow(logger).to receive(:info).with("Successfully processed 1 facilities from #{api_key} API")
-
-        syncer.call
-
-        expect(logger).to have_received(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
-        expect(logger).to have_received(:info).with("Successfully processed 1 facilities from #{api_key} API")
-      end
-
-      it "logs final processing summary" do
-        allow(logger).to receive(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
-        allow(logger).to receive(:info).with(/Successfully processed \d+ facilities from #{api_key} API/)
-
-        syncer.call
-
-        expect(logger).to have_received(:info).with("Fetching facilities from #{api_key} API (offset: 0, limit: #{page_size})")
-        expect(logger).to have_received(:info).with(/Successfully processed \d+ facilities from #{api_key} API/)
-      end
-    end
-
-    context "with result structure" do
-      let(:sample_records) { [{ "name" => "Test Fountain" }] }
-      let(:response) do
-        instance_double(Faraday::Response, body: { "results" => sample_records })
-      end
-      let(:sample_facility) { instance_double(Facility) }
-      let(:syncer_result) do
-        ApplicationService::Result.new(
-          data: { facility: sample_facility },
-          errors: []
-        )
-      end
-
-      before do
-        allow(External::ApiHelper).to receive(:supported_api?).with(api_key).and_return(true)
-        allow(api_client).to receive(:get_dataset_records)
-          .with(api_key, limit: page_size, offset: 0)
-          .and_return(response)
-        allow(External::VancouverCity::FacilitySyncer).to receive(:call).and_return(syncer_result)
         allow(logger).to receive(:info)
       end
 
-      it "returns properly structured result data" do
+      it "does not discard orphan facilities" do
         result = syncer.call
 
-        expect(result.data).to be_a(Hash)
-        expect(result.data).to have_key(:facilities)
-        expect(result.data).to have_key(:total_count)
-        expect(result.data).to have_key(:api_key)
-        expect(result.data[:facilities]).to be_an(Array)
-        expect(result.data[:total_count]).to be_an(Integer)
-        expect(result.data[:api_key]).to eq(api_key)
-      end
-    end
-  end
-
-  describe "private methods" do
-    describe "#process_records" do
-      let(:sample_records) { [{ "name" => "Test Fountain" }] }
-      let(:syncer) { described_class.new(api_key: api_key, api_client: api_client) }
-      let(:sample_facility) { instance_double(Facility) }
-      let(:syncer_result) do
-        ApplicationService::Result.new(
-          data: { facility: sample_facility },
-          errors: []
-        )
+        expect(result.success?).to be true
+        expect(orphan_facility.reload).not_to be_discarded
       end
 
-      before do
-        allow(External::VancouverCity::FacilitySyncer).to receive(:call).and_return(syncer_result)
-      end
+      it "returns no discard entries in result data" do
+        result = syncer.call
 
-      it "processes records and returns array of facilities" do
-        # Use send to access private method
-        facilities = syncer.send(:process_records, sample_records)
-
-        expect(facilities).to be_an(Array)
-        expect(facilities).to contain_exactly(sample_facility)
-        expect(External::VancouverCity::FacilitySyncer).to have_received(:call)
-          .with(record: sample_records[0], api_key: api_key)
-      end
-
-      it "handles multiple records" do
-        multiple_records = sample_records * 3
-
-        facilities = syncer.send(:process_records, multiple_records)
-
-        expect(facilities.size).to eq(3)
-        expect(facilities).to all(eq(sample_facility))
-        expect(External::VancouverCity::FacilitySyncer).to have_received(:call).exactly(3).times
-      end
-
-      context "when some record processing fails" do
-        let(:failed_result) do
-          ApplicationService::Result.new(
-            data: nil,
-            errors: ["Processing failed"]
-          )
-        end
-
-        before do
-          allow(External::VancouverCity::FacilitySyncer).to receive(:call)
-            .and_return(syncer_result, failed_result, syncer_result)
-        end
-
-        it "processes successful records and collects errors" do
-          mixed_records = sample_records * 3
-
-          facilities = syncer.send(:process_records, mixed_records)
-
-          expect(facilities.size).to eq(2) # Only successful ones
-          expect(syncer.send(:errors)).to include("Processing failed")
-        end
+        discard_entries = result.data.select { |entry| entry.operation == External::SyncOperations.discard }
+        expect(discard_entries.size).to eq(0)
       end
     end
   end

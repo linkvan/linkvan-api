@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Facilities::DiscardReasonComponent, type: :component do
   subject(:component) { described_class.new(discard_reason) }
 
-  let(:discard_reason) { :none }
+  let(:discard_reason) { nil }
 
   describe "#initialize" do
     context "when discard_reason is a symbol" do
@@ -59,15 +59,15 @@ RSpec.describe Facilities::DiscardReasonComponent, type: :component do
     context "with nil discard_reason" do
       let(:discard_reason) { nil }
 
-      it "returns error message for nil" do
-        expect(component.call).to have_text("Unsupported value ''")
+      it "returns 'None' text" do
+        expect(component.call).to have_text("None")
       end
     end
   end
 
   describe ".select_options" do
     it "returns inverted hash as array of arrays" do
-      expected = [["None", :none], ["Closed", :closed], ["Duplicated", :duplicated]]
+      expected = [["None", nil], ["Closed", :closed], ["Duplicated", :duplicated], ["Removed by Sync", :sync_removed]]
       expect(described_class.select_options).to eq(expected)
     end
   end
@@ -92,11 +92,11 @@ RSpec.describe Facilities::DiscardReasonComponent, type: :component do
     end
 
     context "with string discard reason" do
-      let(:discard_reason) { "none" }
+      let(:discard_reason) { "sync_removed" }
 
       it "renders the correct text" do
         render_inline(component)
-        expect(rendered_content).to have_text("None")
+        expect(rendered_content).to have_text("Removed by Sync")
       end
     end
   end

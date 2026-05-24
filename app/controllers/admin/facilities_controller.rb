@@ -75,42 +75,55 @@ class Admin::FacilitiesController < Admin::BaseController
 
   def load_facilities
     facilities = Facility.all
-
-    case params[:status]
-    when "live"
-      facilities = facilities.live
-    when "pending_reviews"
-      facilities = facilities.pending_reviews
-    when "discarded"
-      facilities = facilities.discarded
-    end
-
-    if params[:service] == "none"
-      facilities = facilities.without_services
-    elsif params[:service].present?
-      facilities = facilities.with_service(params[:service])
-    end
-
-    if params[:welcome_customer] == "none"
-      facilities = facilities.without_welcomes
-    elsif params[:welcome_customer].present?
-      facilities = facilities.joins(:facility_welcomes)
-                             .where(facility_welcomes: { customer: params[:welcome_customer] })
-    end
-
-    if params[:q].present?
-      facilities = facilities.name_search(params[:q]).or(
-        facilities.address_search(params[:q])
-      )
-    end
-
-    facilities = facilities.order(updated_at: :asc)
+    facilities = filter_by_status(facilities)
+    facilities = filter_by_service(facilities)
+    facilities = filter_by_welcome(facilities)
+    facilities = filter_by_search(facilities)
+    facilities = facilities.with_associations.order(updated_at: :desc)
 
     @pagy, @facilities = pagy(facilities)
   end
 
+  def filter_by_status(facilities)
+    case params[:status]
+    when "live" then facilities.live
+    when "pending_reviews" then facilities.pending_reviews
+    when "discarded" then facilities.discarded
+    else facilities
+    end
+  end
+
+  def filter_by_service(facilities)
+    if params[:service] == "none"
+      facilities.without_services
+    elsif params[:service].present?
+      facilities.with_service(params[:service])
+    else
+      facilities
+    end
+  end
+
+  def filter_by_welcome(facilities)
+    if params[:welcome_customer] == "none"
+      facilities.without_welcomes
+    elsif params[:welcome_customer].present?
+      facilities.joins(:facility_welcomes)
+                .where(facility_welcomes: { customer: params[:welcome_customer] })
+    else
+      facilities
+    end
+  end
+
+  def filter_by_search(facilities)
+    if params[:q].present?
+      facilities.name_search(params[:q]).or(facilities.address_search(params[:q]))
+    else
+      facilities
+    end
+  end
+
   def load_facility
-    @facility = Facility.find(params[:id])
+    @facility = Facility.with_associations.find(params[:id])
   end
 
   def load_services_dropdown

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class FacilityTimeSlot < ApplicationRecord
-  belongs_to :facility_schedule, touch: true
+  belongs_to :facility_schedule, touch: true, inverse_of: :time_slots
   has_one :facility, through: :facility_schedule
 
   validates :from_hour, :to_hour, presence: true,

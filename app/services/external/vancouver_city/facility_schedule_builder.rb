@@ -53,7 +53,10 @@ class External::VancouverCity::FacilityScheduleBuilder < ApplicationService
   # Add schedules to facility based on business requirements
   # Creates open-all-day schedules for all weekdays
   def add_facility_schedules
+    current_schedules = facility.schedules.index_by(&:week_day)
     FacilitySchedule.week_days.each_key do |day|
+      next if current_schedules.key?(day)
+
       facility.schedules.build(
         week_day: day,
         closed_all_day: false,

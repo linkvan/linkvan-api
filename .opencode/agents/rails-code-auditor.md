@@ -1,7 +1,7 @@
 ---
 description: Review code for quality and Rails conventions (report + suggest on request)
 mode: subagent
-model: minimax-coding-plan/MiniMax-M2.5
+model: minimax-coding-plan/MiniMax-M2.7
 permission:
   skill:
     "rails-code-quality": "allow"
