@@ -43,23 +43,13 @@ class FacilityTimeSlot < ApplicationRecord
     return FacilityTimeSlot.none unless [from_hour, from_min, to_hour, to_min].all?(&:present?)
 
     start_i = (from_hour + (from_min/60r)).to_f
-    end_i = (to_hour + (to_min/60r)).to_f
+    end_i   = (to_hour   + (to_min/60r)).to_f
 
-    sql_start_i = Arel.sql("(from_hour + (from_min / 60.0))")
-    sql_end_i = Arel.sql("(to_hour + (to_min / 60.0))")
-
-    query_sql = <<~SQL.squish
-      (
-        SELECT ts.*,
-               #{sql_start_i} as start_i,
-               #{sql_end_i} as end_i
-          FROM facility_time_slots ts
-          WHERE (#{sql_start_i} <= #{end_i})
-            AND (#{sql_end_i} >= #{start_i})
-      ) as facility_time_slots
-    SQL
-
-    FacilityTimeSlot.from(query_sql).where(id: siblings_time_slots)
+    siblings_time_slots.where(
+      "(from_hour + (from_min / 60.0)) <= ? AND (to_hour + (to_min / 60.0)) >= ?",
+      end_i,
+      start_i
+    )
   end
 
   private
