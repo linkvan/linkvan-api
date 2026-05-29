@@ -76,7 +76,7 @@ group :development do
   # powerful developer console.
   gem "pry", "~> 0.16.0"
   gem "pry-rails"
-  gem "pry-stack_explorer", "~> 0.6.2"
+  gem "pry-stack_explorer", "~> 0.6.3"
   gem "pry-remote-reloaded"
   gem "pry-byebug", "~> 3.12.0"
 
