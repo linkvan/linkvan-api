@@ -150,9 +150,9 @@ RSpec.describe Facilities::CsvExporter do
     end
 
     context "with multiple facilities" do
-      let(:facility1) { create(:facility, name: "Facility One") }
-      let(:facility2) { create(:facility, name: "Facility Two") }
-      let(:facilities) { Facility.where(id: [facility1.id, facility2.id]) }
+      let(:downtown_facility) { create(:facility, name: "Facility One") }
+      let(:uptown_facility) { create(:facility, name: "Facility Two") }
+      let(:facilities) { Facility.where(id: [downtown_facility.id, uptown_facility.id]) }
 
       it "includes all facilities" do
         expect(result.data).to include("Facility One")
