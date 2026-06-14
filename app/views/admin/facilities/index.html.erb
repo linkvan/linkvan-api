@@ -7,6 +7,7 @@
         </div>
       
         <div class="level-right">
+            <%= link_to "Export CSV", export_admin_facilities_path(request.query_parameters), class: "button is-light level-item" %>
             <%= link_to "New Facility", new_admin_facility_path, class: "button is-light level-item" %>
         </div>
     </div>

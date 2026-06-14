@@ -62,7 +62,7 @@ group :development, :test do
 end
 
 # Faker gem - available in development/test, and in production when ALLOW_FAKE_DATA is set
-gem "faker", "~> 3.6", groups: [:development, :test].tap { |groups| 
+gem "faker", "~> 3.8", groups: [:development, :test].tap { |groups| 
   groups << :production if ENV['ALLOW_FAKE_DATA'] == 'true' 
 }
 
@@ -76,7 +76,7 @@ group :development do
   # powerful developer console.
   gem "pry", "~> 0.16.0"
   gem "pry-rails"
-  gem "pry-stack_explorer", "~> 0.6.2"
+  gem "pry-stack_explorer", "~> 0.6.3"
   gem "pry-remote-reloaded"
   gem "pry-byebug", "~> 3.12.0"
 
