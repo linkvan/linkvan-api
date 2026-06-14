@@ -206,9 +206,10 @@ RSpec.describe Admin::FacilitiesController do
     end
 
     describe "CSV content" do
-      let!(:facility) { create(:facility, name: "Export Test Facility") }
-
-      before { get_export }
+      before do
+        create(:facility, name: "Export Test Facility")
+        get_export
+      end
 
       it "includes CSV headers" do
         expect(response.body).to include("ID,Name,Status,Address")
