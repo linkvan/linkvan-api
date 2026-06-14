@@ -191,6 +191,67 @@ RSpec.describe Admin::FacilitiesController do
     end
   end
 
+  describe "GET #export" do
+    subject(:get_export) { get :export, params: params }
+
+    let(:params) { {} }
+
+    it "returns a CSV file download" do
+      get_export
+      expect(response).to have_http_status(:success)
+      expect(response.content_type).to include("text/csv")
+      expect(response.headers["Content-Disposition"]).to include("attachment")
+      expect(response.headers["Content-Disposition"]).to include("facilities-")
+      expect(response.headers["Content-Disposition"]).to include(".csv")
+    end
+
+    describe "CSV content" do
+      let!(:facility) { create(:facility, name: "Export Test Facility") }
+
+      before { get_export }
+
+      it "includes CSV headers" do
+        expect(response.body).to include("ID,Name,Status,Address")
+      end
+
+      it "includes facility data" do
+        expect(response.body).to include("Export Test Facility")
+      end
+    end
+
+    describe "filtering" do
+      let(:live_facility) { create(:facility, :with_verified, name: "Live Export Facility") }
+      let(:pending_facility) { create(:facility, verified: false, name: "Pending Export Facility") }
+
+      before do
+        live_facility
+        pending_facility
+      end
+
+      context "with status filter" do
+        let(:params) { { status: "live" } }
+
+        it "exports only filtered facilities" do
+          get_export
+          expect(response.body).to include("Live Export Facility")
+          expect(response.body).not_to include("Pending Export Facility")
+        end
+      end
+    end
+
+    describe "bypasses pagination" do
+      let(:facilities) { create_list(:facility, 25) }
+
+      before { facilities }
+
+      it "exports all facilities regardless of pagination" do
+        get_export
+        csv = CSV.parse(response.body, headers: true)
+        expect(csv.length).to eq(25)
+      end
+    end
+  end
+
   describe "GET #show" do
     let(:facility) { create(:facility) }
 

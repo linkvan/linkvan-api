@@ -43,6 +43,10 @@ Rails.application.routes.draw do
     end
 
     resources :facilities do
+      collection do
+        get :export
+      end
+
       member do
         put :switch_status
       end
