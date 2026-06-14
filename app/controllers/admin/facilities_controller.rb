@@ -1,12 +1,24 @@
 # frozen_string_literal: true
 
 class Admin::FacilitiesController < Admin::BaseController
-  before_action :load_facilities, only: [:index]
   before_action :load_services_dropdown, only: [:index]
   before_action :load_welcomes_dropdown, only: [:index]
   before_action :load_facility, only: %i[show edit update destroy switch_status]
 
-  def index; end
+  def index
+    facilities = apply_filters(Facility.all).with_associations.order(updated_at: :desc)
+    @pagy, @facilities = pagy(facilities)
+  end
+
+  def export
+    facilities = apply_filters(Facility.all).with_associations.order(updated_at: :desc)
+    result = Facilities::CsvExporter.call(facilities)
+
+    send_data result.data,
+              filename: "facilities-#{Date.current.iso8601}.csv",
+              type: "text/csv; charset=utf-8",
+              disposition: "attachment"
+  end
 
   def show; end
 
@@ -73,15 +85,11 @@ class Admin::FacilitiesController < Admin::BaseController
 
   private
 
-  def load_facilities
-    facilities = Facility.all
+  def apply_filters(facilities)
     facilities = filter_by_status(facilities)
     facilities = filter_by_service(facilities)
     facilities = filter_by_welcome(facilities)
-    facilities = filter_by_search(facilities)
-    facilities = facilities.with_associations.order(updated_at: :desc)
-
-    @pagy, @facilities = pagy(facilities)
+    filter_by_search(facilities)
   end
 
   def filter_by_status(facilities)
