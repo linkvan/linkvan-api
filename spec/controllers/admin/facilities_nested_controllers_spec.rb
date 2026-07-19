@@ -184,7 +184,7 @@ RSpec.describe Admin::FacilityTimeSlotsController do
 
     it "sets flash notice" do
       delete :destroy, params: { facility_id: facility.id, schedule_id: schedule.id, id: time_slot.id }
-      expect(flash[:notice]).to match(/Successfully deleted time slot/)
+      expect(flash[:notice]).to include("Successfully deleted time slot")
     end
   end
 end

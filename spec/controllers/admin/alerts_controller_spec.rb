@@ -202,7 +202,7 @@ RSpec.describe Admin::AlertsController do
 
         it "sets flash notice" do
           post_create
-          expect(flash[:notice]).to match(/Successfully created alert/)
+          expect(flash[:notice]).to include("Successfully created alert")
           expect(flash[:notice]).to include("id: #{assigns(:alert).id}")
           expect(flash[:notice]).to include("title: New Alert")
         end
@@ -268,7 +268,7 @@ RSpec.describe Admin::AlertsController do
 
       it "sets flash.now alert" do
         post_create
-        expect(flash.now[:alert]).to match(/Failed to create alert/)
+        expect(flash.now[:alert]).to include("Failed to create alert")
         expect(flash.now[:alert]).to include("Errors:")
       end
 
@@ -333,7 +333,7 @@ RSpec.describe Admin::AlertsController do
       end
 
       it "sets flash notice" do
-        expect(flash[:notice]).to match(/Successfully updated alert/)
+        expect(flash[:notice]).to include("Successfully updated alert")
         expect(flash[:notice]).to include("id: #{alert.id}")
       end
     end
@@ -388,7 +388,7 @@ RSpec.describe Admin::AlertsController do
 
       it "sets flash.now alert" do
         patch_update
-        expect(flash.now[:alert]).to match(/Failed to update alert/)
+        expect(flash.now[:alert]).to include("Failed to update alert")
         expect(flash.now[:alert]).to include("id: #{alert.id}")
         expect(flash.now[:alert]).to include("Errors:")
       end
@@ -427,7 +427,7 @@ RSpec.describe Admin::AlertsController do
 
       it "sets flash notice" do
         delete_destroy
-        expect(flash[:notice]).to match(/Successfully deleted Alert/)
+        expect(flash[:notice]).to include("Successfully deleted Alert")
         expect(flash[:notice]).to include(alert.title)
         expect(flash[:notice]).to include("id: #{alert.id}")
       end
@@ -459,7 +459,7 @@ RSpec.describe Admin::AlertsController do
       end
 
       it "sets flash error" do
-        expect(flash[:error]).to match(/Failed to delete Alert/)
+        expect(flash[:error]).to include("Failed to delete Alert")
         expect(flash[:error]).to include(alert.title)
         expect(flash[:error]).to include("id: #{alert.id}")
         expect(flash[:error]).to include("Errors:")
@@ -541,7 +541,7 @@ RSpec.describe Admin::AlertsController do
         }
       end
 
-      it { expect(flash[:notice]).to match(/Successfully created alert/) }
+      it { expect(flash[:notice]).to include("Successfully created alert") }
       it { expect(flash[:notice]).to include("id: #{assigns(:alert).id}") }
       it { expect(flash[:notice]).to include("title: Flash Test Alert") }
     end
@@ -551,7 +551,7 @@ RSpec.describe Admin::AlertsController do
         post :create, params: { alert: { title: nil, content: nil } }
       end
 
-      it { expect(flash.now[:alert]).to match(/Failed to create alert/) }
+      it { expect(flash.now[:alert]).to include("Failed to create alert") }
       it { expect(flash.now[:alert]).to include("Errors:") }
     end
 
@@ -565,7 +565,7 @@ RSpec.describe Admin::AlertsController do
         }
       end
 
-      it { expect(flash[:notice]).to match(/Successfully updated alert/) }
+      it { expect(flash[:notice]).to include("Successfully updated alert") }
       it { expect(flash[:notice]).to include("id: #{alert.id}") }
     end
 
@@ -576,7 +576,7 @@ RSpec.describe Admin::AlertsController do
         patch :update, params: { id: alert.id, alert: { title: nil } }
       end
 
-      it { expect(flash.now[:alert]).to match(/Failed to update alert/) }
+      it { expect(flash.now[:alert]).to include("Failed to update alert") }
       it { expect(flash.now[:alert]).to include("id: #{alert.id}") }
       it { expect(flash.now[:alert]).to include("Errors:") }
     end
@@ -588,7 +588,7 @@ RSpec.describe Admin::AlertsController do
         delete :destroy, params: { id: alert.id }
       end
 
-      it { expect(flash[:notice]).to match(/Successfully deleted Alert/) }
+      it { expect(flash[:notice]).to include("Successfully deleted Alert") }
       it { expect(flash[:notice]).to include("To Delete") }
       it { expect(flash[:notice]).to include("id: #{alert.id}") }
     end
@@ -604,7 +604,7 @@ RSpec.describe Admin::AlertsController do
       end
 
       it "sets flash error" do
-        expect(flash[:error]).to match(/Failed to delete Alert/)
+        expect(flash[:error]).to include("Failed to delete Alert")
         expect(flash[:error]).to include("Cannot Delete")
         expect(flash[:error]).to include("Errors:")
       end
@@ -703,7 +703,7 @@ RSpec.describe Admin::AlertsController do
         end
 
         it "sets success flash" do
-          expect(flash[:notice]).to match(/Successfully updated alert/)
+          expect(flash[:notice]).to include("Successfully updated alert")
         end
       end
 
@@ -722,7 +722,7 @@ RSpec.describe Admin::AlertsController do
         end
 
         it "sets success flash" do
-          expect(flash[:notice]).to match(/Successfully updated alert/)
+          expect(flash[:notice]).to include("Successfully updated alert")
         end
       end
     end
