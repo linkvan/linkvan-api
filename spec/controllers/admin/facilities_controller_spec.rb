@@ -343,7 +343,7 @@ RSpec.describe Admin::FacilitiesController do
 
         it "sets flash notice" do
           post_create
-          expect(flash[:notice]).to match(/Successfully created facility/)
+          expect(flash[:notice]).to include("Successfully created facility")
         end
       end
     end
@@ -359,7 +359,7 @@ RSpec.describe Admin::FacilitiesController do
 
       it "sets flash alert" do
         post_create
-        expect(flash[:alert]).to match(/Failed to create facility/)
+        expect(flash[:alert]).to include("Failed to create facility")
       end
 
       it "renders new template" do
@@ -396,7 +396,7 @@ RSpec.describe Admin::FacilitiesController do
 
       it "sets flash notice" do
         patch_update
-        expect(flash[:notice]).to match(/Successfully updated facility/)
+        expect(flash[:notice]).to include("Successfully updated facility")
       end
     end
 
@@ -412,7 +412,7 @@ RSpec.describe Admin::FacilitiesController do
 
       it "sets flash alert" do
         patch_update
-        expect(flash[:alert]).to match(/Failed to update facility/)
+        expect(flash[:alert]).to include("Failed to update facility")
       end
 
       it "renders edit template" do
@@ -439,7 +439,7 @@ RSpec.describe Admin::FacilitiesController do
 
         it "sets flash notice" do
           patch_update
-          expect(flash[:notice]).to match(/Successfully undiscarded facility/)
+          expect(flash[:notice]).to include("Successfully undiscarded facility")
         end
       end
 
@@ -456,7 +456,7 @@ RSpec.describe Admin::FacilitiesController do
         end
 
         it "sets flash notice with error" do
-          expect(flash[:notice]).to match(/Failed to undiscarded facility/)
+          expect(flash[:notice]).to include("Failed to undiscarded facility")
         end
       end
     end
@@ -479,7 +479,7 @@ RSpec.describe Admin::FacilitiesController do
 
       it "sets flash notice" do
         delete_destroy
-        expect(flash[:notice]).to match(/Successfully discarded Facility/)
+        expect(flash[:notice]).to include("Successfully discarded Facility")
       end
 
       it "redirects back" do
@@ -503,7 +503,7 @@ RSpec.describe Admin::FacilitiesController do
       end
 
       it "sets flash alert" do
-        expect(flash[:alert]).to match(/Failed to discard Facility/)
+        expect(flash[:alert]).to include("Failed to discard Facility")
       end
 
       it "renders show template" do
@@ -567,7 +567,7 @@ RSpec.describe Admin::FacilitiesController do
       end
 
       it "sets flash alert" do
-        expect(flash[:alert]).to match(/Failed to discard Facility/)
+        expect(flash[:alert]).to include("Failed to discard Facility")
       end
     end
   end
@@ -647,7 +647,7 @@ RSpec.describe Admin::FacilitiesController do
     describe "create success" do
       before { post :create, params: { facility: { name: "Test", phone: "123" } } }
 
-      it { expect(flash[:notice]).to match(/Successfully created facility/) }
+      it { expect(flash[:notice]).to include("Successfully created facility") }
       it { expect(flash[:notice]).to include("(id: #{assigns(:facility).id})") }
     end
 
@@ -656,7 +656,7 @@ RSpec.describe Admin::FacilitiesController do
 
       before { patch :update, params: { id: facility.id, facility: { name: "Updated" } } }
 
-      it { expect(flash[:notice]).to match(/Successfully updated facility/) }
+      it { expect(flash[:notice]).to include("Successfully updated facility") }
       it { expect(flash[:notice]).to include("(id: #{facility.id})") }
     end
 
@@ -665,7 +665,7 @@ RSpec.describe Admin::FacilitiesController do
 
       before { delete :destroy, params: { id: facility.id, facility: { discard_reason: "closed" } } }
 
-      it { expect(flash[:notice]).to match(/Successfully discarded Facility/) }
+      it { expect(flash[:notice]).to include("Successfully discarded Facility") }
       it { expect(flash[:notice]).to include(facility.name) }
       it { expect(flash[:notice]).to include("(id: #{facility.id})") }
     end
@@ -675,7 +675,7 @@ RSpec.describe Admin::FacilitiesController do
 
       before { patch :switch_status, params: { id: facility.id, status: "live" } }
 
-      it { expect(flash[:notice]).to match(/Successfully switched Facility/) }
+      it { expect(flash[:notice]).to include("Successfully switched Facility") }
       it { expect(flash[:notice]).to include(facility.name) }
       it { expect(flash[:notice]).to include("status to live") }
     end
@@ -685,13 +685,13 @@ RSpec.describe Admin::FacilitiesController do
 
       before { patch :update, params: { id: facility.id, undiscard: true } }
 
-      it { expect(flash[:notice]).to match(/Successfully undiscarded facility/) }
+      it { expect(flash[:notice]).to include("Successfully undiscarded facility") }
     end
 
     describe "create failure" do
       before { post :create, params: { facility: { name: nil } } }
 
-      it { expect(flash[:alert]).to match(/Failed to create facility/) }
+      it { expect(flash[:alert]).to include("Failed to create facility") }
       it { expect(flash[:alert]).to include("Errors:") }
     end
 
@@ -700,7 +700,7 @@ RSpec.describe Admin::FacilitiesController do
 
       before { patch :update, params: { id: facility.id, facility: { name: nil } } }
 
-      it { expect(flash[:alert]).to match(/Failed to update facility/) }
+      it { expect(flash[:alert]).to include("Failed to update facility") }
       it { expect(flash[:alert]).to include("(id: #{facility.id})") }
     end
 
@@ -714,7 +714,7 @@ RSpec.describe Admin::FacilitiesController do
         delete :destroy, params: { id: facility.id, facility: { discard_reason: "closed" } }
       end
 
-      it { expect(flash[:alert]).to match(/Failed to discard Facility/) }
+      it { expect(flash[:alert]).to include("Failed to discard Facility") }
       it { expect(flash[:alert]).to include(facility.name) }
       it { expect(flash[:alert]).to include("Errors:") }
     end
@@ -729,7 +729,7 @@ RSpec.describe Admin::FacilitiesController do
         patch :switch_status, params: { id: facility.id, status: "live" }
       end
 
-      it { expect(flash[:alert]).to match(/Failed to discard Facility/) }
+      it { expect(flash[:alert]).to include("Failed to discard Facility") }
       it { expect(flash[:alert]).to include(facility.name) }
       it { expect(flash[:alert]).to include("Errors:") }
     end
