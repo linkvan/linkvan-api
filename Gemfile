@@ -24,7 +24,7 @@ gem "bootsnap", "~> 1.23.0", require: false
 
 # Framework building reusable, tetable and encapsulated ViewComponents in Rails
 # docs: viewcomponent.org
-gem "view_component", "~> 4.11"
+gem "view_component", "~> 4.12"
 
 # Use SCSS for stylesheets
 #gem "sass-rails", "~> 6.0.0"
