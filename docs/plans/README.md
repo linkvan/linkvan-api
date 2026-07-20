@@ -13,3 +13,4 @@ Implementation plans for Linkvan API development.
 | [RuboCop Remediation](rubocop-remediation/plan.md) | Complete | 64/64 (100%) | 2026-03-14 |
 | [Test Coverage Implementation](test-coverage-implementation/plan.md) | Complete | 24/24 (100%) | 2026-01-26 |
 | [Vancouver Water Fountain Sync](vancouver-water-fountain-sync/plan.md) | Not Started | 0/10 (0%) | 2026-03-21 |
+| [Facility Phone Numbers](facility-phone-numbers/plan.md) | Not Started | 0/21 (0%) | 2026-07-19 |

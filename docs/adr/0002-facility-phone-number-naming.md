@@ -1,0 +1,3 @@
+# Model named `FacilityPhoneNumber`, not `FacilityPhone`
+
+Sibling child models of `Facility` use shortened nouns (`FacilityService`, `FacilityWelcome`, `FacilitySchedule`), so `FacilityPhone` would mirror that convention. We chose the longer `FacilityPhoneNumber` / `facility_phone_numbers` specifically to avoid ambiguity with the existing `Facility#phone` legacy string column while both coexist (see ADR-0001). The naming clash would otherwise cause confusion in migrations, specs, and serializer code where `facility.phone` (string) and `facility.facility_phones` (records) appear side by side.

@@ -1,0 +1,3 @@
+# `primary` is set only via `mark_primary!`, never via the admin form
+
+The `primary` flag on **FacilityPhoneNumber** is managed exclusively through a dedicated `mark_primary!` model method (invoked by a `PUT /admin/facilities/:facility_id/phone_numbers/:id/mark_primary` route), not through a checkbox in the create/edit form. This avoids uniqueness-validation conflicts when an admin saves a new row with `primary: true` while another row is already primary, and keeps a single source of truth for the demote-then-promote transaction. Alternatives considered: form checkbox + soft uniqueness validation (fragile UX), form checkbox + autodemote callback (hides side effects).

@@ -1,0 +1,3 @@
+# Keep legacy `Facility#phone` alongside `FacilityPhoneNumber`
+
+The `facilities.phone` string column carries messy, inconsistently-formatted historical data that cannot be reliably backfilled into the new `facility_phone_numbers` table. We are keeping the legacy column unchanged while introducing `FacilityPhoneNumber` rows as the canonical multi-number model. The API returns both `phone` (legacy flat string) and `phone_numbers` (new array) until the frontend has migrated and the column can be safely removed.

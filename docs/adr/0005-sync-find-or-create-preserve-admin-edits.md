@@ -1,0 +1,3 @@
+# Re-sync is find-or-create by `(facility_id, number)` and never clobbers admin edits
+
+On subsequent Vancouver City syncs, a **FacilityPhoneNumber** row is looked up by the unique `(facility_id, number)` pair. If found, the existing row is left untouched — admin-edited `description`, `extension`, and `primary` are preserved. If not found, a new row is created with `primary: true` only when the facility has no existing primary; otherwise it is created with `primary: false`. This means the syncer never destroys or overwrites phone-number rows, and never demotes an admin-chosen primary. Alternatives considered: destroy-and-rebuild on every sync (wipes admin edits); always force synced number as primary (overrides admin intent).
