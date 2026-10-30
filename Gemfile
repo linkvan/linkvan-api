@@ -4,9 +4,9 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.4.5"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
-gem "rails", "~> 8.1.3"
+gem "rails", "~> 8.1.4"
 # Use postgresql as the database for Active Record
-gem "pg", "~> 1.6.2"
+gem "pg", "~> 1.7.0"
 # Use Puma as the app server
 gem "puma", "~> 8.0"
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -20,11 +20,11 @@ gem "bcrypt", "~> 3.1.16"
 # gem "image_processing", "~> 1.2"
 
 # Reduces boot times through caching; required in config/boot.rb
-gem "bootsnap", "~> 1.25.0", require: false
+gem "bootsnap", "~> 1.26.0", require: false
 
 # Framework building reusable, tetable and encapsulated ViewComponents in Rails
 # docs: viewcomponent.org
-gem "view_component", "~> 4.12"
+gem "view_component", "~> 4.19"
 
 # Use SCSS for stylesheets
 #gem "sass-rails", "~> 6.0.0"
@@ -106,7 +106,7 @@ end
 gem "tzinfo-data", platforms: [:mri, :windows]
 
 # Pagination
-gem "pagy", "~> 43.6"
+gem "pagy", "~> 43.8"
 
 # Alternative approach to web apps development.
 # https://github.com/hotwired/hotwire-rails
@@ -134,7 +134,7 @@ gem "importmap-rails"
 # gem "rack-timeout"
 
 # Http client for making API requests
-gem "faraday", "~> 2.14.3"
+gem "faraday", "~> 2.15.0"
 
 # OpenStruct for easy data modeling - removed from standard library since ruby 3.5
 gem "ostruct"
