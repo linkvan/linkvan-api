@@ -303,7 +303,7 @@ GEM
     rack-cors (3.0.0)
       logger
       rack (>= 3.0.14)
-    rack-mini-profiler (4.0.1)
+    rack-mini-profiler (5.0.0)
       rack (>= 1.2.0)
     rack-session (2.1.2)
       base64 (>= 0.1.0)
@@ -529,7 +529,7 @@ DEPENDENCIES
   pry-stack_explorer (~> 0.6.3)
   puma (~> 8.0)
   rack-cors
-  rack-mini-profiler (~> 4.0)
+  rack-mini-profiler (~> 5.0)
   rails (~> 8.1.4)
   rails-controller-testing
   redis (~> 6.0.0)
