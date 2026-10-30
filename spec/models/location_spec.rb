@@ -251,11 +251,10 @@ RSpec.describe Location, type: :model do
       expect(result).to eq(distance)
     end
 
-    it "handles multiple coordinates" do
-      coords = [other_lat, other_long, 49.3, -123.1]
-      location.distance_from(*coords)
-
-      expect(Haversine).to have_received(:distance).with(lat, long, *coords)
+    it "rejects more than one pair of coordinates" do
+      expect do
+        location.distance_from(other_lat, other_long, 49.3, -123.1)
+      end.to raise_error(ArgumentError)
     end
   end
 
