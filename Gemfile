@@ -53,7 +53,7 @@ group :development, :test do
   gem "capybara"
   gem "rails-controller-testing"
 
-   gem "factory_bot_rails", "~> 6.4.3"
+   gem "factory_bot_rails", "~> 6.5.1"
 
    gem 'simplecov', require: false
 
@@ -69,12 +69,12 @@ gem "faker", "~> 3.8", groups: [:development, :test].tap { |groups|
 group :development do
   # Access an interactive console on exception pages or by calling "console" anywhere in the code.
   gem "web-console", "~> 4.3.0"
-  gem "listen", "~> 3.10.0"
+  gem "listen", "~> 3.10.1"
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   # gem "spring"
 
   # powerful developer console.
-  gem "pry", "~> 0.16.0"
+  gem "pry", "~> 0.16.1"
   gem "pry-rails"
   gem "pry-stack_explorer", "~> 0.6.3"
   gem "pry-remote-reloaded"
