@@ -90,7 +90,7 @@ GEM
       debug_inspector (>= 1.2.0)
     bootsnap (1.26.0)
       msgpack (~> 1.5)
-    brakeman (8.0.4)
+    brakeman (8.1.0)
       racc
     builder (3.3.0)
     byebug (13.0.0)
@@ -129,11 +129,11 @@ GEM
     drb (2.2.3)
     erb (6.0.7)
     erubi (1.13.1)
-    factory_bot (6.5.6)
+    factory_bot (6.6.0)
       activesupport (>= 6.1.0)
-    factory_bot_rails (6.4.4)
+    factory_bot_rails (6.5.1)
       factory_bot (~> 6.5)
-      railties (>= 5.0.0)
+      railties (>= 6.1.0)
     faker (3.8.0)
       i18n (>= 1.8.11, < 2)
     faraday (2.15.0)
@@ -201,7 +201,7 @@ GEM
       base64
     language_server-protocol (3.17.0.6)
     lint_roller (1.1.0)
-    listen (3.10.0)
+    listen (3.10.1)
       logger
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -278,7 +278,7 @@ GEM
       actionpack (>= 7.0.0)
       activesupport (>= 7.0.0)
       rack
-    pry (0.16.0)
+    pry (0.16.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
       reline (>= 0.6.0)
@@ -501,7 +501,7 @@ DEPENDENCIES
   dartsass-rails
   devise (~> 5.0.4)
   dotenv-rails
-  factory_bot_rails (~> 6.4.3)
+  factory_bot_rails (~> 6.5.1)
   faker (~> 3.8)
   faraday (~> 2.15.0)
   geo_coord
@@ -510,13 +510,13 @@ DEPENDENCIES
   importmap-rails
   inline_svg
   jwt
-  listen (~> 3.10.0)
+  listen (~> 3.10.1)
   memory_profiler
   ostruct
   pagy (~> 43.8)
   pg (~> 1.7.0)
   propshaft
-  pry (~> 0.16.0)
+  pry (~> 0.16.1)
   pry-byebug (~> 3.12.0)
   pry-rails
   pry-remote-reloaded
