@@ -1,32 +1,111 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+# Dependabot configuration
+# Docs: https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+#
+# Philosophy: one weekly batch, grouped by risk instead of one PR per gem.
+#   - patch + minor updates are grouped per dependency type (dev / production)
+#   - major updates stay ungrouped so each one gets its own review
+#
+# The default branch is `develop`, so `target-branch` is intentionally omitted.
+# Setting it explicitly would disable grouping/commit-message options for
+# security updates.
 
 version: 2
 updates:
-  - package-ecosystem: "bundler" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "bundler"
+    directory: "/"
     schedule:
       interval: "weekly"
-    target-branch: "develop"
+      day: "friday"
+      time: "09:00"
+      timezone: "America/Los_Angeles"
+    open-pull-requests-limit: 10
+    rebase-strategy: "auto"
+    versioning-strategy: "increase"
     labels:
       - "ruby"
       - "dependencies"
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(deps-dev)"
+    cooldown:
+      default-days: 7
+      semver-major-days: 30
+    groups:
+      ruby-tooling-deps:
+        dependency-type: "development"
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+      ruby-runtime-deps:
+        dependency-type: "production"
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+      ruby-security:
+        applies-to: "security-updates"
+        patterns:
+          - "*"
 
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
-    target-branch: "develop"
+      day: "friday"
+      time: "09:00"
+      timezone: "America/Los_Angeles"
+    open-pull-requests-limit: 10
+    rebase-strategy: "auto"
+    versioning-strategy: "increase"
     labels:
       - "javascript"
       - "dependencies"
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(deps-dev)"
+    cooldown:
+      default-days: 7
+      semver-major-days: 30
+    groups:
+      js-tooling-deps:
+        dependency-type: "development"
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+      js-runtime-deps:
+        dependency-type: "production"
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+      js-security:
+        applies-to: "security-updates"
+        patterns:
+          - "*"
 
-  - package-ecosystem: "composer"
+  - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
-    target-branch: "develop"
+      day: "friday"
+      time: "09:00"
+      timezone: "America/Los_Angeles"
+    open-pull-requests-limit: 5
     labels:
+      - "github-actions"
       - "dependencies"
+    commit-message:
+      prefix: "chore(ci)"
+    groups:
+      github-actions-minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
