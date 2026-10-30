@@ -5,7 +5,13 @@ RSpec.describe Users::ShowComponent, type: :component do
 
   let(:user) { create(:user, organization: "Test Org", phone_number: "123-456-7890") }
 
-  it { expect { render_inline(component) }.not_to raise_exception }
+  # view_component >= 4.19 forbids rendering the same instance twice, so every
+  # render builds a fresh component instead of reusing the memoized subject.
+  def render_component
+    render_inline(described_class.new(user: user))
+  end
+
+  it { expect { render_component }.not_to raise_exception }
 
   describe "#card_id" do
     it "returns the dom_id for the user" do
@@ -15,7 +21,7 @@ RSpec.describe Users::ShowComponent, type: :component do
 
   context "when rendering the component" do
     before do
-      render_inline(component)
+      render_component
     end
 
     it "displays user name" do
@@ -61,7 +67,7 @@ RSpec.describe Users::ShowComponent, type: :component do
     let(:user) { create(:admin_user) }
 
     before do
-      render_inline(component)
+      render_component
     end
 
     it "displays admin as True" do
@@ -73,7 +79,7 @@ RSpec.describe Users::ShowComponent, type: :component do
     let(:user) { create(:user, :not_verified) }
 
     before do
-      render_inline(component)
+      render_component
     end
 
     it "displays admin as False" do
@@ -85,14 +91,14 @@ RSpec.describe Users::ShowComponent, type: :component do
     let(:user) { create(:user, organization: nil, phone_number: "123-456-7890") }
 
     before do
-      render_inline(component)
+      render_component
     end
 
     context "with a user missing phone number" do
       let(:user) { create(:user, organization: "Test Org", phone_number: nil) }
 
       before do
-        render_inline(component)
+        render_component
       end
 
       it "still renders without error" do
@@ -109,7 +115,7 @@ RSpec.describe Users::ShowComponent, type: :component do
     let(:user) { create(:user, phone_number: nil) }
 
     before do
-      render_inline(component)
+      render_component
     end
 
     it "still renders without error" do
