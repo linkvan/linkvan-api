@@ -3,6 +3,8 @@
 #
 # Philosophy: one weekly batch, grouped by risk instead of one PR per gem.
 #   - patch + minor updates are grouped per dependency type (dev / production)
+#   - linters are grouped separately: a RuboCop major enables new cops and
+#     should never block a runtime bump (see #388)
 #   - major updates stay ungrouped so each one gets its own review
 #
 # The default branch is `develop`, so `target-branch` is intentionally omitted.
@@ -18,7 +20,7 @@ updates:
       day: "friday"
       time: "09:00"
       timezone: "America/Los_Angeles"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 15
     rebase-strategy: "auto"
     versioning-strategy: "increase"
     labels:
@@ -31,10 +33,20 @@ updates:
       default-days: 7
       semver-major-days: 30
     groups:
+      ruby-lint-deps:
+        patterns:
+          - "rubocop"
+          - "rubocop-*"
+        update-types:
+          - "minor"
+          - "patch"
       ruby-tooling-deps:
         dependency-type: "development"
         patterns:
           - "*"
+        exclude-patterns:
+          - "rubocop"
+          - "rubocop-*"
         update-types:
           - "minor"
           - "patch"
