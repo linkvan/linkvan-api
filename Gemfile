@@ -120,7 +120,6 @@ gem "colorize"
 # Adds support to inline SVG images
 gem "inline_svg"
 
-gem "haversine", git: "https://github.com/fabionl/haversine.git"
 gem "geo_coord", require: "geo/coord"
 gem 'geocoder', '~> 1.8'
 
