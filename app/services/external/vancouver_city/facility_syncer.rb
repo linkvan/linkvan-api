@@ -15,7 +15,7 @@ class External::VancouverCity::FacilitySyncer < ApplicationService
     super()
   end
 
-  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable-next Metrics/AbcSize
   def call
     external_id = ::External::VancouverCity::FacilityMapper.external_id(record)
     log.info "Processing facility record with external_id '#{external_id}' and name '#{record['name']}' using operation '#{operation.name}'"
@@ -59,7 +59,6 @@ class External::VancouverCity::FacilitySyncer < ApplicationService
       errors: errors
     )
   end
-  # rubocop:enable Metrics/AbcSize
 
   private
 

@@ -67,6 +67,14 @@ Rails/FilePath:
 Rails/I18nLocaleTexts:
   Enabled: false
 
+# New in rubocop-rails 2.38. Rewriting `params[:id]` as `params.expect(:id)`
+# across 21 controllers changes behaviour: a missing param becomes
+# ActionController::ParameterMissing (400) instead of nil -> RecordNotFound
+# (404). That is a deliberate API decision, not a side effect of a dependency
+# bump, so the cop stays off until the migration gets its own PR.
+Rails/StrongParametersExpect:
+  Enabled: false
+
 
 
 # Prefer &&/|| over and/or.
