@@ -20,11 +20,11 @@ gem "bcrypt", "~> 3.1.16"
 # gem "image_processing", "~> 1.2"
 
 # Reduces boot times through caching; required in config/boot.rb
-gem "bootsnap", "~> 1.26.0", require: false
+gem "bootsnap", "~> 1.26.1", require: false
 
 # Framework building reusable, tetable and encapsulated ViewComponents in Rails
 # docs: viewcomponent.org
-gem "view_component", "~> 4.19"
+gem "view_component", "~> 4.20"
 
 # Use SCSS for stylesheets
 #gem "sass-rails", "~> 6.0.0"
@@ -134,7 +134,7 @@ gem "importmap-rails"
 # gem "rack-timeout"
 
 # Http client for making API requests
-gem "faraday", "~> 2.15.0"
+gem "faraday", "~> 2.15.1"
 
 # OpenStruct for easy data modeling - removed from standard library since ruby 3.5
 gem "ostruct"
