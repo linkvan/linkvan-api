@@ -119,9 +119,8 @@ RSpec.describe FacilityWelcome, type: :model do
 
     it "updates facility timestamp on update" do
       facility_welcome = create(:facility_welcome, facility: facility)
-      # rubocop:disable Rails/SkipsModelValidations
+      # rubocop:disable-next Rails/SkipsModelValidations
       facility_welcome.touch
-      # rubocop:enable Rails/SkipsModelValidations
       expect(facility.reload.updated_at).to be > original_updated_at
     end
   end

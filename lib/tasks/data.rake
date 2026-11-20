@@ -2,7 +2,7 @@
 
 require "colorize"
 
-# rubocop:disable Metrics/BlockLength
+# rubocop:disable-next Metrics/BlockLength
 namespace :data do
   desc "Create facilities from db/fake_data.json JSON file"
   task seed_fake: :environment do
@@ -190,4 +190,3 @@ namespace :data do
     logger.info "[seed_fake] Done creating facilities. #{counter} facilities created."
   end
 end
-# rubocop:enable Metrics/BlockLength

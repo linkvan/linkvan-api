@@ -1,18 +1,18 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.4.5"
+ruby "3.4.13"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails"
-gem "rails", "~> 8.1.3"
+gem "rails", "~> 8.1.4"
 # Use postgresql as the database for Active Record
-gem "pg", "~> 1.6.2"
+gem "pg", "~> 1.7.0"
 # Use Puma as the app server
 gem "puma", "~> 8.0"
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 #gem "jbuilder", "~> 2.7"
 # Use Redis adapter to run Action Cable in production
-gem "redis", "~> 5.4.1"
+gem "redis", "~> 6.0.0"
 # Use Active Model has_secure_password
 gem "bcrypt", "~> 3.1.16"
 
@@ -20,11 +20,11 @@ gem "bcrypt", "~> 3.1.16"
 # gem "image_processing", "~> 1.2"
 
 # Reduces boot times through caching; required in config/boot.rb
-gem "bootsnap", "~> 1.23.0", require: false
+gem "bootsnap", "~> 1.26.1", require: false
 
 # Framework building reusable, tetable and encapsulated ViewComponents in Rails
 # docs: viewcomponent.org
-gem "view_component", "~> 4.11"
+gem "view_component", "~> 4.24"
 
 # Use SCSS for stylesheets
 #gem "sass-rails", "~> 6.0.0"
@@ -53,7 +53,7 @@ group :development, :test do
   gem "capybara"
   gem "rails-controller-testing"
 
-   gem "factory_bot_rails", "~> 6.4.3"
+   gem "factory_bot_rails", "~> 6.5.1"
 
    gem 'simplecov', require: false
 
@@ -69,12 +69,12 @@ gem "faker", "~> 3.8", groups: [:development, :test].tap { |groups|
 group :development do
   # Access an interactive console on exception pages or by calling "console" anywhere in the code.
   gem "web-console", "~> 4.3.0"
-  gem "listen", "~> 3.10.0"
+  gem "listen", "~> 3.10.1"
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   # gem "spring"
 
   # powerful developer console.
-  gem "pry", "~> 0.16.0"
+  gem "pry", "~> 0.16.1"
   gem "pry-rails"
   gem "pry-stack_explorer", "~> 0.6.3"
   gem "pry-remote-reloaded"
@@ -82,7 +82,7 @@ group :development do
 
   # Display performance information such as SQL time and flame graphs for each request in your browser.
   # Can be configured to work on production as well see: https://github.com/MiniProfiler/rack-mini-profiler/blob/master/README.md
-  gem "rack-mini-profiler", "~> 4.0"
+  gem "rack-mini-profiler", "~> 5.0"
   gem "memory_profiler"
   gem "stackprof"
 
@@ -106,7 +106,7 @@ end
 gem "tzinfo-data", platforms: [:mri, :windows]
 
 # Pagination
-gem "pagy", "~> 43.5"
+gem "pagy", "~> 43.8"
 
 # Alternative approach to web apps development.
 # https://github.com/hotwired/hotwire-rails
@@ -120,7 +120,6 @@ gem "colorize"
 # Adds support to inline SVG images
 gem "inline_svg"
 
-gem "haversine", git: "https://github.com/fabionl/haversine.git"
 gem "geo_coord", require: "geo/coord"
 gem 'geocoder', '~> 1.8'
 
@@ -135,7 +134,7 @@ gem "importmap-rails"
 # gem "rack-timeout"
 
 # Http client for making API requests
-gem "faraday", "~> 2.14.2"
+gem "faraday", "~> 2.15.1"
 
 # OpenStruct for easy data modeling - removed from standard library since ruby 3.5
 gem "ostruct"

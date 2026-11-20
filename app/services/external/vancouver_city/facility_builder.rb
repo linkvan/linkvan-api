@@ -48,9 +48,8 @@ class External::VancouverCity::FacilityBuilder < ApplicationService
     if facility&.valid?
       Result.new(data: ResultData.new(facility: facility), errors: errors)
     else
-      # rubocop:disable Style/SafeNavigationChainLength
+      # rubocop:disable-next Style/SafeNavigationChainLength
       add_error("Facility '#{facility&.name}' is invalid: #{facility&.errors&.full_messages&.join(', ')}")
-      # rubocop:enable Style/SafeNavigationChainLength
       Result.new(data: ResultData.new, errors: errors)
     end
   end

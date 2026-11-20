@@ -52,9 +52,8 @@ class Location
     [lat, long]
   end
 
-  def distance_from(*coords)
-    # Uses Haversine gem to make distance calculations.
-    #    https://github.com/fabionl/haversine
-    Haversine.distance(lat, long, *coords)
+  def distance_from(to_lat, to_long)
+    # Uses the vendored haversine implementation, see app/models/haversine.rb
+    Haversine.distance(lat, long, to_lat, to_long)
   end
 end

@@ -5,6 +5,12 @@ RSpec.describe Facilities::CardComponent, type: :component do
 
   let(:facility) { create(:facility) }
 
+  # view_component >= 4.19 forbids rendering the same instance twice, so every
+  # render builds a fresh component instead of reusing the memoized subject.
+  def render_component
+    render_inline(described_class.new(facility: facility))
+  end
+
   describe "#initialize" do
     it "assigns the facility" do
       expect(component.facility).to eq(facility)
@@ -25,10 +31,10 @@ RSpec.describe Facilities::CardComponent, type: :component do
   end
 
   describe "rendering" do
-    before { render_inline(component) }
+    before { render_component }
 
     it "renders without error" do
-      expect { render_inline(component) }.not_to raise_exception
+      expect { render_component }.not_to raise_exception
     end
 
     it "renders a card with facility class and id" do
@@ -137,7 +143,7 @@ RSpec.describe Facilities::CardComponent, type: :component do
     context "when facility is live" do
       let(:facility) { create(:facility, :with_verified) }
 
-      before { render_inline(component) }
+      before { render_component }
 
       it "renders live status icon" do
         expect(rendered_content).to have_css(".icon.has-text-success .fas.fa-check-square")
@@ -149,7 +155,7 @@ RSpec.describe Facilities::CardComponent, type: :component do
     end
 
     context "when facility is pending reviews" do
-      before { render_inline(component) }
+      before { render_component }
 
       it "renders pending status icon" do
         expect(rendered_content).to have_css(".icon.has-text-danger .fas.fa-times")
@@ -163,7 +169,7 @@ RSpec.describe Facilities::CardComponent, type: :component do
     context "when facility is discarded" do
       let(:facility) { create(:facility).tap(&:discard) }
 
-      before { render_inline(component) }
+      before { render_component }
 
       it "renders discarded status icon" do
         expect(rendered_content).to have_css(".icon.has-text-warning .fas.fa-minus-circle")
@@ -180,13 +186,13 @@ RSpec.describe Facilities::CardComponent, type: :component do
       let(:facility) { create(:facility, address: "") }
 
       it "renders without error" do
-        expect { render_inline(component) }.not_to raise_exception
+        expect { render_component }.not_to raise_exception
       end
     end
 
     context "when facility has no associated data" do
       it "renders basic structure" do
-        render_inline(component)
+        render_component
         expect(rendered_content).to have_css("div.card.facility")
         expect(rendered_content).to have_link(facility.name)
       end

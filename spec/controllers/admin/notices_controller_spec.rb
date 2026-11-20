@@ -147,7 +147,7 @@ RSpec.describe Admin::NoticesController do
 
         it "sets flash notice" do
           post_create
-          expect(flash[:notice]).to match(/Successfully created notice/)
+          expect(flash[:notice]).to include("Successfully created notice")
           expect(flash[:notice]).to include("id: #{assigns(:notice).id}")
           expect(flash[:notice]).to include("title: New Notice")
         end
@@ -261,7 +261,7 @@ RSpec.describe Admin::NoticesController do
 
       it "sets flash.now notice" do
         post_create
-        expect(flash.now[:notice]).to match(/Failed to create notice/)
+        expect(flash.now[:notice]).to include("Failed to create notice")
         expect(flash.now[:notice]).to include("Errors:")
       end
 
@@ -320,7 +320,7 @@ RSpec.describe Admin::NoticesController do
       end
 
       it "sets flash notice" do
-        expect(flash[:notice]).to match(/Successfully updated notice/)
+        expect(flash[:notice]).to include("Successfully updated notice")
         expect(flash[:notice]).to include("id: #{notice.id}")
       end
     end
@@ -400,7 +400,7 @@ RSpec.describe Admin::NoticesController do
 
       it "sets flash.now notice" do
         patch_update
-        expect(flash.now[:notice]).to match(/Failed to update notice/)
+        expect(flash.now[:notice]).to include("Failed to update notice")
         expect(flash.now[:notice]).to include("id: #{notice.id}")
         expect(flash.now[:notice]).to include("Errors:")
       end
@@ -439,7 +439,7 @@ RSpec.describe Admin::NoticesController do
 
       it "sets flash notice" do
         delete_destroy
-        expect(flash[:notice]).to match(/Successfully deleted Notice/)
+        expect(flash[:notice]).to include("Successfully deleted Notice")
         expect(flash[:notice]).to include(notice.title)
         expect(flash[:notice]).to include("id: #{notice.id}")
       end
@@ -521,7 +521,7 @@ RSpec.describe Admin::NoticesController do
         }
       end
 
-      it { expect(flash[:notice]).to match(/Successfully created notice/) }
+      it { expect(flash[:notice]).to include("Successfully created notice") }
       it { expect(flash[:notice]).to include("id: #{assigns(:notice).id}") }
       it { expect(flash[:notice]).to include("title: Flash Test Notice") }
     end
@@ -531,7 +531,7 @@ RSpec.describe Admin::NoticesController do
         post :create, params: { notice: { title: nil, content: nil } }
       end
 
-      it { expect(flash.now[:notice]).to match(/Failed to create notice/) }
+      it { expect(flash.now[:notice]).to include("Failed to create notice") }
       it { expect(flash.now[:notice]).to include("Errors:") }
     end
 
@@ -545,7 +545,7 @@ RSpec.describe Admin::NoticesController do
         }
       end
 
-      it { expect(flash[:notice]).to match(/Successfully updated notice/) }
+      it { expect(flash[:notice]).to include("Successfully updated notice") }
       it { expect(flash[:notice]).to include("id: #{notice.id}") }
     end
 
@@ -556,7 +556,7 @@ RSpec.describe Admin::NoticesController do
         patch :update, params: { id: notice.id, notice: { title: nil } }
       end
 
-      it { expect(flash.now[:notice]).to match(/Failed to update notice/) }
+      it { expect(flash.now[:notice]).to include("Failed to update notice") }
       it { expect(flash.now[:notice]).to include("id: #{notice.id}") }
       it { expect(flash.now[:notice]).to include("Errors:") }
     end
@@ -568,7 +568,7 @@ RSpec.describe Admin::NoticesController do
         delete :destroy, params: { id: notice.id }
       end
 
-      it { expect(flash[:notice]).to match(/Successfully deleted Notice/) }
+      it { expect(flash[:notice]).to include("Successfully deleted Notice") }
       it { expect(flash[:notice]).to include("To Delete") }
       it { expect(flash[:notice]).to include("id: #{notice.id}") }
     end
@@ -677,7 +677,7 @@ RSpec.describe Admin::NoticesController do
         end
 
         it "sets success flash" do
-          expect(flash[:notice]).to match(/Successfully updated notice/)
+          expect(flash[:notice]).to include("Successfully updated notice")
         end
       end
 
@@ -696,7 +696,7 @@ RSpec.describe Admin::NoticesController do
         end
 
         it "sets success flash" do
-          expect(flash[:notice]).to match(/Successfully updated notice/)
+          expect(flash[:notice]).to include("Successfully updated notice")
         end
       end
     end

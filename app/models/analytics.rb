@@ -27,9 +27,8 @@ module Analytics
           impressionable_id: impressionable.id }
       end
 
-      # rubocop:disable Rails/SkipsModelValidations -- Skipping validations for bulk analytics operations to improve performance and avoid unnecessary checks
+      # rubocop:disable-next Rails/SkipsModelValidations -- Skipping validations for bulk analytics operations to improve performance and avoid unnecessary checks
       event.impressions.upsert_all(impressions_params, record_timestamps: true)
-      # rubocop:enable Rails/SkipsModelValidations
     end
   end
 end

@@ -195,7 +195,7 @@ RSpec.describe Admin::UsersController do
 
         it "sets flash notice" do
           post_create
-          expect(flash[:notice]).to match(/Successfully created user/)
+          expect(flash[:notice]).to include("Successfully created user")
           expect(flash[:notice]).to include("id: #{assigns(:user).id}")
           expect(flash[:notice]).to include("email: newuser@example.com")
         end
@@ -259,7 +259,7 @@ RSpec.describe Admin::UsersController do
 
       it "sets flash.now alert" do
         post_create
-        expect(flash.now[:alert]).to match(/Failed to create user/)
+        expect(flash.now[:alert]).to include("Failed to create user")
         expect(flash.now[:alert]).to include("Errors:")
       end
 
@@ -295,7 +295,7 @@ RSpec.describe Admin::UsersController do
 
       it "sets flash notice" do
         patch_update
-        expect(flash[:notice]).to match(/Successfully updated user/)
+        expect(flash[:notice]).to include("Successfully updated user")
         expect(flash[:notice]).to include("id: #{user.id}")
       end
     end
@@ -312,7 +312,7 @@ RSpec.describe Admin::UsersController do
 
       it "sets flash.now alert" do
         patch_update
-        expect(flash.now[:alert]).to match(/Failed to update user/)
+        expect(flash.now[:alert]).to include("Failed to update user")
         expect(flash.now[:alert]).to include("id: #{user.id}")
         expect(flash.now[:alert]).to include("Errors:")
       end
@@ -384,7 +384,7 @@ RSpec.describe Admin::UsersController do
 
       it "sets flash notice" do
         delete_destroy
-        expect(flash[:notice]).to match(/Successfully deleted User/)
+        expect(flash[:notice]).to include("Successfully deleted User")
         expect(flash[:notice]).to include("id: #{user.id}")
         expect(flash[:notice]).to include("email: #{user.email}")
       end
@@ -462,7 +462,7 @@ RSpec.describe Admin::UsersController do
         post :create, params: { user: { name: nil } }
       end
 
-      it { expect(flash.now[:alert]).to match(/Failed to create user/) }
+      it { expect(flash.now[:alert]).to include("Failed to create user") }
       it { expect(flash.now[:alert]).to include("Errors:") }
     end
 
@@ -473,7 +473,7 @@ RSpec.describe Admin::UsersController do
         patch :update, params: { id: user.id, user: { name: "Updated" } }
       end
 
-      it { expect(flash[:notice]).to match(/Successfully updated user/) }
+      it { expect(flash[:notice]).to include("Successfully updated user") }
       it { expect(flash[:notice]).to include("id: #{user.id}") }
     end
 
@@ -484,7 +484,7 @@ RSpec.describe Admin::UsersController do
         patch :update, params: { id: user.id, user: { name: nil } }
       end
 
-      it { expect(flash.now[:alert]).to match(/Failed to update user/) }
+      it { expect(flash.now[:alert]).to include("Failed to update user") }
       it { expect(flash.now[:alert]).to include("id: #{user.id}") }
     end
 
@@ -495,7 +495,7 @@ RSpec.describe Admin::UsersController do
         delete :destroy, params: { id: user.id }
       end
 
-      it { expect(flash[:notice]).to match(/Successfully deleted User/) }
+      it { expect(flash[:notice]).to include("Successfully deleted User") }
       it { expect(flash[:notice]).to include(user.name) }
       it { expect(flash[:notice]).to include("id: #{user.id}") }
     end
@@ -769,7 +769,7 @@ RSpec.describe Admin::PasswordsController do
 
       it "sets flash.now alert" do
         post_create
-        expect(flash.now[:alert]).to match(/Failed to reset password/)
+        expect(flash.now[:alert]).to include("Failed to reset password")
         expect(flash.now[:alert]).to include("id: #{user.id}")
         expect(flash.now[:alert]).to include("Errors:")
       end

@@ -11,8 +11,7 @@ class GeoLocation
     end
 
     def distance(from_coord, to_coord)
-      # Uses Haversine gem to make distance calculations.
-      #    https://github.com/fabionl/haversine
+      # Uses the vendored haversine implementation, see app/models/haversine.rb
       Haversine.distance(from_coord.lat, from_coord.long, to_coord.lat, to_coord.long)
       # from_coord.distance(to_coord)
     end
