@@ -1,0 +1,11 @@
+#!/bin/bash
+# Runs the test suite inside the docker-compose.ci.yml "test" service.
+# Kept in one place so the compose command and bin/docker/test cannot drift.
+# Extra arguments are forwarded to rspec.
+set -e
+
+bundle install
+bin/rails db:create db:migrate
+yarn install --frozen-lockfile --check-files
+yarn build:css
+bin/bundle exec rspec "$@"

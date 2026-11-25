@@ -1,11 +1,6 @@
 #!/bin/bash
 set -e
 
-# Pass all arguments to the rspec command inside docker
-if [ $# -eq 0 ]; then
-    # No arguments provided, run all tests
-    docker-compose -f docker-compose.ci.yml -p linkvan-test run --rm test
-else
-    # Arguments provided, pass them to rspec
-    docker-compose -f docker-compose.ci.yml -p linkvan-test run --rm test bash -c 'bundle install && bin/rails db:create db:migrate && yarn install --frozen-lockfile --check-files && yarn build:css && bin/bundle exec rspec "$@"' rspec "$@"
-fi
+# Runs the suite in the docker-compose.ci.yml "test" service.
+# Any arguments are forwarded to rspec.
+docker-compose -f docker-compose.ci.yml -p linkvan-test run --rm test bin/docker/ci-run "$@"
