@@ -1,14 +1,14 @@
 # Run using bin/ci
 
 CI.run do
-  step "Setup", "bundle install && bin/rails db:create db:migrate"
+  step "Setup", "bundle install && RAILS_ENV=test bin/rails db:create db:migrate"
   step "Assets", "yarn install --frozen-lockfile --check-files && yarn build:css"
 
   step "Style: Ruby", "bin/rubocop"
 
   step "Security: Importmap vulnerability audit", "bin/importmap audit"
   step "Security: Brakeman code analysis", "bin/brakeman --quiet --no-pager --exit-on-warn --exit-on-error"
-  step "Tests: RSpec", "bin/rspec"
+  step "Tests: RSpec", "JWT_KEY=${JWT_KEY:-some_key_for_testing} bin/rspec"
 
   # Optional: Run system tests
   # step "Tests: System", "bin/rails test:system"
