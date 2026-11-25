@@ -461,7 +461,7 @@ DEPENDENCIES
   byebug
   capybara
   colorize
-  cssbundling-rails (~> 1.4)
+  cssbundling-rails
   devise (~> 5.0.4)
   dotenv-rails
   factory_bot_rails (~> 6.5.1)

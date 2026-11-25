@@ -4,6 +4,10 @@ tmp
 log
 public/assets
 public/packs
+# Keep the directory (Propshaft only loads app/assets/* existent dirs) but never ship
+# a stale compilation from the host — assets:precompile regenerates it.
+app/assets/builds/*
+!app/assets/builds/.keep
 .bundle
 
 db/*.sqlite3
