@@ -129,6 +129,7 @@ COPY --chown=appuser:appgroup . /usr/src/app
 
 # Precompile assets without requiring active record or credentials
 RUN RAILS_SERVE_STATIC_FILES=enabled \
+      SKIP_YARN_INSTALL=1 \
       SECRET_KEY_BASE=dummy-secret-key-for-asset-compilation \
       DATABASE_URL=postgresql://user:pass@127.0.0.1/dbname \
       bundle exec rails assets:precompile
