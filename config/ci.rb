@@ -2,6 +2,7 @@
 
 CI.run do
   step "Setup", "bundle install && bin/rails db:create db:migrate"
+  step "Assets", "yarn install --frozen-lockfile --check-files && yarn build:css"
 
   step "Style: Ruby", "bin/rubocop"
 

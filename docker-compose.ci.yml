@@ -16,6 +16,7 @@ x-ci-app: &ci-app
     RAILS_ENV: test
     RACK_ENV: test
     BUNDLE_PATH: /usr/src/app/vendor/bundle
+    JWT_KEY: ${JWT_KEY:-some_key_for_testing}
     POSTGRES_HOST: postgres
     POSTGRES_PORT: 5432
   entrypoint: ./bin/docker/entrypoints/wait-for-postgres.sh
@@ -36,4 +37,4 @@ services:
 
   test:
     <<: *ci-app
-    command: bash -c "bundle install && bin/rails db:create db:migrate && yarn install --frozen-lockfile --check-files && yarn build:css && bin/bundle exec rspec"
+    command: ["bin/docker/ci-run"]
