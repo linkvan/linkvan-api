@@ -127,12 +127,6 @@ RUN yarn install --frozen-lockfile --check-files
 # Chown files so non are root.
 COPY --chown=appuser:appgroup . /usr/src/app
 
-# Build CSS first
-RUN yarn build:css
-
-# Download Import Maps JavaScript dependencies
-RUN ./bin/importmap install
-
 # Precompile assets without requiring active record or credentials
 RUN RAILS_SERVE_STATIC_FILES=enabled \
       SECRET_KEY_BASE=dummy-secret-key-for-asset-compilation \
