@@ -7,5 +7,5 @@ if [ $# -eq 0 ]; then
     docker-compose -f docker-compose.ci.yml -p linkvan-test run --rm test
 else
     # Arguments provided, pass them to rspec
-    docker-compose -f docker-compose.ci.yml -p linkvan-test run --rm test bash -c "bundle install && bin/rails db:create db:migrate && yarn build:css && bin/bundle exec rspec $*"
+    docker-compose -f docker-compose.ci.yml -p linkvan-test run --rm test bash -c 'bundle install && bin/rails db:create db:migrate && yarn install --frozen-lockfile --check-files && yarn build:css && bin/bundle exec rspec "$@"' rspec "$@"
 fi
