@@ -26,18 +26,11 @@ gem "bootsnap", "~> 1.26.1", require: false
 # docs: viewcomponent.org
 gem "view_component", "~> 4.24"
 
-# Use SCSS for stylesheets
-#gem "sass-rails", "~> 6.0.0"
-# As of Rails 7.0, sprockets is optional
-# Removed sprockets-rails - using import maps instead
-# gem "sprockets-rails"
-# gem "dartsass-sprockets"
-
 # Use Propshaft for asset pipeline
 gem "propshaft"
 
-# Use dartsass-rails for standalone Sass processing
-gem "dartsass-rails"
+# Bundle and process CSS (Bulma) into app/assets/builds
+gem "cssbundling-rails"
 
 # Authentication
 gem "devise", "~> 5.0.4"

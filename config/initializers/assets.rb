@@ -3,6 +3,5 @@
 # Version of your assets, change this if you want to expire all your assets.
 Rails.application.config.assets.version = "1.0"
 
-# Add additional assets to the asset load path.
-# Rails.application.config.assets.paths << Emoji.images_path
-Rails.application.config.assets.paths << Rails.root.join("node_modules", "@fortawesome", "fontawesome-free", "webfonts")
+# app/assets/stylesheets holds compiler inputs (cssbundling-rails), not serving assets.
+Rails.application.config.assets.excluded_paths = [Rails.root.join("app", "assets", "stylesheets")]

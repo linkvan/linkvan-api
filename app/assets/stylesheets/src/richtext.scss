@@ -8,7 +8,7 @@
 // Note2: Moved icons to make it webpacker compatible
 // Note3: Resized heading dialog width to make it large enough for all heading options.
 trix-toolbar {
-  .trix-button--icon-color::before { background-image: url("../images/richtext/trix_color.svg"); }
+  .trix-button--icon-color::before { background-image: url("images/richtext/trix_color.svg"); }
 
   .trix-dialog--heading { max-width: 189px; }
 

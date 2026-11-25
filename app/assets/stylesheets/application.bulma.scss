@@ -1,0 +1,29 @@
+// Entry point for cssbundling-rails.
+//   build:  yarn build:css   (also runs via assets:precompile and bin/dev)
+//   output: app/assets/builds/application.css
+//
+// Framework CSS is compiled locally from node_modules. The only remote stylesheet
+// left is FontAwesome, which is linked from the layout (see application_admin.html.erb).
+
+@use "bulma/bulma";
+
+@use "src/actiontext";
+@use "src/linkvan/linkvan";
+@use "src/richtext";
+@use "../../components/components";
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Pagy page input styling - override inline styles */
+.pagy-bulma.input-nav-js {
+  .pagination-link input[name="page"] {
+    text-align: center !important;
+    width: 5rem !important;
+    line-height: 1.5 !important;
+    padding: .5rem .75rem !important;
+    color: black !important;
+    background-color: #fafafa !important;
+  }
+}
