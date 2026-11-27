@@ -1,13 +1,13 @@
 # Pin npm packages by running ./bin/importmap
 
 pin "application", preload: true
-pin "@hotwired/turbo-rails", to: "@hotwired--turbo-rails.js" # @8.0.16
-pin "@hotwired/stimulus", to: "@hotwired--stimulus.js" # @3.2.2
+# Use the assets shipped by turbo-rails/stimulus-rails so gem upgrades carry the JS.
+pin "@hotwired/turbo-rails", to: "turbo.min.js"
+pin "@hotwired/stimulus", to: "stimulus.min.js"
 pin "@hotwired/stimulus-loading", to: "stimulus-loading.js"
 pin "@rails/actiontext", to: "@rails--actiontext.js" # @8.0.201
 pin "trix"
 pin "@rails/request.js", to: "@rails--request.js.js" # @0.0.12
-pin "@hotwired/turbo", to: "@hotwired--turbo.js" # @8.0.13
 pin "@rails/actioncable/src", to: "@rails--actioncable--src.js" # @8.0.201
 
 # Pin Pagy JavaScript module
